@@ -21,7 +21,7 @@ void OrganicText::setup() {
 	noiseSize.set("Noise", 0, 0, 20);
 	pointsSize.set("Spacing", 0.2, 0, 1);
 	pointRadius.set("Radius", 0.5, 0, 1);
-	sText.set("Text", "Goldsmiths");
+	sText.set("Text", "OrganicText");
 
 	parameters.setName("OrganicText");
 	parameters.add(bDebug);
