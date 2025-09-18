@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	ofSetWindowShape(512, 512);
+	int p = 50;
+	ofSetWindowPosition(-ofGetWidth()-p, +p);
+
 	t.setup();
 }
 

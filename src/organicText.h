@@ -4,6 +4,10 @@
 #include "ofxGui.h"
 using namespace glm;
 
+#define ORGANICTEXT "ARB"
+#define MAX_RADIUS 50
+#define MIN_RADIUS 1
+
 class OrganicText
 {
 public:
@@ -25,9 +29,11 @@ public:
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bDebug;
 	ofParameter<bool> bFill;
+	ofParameter<bool> bPlain;
 	ofParameter<float> noiseSize;
-	ofParameter<float> pointsSize;
+	ofParameter<float> pointsSpacing;
 	ofParameter<float> pointRadius;
+	ofParameter<float> pointsRadiusMin;
 	ofParameter<string> sText;
 
 	ofEventListener e_PointsRadius;

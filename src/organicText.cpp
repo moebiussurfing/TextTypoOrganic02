@@ -18,20 +18,24 @@ void OrganicText::setup() {
 
 	bDebug.set("Debug", false);
 	bFill.set("Fill", false);
+	bPlain.set("Plain", true);
 	noiseSize.set("Noise", 0, 0, 20);
-	pointsSize.set("Spacing", 0.2, 0, 1);
+	pointsSpacing.set("Spacing", 0.2, 0, 1);
 	pointRadius.set("Radius", 0.5, 0, 1);
-	sText.set("Text", "OrganicText");
+	pointsRadiusMin.set("Radius Min", 0.5, 0, 1);
+	sText.set("Text", ORGANICTEXT);
 
 	parameters.setName("OrganicText");
 	parameters.add(bDebug);
 	parameters.add(bFill);
+	parameters.add(bPlain);
 	parameters.add(noiseSize);
-	parameters.add(pointsSize);
+	parameters.add(pointsSpacing);
+	parameters.add(pointsRadiusMin);
 	parameters.add(pointRadius);
 	parameters.add(sText);
 
-	e_PointsSize = pointsSize.newListener([this](float & v) {
+	e_PointsSize = pointsSpacing.newListener([this](float & v) {
 		refreshPointsString();
 	});
 
@@ -55,7 +59,7 @@ void OrganicText::setup() {
 
 //--------------------------------------------------------------
 void OrganicText::refreshPointsString() {
-	float sz = ofMap(pointsSize, 0, 1, 1, 10, true);
+	float sz = ofMap(pointsSpacing, 0, 1, 1, 10, true);
 	pointsString = sampleStringPoints(sText, sz);
 }
 
@@ -95,10 +99,12 @@ void OrganicText::draw() {
 		ofColor clr1 = ofColor(ofColor::black);
 		ofColor clr2 = ofColor(ofColor::gray);
 		ofColor c = clr1.lerp(clr2, ofNoise(phase, 123.232));
+		if (bPlain) c = ofColor::black;
 		ofSetColor(c);
 
 		// Varying radius
-		float r = ofMap(pointRadius, 0, 1, 1, 16, true);
+		float rmin = ofMap(pointsRadiusMin, 0, 1, MIN_RADIUS, MAX_RADIUS, true);
+		float r = ofMap(pointRadius, 0, 1, rmin, MAX_RADIUS, true);
 		float pointSize = ofNoise(phase, 0.7232) * r;
 		ofDrawCircle(newPoint, pointSize);
 
