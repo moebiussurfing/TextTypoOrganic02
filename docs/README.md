@@ -19,7 +19,6 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 
 ### 👨‍💻 For Developers  
 - **[Code Architecture](Developer/Architecture.md)** - System design and structure
-- **[Building Instructions](Developer/Building.md)** - Setup and compilation guide
 - **[API Reference](Developer/API-Reference.md)** - Complete function documentation
 
 ### 📋 Project Management
@@ -27,7 +26,6 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 - **[Known Bugs](TODO/Known-Bugs.md)** - Issues to be resolved
 - **[Future Features](Plans/Future-Features.md)** - Long-term roadmap
 - **[Technical Roadmap](Plans/Technical-Roadmap.md)** - Implementation strategies
-- **[Enhancement Ideas](Plans/Enhancement-Ideas.md)** - Creative possibilities
 
 ### 📖 Project History
 - **[Changelog](CHANGELOG.md)** - Major milestones and changes
@@ -71,14 +69,9 @@ See the [User Manual](User/User-Manual.md) for all keyboard shortcuts and GUI pa
 
 ## 🛠️ Building & Setup
 
-### Quick Setup
-1. **openFrameworks 0.12.1** installed
-2. **Visual Studio 2019+** 
-3. **Font file**: `NotoSansMono-Regular.ttf` in `bin/data/`
-4. **Build**: Open `.vcxproj` and build in Release mode
+**Requirements**: openFrameworks 0.12.1, Visual Studio, font file in `bin/data/`
 
-### For Detailed Instructions
-See [Building Instructions](Developer/Building.md) for complete setup guide.
+Open `.vcxproj` and build in Release mode.
 
 ## 🎨 For Copilot AI Assistants
 

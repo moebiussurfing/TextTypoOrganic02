@@ -211,40 +211,7 @@ switch(colorMode.get()) {
 3. Add color-specific parameters
 4. Test with existing presets
 
-## Dependencies
 
-### External Libraries
-- **openFrameworks 0.12.1**: Core framework
-- **ofxGui**: Parameter interface (included with OF)
-- **Standard Library**: algorithm, vector, string
-
-### System Requirements
-- **OS**: Windows 10+ (current build)
-- **Compiler**: Visual Studio 2019+
-- **OpenGL**: 3.0+ support
-- **RAM**: 4GB minimum, 8GB recommended
-
-## Build Configuration
-
-### Debug Mode
-- Full error checking
-- Console logging enabled
-- Debug visualization available
-- Slower performance
-
-### Release Mode  
-- Optimized code
-- Minimal logging
-- Best performance
-- Distribution ready
-
-### Preprocessor Definitions
-```cpp
-#ifdef DEBUG
-    #define LOG_VERBOSE
-    #define ENABLE_PROFILING
-#endif
-```
 
 ## Future Architecture Considerations
 
