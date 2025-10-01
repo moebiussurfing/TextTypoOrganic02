@@ -546,11 +546,15 @@ void OrganicText::drawDebugInfo() const {
 void OrganicText::drawPerformanceInfo() const {
 	if (!bDebug.get()) return;
 	
+	// Quick debug test - draw simple text to verify function is called
+	ofSetColor(255, 0, 0); // Red color
+	ofDrawBitmapString("DEBUG ACTIVE - Performance Box Working!", 50, 50);
+	
 	ofPushStyle();
 	
 	// === INTERNAL APP METRICS ===
 	float fps = ofGetFrameRate();
-	float frameTime = 1000.0f / max(fps, 0.1f); // Avoid division by zero
+	float frameTime = 1000.0f / std::max(fps, 0.1f); // Avoid division by zero
 	int pointCount = pointsString.size();
 	
 	// Trail system metrics
@@ -579,8 +583,8 @@ void OrganicText::drawPerformanceInfo() const {
 	}
 	
 	// Memory usage estimation (rough)
-	int estimatedMemoryKB = (pointCount * sizeof(vec2)) / 1024 + 
-	                       (totalTrailPoints * sizeof(vec2)) / 1024 + 
+	int estimatedMemoryKB = (pointCount * static_cast<int>(sizeof(vec2))) / 1024 + 
+	                       (totalTrailPoints * static_cast<int>(sizeof(vec2))) / 1024 + 
 	                       100; // Base app memory
 	
 	// Performance status
@@ -603,7 +607,7 @@ void OrganicText::drawPerformanceInfo() const {
 	infoLines.push_back("");
 	infoLines.push_back("=== SYSTEM STATUS ===");
 	infoLines.push_back("Memory ~: " + ofToString(estimatedMemoryKB) + " KB");
-	infoLines.push_back("Animation: " + (bEnableAnimation.get() ? "ON" : "OFF"));
+	infoLines.push_back("Animation: " + string(bEnableAnimation.get() ? "ON" : "OFF"));
 	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (sceneZoom.get() * 4.0f), 1) + "x");
 	infoLines.push_back("Current Preset: " + sText.get());
 	
