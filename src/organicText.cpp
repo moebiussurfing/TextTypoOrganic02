@@ -160,10 +160,10 @@ void OrganicText::setup() {
 	parameters.setName("OrganicText Enhanced");
 
 	parameters.add(sText);
+	parameters.add(sceneZoom);
 	parameters.add(bDrawOutline);
 	parameters.add(bDrawFill);
 	parameters.add(bDrawShapes);
-	parameters.add(sceneZoom);
 	parameters.add(bDrawConnections);
 
 	parameters.add(bEnableDensity);
