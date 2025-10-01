@@ -122,14 +122,14 @@ public:
 	ofParameter<float> spiralTightness;
 	ofParameter<float> pulseIntensity;
 
-	// Connection parameters with enable/reset
-	ofParameter<bool> bEnableConnection; // Enable connection group
-	ofParameter<void> resetConnection; // Reset connection group
-	ofParameter<void> randomConnection; // Randomize connection group
+	// Connection parameters - Removed unused bEnableConnection
+	ofParameter<void> resetConnection; 
+	ofParameter<void> randomConnection; 
 	ofParameter<bool> bDrawConnections;
 	ofParameter<float> connectionDistance;
 	ofParameter<float> connectionAlpha;
 	ofParameter<bool> bOnlyNearConnections;
+	ofParameter<float> connectionQuality; // NEW: 0-1, reduces line count for performance
 
 	// Trail parameters
 	ofParameter<bool> bDrawTrails;

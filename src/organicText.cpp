@@ -82,14 +82,14 @@ void OrganicText::setup() {
 	spiralTightness.set("Spiral", 0.2, 0.0, 1.0); // Normalized 0-1
 	pulseIntensity.set("Pulse", 0.2, 0.0, 1.0); // Normalized 0-1
 
-	// Connection group - Simplified names
-	bEnableConnection.set("Enable", true);
+	// Connection group - Simplified names + performance optimization
 	resetConnection.set("Reset");
 	randomConnection.set("Random");
 	bDrawConnections.set("Draw", false);
 	connectionDistance.set("Distance", 30, 5, 100);
 	connectionAlpha.set("Alpha", 100, 0, 255);
 	bOnlyNearConnections.set("Near Only", true);
+	connectionQuality.set("Quality", 1.0, 0.1, 1.0); // NEW: 1.0=full quality, 0.1=10% connections
 
 	// Trail group (part of connection group) - Simplified names
 	bDrawTrails.set("Trails", false);
@@ -154,10 +154,10 @@ void OrganicText::setup() {
 	animGroup.add(resetAnimation);
 
 	connectionGroup.setName("Connections");
-	connectionGroup.add(bEnableConnection);
 	connectionGroup.add(bDrawConnections);
 	connectionGroup.add(connectionDistance);
 	connectionGroup.add(connectionAlpha);
+	connectionGroup.add(connectionQuality); // NEW: Performance control
 	connectionGroup.add(bOnlyNearConnections);
 	connectionGroup.add(bDrawTrails);
 	connectionGroup.add(trailLength);
@@ -332,7 +332,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	vec2 offset(0, 0);
 
 	// Check if animation is enabled globally and for the group
-	if (!bEnableAnimation.get() || !bEnableAnimationGroup.get()) {
+	if (!bEnableAnimation.get() || !bEnableAnimation.get()) {
 		return offset;
 	}
 
@@ -505,7 +505,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 
 //--------------------------------------------------------------
 void OrganicText::updateTrails() {
-	if (!bDrawTrails || !bEnableConnection.get()) return;
+	if (!bDrawTrails || !true) return;
 
 	for (size_t i = 0; i < pointsString.size() && i < pointTrails.size(); i++) {
 		float phase = t + 0.123f * static_cast<float>(i);
@@ -522,7 +522,7 @@ void OrganicText::updateTrails() {
 
 //--------------------------------------------------------------
 void OrganicText::drawConnections() const {
-	if (!bDrawConnections || !bEnableConnection.get() || pointsString.size() < 2) return;
+	if (!bDrawConnections || !true || pointsString.size() < 2) return;
 
 	// Use custom connection color instead of white
 	ofSetColor(connectionColor.get(), connectionAlpha.get());
@@ -610,7 +610,7 @@ void OrganicText::drawDebugInfo() const {
 	// Connection system metrics
 	int activeConnections = 0;
 	float connectionCost = 0.0f; // O(n²) computational cost indicator
-	if (bDrawConnections.get() && bEnableConnection.get()) {
+	if (bDrawConnections.get() && true) {
 		float maxDist = connectionDistance.get();
 		connectionCost = pointCount * pointCount; // Shows O(n²) nature
 
@@ -741,7 +741,7 @@ void OrganicText::draw() {
 	drawConnections();
 
 	// Draw trails
-	if (bDrawTrails && bEnableConnection.get()) {
+	if (bDrawTrails && true) {
 		for (size_t i = 0; i < pointTrails.size(); i++) {
 			for (size_t j = 1; j < pointTrails[i].size(); j++) {
 				float alpha = pow(trailFade.get(), static_cast<float>(j)) * 255.0f;
@@ -752,7 +752,7 @@ void OrganicText::draw() {
 	}
 
 	// Draw main points (only if shapes are enabled)
-	if (bDrawShapes && bEnableShape.get()) {
+	if (bDrawShapes && true) {
 		for (size_t i = 0; i < pointsString.size(); i++) {
 			ofPushStyle();
 
@@ -996,11 +996,7 @@ void OrganicText::resetAllParams() {
 	sceneZoom.set(0.0f);
 
 	// Reset enable flags
-	bEnableDensity.set(true);
-	bEnableShape.set(true);
-	bEnableColor.set(true);
-	bEnableGlobalColor.set(true);
-	bEnableAnimationGroup.set(true);
+	// Removed all bEnable parameter settings (not needed)
 	bEnableConnection.set(true);
 
 	// Reset time
@@ -1054,6 +1050,7 @@ void OrganicText::randomizeAnimationParams() {
 void OrganicText::randomizeConnectionParams() {
 	connectionDistance.set(ofRandom(connectionDistance.getMin(), connectionDistance.getMax()));
 	connectionAlpha.set(ofRandom(connectionAlpha.getMin(), connectionAlpha.getMax()));
+	connectionQuality.set(ofRandom(connectionQuality.getMin(), connectionQuality.getMax())); // NEW
 	bOnlyNearConnections.set(ofRandom(1.0f) > 0.5f);
 	bDrawConnections.set(ofRandom(1.0f) > 0.3f);
 }

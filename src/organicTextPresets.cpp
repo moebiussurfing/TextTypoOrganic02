@@ -52,11 +52,6 @@ void OrganicTextPresets::loadPreset0_Minimal(OrganicText* ot) {
     // Enable all systems
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -98,11 +93,6 @@ void OrganicTextPresets::loadPreset1_CyberWave(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -142,11 +132,6 @@ void OrganicTextPresets::loadPreset2_OrganicFlow(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -184,11 +169,6 @@ void OrganicTextPresets::loadPreset3_NeonPulse(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -232,11 +212,6 @@ void OrganicTextPresets::loadPreset4_CosmicDance(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -278,11 +253,6 @@ void OrganicTextPresets::loadPreset5_RetroGrid(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -324,11 +294,6 @@ void OrganicTextPresets::loadPreset6_BioLuminous(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -368,11 +333,6 @@ void OrganicTextPresets::loadPreset7_QuantumField(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -412,11 +372,6 @@ void OrganicTextPresets::loadPreset8_TribalRitual(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
@@ -460,11 +415,6 @@ void OrganicTextPresets::loadPreset9_GalaxyStorm(OrganicText* ot) {
     // Enable all
     ot->bDrawShapes.set(true);
     ot->bEnableAnimation.set(true);
-    ot->bEnableDensity.set(true);
-    ot->bEnableShape.set(true);
-    ot->bEnableColor.set(true);
-    ot->bEnableGlobalColor.set(true);
-    ot->bEnableAnimationGroup.set(true);
     ot->bEnableConnection.set(true);
 }
 
