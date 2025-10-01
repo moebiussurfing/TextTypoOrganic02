@@ -174,25 +174,22 @@ void OrganicText::setup() {
 	e_PointsRadius = pointRadius.newListener([this](float & v) { refreshPointsString(); });
 	e_sText = sText.newListener([this](string & s) { refreshPointsString(); });
 	e_PointDensity = pointDensity.newListener([this](float & v) { refreshPointsString(); });
-	
-	// Add listener for contour sampling
-	contourSampling.newListener([this](float & v) { refreshPointsString(); });
+	e_ContourSampling = contourSampling.newListener([this](float & v) { refreshPointsString(); });
 
-	// Reset and randomize listeners
-	resetDensity.addListener(this, &OrganicText::resetDensityParams);
-	resetShape.addListener(this, &OrganicText::resetShapeParams);
-	resetColor.addListener(this, &OrganicText::resetColorParams);
-	resetGlobalColor.addListener(this, &OrganicText::resetGlobalColorParams);
-	resetAnimation.addListener(this, &OrganicText::resetAnimationParams);
-	resetConnection.addListener(this, &OrganicText::resetConnectionParams);
-	resetAll.addListener(this, &OrganicText::resetAllParams);
+	e_ResetDensity = resetDensity.newListener([this](void) { resetDensityParams(); });
+	e_ResetShape = resetShape.newListener([this](void) { resetShapeParams(); });
+	e_ResetColor = resetColor.newListener([this](void) { resetColorParams(); });
+	e_ResetGlobalColor = resetGlobalColor.newListener([this](void) { resetGlobalColorParams(); });
+	e_ResetAnimation = resetAnimation.newListener([this](void) { resetAnimationParams(); });
+	e_ResetConnection = resetConnection.newListener([this](void) { resetConnectionParams(); });
+	e_ResetAll = resetAll.newListener([this](void) { resetAllParams(); });
 
-	randomDensity.addListener(this, &OrganicText::randomizeDensityParams);
-	randomShape.addListener(this, &OrganicText::randomizeShapeParams);
-	randomColor.addListener(this, &OrganicText::randomizeColorParams);
-	randomGlobalColor.addListener(this, &OrganicText::randomizeGlobalColorParams);
-	randomAnimation.addListener(this, &OrganicText::randomizeAnimationParams);
-	randomConnection.addListener(this, &OrganicText::randomizeConnectionParams);
+	e_RandomDensity = randomDensity.newListener([this](void) { randomizeDensityParams(); });
+	e_RandomShape = randomShape.newListener([this](void) { randomizeShapeParams(); });
+	e_RandomColor = randomColor.newListener([this](void) { randomizeColorParams(); });
+	e_RandomGlobalColor = randomGlobalColor.newListener([this](void) { randomizeGlobalColorParams(); });
+	e_RandomAnimation = randomAnimation.newListener([this](void) { randomizeAnimationParams(); });
+	e_RandomConnection = randomConnection.newListener([this](void) { randomizeConnectionParams(); });
 
 	// Auto-save on exit (removing window event that doesn't exist in OF 0.12.1)
 	// e_WindowClosed = ofEvents().windowClosed.newListener([this](ofEventArgs & args) { saveSettings(); });

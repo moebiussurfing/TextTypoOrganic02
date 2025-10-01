@@ -136,14 +136,9 @@ public:
 	ofParameter<void> resetAll; // Reset everything to defaults
 
 	// Event listeners
-	ofEventListener e_PointsRadius;
-	ofEventListener e_PointsSize;
-	ofEventListener e_sText;
-	ofEventListener e_PointDensity;
-	ofEventListener e_ShapeType;
-	ofEventListener e_ColorMode;
-	ofEventListener e_AnimMode;
-	ofEventListener e_WindowClosed;
+	ofEventListener e_PointsSize, e_PointsRadius, e_sText, e_PointDensity, e_ContourSampling;
+	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_ResetAll;
+	ofEventListener e_RandomDensity, e_RandomShape, e_RandomColor, e_RandomGlobalColor, e_RandomAnimation, e_RandomConnection;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const string& s, float ds);
