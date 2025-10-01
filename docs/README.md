@@ -79,6 +79,16 @@ See the [User Manual](User/User-Manual.md) for all keyboard shortcuts and GUI pa
 
 Open `.vcxproj` and build in Release mode.
 
+## 🤖 Quick Start for AI Assistants
+
+**New to this project?**
+1. **Read** [PROJECT-CONTEXT.md](AI-Assistant/PROJECT-CONTEXT.md) - Get full context in 2 minutes ⭐
+2. **Check** [CURRENT-STATE.md](AI-Assistant/CURRENT-STATE.md) - See what to work on now  
+3. **Use** [QUICK-COMMANDS.md](AI-Assistant/QUICK-COMMANDS.md) - Common operations ready to use
+4. **Follow** [CODE-PATTERNS.md](AI-Assistant/CODE-PATTERNS.md) - Keep code consistent
+
+**Typical command**: `"Read /docs/AI-Assistant/PROJECT-CONTEXT.md and tell me the current priorities"`
+
 ## 🎨 For Copilot AI Assistants
 
 This documentation is specifically optimized for AI coding assistants:
