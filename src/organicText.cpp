@@ -4,12 +4,25 @@
 #include <cmath>
 
 //--------------------------------------------------------------
-void OrganicText::setup() {
-	ofBackground(0); // Changed to black for better color effects
-	ofSetFrameRate(60);
+OrganicText::OrganicText() {
+	ofAddListener(ofEvents().update, this, &OrganicText::update);
+}
 
+//--------------------------------------------------------------
+OrganicText::~OrganicText() {
+	ofRemoveListener(ofEvents().update, this, &OrganicText::update);
+}
+
+//--------------------------------------------------------------
+void OrganicText::exit() {
+	saveSettings();
+}
+
+//--------------------------------------------------------------
+void OrganicText::setup() {
 	// Basic parameters
-	bDebug.set("Debug", false);
+	bDebugDraw.set("Draw Debug", false);
+	bDebugDrawInfo.set("Draw Debug Info", false);
 	bDrawFill.set("Draw Fill", true);
 	bEnablePlain.set("Enable Plain", false);
 	bDrawOutline.set("Draw Outline", false);
@@ -166,7 +179,8 @@ void OrganicText::setup() {
 	parameters.add(globalColorGroup);
 	parameters.add(animGroup);
 	parameters.add(connectionGroup);
-	parameters.add(bDebug);
+	parameters.add(bDebugDraw);
+	parameters.add(bDebugDrawInfo);
 	parameters.add(resetAll);
 
 	// Event listeners
@@ -191,9 +205,6 @@ void OrganicText::setup() {
 	e_RandomAnimation = randomAnimation.newListener([this](void) { randomizeAnimationParams(); });
 	e_RandomConnection = randomConnection.newListener([this](void) { randomizeConnectionParams(); });
 
-	// Auto-save on exit (removing window event that doesn't exist in OF 0.12.1)
-	// e_WindowClosed = ofEvents().windowClosed.newListener([this](ofEventArgs & args) { saveSettings(); });
-
 	gui.setup(parameters);
 	gui.getGroup(densityGroup.getName()).minimizeAll();
 	gui.getGroup(shapeGroup.getName()).minimizeAll();
@@ -212,32 +223,51 @@ void OrganicText::setup() {
 
 	refreshPointsString();
 
+	resetAllParams(); // set default app states here instead of above when setting up parameters
+
 	// Load settings if they exist
 	loadSettings();
 }
 
 //--------------------------------------------------------------
-vector<vec2> OrganicText::sampleStringPoints(const string& s, float ds) {
+void OrganicText::update(ofEventArgs & args) {
+	update();
+}
+
+//--------------------------------------------------------------
+void OrganicText::update() {
+	if (bEnableAnimation.get()) {
+		t += 0.01f * animSpeed.get();
+	}
+
+	fps = ofGetFrameRate();
+	frameTime = 1000.0f / std::max(fps, 0.1f); // Avoid division by zero
+	string wt = ("FPS: " + ofToString(fps, 0) + "    Frame Time: " + ofToString(frameTime, 2) + " ms");
+	ofSetWindowTitle(wt);
+}
+
+//--------------------------------------------------------------
+vector<vec2> OrganicText::sampleStringPoints(const string & s, float ds) {
 	vector<vec2> points;
 	if (s.empty()) return points;
-	
+
 	// Get the paths from the font
 	vector<ofPath> paths = font.getStringAsPoints(s, true, false);
-	
-	for (auto& path : paths) {
+
+	for (auto & path : paths) {
 		// Get polylines from each path
 		vector<ofPolyline> polylines = path.getOutline();
-		
-		for (auto& polyline : polylines) {
+
+		for (auto & polyline : polylines) {
 			if (polyline.size() == 0) continue;
-			
+
 			// Improved contour sampling
 			float totalLength = polyline.getPerimeter();
 			float samplingStep = ds / contourSampling.get(); // Use new contour sampling parameter
 			int numSamples = static_cast<int>(totalLength / samplingStep);
-			
+
 			if (numSamples < 3) numSamples = 3; // Minimum samples
-			
+
 			// Sample points evenly along the perimeter
 			for (int i = 0; i < numSamples; i++) {
 				float position = static_cast<float>(i) / static_cast<float>(numSamples - 1);
@@ -246,7 +276,7 @@ vector<vec2> OrganicText::sampleStringPoints(const string& s, float ds) {
 			}
 		}
 	}
-	
+
 	return points;
 }
 
@@ -257,7 +287,7 @@ void OrganicText::refreshPointsString() {
 		pointsString.clear();
 		return;
 	}
-	
+
 	float baseSpacing = ofMap(pointsSpacing, 0, 1, 0.5, 10, true);
 	float densityMultiplier = pointDensity.get();
 	float finalSpacing = baseSpacing / densityMultiplier;
@@ -288,7 +318,7 @@ void OrganicText::refreshPointsString() {
 //--------------------------------------------------------------
 vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	vec2 offset(0, 0);
-	
+
 	// Check if animation is enabled globally and for the group
 	if (!bEnableAnimation.get() || !bEnableAnimationGroup.get()) {
 		return offset;
@@ -337,7 +367,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 //--------------------------------------------------------------
 ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const {
 	ofColor color = ofColor::white;
-	
+
 	// Check if color is enabled
 	if (!bEnableColor.get() && !bEnableGlobalColor.get()) {
 		return color; // Return white if both color systems are disabled
@@ -361,12 +391,12 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		float indexMix = static_cast<float>(index) / static_cast<float>(pointsString.size());
 		float timeMix = (sin(t * colorSpeed.get()) + 1.0f) * 0.5f;
 		float mixFactor = colorMixFactor.get();
-		
+
 		// Create a smooth blend between the three colors
 		ofColor color1 = globalColor1.get();
 		ofColor color2 = globalColor2.get();
 		ofColor color3 = globalColor3.get();
-		
+
 		// First mix between color1 and color2 based on index
 		ofColor color12 = color1.lerp(color2, indexMix);
 		// Then mix with color3 based on time and mix factor
@@ -378,12 +408,12 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		float distance = glm::distance(position, textCenter);
 		float maxDist = 200.0f;
 		float distanceFactor = ofMap(distance, 0, maxDist, 0, 1, true);
-		
+
 		// Mix between colors based on distance
 		ofColor color1 = globalColor1.get();
 		ofColor color2 = globalColor2.get();
 		ofColor color3 = globalColor3.get();
-		
+
 		if (distanceFactor < 0.5f) {
 			color = color1.lerp(color2, distanceFactor * 2.0f);
 		} else {
@@ -504,32 +534,32 @@ void OrganicText::drawConnections() const {
 }
 
 //--------------------------------------------------------------
-void OrganicText::drawDebugInfo() const {
-	if (!bDebug.get()) return;
-	
+void OrganicText::drawDebug() const {
+	if (!bDebugDraw.get()) return;
+
 	ofPushStyle();
 	ofSetColor(ofColor::red);
 	ofNoFill();
 	ofSetLineWidth(1);
-	
+
 	// Draw center point
 	ofDrawCircle(textCenter, 5);
-	
+
 	// Draw coordinate system
 	ofDrawLine(textCenter - vec2(20, 0), textCenter + vec2(20, 0));
 	ofDrawLine(textCenter - vec2(0, 20), textCenter + vec2(0, 20));
-	
+
 	// Draw original sample points
 	ofSetColor(ofColor::yellow);
-	for (const auto& point : pointsString) {
+	for (const auto & point : pointsString) {
 		ofDrawCircle(point, 2);
 	}
-	
+
 	// Draw bounding box
 	if (!pointsString.empty()) {
 		vec2 minPoint = pointsString[0];
 		vec2 maxPoint = pointsString[0];
-		for (const auto& point : pointsString) {
+		for (const auto & point : pointsString) {
 			minPoint.x = std::min(minPoint.x, point.x);
 			minPoint.y = std::min(minPoint.y, point.y);
 			maxPoint.x = std::max(maxPoint.x, point.x);
@@ -538,36 +568,34 @@ void OrganicText::drawDebugInfo() const {
 		ofSetColor(ofColor::green);
 		ofDrawRectangle(minPoint.x, minPoint.y, maxPoint.x - minPoint.x, maxPoint.y - minPoint.y);
 	}
-	
+
 	ofPopStyle();
 }
 
 //--------------------------------------------------------------
-void OrganicText::drawPerformanceInfo() const {
-	if (!bDebug.get()) return;
-	
+void OrganicText::drawDebugInfo() const {
+	if (!bDebugDrawInfo.get()) return;
+
 	ofPushStyle();
-	
+
 	// === INTERNAL APP METRICS ===
-	float fps = ofGetFrameRate();
-	float frameTime = 1000.0f / std::max(fps, 0.1f); // Avoid division by zero
 	int pointCount = pointsString.size();
-	
+
 	// Trail system metrics
 	int totalTrailPoints = 0;
 	int activeTrails = 0;
-	for (const auto& trail : pointTrails) {
+	for (const auto & trail : pointTrails) {
 		totalTrailPoints += trail.size();
 		if (!trail.empty()) activeTrails++;
 	}
-	
-	// Connection system metrics  
+
+	// Connection system metrics
 	int activeConnections = 0;
 	float connectionCost = 0.0f; // O(n²) computational cost indicator
 	if (bDrawConnections.get() && bEnableConnection.get()) {
 		float maxDist = connectionDistance.get();
 		connectionCost = pointCount * pointCount; // Shows O(n²) nature
-		
+
 		// Count actual connections being drawn
 		for (int i = 0; i < pointCount; i++) {
 			for (int j = i + 1; j < pointCount; j++) {
@@ -577,17 +605,17 @@ void OrganicText::drawPerformanceInfo() const {
 			}
 		}
 	}
-	
+
 	// Memory usage estimation (rough)
-	int estimatedMemoryKB = (pointCount * static_cast<int>(sizeof(vec2))) / 1024 + 
-	                       (totalTrailPoints * static_cast<int>(sizeof(vec2))) / 1024 + 
-	                       100; // Base app memory
-	
+	int estimatedMemoryKB = (pointCount * static_cast<int>(sizeof(vec2))) / 1024 + (totalTrailPoints * static_cast<int>(sizeof(vec2))) / 1024 + 100; // Base app memory
+
 	// Performance status
 	string perfStatus = "GOOD";
-	if (fps < 30) perfStatus = "POOR";
-	else if (fps < 45) perfStatus = "OK";
-	
+	if (fps < 30)
+		perfStatus = "POOR";
+	else if (fps < 45)
+		perfStatus = "OK";
+
 	// === BUILD INFO STRINGS ===
 	vector<string> infoLines;
 	infoLines.push_back("=== APP PERFORMANCE ===");
@@ -606,48 +634,51 @@ void OrganicText::drawPerformanceInfo() const {
 	infoLines.push_back("Animation: " + string(bEnableAnimation.get() ? "ON" : "OFF"));
 	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (sceneZoom.get() * 4.0f), 1) + "x");
 	infoLines.push_back("Current Preset: " + sText.get());
-	
+
 	// === DRAW PERFORMANCE BOX ===
 	float lineHeight = 14;
 	float padding = 8;
 	float boxWidth = 220;
 	float boxHeight = infoLines.size() * lineHeight + (padding * 2);
-	
+
 	// Position at top-right, but leave space for GUI
 	float boxX = ofGetWidth() - boxWidth - 10;
 	float boxY = 10;
-	
+
 	// Black semi-transparent background
 	ofSetColor(0, 0, 0, 180);
 	ofFill();
 	ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
-	
+
 	// White border
 	ofSetColor(255, 255, 255, 255);
 	ofNoFill();
 	ofSetLineWidth(1);
 	ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
-	
+
 	// Draw text lines
 	ofSetColor(255, 255, 255, 255);
 	for (size_t i = 0; i < infoLines.size(); i++) {
 		float textX = boxX + padding;
 		float textY = boxY + padding + (i + 1) * lineHeight;
-		
+
 		// Color code important metrics
 		if (infoLines[i].find("FPS:") != string::npos) {
-			if (fps < 30) ofSetColor(255, 100, 100); // Red for poor FPS
-			else if (fps < 45) ofSetColor(255, 255, 100); // Yellow for ok FPS  
-			else ofSetColor(100, 255, 100); // Green for good FPS
+			if (fps < 30)
+				ofSetColor(255, 100, 100); // Red for poor FPS
+			else if (fps < 45)
+				ofSetColor(255, 255, 100); // Yellow for ok FPS
+			else
+				ofSetColor(100, 255, 100); // Green for good FPS
 		} else if (infoLines[i].find("Connection Cost:") != string::npos && connectionCost > 10000) {
 			ofSetColor(255, 200, 100); // Orange for high computational cost
 		} else {
 			ofSetColor(255, 255, 255); // White for normal text
 		}
-		
+
 		ofDrawBitmapString(infoLines[i], textX, textY);
 	}
-	
+
 	ofPopStyle();
 }
 
@@ -655,15 +686,15 @@ void OrganicText::drawPerformanceInfo() const {
 void OrganicText::draw() {
 	// Calculate zoom factor (0-1 maps to 1x-5x)
 	float zoomFactor = 1.0f + (sceneZoom.get() * 4.0f);
-	
+
 	ofPushMatrix();
-	
+
 	// Center the content and apply zoom
 	float centerX = ofGetWidth() / 2.0f;
 	float centerY = ofGetHeight() / 2.0f;
 	ofTranslate(centerX, centerY);
 	ofScale(zoomFactor, zoomFactor);
-	
+
 	// Move to text position (considering the zoom scaling)
 	ofTranslate(-font.stringWidth(sText) / 2.0f, font.stringHeight(sText) / 2.0f);
 
@@ -678,7 +709,10 @@ void OrganicText::draw() {
 	}
 
 	// Debug mode visualization
-	if (bDebug) {
+	if (bDebugDraw) {
+		drawDebug();
+	}
+	if (bDebugDrawInfo) {
 		drawDebugInfo();
 	}
 
@@ -728,7 +762,7 @@ void OrganicText::draw() {
 			// Draw shape
 			drawShape(newPoint, pointSize, (ShapeType)shapeType.get(), rotation);
 
-			if (bDebug) {
+			if (bDebugDraw) {
 				ofFill();
 				ofSetColor(ofColor::red);
 				ofDrawCircle(pointsString[i], 2 / zoomFactor); // Adjust debug circle size for zoom
@@ -739,18 +773,11 @@ void OrganicText::draw() {
 	}
 
 	ofPopMatrix();
-	
-	// Draw performance info box (outside transformations)
-	drawPerformanceInfo();
-	
-	gui.draw();
-}
 
-//--------------------------------------------------------------
-void OrganicText::update() {
-	if (bEnableAnimation.get()) {
-		t += 0.01f * animSpeed.get();
-	}
+	// Draw performance info box (outside transformations)
+	drawDebugInfo();
+
+	gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -818,6 +845,13 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 		bDrawFill.set(!bDrawFill.get());
 	}
 
+	// Debug modes
+	else if (key == 'D') {
+		bDebugDraw.set(!bDebugDraw.get());
+	}else if ( key == 'd') {
+		bDebugDrawInfo.set(!bDebugDrawInfo.get());
+	}
+
 	// Background color
 	else if (key == 'b' || key == 'B') {
 		static bool darkBg = true;
@@ -868,11 +902,6 @@ void OrganicText::loadSettings() {
 	} else {
 		ofLogNotice("OrganicText") << "Settings file not found: " << pathSettings;
 	}
-}
-
-//--------------------------------------------------------------
-void OrganicText::exit() {
-	saveSettings();
 }
 
 //--------------------------------------------------------------
@@ -939,15 +968,15 @@ void OrganicText::resetAllParams() {
 	resetGlobalColorParams();
 	resetAnimationParams();
 	resetConnectionParams();
-	
+
 	// Reset basic parameters
-	bDebug.set(false);
+	bDebugDraw.set(false);
 	bDrawFill.set(true);
 	bDrawOutline.set(false);
 	bDrawShapes.set(true);
 	bEnableAnimation.set(true);
 	sceneZoom.set(0.0f);
-	
+
 	// Reset enable flags
 	bEnableDensity.set(true);
 	bEnableShape.set(true);
@@ -955,7 +984,7 @@ void OrganicText::resetAllParams() {
 	bEnableGlobalColor.set(true);
 	bEnableAnimationGroup.set(true);
 	bEnableConnection.set(true);
-	
+
 	// Reset time
 	t = 0.0f;
 }

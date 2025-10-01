@@ -2,6 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	//ofBackground(0); // Changed to black for better color effects
+	//ofSetFrameRate(60);
+
 	#if 0
 	ofSetWindowShape(512, 512);
 	int p = 50;
@@ -13,7 +16,6 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	t.update();
 }
 
 //--------------------------------------------------------------

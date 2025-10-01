@@ -38,17 +38,19 @@ enum AnimMode {
 
 class OrganicText {
 public:
-	//OrganicText();
-	//~OrganicText();
+	OrganicText();
+	~OrganicText();
 
 	void setup();
-	void update();
 	void draw();
-	void exit(); // New: exit function for auto-save
-	//void update(ofEventArgs & args);
 	void keyPressed(ofKeyEventArgs & eventArgs);
-	//void exit();
+	void exit();
 
+private:
+	void update();
+	void update(ofEventArgs & args);
+
+public:
 	string pathSettings = "OrganicText.json";
 
 	ofParameterGroup parameters;
@@ -61,7 +63,8 @@ public:
 
 	// Basic parameters
 	ofParameter<bool> bKeys;
-	ofParameter<bool> bDebug;
+	ofParameter<bool> bDebugDraw;
+	ofParameter<bool> bDebugDrawInfo;
 	ofParameter<bool> bDrawFill; // Fill shapes 
 	ofParameter<bool> bEnablePlain;
 	ofParameter<bool> bDrawShapes; // Enable shape drawing (renamed from bEnableShapes)
@@ -135,6 +138,7 @@ public:
 	// Global controls
 	ofParameter<void> resetAll; // Reset everything to defaults
 
+private:
 	// Event listeners
 	ofEventListener e_PointsSize, e_PointsRadius, e_sText, e_PointDensity, e_ContourSampling;
 	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_ResetAll;
@@ -147,11 +151,13 @@ public:
 	void updateTrails();
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
+	void drawDebug() const; // Debug visualization
+	void drawDebugInfo() const; // Performance information box
+
+public:
 	void saveSettings();
 	void loadSettings();
-	void drawDebugInfo() const; // Debug visualization
-	void drawPerformanceInfo() const; // Performance information box
-	
+
 	// Reset functions
 	void resetDensityParams();
 	void resetShapeParams();
@@ -168,10 +174,8 @@ public:
 	void randomizeGlobalColorParams();
 	void randomizeAnimationParams();
 	void randomizeConnectionParams();
-	
-	// Preset functions (0-9 numerical keys)
-	void loadPreset(int presetNumber);
 
+private:
 	// Data
 	vector<vec2> pointsString;
 	vector<vector<vec2>> pointTrails; // For trail effect
@@ -179,7 +183,15 @@ public:
 	float t;
 	vec2 textCenter; // Center of text for distance calculations
 
-	ofxPanel gui;
 	void refreshPointsString();
+
+	float fps;
+	float frameTime;
+
+public:
+	ofxPanel gui;
+
+	// Preset functions (0-9 numerical keys)
+	void loadPreset(int presetNumber);
 
 };
