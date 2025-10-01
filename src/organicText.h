@@ -7,6 +7,7 @@ using namespace glm;
 constexpr const char* ORGANICTEXT = "ARB";
 constexpr float MAX_RADIUS = 50.0f;
 constexpr float MIN_RADIUS = 1.0f;
+constexpr float ZOOM_MAX_X = 10.0f;
 
 // Shape types for drawing points
 enum ShapeType {

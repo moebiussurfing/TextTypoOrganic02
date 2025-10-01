@@ -632,7 +632,7 @@ void OrganicText::drawDebugInfo() const {
 	infoLines.push_back("=== SYSTEM STATUS ===");
 	infoLines.push_back("Memory ~: " + ofToString(estimatedMemoryKB) + " KB");
 	infoLines.push_back("Animation: " + string(bEnableAnimation.get() ? "ON" : "OFF"));
-	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (sceneZoom.get() * 4.0f), 1) + "x");
+	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (sceneZoom.get() * ZOOM_MAX_X), 1) + "x");
 	infoLines.push_back("Current Preset: " + sText.get());
 
 	// === DRAW PERFORMANCE BOX ===
@@ -685,7 +685,7 @@ void OrganicText::drawDebugInfo() const {
 //--------------------------------------------------------------
 void OrganicText::draw() {
 	// Calculate zoom factor (0-1 maps to 1x-5x)
-	float zoomFactor = 1.0f + (sceneZoom.get() * 4.0f);
+	float zoomFactor = 1.0f + (sceneZoom.get() * ZOOM_MAX_X);
 
 	ofPushMatrix();
 
