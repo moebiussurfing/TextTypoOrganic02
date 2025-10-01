@@ -17,17 +17,13 @@ enum ShapeType {
 	SHAPE_CROSS = 4
 };
 
-// Color modes
+// Color modes (simplified - based only on global colors)
 enum ColorMode {
-	COLOR_PLAIN = 0,
-	COLOR_RAINBOW = 1,
-	COLOR_GRADIENT = 2,
-	COLOR_NOISE = 3,
-	COLOR_DISTANCE = 4,
-	COLOR_GLOBAL_1 = 5,
-	COLOR_GLOBAL_2 = 6,
-	COLOR_GLOBAL_3 = 7,
-	COLOR_GLOBAL_MIX = 8
+	COLOR_GLOBAL_1 = 0,     // Use globalColor1
+	COLOR_GLOBAL_2 = 1,     // Use globalColor2  
+	COLOR_GLOBAL_3 = 2,     // Use globalColor3
+	COLOR_GLOBAL_MIX = 3,   // Mix all 3 colors
+	COLOR_DISTANCE = 4      // Mix based on distance from center
 };
 
 // Animation modes
@@ -65,68 +61,65 @@ public:
 	// Basic parameters
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bDebug;
-	ofParameter<bool> bFill;
-	ofParameter<bool> bPlain;
-	ofParameter<bool> bDrawShapes; // New: Toggle to disable shape drawing
-	ofParameter<bool> bEnableAnimation; // New: Toggle to disable animation
-	ofParameter<float> noiseSize;
+	ofParameter<bool> bDrawFill;
+	ofParameter<bool> bDrawPlain;
+	ofParameter<bool> bDrawShapes; // Toggle to disable shape drawing
+	ofParameter<bool> bEnableAnimation; // Toggle to disable animation
 	ofParameter<string> sText;
 
 	// Density parameters with enable/reset
-	ofParameter<bool> bEnableDensity; // New: Enable density group
-	ofParameter<void> resetDensity; // New: Reset density group
-	ofParameter<void> randomDensity; // New: Randomize density group
+	ofParameter<bool> bEnableDensity; // Enable density group
+	ofParameter<void> resetDensity; // Reset density group
+	ofParameter<void> randomDensity; // Randomize density group
 	ofParameter<float> pointsSpacing;
 	ofParameter<float> pointDensity;
 	ofParameter<float> minSpacing;
-	ofParameter<float> contourSampling; // New: Better contour sampling control
+	ofParameter<float> contourSampling; // Better contour sampling control
 
 	// Shape parameters with enable/reset
-	ofParameter<bool> bEnableShape; // New: Enable shape group
-	ofParameter<void> resetShape; // New: Reset shape group
-	ofParameter<void> randomShape; // New: Randomize shape group
+	ofParameter<bool> bEnableShape; // Enable shape group
+	ofParameter<void> resetShape; // Reset shape group
+	ofParameter<void> randomShape; // Randomize shape group
 	ofParameter<int> shapeType;
 	ofParameter<float> pointRadius;
 	ofParameter<float> pointsRadiusMin;
 	ofParameter<float> triangleRatio;
-	ofParameter<bool> bShowOutline;
+	ofParameter<bool> bDrawOutline;
 	ofParameter<float> shapeRotation;
 
-	// Color parameters with enable/reset
-	ofParameter<bool> bEnableColor; // New: Enable color group
-	ofParameter<void> resetColor; // New: Reset color group
-	ofParameter<void> randomColor; // New: Randomize color group
-	ofParameter<int> colorMode;
+	// Simplified color parameters (based on global colors only)
+	ofParameter<bool> bEnableColor; // Enable color group
+	ofParameter<void> resetColor; // Reset color group
+	ofParameter<void> randomColor; // Randomize color group
+	ofParameter<int> colorMode; // Simplified: 0=Color1, 1=Color2, 2=Color3, 3=Mix, 4=Distance
 	ofParameter<float> colorSpeed;
-	ofParameter<float> hueShift;
-	ofParameter<float> saturation;
-	ofParameter<float> brightness;
+	ofParameter<float> colorMixFactor; // How colors blend
 	ofParameter<bool> bColorByDistance;
 
 	// Global color parameters with enable/reset
-	ofParameter<bool> bEnableGlobalColor; // New: Enable global color group
-	ofParameter<void> resetGlobalColor; // New: Reset global color group
-	ofParameter<void> randomGlobalColor; // New: Randomize global color group
+	ofParameter<bool> bEnableGlobalColor; // Enable global color group
+	ofParameter<void> resetGlobalColor; // Reset global color group
+	ofParameter<void> randomGlobalColor; // Randomize global color group
 	ofParameter<ofColor> globalColor1;
 	ofParameter<ofColor> globalColor2;
 	ofParameter<ofColor> globalColor3;
-	ofParameter<float> globalColorMix;
 
 	// Animation parameters with enable/reset
-	ofParameter<bool> bEnableAnimationGroup; // New: Enable animation group
-	ofParameter<void> resetAnimation; // New: Reset animation group
-	ofParameter<void> randomAnimation; // New: Randomize animation group
+	ofParameter<bool> bEnableAnimationGroup; // Enable animation group
+	ofParameter<void> resetAnimation; // Reset animation group
+	ofParameter<void> randomAnimation; // Randomize animation group
 	ofParameter<int> animationMode;
 	ofParameter<float> animSpeed;
+	ofParameter<float> noiseSize; // Moved from basic parameters
 	ofParameter<float> waveFrequency;
 	ofParameter<float> waveAmplitude;
 	ofParameter<float> spiralTightness;
 	ofParameter<float> pulseIntensity;
 
 	// Connection parameters with enable/reset
-	ofParameter<bool> bEnableConnection; // New: Enable connection group
-	ofParameter<void> resetConnection; // New: Reset connection group
-	ofParameter<void> randomConnection; // New: Randomize connection group
+	ofParameter<bool> bDrawConnection; // Enable connection group
+	ofParameter<void> resetConnection; // Reset connection group
+	ofParameter<void> randomConnection; // Randomize connection group
 	ofParameter<bool> bDrawConnections;
 	ofParameter<float> connectionDistance;
 	ofParameter<float> connectionAlpha;
@@ -138,7 +131,7 @@ public:
 	ofParameter<float> trailFade;
 
 	// Global controls
-	ofParameter<void> resetAll; // New: Reset everything to defaults
+	ofParameter<void> resetAll; // Reset everything to defaults
 
 	// Event listeners
 	ofEventListener e_PointsRadius;
@@ -176,6 +169,12 @@ public:
 	void randomizeGlobalColorParams();
 	void randomizeAnimationParams();
 	void randomizeConnectionParams();
+	
+	// Preset functions (for keys 1,2,3,4)
+	void loadPreset1_CyberWave();
+	void loadPreset2_OrganicFlow();
+	void loadPreset3_NeonPulse();
+	void loadPreset4_CosmicDance();
 
 	// Data
 	vector<vec2> pointsString;
