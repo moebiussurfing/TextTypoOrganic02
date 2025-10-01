@@ -62,61 +62,61 @@ public:
 	ofParameterGroup animGroup; // Animation controls
 	ofParameterGroup connectionGroup; // Connection controls
 
-	// Basic parameters
-	ofParameter<bool> bKeys;
+	// Basic parameters - Simplified
 	ofParameter<bool> bDebugDraw;
 	ofParameter<bool> bDebugDrawInfo;
-	ofParameter<bool> bDrawFill; // Fill shapes 
-	ofParameter<bool> bEnablePlain;
-	ofParameter<bool> bDrawShapes; // Enable shape drawing (renamed from bEnableShapes)
-	ofParameter<bool> bEnableAnimation; // Enable animation
-	ofParameter<bool> bDrawOutline; // Draw text outline
-	ofParameter<float> sceneZoom; // Scene zoom factor (0-1, maps to 1x-5x)
+	ofParameter<bool> bDrawFill; 
+	ofParameter<bool> bDrawShapes; 
+	ofParameter<bool> bEnableAnimation; 
+	ofParameter<bool> bDrawOutline; 
+	ofParameter<float> sceneZoom; 
 	ofParameter<string> sText;
 
-	// Density parameters with enable/reset
-	ofParameter<bool> bEnableDensity; // Enable density group
-	ofParameter<void> resetDensity; // Reset density group
-	ofParameter<void> randomDensity; // Randomize density group
+	// Density parameters - Removed unused bEnableDensity
+	ofParameter<void> resetDensity; 
+	ofParameter<void> randomDensity; 
 	ofParameter<float> pointsSpacing;
 	ofParameter<float> pointDensity;
 	ofParameter<float> minSpacing;
-	ofParameter<float> contourSampling; // Better contour sampling control
+	ofParameter<float> contourSampling; 
 
-	// Shape parameters with enable/reset
-	ofParameter<bool> bEnableShape; // Enable shape group
-	ofParameter<void> resetShape; // Reset shape group
-	ofParameter<void> randomShape; // Randomize shape group
+	// Shape parameters - Removed unused bEnableShape
+	ofParameter<void> resetShape; 
+	ofParameter<void> randomShape; 
 	ofParameter<int> shapeType;
+	ofParameter<string> shapeTypeName; // NEW: Display current shape name
 	ofParameter<float> pointRadius;
 	ofParameter<float> pointsRadiusMin;
 	ofParameter<float> triangleRatio;
 	ofParameter<float> shapeRotation;
 
-	// Simplified color parameters (based on global colors only)
-	ofParameter<bool> bEnableColor; // Enable color group
-	ofParameter<void> resetColor; // Reset color group
-	ofParameter<void> randomColor; // Randomize color group
-	ofParameter<int> colorMode; // Simplified: 0=Color1, 1=Color2, 2=Color3, 3=Mix, 4=Distance
+	// Color parameters - Removed unused bEnableColor
+	ofParameter<void> resetColor; 
+	ofParameter<void> randomColor; 
+	ofParameter<int> colorMode; 
+	ofParameter<string> colorModeName; // NEW: Display current color mode name
 	ofParameter<float> colorSpeed;
-	ofParameter<float> colorMixFactor; // How colors blend
+	ofParameter<float> colorMixFactor; 
 	ofParameter<bool> bColorByDistance;
 
-	// Global color parameters with enable/reset
-	ofParameter<bool> bEnableGlobalColor; // Enable global color group
-	ofParameter<void> resetGlobalColor; // Reset global color group
-	ofParameter<void> randomGlobalColor; // Randomize global color group
+	// Colors parameters - Simplified, removed unused bEnableGlobalColor
+	ofParameter<void> resetGlobalColor; 
+	ofParameter<void> randomGlobalColor; 
 	ofParameter<ofColor> globalColor1;
 	ofParameter<ofColor> globalColor2;
 	ofParameter<ofColor> globalColor3;
+	
+	// NEW: Outline and connection colors
+	ofParameter<ofColor> outlineColor;
+	ofParameter<ofColor> connectionColor;
 
-	// Animation parameters with enable/reset
-	ofParameter<bool> bEnableAnimationGroup; // Enable animation group
-	ofParameter<void> resetAnimation; // Reset animation group
-	ofParameter<void> randomAnimation; // Randomize animation group
+	// Animation parameters - Removed redundant bEnableAnimationGroup (use bEnableAnimation)
+	ofParameter<void> resetAnimation; 
+	ofParameter<void> randomAnimation; 
 	ofParameter<int> animationMode;
+	ofParameter<string> animationModeName; // NEW: Display current animation mode name
 	ofParameter<float> animSpeed;
-	ofParameter<float> noiseSize; // Moved from basic parameters
+	ofParameter<float> noiseSize; 
 	ofParameter<float> waveFrequency;
 	ofParameter<float> waveAmplitude;
 	ofParameter<float> spiralTightness;
@@ -158,6 +158,11 @@ private:
 public:
 	void saveSettings();
 	void loadSettings();
+	
+	// Update mode name strings
+	void updateShapeTypeName(int &);
+	void updateColorModeName(int &);
+	void updateAnimationModeName(int &);
 
 	// Reset functions
 	void resetDensityParams();
