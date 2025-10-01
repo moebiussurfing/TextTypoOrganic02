@@ -148,7 +148,7 @@ void OrganicText::setup() {
 
 	parameters.add(sText);
 	parameters.add(bDrawOutline);
-	parameters.add(bFill);
+	parameters.add(bDrawFill);
 	parameters.add(bDrawShapes);
 	parameters.add(sceneZoom);
 	parameters.add(bDrawConnections);
