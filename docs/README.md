@@ -12,6 +12,12 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 
 ## 📚 Documentation Structure
 
+### 🤖 For AI Assistants (Copilot, Gemini, Cline, etc.)
+- **[PROJECT-CONTEXT.md](AI-Assistant/PROJECT-CONTEXT.md)** - Complete project overview in one file ⭐
+- **[QUICK-COMMANDS.md](AI-Assistant/QUICK-COMMANDS.md)** - Common operations and workflows
+- **[CODE-PATTERNS.md](AI-Assistant/CODE-PATTERNS.md)** - Coding conventions and patterns
+- **[CURRENT-STATE.md](AI-Assistant/CURRENT-STATE.md)** - Current status and immediate priorities
+
 ### 👤 For Users
 - **[Quick Start Guide](User/Quick-Start.md)** - Get started in 30 seconds
 - **[Complete User Manual](User/User-Manual.md)** - All features and controls explained  
@@ -75,15 +81,15 @@ Open `.vcxproj` and build in Release mode.
 
 ## 🎨 For Copilot AI Assistants
 
-This documentation is organized to help AI assistants understand and work with the project:
+This documentation is specifically optimized for AI coding assistants:
 
-- **Immediate tasks**: Check [`/TODO/Current-Tasks.md`](TODO/Current-Tasks.md) for what needs to be done now
-- **Bug tracking**: See [`/TODO/Known-Bugs.md`](TODO/Known-Bugs.md) for current issues
-- **Code structure**: [`/Developer/Architecture.md`](Developer/Architecture.md) explains the system design
-- **Future planning**: [`/Plans/`](Plans/) contains roadmaps and enhancement ideas
-- **User needs**: [`/User/`](User/) documentation shows how the software is actually used
+- **Start here**: [`/AI-Assistant/PROJECT-CONTEXT.md`](AI-Assistant/PROJECT-CONTEXT.md) - Complete project context in one file
+- **Common tasks**: [`/AI-Assistant/QUICK-COMMANDS.md`](AI-Assistant/QUICK-COMMANDS.md) - Frequent operations and workflows  
+- **Code style**: [`/AI-Assistant/CODE-PATTERNS.md`](AI-Assistant/CODE-PATTERNS.md) - Conventions and patterns
+- **Current status**: [`/AI-Assistant/CURRENT-STATE.md`](AI-Assistant/CURRENT-STATE.md) - What to work on now
+- **Immediate tasks**: [`/TODO/Current-Tasks.md`](TODO/Current-Tasks.md) - Prioritized task list
 
-The project is **production ready** with a clean codebase, comprehensive documentation, and clear development paths forward.
+**For AI Assistants**: The project is **production ready** with clean, well-documented code and clear development paths forward.
 
 ---
 
