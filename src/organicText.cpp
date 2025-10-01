@@ -385,11 +385,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const {
 	ofColor color = ofColor::white;
 
-	// Check if color is enabled
-	if (!bEnableColor.get() && !bEnableGlobalColor.get()) {
-		return color; // Return white if both color systems are disabled
-	}
-
+	// Always calculate color (removed enable checks)
 	switch ((ColorMode)colorMode.get()) {
 	case COLOR_GLOBAL_1:
 		color = globalColor1.get();
@@ -995,10 +991,7 @@ void OrganicText::resetAllParams() {
 	bEnableAnimation.set(true);
 	sceneZoom.set(0.0f);
 
-	// Reset enable flags
 	// Removed all bEnable parameter settings (not needed)
-	bEnableConnection.set(true);
-
 	// Reset time
 	t = 0.0f;
 }
