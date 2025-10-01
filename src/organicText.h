@@ -14,7 +14,8 @@ enum ShapeType {
 	SHAPE_RECTANGLE = 1,
 	SHAPE_TRIANGLE = 2,
 	SHAPE_STAR = 3,
-	SHAPE_CROSS = 4
+	SHAPE_CROSS = 4,
+	SHAPE_POINT = 5  // New: Just points for debug-like visualization
 };
 
 // Color modes (simplified - based only on global colors)
@@ -61,10 +62,12 @@ public:
 	// Basic parameters
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bDebug;
-	ofParameter<bool> bDrawFill;
-	ofParameter<bool> bDrawPlain;
+	ofParameter<bool> bFill;
+	ofParameter<bool> bPlain;
 	ofParameter<bool> bDrawShapes; // Toggle to disable shape drawing
 	ofParameter<bool> bEnableAnimation; // Toggle to disable animation
+	ofParameter<bool> bShowOutline;
+	ofParameter<float> sceneZoom; // Scene zoom factor (0-1, maps to 1x-5x)
 	ofParameter<string> sText;
 
 	// Density parameters with enable/reset
@@ -152,6 +155,7 @@ public:
 	vec2 getAnimatedOffset(int index, float phase) const;
 	void saveSettings();
 	void loadSettings();
+	void drawDebugInfo() const; // New: Debug visualization
 	
 	// Reset functions
 	void resetDensityParams();
@@ -170,7 +174,9 @@ public:
 	void randomizeAnimationParams();
 	void randomizeConnectionParams();
 	
-	// Preset functions (for keys 1,2,3,4)
+	// Preset functions (0-9 numerical keys)
+	void loadPreset(int presetNumber);
+	void loadPreset0_Minimal();
 	void loadPreset1_CyberWave();
 	void loadPreset2_OrganicFlow();
 	void loadPreset3_NeonPulse();

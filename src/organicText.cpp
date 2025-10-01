@@ -8,9 +8,9 @@ void OrganicText::setup() {
 	// Basic parameters
 	bDebug.set("Debug", false);
 
-	bDrawFill.set("Draw Fill", true);
-	bDrawPlain.set("Draw Plain", false);
-	bDrawOutline.set("Draw Outline", false);
+	bFill.set("Fill", true);
+	bPlain.set("Plain", false);
+	bShowOutline.set("Show Outline", false);
 	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Enable Animation", true);
 	sText.set("Text", ORGANICTEXT);
@@ -30,7 +30,7 @@ void OrganicText::setup() {
 	randomShape.set("Random Shape");
 	pointRadius.set("Radius", 0.5, 0, 1);
 	pointsRadiusMin.set("Radius Min", 0.3, 0, 1);
-	shapeType.set("Shape", 0, 0, 4);
+	shapeType.set("Shape", 0, 0, 5); // Updated max to include SHAPE_POINT
 	triangleRatio.set("Triangle Ratio", 1.0, 0.5, 2.0);
 	shapeRotation.set("Shape Rotation", 0, 0, 360);
 
@@ -143,8 +143,8 @@ void OrganicText::setup() {
 	parameters.setName("OrganicText Enhanced");
 
 	parameters.add(sText);
-	parameters.add(bDrawOutline);
-	parameters.add(bDrawFill);
+	parameters.add(bShowOutline);
+	parameters.add(bFill);
 	parameters.add(bDrawShapes);
 	parameters.add(bDrawConnections);
 
@@ -430,7 +430,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 			star.addVertex(cos(angle) * radius, sin(angle) * radius);
 		}
 		star.close();
-		if (bDrawFill)
+		if (bFill)
 			star.draw();
 		else
 			star.draw();
@@ -441,6 +441,12 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 		float thickness = size * 0.2f;
 		ofDrawRectangle(-thickness / 2.0f, -size / 2.0f, thickness, size);
 		ofDrawRectangle(-size / 2.0f, -thickness / 2.0f, size, thickness);
+		break;
+	}
+
+	case SHAPE_POINT: {
+		// Just draw a simple point/small circle
+		ofDrawCircle(0, 0, size * 0.3f);
 		break;
 	}
 	}
@@ -541,7 +547,7 @@ void OrganicText::draw() {
 			ofColor color = getPointColor(static_cast<int>(i), newPoint, phase);
 			ofSetColor(color);
 
-			if (bDrawFill)
+			if (bFill)
 				ofFill();
 			else
 				ofNoFill();
@@ -587,19 +593,16 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
 	// Shape controls
-	if (key >= '1' && key <= '5') {
-		shapeType.set(key - '1');
+	if (key >= '0' && key <= '9') {
+		// Load preset based on number key
+		int presetNumber = key - '0';
+		loadPreset(presetNumber);
 	}
 
-	// Preset controls (keys 1,2,3,4 with modifiers)
-	else if (key == '1' && (mod_CONTROL || mod_COMMAND)) {
-		loadPreset1_CyberWave();
-	} else if (key == '2' && (mod_CONTROL || mod_COMMAND)) {
-		loadPreset2_OrganicFlow();
-	} else if (key == '3' && (mod_CONTROL || mod_COMMAND)) {
-		loadPreset3_NeonPulse();
-	} else if (key == '4' && (mod_CONTROL || mod_COMMAND)) {
-		loadPreset4_CosmicDance();
+	// Preset controls (keys 1,2,3,4 with modifiers) - REMOVED, now use direct number keys
+	// Shape controls with Shift modifier
+	else if (key >= '1' && key <= '5' && mod_SHIFT) {
+		shapeType.set(key - '1');
 	}
 
 	// Color mode controls (simplified)
@@ -628,15 +631,22 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 		animSpeed.set(std::max(0.1f, animSpeed.get() - 0.1f));
 	}
 
+	// Zoom controls
+	else if (key == OF_KEY_LEFT) {
+		sceneZoom.set(std::max(0.0f, sceneZoom.get() - 0.1f));
+	} else if (key == OF_KEY_RIGHT) {
+		sceneZoom.set(std::min(1.0f, sceneZoom.get() + 0.1f));
+	}
+
 	// Toggle features
 	else if (key == 't' || key == 'T') {
 		bDrawTrails.set(!bDrawTrails.get());
 	} else if (key == 'l' || key == 'L') {
 		bDrawConnections.set(!bDrawConnections.get());
 	} else if (key == 'o' || key == 'O') {
-		bDrawOutline.set(!bDrawOutline.get());
+		bShowOutline.set(!bShowOutline.get());
 	} else if (key == 'f' || key == 'F') {
-		bDrawFill.set(!bDrawFill.get());
+		bFill.set(!bFill.get());
 	}
 
 	// Background color
@@ -763,10 +773,11 @@ void OrganicText::resetAllParams() {
 	
 	// Reset basic parameters
 	bDebug.set(false);
-	bDrawFill.set(true);
-	bDrawOutline.set(false);
+	bFill.set(true);
+	bShowOutline.set(false);
 	bDrawShapes.set(true);
 	bEnableAnimation.set(true);
+	sceneZoom.set(0.0f);
 	
 	// Reset enable flags
 	bEnableDensity.set(true);
@@ -778,6 +789,179 @@ void OrganicText::resetAllParams() {
 	
 	// Reset time
 	t = 0.0f;
+}
+
+//--------------------------------------------------------------
+// Simplified preset functions without external dependencies
+void OrganicText::loadPreset0_Minimal() {
+	// Minimal colors: Black, white, gray
+	globalColor1.set(ofColor::white);
+	globalColor2.set(ofColor::lightGray);
+	globalColor3.set(ofColor::gray);
+	colorMode.set(0); // COLOR_GLOBAL_1
+	colorSpeed.set(0.5f);
+	colorMixFactor.set(0.2f);
+	
+	// Low density, clean
+	pointDensity.set(1.0f);
+	contourSampling.set(2.0f);
+	pointsSpacing.set(0.3f);
+	
+	// Simple circles
+	shapeType.set(0); // SHAPE_CIRCLE
+	pointRadius.set(0.4f);
+	pointsRadiusMin.set(0.2f);
+	
+	// No animation for clean look
+	animationMode.set(0); // ANIM_NOISE
+	animSpeed.set(0.3f);
+	noiseSize.set(2.0f);
+	
+	// No connections or trails
+	bDrawConnections.set(false);
+	bDrawTrails.set(false);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset1_CyberWave() {
+	// Colors: Electric blue, neon green, bright cyan
+	globalColor1.set(ofColor(0, 255, 255));     // Cyan
+	globalColor2.set(ofColor(0, 255, 100));     // Electric green
+	globalColor3.set(ofColor(100, 150, 255));   // Electric blue
+	colorMode.set(3); // COLOR_GLOBAL_MIX
+	colorSpeed.set(2.5f);
+	colorMixFactor.set(0.8f);
+	
+	// Dense particles with connections
+	pointDensity.set(3.0f);
+	contourSampling.set(7.0f);
+	pointsSpacing.set(0.15f);
+	
+	// Small circles with trails
+	shapeType.set(0); // SHAPE_CIRCLE
+	pointRadius.set(0.3f);
+	pointsRadiusMin.set(0.1f);
+	
+	// Wave animation
+	animationMode.set(1); // ANIM_WAVE
+	animSpeed.set(1.8f);
+	waveFrequency.set(0.05f);
+	waveAmplitude.set(15.0f);
+	
+	// Connections and trails
+	bDrawConnections.set(true);
+	connectionDistance.set(25.0f);
+	connectionAlpha.set(80.0f);
+	bDrawTrails.set(true);
+	trailLength.set(15);
+	trailFade.set(0.85f);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset2_OrganicFlow() {
+	// Colors: Warm earth tones
+	globalColor1.set(ofColor(255, 180, 100));   // Warm orange
+	globalColor2.set(ofColor(180, 255, 120));   // Soft green
+	globalColor3.set(ofColor(255, 200, 150));   // Warm beige
+	colorMode.set(4); // COLOR_DISTANCE
+	colorSpeed.set(0.8f);
+	colorMixFactor.set(0.6f);
+	
+	// Medium density
+	pointDensity.set(2.0f);
+	contourSampling.set(4.0f);
+	pointsSpacing.set(0.25f);
+	
+	// Varied circles
+	shapeType.set(0); // SHAPE_CIRCLE
+	pointRadius.set(0.7f);
+	pointsRadiusMin.set(0.4f);
+	
+	// Spiral animation
+	animationMode.set(2); // ANIM_SPIRAL
+	animSpeed.set(1.2f);
+	spiralTightness.set(0.02f);
+	noiseSize.set(8.0f);
+	
+	// Subtle connections
+	bDrawConnections.set(true);
+	connectionDistance.set(40.0f);
+	connectionAlpha.set(50.0f);
+	bDrawTrails.set(false);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset3_NeonPulse() {
+	// Colors: Hot neon colors
+	globalColor1.set(ofColor(255, 0, 150));     // Hot pink
+	globalColor2.set(ofColor(255, 255, 0));     // Bright yellow
+	globalColor3.set(ofColor(150, 0, 255));     // Electric purple
+	colorMode.set(0); // COLOR_GLOBAL_1
+	colorSpeed.set(3.0f);
+	colorMixFactor.set(0.9f);
+	
+	// High density
+	pointDensity.set(4.0f);
+	contourSampling.set(8.0f);
+	pointsSpacing.set(0.1f);
+	
+	// Stars with rotation
+	shapeType.set(3); // SHAPE_STAR
+	pointRadius.set(0.4f);
+	pointsRadiusMin.set(0.2f);
+	shapeRotation.set(45.0f);
+	
+	// Pulse animation
+	animationMode.set(3); // ANIM_PULSE
+	animSpeed.set(2.5f);
+	pulseIntensity.set(25.0f);
+	
+	// No connections, focus on shapes
+	bDrawConnections.set(false);
+	bDrawTrails.set(false);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset4_CosmicDance() {
+	// Colors: Deep space colors
+	globalColor1.set(ofColor(100, 150, 255));   // Deep blue
+	globalColor2.set(ofColor(200, 100, 255));   // Purple
+	globalColor3.set(ofColor(255, 200, 100));   // Warm gold
+	colorMode.set(3); // COLOR_GLOBAL_MIX
+	colorSpeed.set(0.5f);
+	colorMixFactor.set(0.4f);
+	bColorByDistance.set(true);
+	
+	// Sparse but elegant
+	pointDensity.set(1.5f);
+	contourSampling.set(3.0f);
+	pointsSpacing.set(0.4f);
+	
+	// Mixed shapes
+	shapeType.set(2); // SHAPE_TRIANGLE
+	pointRadius.set(0.8f);
+	pointsRadiusMin.set(0.3f);
+	triangleRatio.set(1.5f);
+	
+	// Orbital animation
+	animationMode.set(4); // ANIM_ORBIT
+	animSpeed.set(0.6f);
+	noiseSize.set(12.0f);
+	
+	// Long distance connections with trails
+	bDrawConnections.set(true);
+	connectionDistance.set(60.0f);
+	connectionAlpha.set(30.0f);
+	bOnlyNearConnections.set(false);
+	bDrawTrails.set(true);
+	trailLength.set(25);
+	trailFade.set(0.95f);
+	
+	refreshPointsString();
 }
 
 //--------------------------------------------------------------
@@ -836,181 +1020,119 @@ void OrganicText::randomizeConnectionParams() {
 }
 
 //--------------------------------------------------------------
-// PRESET 1: CYBER WAVE - Futuristic cyberpunk aesthetic
-void OrganicText::loadPreset1_CyberWave() {
-	// Colors: Electric blue, neon green, bright cyan
-	globalColor1.set(ofColor(0, 255, 255));     // Cyan
-	globalColor2.set(ofColor(0, 255, 100));     // Electric green
-	globalColor3.set(ofColor(100, 150, 255));   // Electric blue
-	colorMode.set(COLOR_GLOBAL_MIX);
-	colorSpeed.set(2.5f);
-	colorMixFactor.set(0.8f);
-	
-	// Dense particles with connections
-	pointDensity.set(3.0f);
-	contourSampling.set(7.0f);
-	pointsSpacing.set(0.15f);
-	
-	// Small circles with trails
-	shapeType.set(SHAPE_CIRCLE);
-	pointRadius.set(0.3f);
-	pointsRadiusMin.set(0.1f);
-	
-	// Wave animation
-	animationMode.set(ANIM_WAVE);
-	animSpeed.set(1.8f);
-	waveFrequency.set(0.05f);
-	waveAmplitude.set(15.0f);
-	
-	// Connections and trails
-	bDrawConnections.set(true);
-	connectionDistance.set(25.0f);
-	connectionAlpha.set(80.0f);
-	bDrawTrails.set(true);
-	trailLength.set(15);
-	trailFade.set(0.85f);
-	
-	// Enable all
-	bDrawShapes.set(true);
-	bEnableAnimation.set(true);
-	bEnableDensity.set(true);
-	bEnableShape.set(true);
-	bEnableColor.set(true);
-	bEnableGlobalColor.set(true);
-	bEnableAnimationGroup.set(true);
-	bDrawConnection.set(true);
+// New preset loading function that delegates to the PresetManager
+void OrganicText::loadPreset(int presetNumber) {
+	switch(presetNumber) {
+		case 0: loadPreset0_Minimal(); break;
+		case 1: loadPreset1_CyberWave(); break;
+		case 2: loadPreset2_OrganicFlow(); break;
+		case 3: loadPreset3_NeonPulse(); break;
+		case 4: loadPreset4_CosmicDance(); break;
+		case 5: 
+			// Retro Grid
+			globalColor1.set(ofColor(255, 0, 128));
+			globalColor2.set(ofColor(0, 255, 255));
+			globalColor3.set(ofColor(128, 0, 255));
+			colorMode.set(3);
+			shapeType.set(1); // Rectangle
+			animationMode.set(1); // Wave
+			refreshPointsString();
+			break;
+		case 6:
+			// Bioluminous
+			globalColor1.set(ofColor(0, 255, 150));
+			globalColor2.set(ofColor(100, 200, 255));
+			globalColor3.set(ofColor(200, 255, 100));
+			colorMode.set(4); // Distance
+			shapeType.set(0); // Circle
+			animationMode.set(0); // Noise
+			refreshPointsString();
+			break;
+		case 7:
+			// Quantum Field
+			globalColor1.set(ofColor::white);
+			globalColor2.set(ofColor(150, 150, 255));
+			globalColor3.set(ofColor(255, 150, 255));
+			colorMode.set(3);
+			shapeType.set(5); // Points
+			pointDensity.set(5.0f);
+			animationMode.set(0); // Noise
+			refreshPointsString();
+			break;
+		case 8:
+			// Tribal Ritual
+			globalColor1.set(ofColor(255, 100, 0));
+			globalColor2.set(ofColor(200, 50, 0));
+			globalColor3.set(ofColor(255, 200, 100));
+			colorMode.set(1);
+			shapeType.set(4); // Cross
+			animationMode.set(3); // Pulse
+			refreshPointsString();
+			break;
+		case 9:
+			// Galaxy Storm
+			globalColor1.set(ofColor(100, 0, 200));
+			globalColor2.set(ofColor(255, 150, 0));
+			globalColor3.set(ofColor(0, 100, 255));
+			colorMode.set(4);
+			shapeType.set(3); // Star
+			animationMode.set(4); // Orbit
+			bDrawTrails.set(true);
+			refreshPointsString();
+			break;
+		default: break;
+	}
 }
 
 //--------------------------------------------------------------
-// PRESET 2: ORGANIC FLOW - Natural, flowing organic movement
-void OrganicText::loadPreset2_OrganicFlow() {
-	// Colors: Warm earth tones
-	globalColor1.set(ofColor(255, 180, 100));   // Warm orange
-	globalColor2.set(ofColor(180, 255, 120));   // Soft green
-	globalColor3.set(ofColor(255, 200, 150));   // Warm beige
-	colorMode.set(COLOR_DISTANCE);
-	colorSpeed.set(0.8f);
-	colorMixFactor.set(0.6f);
+// Debug visualization function
+void OrganicText::drawDebugInfo() const {
+	ofPushStyle();
+	ofNoFill();
+	ofSetLineWidth(1.0f);
 	
-	// Medium density
-	pointDensity.set(2.0f);
-	contourSampling.set(4.0f);
-	pointsSpacing.set(0.25f);
+	// Draw coordinate system axes
+	ofSetColor(ofColor::red, 100);
+	ofDrawLine(-100, 0, 100, 0); // X axis
+	ofSetColor(ofColor::green, 100);
+	ofDrawLine(0, -100, 0, 100); // Y axis
 	
-	// Varied circles
-	shapeType.set(SHAPE_CIRCLE);
-	pointRadius.set(0.7f);
-	pointsRadiusMin.set(0.4f);
+	// Draw text center point
+	ofSetColor(ofColor::yellow, 150);
+	ofDrawCircle(textCenter, 5);
 	
-	// Spiral animation
-	animationMode.set(ANIM_SPIRAL);
-	animSpeed.set(1.2f);
-	spiralTightness.set(0.02f);
-	noiseSize.set(8.0f);
+	// Draw text bounding box
+	ofSetColor(ofColor::cyan, 80);
+	float textWidth = font.stringWidth(sText);
+	float textHeight = font.stringHeight(sText);
+	ofDrawRectangle(0, -textHeight, textWidth, textHeight);
 	
-	// Subtle connections
-	bDrawConnections.set(true);
-	connectionDistance.set(40.0f);
-	connectionAlpha.set(50.0f);
-	bDrawTrails.set(false);
+	// Draw original sampled points
+	ofSetColor(ofColor::magenta, 120);
+	for (const auto& point : pointsString) {
+		ofDrawCircle(point, 1);
+	}
 	
-	// Enable all
-	bDrawShapes.set(true);
-	bEnableAnimation.set(true);
-	bEnableDensity.set(true);
-	bEnableShape.set(true);
-	bEnableColor.set(true);
-	bEnableGlobalColor.set(true);
-	bEnableAnimationGroup.set(true);
-	bDrawConnection.set(true);
-}
-
-//--------------------------------------------------------------
-// PRESET 3: NEON PULSE - High energy pulsing neon
-void OrganicText::loadPreset3_NeonPulse() {
-	// Colors: Hot neon colors
-	globalColor1.set(ofColor(255, 0, 150));     // Hot pink
-	globalColor2.set(ofColor(255, 255, 0));     // Bright yellow
-	globalColor3.set(ofColor(150, 0, 255));     // Electric purple
-	colorMode.set(COLOR_GLOBAL_1);
-	colorSpeed.set(3.0f);
-	colorMixFactor.set(0.9f);
+	// Draw connection radius for first few points
+	if (bDrawConnections && pointsString.size() > 0) {
+		ofSetColor(ofColor::orange, 60);
+		for (size_t i = 0; i < std::min(size_t(5), pointsString.size()); i++) {
+			ofDrawCircle(pointsString[i], connectionDistance.get());
+		}
+	}
 	
-	// High density
-	pointDensity.set(4.0f);
-	contourSampling.set(8.0f);
-	pointsSpacing.set(0.1f);
+	// Draw animation vectors
+	if (bEnableAnimation && pointsString.size() > 0) {
+		ofSetColor(ofColor::white, 100);
+		for (size_t i = 0; i < std::min(size_t(10), pointsString.size()); i += 2) {
+			float phase = t + 0.123f * static_cast<float>(i);
+			vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
+			vec2 startPoint = pointsString[i];
+			vec2 endPoint = startPoint + offset;
+			ofDrawLine(startPoint, endPoint);
+			ofDrawCircle(endPoint, 2);
+		}
+	}
 	
-	// Stars with rotation
-	shapeType.set(SHAPE_STAR);
-	pointRadius.set(0.4f);
-	pointsRadiusMin.set(0.2f);
-	shapeRotation.set(45.0f);
-	
-	// Pulse animation
-	animationMode.set(ANIM_PULSE);
-	animSpeed.set(2.5f);
-	pulseIntensity.set(25.0f);
-	
-	// No connections, focus on shapes
-	bDrawConnections.set(false);
-	bDrawTrails.set(false);
-	
-	// Enable all
-	bDrawShapes.set(true);
-	bEnableAnimation.set(true);
-	bEnableDensity.set(true);
-	bEnableShape.set(true);
-	bEnableColor.set(true);
-	bEnableGlobalColor.set(true);
-	bEnableAnimationGroup.set(true);
-	bDrawConnection.set(true);
-}
-
-//--------------------------------------------------------------
-// PRESET 4: COSMIC DANCE - Ethereal space-like movement
-void OrganicText::loadPreset4_CosmicDance() {
-	// Colors: Deep space colors
-	globalColor1.set(ofColor(100, 150, 255));   // Deep blue
-	globalColor2.set(ofColor(200, 100, 255));   // Purple
-	globalColor3.set(ofColor(255, 200, 100));   // Warm gold
-	colorMode.set(COLOR_GLOBAL_MIX);
-	colorSpeed.set(0.5f);
-	colorMixFactor.set(0.4f);
-	bColorByDistance.set(true);
-	
-	// Sparse but elegant
-	pointDensity.set(1.5f);
-	contourSampling.set(3.0f);
-	pointsSpacing.set(0.4f);
-	
-	// Mixed shapes
-	shapeType.set(SHAPE_TRIANGLE);
-	pointRadius.set(0.8f);
-	pointsRadiusMin.set(0.3f);
-	triangleRatio.set(1.5f);
-	
-	// Orbital animation
-	animationMode.set(ANIM_ORBIT);
-	animSpeed.set(0.6f);
-	noiseSize.set(12.0f);
-	
-	// Long distance connections with trails
-	bDrawConnections.set(true);
-	connectionDistance.set(60.0f);
-	connectionAlpha.set(30.0f);
-	bOnlyNearConnections.set(false);
-	bDrawTrails.set(true);
-	trailLength.set(25);
-	trailFade.set(0.95f);
-	
-	// Enable all
-	bDrawShapes.set(true);
-	bEnableAnimation.set(true);
-	bEnableDensity.set(true);
-	bEnableShape.set(true);
-	bEnableColor.set(true);
-	bEnableGlobalColor.set(true);
-	bEnableAnimationGroup.set(true);
-	bDrawConnection.set(true);
+	ofPopStyle();
 }
