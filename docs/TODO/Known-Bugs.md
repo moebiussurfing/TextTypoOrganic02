@@ -11,8 +11,6 @@
 ### GUI Related  
 - **Parameter refresh lag** - Some sliders don't update immediately when presets load
   - Workaround: Move slider slightly to refresh
-- **GUI focus issues** - Sometimes GUI doesn't respond until main window clicked
-  - Workaround: Click main window before using GUI
 
 ### Rendering Related
 - **Zoom edge cases** - Very high zoom levels (> 4x) may clip elements

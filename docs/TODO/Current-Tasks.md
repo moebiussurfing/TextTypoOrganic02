@@ -14,9 +14,6 @@
   - Handle edge cases (zero density, missing files)
 
 ### User Experience  
-- [ ] **Add tooltips to GUI parameters**
-  - Explain what each parameter does
-  - Show value ranges and units
 
 - [ ] **Improve preset loading feedback**
   - Visual flash when preset loads

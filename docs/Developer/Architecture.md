@@ -211,8 +211,6 @@ switch(colorMode.get()) {
 3. Add color-specific parameters
 4. Test with existing presets
 
-
-
 ## Future Architecture Considerations
 
 ### Planned Improvements
