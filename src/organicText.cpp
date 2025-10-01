@@ -20,78 +20,76 @@ void OrganicText::exit() {
 
 //--------------------------------------------------------------
 void OrganicText::setup() {
-	// Basic parameters
-	bDebugDraw.set("Draw Debug", false);
-	bDebugDrawInfo.set("Draw Debug Info", false);
-	bDrawFill.set("Draw Fill", true);
-	bEnablePlain.set("Enable Plain", false);
-	bDrawOutline.set("Draw Outline", false);
-	bDrawShapes.set("Draw Shapes", true); // Renamed from bEnableShapes
-	bEnableAnimation.set("Enable Animation", true);
-	sceneZoom.set("Scene Zoom", 0.0f, 0.0f, 1.0f); // 0=1x, 1=5x zoom
+	// Basic parameters - Simplified names
+	bDebugDraw.set("Debug", false);
+	bDrawFill.set("Fill", true);
+	bDrawShapes.set("Draw", true);
+	bEnableAnimation.set("Animate", true);
+	bDrawOutline.set("Outline", false);
+	sceneZoom.set("Zoom", 0.0f, 0.0f, 1.0f); // 0=1x, 1=5x zoom
 	sText.set("Text", ORGANICTEXT);
 
-	// Density group
-	bEnableDensity.set("Enable Density", true);
-	resetDensity.set("Reset Density");
-	randomDensity.set("Random Density");
+	// Density group - Simplified names
+	bEnableDensity.set("Enable", true);
+	resetDensity.set("Reset");
+	randomDensity.set("Random");
 	pointsSpacing.set("Spacing", 0.2, 0.05, 1);
-	pointDensity.set("Point Density", 1.0, 0.1, 5.0);
-	minSpacing.set("Min Spacing", 0.1, 0.01, 0.5);
-	contourSampling.set("Contour Sampling", 2.0, 0.5, 10.0);
+	pointDensity.set("Density", 1.0, 0.1, 5.0);
+	minSpacing.set("Min Gap", 0.1, 0.01, 0.5);
+	contourSampling.set("Sampling", 2.0, 0.5, 10.0);
 
-	// Shape group
-	bEnableShape.set("Enable Shape", true);
-	resetShape.set("Reset Shape");
-	randomShape.set("Random Shape");
-	pointRadius.set("Radius", 0.5, 0, 1);
-	pointsRadiusMin.set("Radius Min", 0.3, 0, 1);
-	shapeType.set("Shape", 0, 0, 5); // Updated max to include SHAPE_POINT
-	triangleRatio.set("Triangle Ratio", 1.0, 0.5, 2.0);
-	shapeRotation.set("Shape Rotation", 0, 0, 360);
+	// Shape group - Simplified names  
+	bEnableShape.set("Enable", true);
+	resetShape.set("Reset");
+	randomShape.set("Random");
+	pointRadius.set("Size", 0.5, 0, 1);
+	pointsRadiusMin.set("Min Size", 0.3, 0, 1);
+	shapeType.set("Type", 0, 0, 5); // Updated max to include SHAPE_POINT
+	triangleRatio.set("Ratio", 1.0, 0.5, 2.0);
+	shapeRotation.set("Rotation", 0, 0, 360);
 
-	// Simplified color group (based on global colors only)
-	bEnableColor.set("Enable Color", true);
-	resetColor.set("Reset Color");
-	randomColor.set("Random Color");
-	colorMode.set("Color Mode", 3, 0, 4); // Default to COLOR_GLOBAL_MIX
-	colorSpeed.set("Color Speed", 1.0, 0.1, 5.0);
-	colorMixFactor.set("Color Mix Factor", 0.5, 0.0, 1.0);
-	bColorByDistance.set("Color by Distance", false);
+	// Color group - Remove "Color" prefix, simplified names
+	bEnableColor.set("Enable", true);
+	resetColor.set("Reset");
+	randomColor.set("Random");
+	colorMode.set("Mode", 3, 0, 4); // Default to COLOR_GLOBAL_MIX
+	colorSpeed.set("Speed", 1.0, 0.1, 5.0);
+	colorMixFactor.set("Mix", 0.5, 0.0, 1.0);
+	bColorByDistance.set("By Distance", false);
 
 	// Global color group
 	bEnableGlobalColor.set("Enable Global Color", true);
-	resetGlobalColor.set("Reset Global Color");
-	randomGlobalColor.set("Random Global Color");
-	globalColor1.set("Global Color 1", ofColor::cyan);
-	globalColor2.set("Global Color 2", ofColor::magenta);
-	globalColor3.set("Global Color 3", ofColor::yellow);
+	resetGlobalColor.set("Reset");
+	randomGlobalColor.set("Random");
+	globalColor1.set("Color 1", ofColor::cyan);
+	globalColor2.set("Color 2", ofColor::magenta);
+	globalColor3.set("Color 3", ofColor::yellow);
 
-	// Animation group
-	bEnableAnimationGroup.set("Enable Animation Group", true);
-	resetAnimation.set("Reset Animation");
-	randomAnimation.set("Random Animation");
-	animationMode.set("Animation Mode", 0, 0, 4);
-	animSpeed.set("Animation Speed", 1.0, 0.1, 3.0);
-	noiseSize.set("Noise Size", 5, 0, 50);
-	waveFrequency.set("Wave Frequency", 0.02, 0.001, 0.1);
-	waveAmplitude.set("Wave Amplitude", 20, 0, 100);
-	spiralTightness.set("Spiral Tightness", 0.01, 0.001, 0.05);
-	pulseIntensity.set("Pulse Intensity", 10, 0, 50);
+	// Animation group - Simplified names
+	bEnableAnimationGroup.set("Enable", true);
+	resetAnimation.set("Reset");
+	randomAnimation.set("Random");
+	animationMode.set("Mode", 0, 0, 4);
+	animSpeed.set("Speed", 1.0, 0.1, 3.0);
+	noiseSize.set("Power", 0.1, 0.0, 1.0); // Normalized 0-1
+	waveFrequency.set("Wave", 0.5, 0.0, 1.0); // Normalized 0-1  
+	waveAmplitude.set("Intensity", 0.2, 0.0, 1.0); // Normalized 0-1
+	spiralTightness.set("Spiral", 0.2, 0.0, 1.0); // Normalized 0-1
+	pulseIntensity.set("Pulse", 0.2, 0.0, 1.0); // Normalized 0-1
 
-	// Connection group
-	bEnableConnection.set("Enable Connection", true);
-	resetConnection.set("Reset Connection");
-	randomConnection.set("Random Connection");
-	bDrawConnections.set("Draw Connections", false);
-	connectionDistance.set("Connection Distance", 30, 5, 100);
-	connectionAlpha.set("Connection Alpha", 100, 0, 255);
-	bOnlyNearConnections.set("Only Near Connections", true);
+	// Connection group - Simplified names
+	bEnableConnection.set("Enable", true);
+	resetConnection.set("Reset");
+	randomConnection.set("Random");
+	bDrawConnections.set("Draw", false);
+	connectionDistance.set("Distance", 30, 5, 100);
+	connectionAlpha.set("Alpha", 100, 0, 255);
+	bOnlyNearConnections.set("Near Only", true);
 
-	// Trail group (part of connection group)
-	bDrawTrails.set("Draw Trails", false);
-	trailLength.set("Trail Length", 10, 3, 50);
-	trailFade.set("Trail Fade", 0.9, 0.5, 0.99);
+	// Trail group (part of connection group) - Simplified names
+	bDrawTrails.set("Trails", false);
+	trailLength.set("Length", 10, 3, 50);
+	trailFade.set("Fade", 0.9, 0.5, 0.99);
 
 	// Global reset
 	resetAll.set("Reset All");
@@ -326,11 +324,13 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 	switch ((AnimMode)animationMode.get()) {
 	case ANIM_NOISE:
-		offset = vec2(ofSignedNoise(phase, 0.0), ofSignedNoise(phase, 0.233)) * noiseSize.get();
+		offset = vec2(ofSignedNoise(phase, 0.0), ofSignedNoise(phase, 0.233)) * (noiseSize.get() * 50.0f); // Scale 0-1 to 0-50
 		break;
 
 	case ANIM_WAVE: {
-		float wave = sin(pointsString[index].x * waveFrequency.get() + t * animSpeed.get()) * waveAmplitude.get();
+		float freq = waveFrequency.get() * 0.1f; // Scale 0-1 to 0-0.1
+		float amp = waveAmplitude.get() * 100.0f; // Scale 0-1 to 0-100
+		float wave = sin(pointsString[index].x * freq + t * animSpeed.get()) * amp;
 		offset = vec2(0, wave);
 		break;
 	}
@@ -338,14 +338,17 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_SPIRAL: {
 		float angle = atan2(pointsString[index].y - textCenter.y, pointsString[index].x - textCenter.x);
 		float distance = glm::distance(pointsString[index], textCenter);
-		float spiralOffset = sin(distance * spiralTightness.get() + t * animSpeed.get()) * noiseSize.get();
+		float tightness = spiralTightness.get() * 0.05f; // Scale 0-1 to 0-0.05
+		float power = noiseSize.get() * 50.0f; // Scale 0-1 to 0-50
+		float spiralOffset = sin(distance * tightness + t * animSpeed.get()) * power;
 		offset = vec2(cos(angle) * spiralOffset, sin(angle) * spiralOffset);
 		break;
 	}
 
 	case ANIM_PULSE: {
 		float distance = glm::distance(pointsString[index], textCenter);
-		float pulse = sin(t * animSpeed.get() * 2) * pulseIntensity.get();
+		float intensity = pulseIntensity.get() * 50.0f; // Scale 0-1 to 0-50
+		float pulse = sin(t * animSpeed.get() * 2) * intensity;
 		vec2 direction = normalize(pointsString[index] - textCenter);
 		offset = direction * pulse;
 		break;
