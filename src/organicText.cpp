@@ -543,6 +543,115 @@ void OrganicText::drawDebugInfo() const {
 }
 
 //--------------------------------------------------------------
+void OrganicText::drawPerformanceInfo() const {
+	if (!bDebug.get()) return;
+	
+	ofPushStyle();
+	
+	// === INTERNAL APP METRICS ===
+	float fps = ofGetFrameRate();
+	float frameTime = 1000.0f / max(fps, 0.1f); // Avoid division by zero
+	int pointCount = pointsString.size();
+	
+	// Trail system metrics
+	int totalTrailPoints = 0;
+	int activeTrails = 0;
+	for (const auto& trail : pointTrails) {
+		totalTrailPoints += trail.size();
+		if (!trail.empty()) activeTrails++;
+	}
+	
+	// Connection system metrics  
+	int activeConnections = 0;
+	float connectionCost = 0.0f; // O(n²) computational cost indicator
+	if (bDrawConnections.get() && bEnableConnection.get()) {
+		float maxDist = connectionDistance.get();
+		connectionCost = pointCount * pointCount; // Shows O(n²) nature
+		
+		// Count actual connections being drawn
+		for (int i = 0; i < pointCount; i++) {
+			for (int j = i + 1; j < pointCount; j++) {
+				if (distance(pointsString[i], pointsString[j]) <= maxDist) {
+					activeConnections++;
+				}
+			}
+		}
+	}
+	
+	// Memory usage estimation (rough)
+	int estimatedMemoryKB = (pointCount * sizeof(vec2)) / 1024 + 
+	                       (totalTrailPoints * sizeof(vec2)) / 1024 + 
+	                       100; // Base app memory
+	
+	// Performance status
+	string perfStatus = "GOOD";
+	if (fps < 30) perfStatus = "POOR";
+	else if (fps < 45) perfStatus = "OK";
+	
+	// === BUILD INFO STRINGS ===
+	vector<string> infoLines;
+	infoLines.push_back("=== APP PERFORMANCE ===");
+	infoLines.push_back("FPS: " + ofToString(fps, 1) + " (" + perfStatus + ")");
+	infoLines.push_back("Frame Time: " + ofToString(frameTime, 2) + " ms");
+	infoLines.push_back("");
+	infoLines.push_back("=== RENDERING LOAD ===");
+	infoLines.push_back("Text Points: " + ofToString(pointCount));
+	infoLines.push_back("Trail Points: " + ofToString(totalTrailPoints));
+	infoLines.push_back("Active Trails: " + ofToString(activeTrails));
+	infoLines.push_back("Connections: " + ofToString(activeConnections));
+	infoLines.push_back("Connection Cost: " + ofToString(connectionCost, 0));
+	infoLines.push_back("");
+	infoLines.push_back("=== SYSTEM STATUS ===");
+	infoLines.push_back("Memory ~: " + ofToString(estimatedMemoryKB) + " KB");
+	infoLines.push_back("Animation: " + (bEnableAnimation.get() ? "ON" : "OFF"));
+	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (sceneZoom.get() * 4.0f), 1) + "x");
+	infoLines.push_back("Current Preset: " + sText.get());
+	
+	// === DRAW PERFORMANCE BOX ===
+	float lineHeight = 14;
+	float padding = 8;
+	float boxWidth = 220;
+	float boxHeight = infoLines.size() * lineHeight + (padding * 2);
+	
+	// Position at top-right, but leave space for GUI
+	float boxX = ofGetWidth() - boxWidth - 10;
+	float boxY = 10;
+	
+	// Black semi-transparent background
+	ofSetColor(0, 0, 0, 180);
+	ofFill();
+	ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
+	
+	// White border
+	ofSetColor(255, 255, 255, 255);
+	ofNoFill();
+	ofSetLineWidth(1);
+	ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
+	
+	// Draw text lines
+	ofSetColor(255, 255, 255, 255);
+	for (size_t i = 0; i < infoLines.size(); i++) {
+		float textX = boxX + padding;
+		float textY = boxY + padding + (i + 1) * lineHeight;
+		
+		// Color code important metrics
+		if (infoLines[i].find("FPS:") != string::npos) {
+			if (fps < 30) ofSetColor(255, 100, 100); // Red for poor FPS
+			else if (fps < 45) ofSetColor(255, 255, 100); // Yellow for ok FPS  
+			else ofSetColor(100, 255, 100); // Green for good FPS
+		} else if (infoLines[i].find("Connection Cost:") != string::npos && connectionCost > 10000) {
+			ofSetColor(255, 200, 100); // Orange for high computational cost
+		} else {
+			ofSetColor(255, 255, 255); // White for normal text
+		}
+		
+		ofDrawBitmapString(infoLines[i], textX, textY);
+	}
+	
+	ofPopStyle();
+}
+
+//--------------------------------------------------------------
 void OrganicText::draw() {
 	// Calculate zoom factor (0-1 maps to 1x-5x)
 	float zoomFactor = 1.0f + (sceneZoom.get() * 4.0f);
@@ -630,6 +739,10 @@ void OrganicText::draw() {
 	}
 
 	ofPopMatrix();
+	
+	// Draw performance info box (outside transformations)
+	drawPerformanceInfo();
+	
 	gui.draw();
 }
 

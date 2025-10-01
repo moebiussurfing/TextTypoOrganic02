@@ -149,7 +149,8 @@ public:
 	vec2 getAnimatedOffset(int index, float phase) const;
 	void saveSettings();
 	void loadSettings();
-	void drawDebugInfo() const; // New: Debug visualization
+	void drawDebugInfo() const; // Debug visualization
+	void drawPerformanceInfo() const; // Performance information box
 	
 	// Reset functions
 	void resetDensityParams();
