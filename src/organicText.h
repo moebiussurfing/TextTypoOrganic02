@@ -62,11 +62,11 @@ public:
 	// Basic parameters
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bDebug;
-	ofParameter<bool> bFill;
-	ofParameter<bool> bPlain;
-	ofParameter<bool> bDrawShapes; // Toggle to disable shape drawing
-	ofParameter<bool> bEnableAnimation; // Toggle to disable animation
-	ofParameter<bool> bShowOutline;
+	ofParameter<bool> bFill; // Fill shapes 
+	ofParameter<bool> bEnablePlain;
+	ofParameter<bool> bDrawShapes; // Enable shape drawing (renamed from bEnableShapes)
+	ofParameter<bool> bEnableAnimation; // Enable animation
+	ofParameter<bool> bDrawOutline; // Draw text outline
 	ofParameter<float> sceneZoom; // Scene zoom factor (0-1, maps to 1x-5x)
 	ofParameter<string> sText;
 
@@ -87,7 +87,6 @@ public:
 	ofParameter<float> pointRadius;
 	ofParameter<float> pointsRadiusMin;
 	ofParameter<float> triangleRatio;
-	ofParameter<bool> bDrawOutline;
 	ofParameter<float> shapeRotation;
 
 	// Simplified color parameters (based on global colors only)
@@ -120,7 +119,7 @@ public:
 	ofParameter<float> pulseIntensity;
 
 	// Connection parameters with enable/reset
-	ofParameter<bool> bDrawConnection; // Enable connection group
+	ofParameter<bool> bEnableConnection; // Enable connection group
 	ofParameter<void> resetConnection; // Reset connection group
 	ofParameter<void> randomConnection; // Randomize connection group
 	ofParameter<bool> bDrawConnections;
@@ -147,7 +146,7 @@ public:
 	ofEventListener e_WindowClosed;
 
 	// Functions
-	vector<vec2> sampleStringPoints(const string& s, float ds) const;
+	vector<vec2> sampleStringPoints(const string& s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
 	void drawConnections() const;
 	void updateTrails();
@@ -176,11 +175,6 @@ public:
 	
 	// Preset functions (0-9 numerical keys)
 	void loadPreset(int presetNumber);
-	void loadPreset0_Minimal();
-	void loadPreset1_CyberWave();
-	void loadPreset2_OrganicFlow();
-	void loadPreset3_NeonPulse();
-	void loadPreset4_CosmicDance();
 
 	// Data
 	vector<vec2> pointsString;

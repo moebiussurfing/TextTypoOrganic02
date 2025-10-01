@@ -1,7 +1,5 @@
 #include "organicText.h"
 #include "organicTextPresets.h"
-#include <algorithm>
-#include <cmath>
 
 //--------------------------------------------------------------
 void OrganicText::setup() {
@@ -10,10 +8,13 @@ void OrganicText::setup() {
 
 	// Basic parameters
 	bDebug.set("Debug", false);
-	bFill.set("Fill", true);
+
+	// Basic parameters
+	bDebug.set("Debug", false);
+	bEnableFill.set("Enable Fill", true);
 	bEnablePlain.set("Enable Plain", false);
 	bDrawOutline.set("Draw Outline", false);
-	bDrawShapes.set("Draw Shapes", true); // Renamed from bEnableShapes
+	bEnableShapes.set("Enable Shapes", true);
 	bEnableAnimation.set("Enable Animation", true);
 	sceneZoom.set("Scene Zoom", 0.0f, 0.0f, 1.0f); // 0=1x, 1=5x zoom
 	sText.set("Text", ORGANICTEXT);
@@ -148,9 +149,8 @@ void OrganicText::setup() {
 
 	parameters.add(sText);
 	parameters.add(bDrawOutline);
-	parameters.add(bFill);
-	parameters.add(bDrawShapes);
-	parameters.add(sceneZoom);
+	parameters.add(bEnableFill);
+	parameters.add(bEnableShapes);
 	parameters.add(bDrawConnections);
 
 	parameters.add(bEnableDensity);
@@ -220,7 +220,7 @@ void OrganicText::setup() {
 }
 
 //--------------------------------------------------------------
-vector<vec2> OrganicText::sampleStringPoints(const string& s, float ds) {
+vector<vec2> OrganicText::sampleStringPoints(const string& s, float ds) const {
 	vector<vec2> points;
 	if (s.empty()) return points;
 	
@@ -430,12 +430,12 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 		ofPolyline star;
 		int points = 5;
 		for (int i = 0; i < points * 2; i++) {
-			float angle = (static_cast<float>(i) * TWO_PI) / (static_cast<float>(points) * 2.0f);
+			float angle = (static_cast<float>(i) * PI) / static_cast<float>(points);
 			float radius = (i % 2 == 0) ? size : size * 0.4f;
 			star.addVertex(cos(angle) * radius, sin(angle) * radius);
 		}
 		star.close();
-		if (bFill.get())
+		if (bEnableFill)
 			star.draw();
 		else
 			star.draw();
@@ -507,45 +507,6 @@ void OrganicText::drawConnections() const {
 }
 
 //--------------------------------------------------------------
-void OrganicText::drawDebugInfo() const {
-	if (!bDebug.get()) return;
-	
-	ofPushStyle();
-	ofSetColor(ofColor::red);
-	ofNoFill();
-	ofSetLineWidth(1);
-	
-	// Draw center point
-	ofDrawCircle(textCenter, 5);
-	
-	// Draw coordinate system
-	ofDrawLine(textCenter - vec2(20, 0), textCenter + vec2(20, 0));
-	ofDrawLine(textCenter - vec2(0, 20), textCenter + vec2(0, 20));
-	
-	// Draw original sample points
-	ofSetColor(ofColor::yellow);
-	for (const auto& point : pointsString) {
-		ofDrawCircle(point, 2);
-	}
-	
-	// Draw bounding box
-	if (!pointsString.empty()) {
-		vec2 minPoint = pointsString[0];
-		vec2 maxPoint = pointsString[0];
-		for (const auto& point : pointsString) {
-			minPoint.x = std::min(minPoint.x, point.x);
-			minPoint.y = std::min(minPoint.y, point.y);
-			maxPoint.x = std::max(maxPoint.x, point.x);
-			maxPoint.y = std::max(maxPoint.y, point.y);
-		}
-		ofSetColor(ofColor::green);
-		ofDrawRectangle(minPoint.x, minPoint.y, maxPoint.x - minPoint.x, maxPoint.y - minPoint.y);
-	}
-	
-	ofPopStyle();
-}
-
-//--------------------------------------------------------------
 void OrganicText::draw() {
 	// Calculate zoom factor (0-1 maps to 1x-5x)
 	float zoomFactor = 1.0f + (sceneZoom.get() * 4.0f);
@@ -594,7 +555,7 @@ void OrganicText::draw() {
 	}
 
 	// Draw main points (only if shapes are enabled)
-	if (bDrawShapes && bEnableShape.get()) {
+	if (bEnableShapes && bEnableShape.get()) {
 		for (size_t i = 0; i < pointsString.size(); i++) {
 			ofPushStyle();
 
@@ -606,7 +567,7 @@ void OrganicText::draw() {
 			ofColor color = getPointColor(static_cast<int>(i), newPoint, phase);
 			ofSetColor(color);
 
-			if (bFill.get())
+			if (bEnableFill)
 				ofFill();
 			else
 				ofNoFill();
@@ -678,14 +639,14 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	// Density controls
 	else if (key == '+' || key == '=') {
-		pointDensity.set(std::min(5.0f, pointDensity.get() + 0.2f));
+		pointDensity.set(min(5.0f, pointDensity.get() + 0.2f));
 	} else if (key == '-') {
 		pointDensity.set(std::max(0.1f, pointDensity.get() - 0.2f));
 	}
 
 	// Speed controls
 	else if (key == OF_KEY_UP) {
-		animSpeed.set(std::min(3.0f, animSpeed.get() + 0.1f));
+		animSpeed.set(min(3.0f, animSpeed.get() + 0.1f));
 	} else if (key == OF_KEY_DOWN) {
 		animSpeed.set(std::max(0.1f, animSpeed.get() - 0.1f));
 	}
@@ -705,7 +666,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'o' || key == 'O') {
 		bDrawOutline.set(!bDrawOutline.get());
 	} else if (key == 'f' || key == 'F') {
-		bFill.set(!bFill.get());
+		bEnableFill.set(!bEnableFill.get());
 	}
 
 	// Background color
@@ -832,9 +793,9 @@ void OrganicText::resetAllParams() {
 	
 	// Reset basic parameters
 	bDebug.set(false);
-	bFill.set(true);
+	bEnableFill.set(true);
 	bDrawOutline.set(false);
-	bDrawShapes.set(true);
+	bEnableShapes.set(true);
 	bEnableAnimation.set(true);
 	sceneZoom.set(0.0f);
 	
@@ -851,8 +812,175 @@ void OrganicText::resetAllParams() {
 }
 
 //--------------------------------------------------------------
-void OrganicText::loadPreset(int presetNumber) {
-	OrganicTextPresets::loadPreset(this, presetNumber);
+void OrganicText::randomizeDensityParams() {
+	// Minimal colors: Black, white, gray
+	globalColor1.set(ofColor::white);
+	globalColor2.set(ofColor::lightGray);
+	globalColor3.set(ofColor::gray);
+	colorMode.set(0); // COLOR_GLOBAL_1
+	colorSpeed.set(0.5f);
+	colorMixFactor.set(0.2f);
+	
+	// Low density, clean
+	pointDensity.set(1.0f);
+	contourSampling.set(2.0f);
+	pointsSpacing.set(0.3f);
+	
+	// Simple circles
+	shapeType.set(0); // SHAPE_CIRCLE
+	pointRadius.set(0.4f);
+	pointsRadiusMin.set(0.2f);
+	
+	// No animation for clean look
+	animationMode.set(0); // ANIM_NOISE
+	animSpeed.set(0.3f);
+	noiseSize.set(2.0f);
+	
+	// No connections or trails
+	bDrawConnections.set(false);
+	bDrawTrails.set(false);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset1_CyberWave() {
+	// Colors: Electric blue, neon green, bright cyan
+	globalColor1.set(ofColor(0, 255, 255));     // Cyan
+	globalColor2.set(ofColor(0, 255, 100));     // Electric green
+	globalColor3.set(ofColor(100, 150, 255));   // Electric blue
+	colorMode.set(3); // COLOR_GLOBAL_MIX
+	colorSpeed.set(2.5f);
+	colorMixFactor.set(0.8f);
+	
+	// Dense particles with connections
+	pointDensity.set(3.0f);
+	contourSampling.set(7.0f);
+	pointsSpacing.set(0.15f);
+	
+	// Small circles with trails
+	shapeType.set(0); // SHAPE_CIRCLE
+	pointRadius.set(0.3f);
+	pointsRadiusMin.set(0.1f);
+	
+	// Wave animation
+	animationMode.set(1); // ANIM_WAVE
+	animSpeed.set(1.8f);
+	waveFrequency.set(0.05f);
+	waveAmplitude.set(15.0f);
+	
+	// Connections and trails
+	bDrawConnections.set(true);
+	connectionDistance.set(25.0f);
+	connectionAlpha.set(80.0f);
+	bDrawTrails.set(true);
+	trailLength.set(15);
+	trailFade.set(0.85f);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset2_OrganicFlow() {
+	// Colors: Warm earth tones
+	globalColor1.set(ofColor(255, 180, 100));   // Warm orange
+	globalColor2.set(ofColor(180, 255, 120));   // Soft green
+	globalColor3.set(ofColor(255, 200, 150));   // Warm beige
+	colorMode.set(4); // COLOR_DISTANCE
+	colorSpeed.set(0.8f);
+	colorMixFactor.set(0.6f);
+	
+	// Medium density
+	pointDensity.set(2.0f);
+	contourSampling.set(4.0f);
+	pointsSpacing.set(0.25f);
+	
+	// Varied circles
+	shapeType.set(0); // SHAPE_CIRCLE
+	pointRadius.set(0.7f);
+	pointsRadiusMin.set(0.4f);
+	
+	// Spiral animation
+	animationMode.set(2); // ANIM_SPIRAL
+	animSpeed.set(1.2f);
+	spiralTightness.set(0.02f);
+	noiseSize.set(8.0f);
+	
+	// Subtle connections
+	bDrawConnections.set(true);
+	connectionDistance.set(40.0f);
+	connectionAlpha.set(50.0f);
+	bDrawTrails.set(false);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset3_NeonPulse() {
+	// Colors: Hot neon colors
+	globalColor1.set(ofColor(255, 0, 150));     // Hot pink
+	globalColor2.set(ofColor(255, 255, 0));     // Bright yellow
+	globalColor3.set(ofColor(150, 0, 255));     // Electric purple
+	colorMode.set(0); // COLOR_GLOBAL_1
+	colorSpeed.set(3.0f);
+	colorMixFactor.set(0.9f);
+	
+	// High density
+	pointDensity.set(4.0f);
+	contourSampling.set(8.0f);
+	pointsSpacing.set(0.1f);
+	
+	// Stars with rotation
+	shapeType.set(3); // SHAPE_STAR
+	pointRadius.set(0.4f);
+	pointsRadiusMin.set(0.2f);
+	shapeRotation.set(45.0f);
+	
+	// Pulse animation
+	animationMode.set(3); // ANIM_PULSE
+	animSpeed.set(2.5f);
+	pulseIntensity.set(25.0f);
+	
+	// No connections, focus on shapes
+	bDrawConnections.set(false);
+	bDrawTrails.set(false);
+	
+	refreshPointsString();
+}
+
+void OrganicText::loadPreset4_CosmicDance() {
+	// Colors: Deep space colors
+	globalColor1.set(ofColor(100, 150, 255));   // Deep blue
+	globalColor2.set(ofColor(200, 100, 255));   // Purple
+	globalColor3.set(ofColor(255, 200, 100));   // Warm gold
+	colorMode.set(3); // COLOR_GLOBAL_MIX
+	colorSpeed.set(0.5f);
+	colorMixFactor.set(0.4f);
+	bColorByDistance.set(true);
+	
+	// Sparse but elegant
+	pointDensity.set(1.5f);
+	contourSampling.set(3.0f);
+	pointsSpacing.set(0.4f);
+	
+	// Mixed shapes
+	shapeType.set(2); // SHAPE_TRIANGLE
+	pointRadius.set(0.8f);
+	pointsRadiusMin.set(0.3f);
+	triangleRatio.set(1.5f);
+	
+	// Orbital animation
+	animationMode.set(4); // ANIM_ORBIT
+	animSpeed.set(0.6f);
+	noiseSize.set(12.0f);
+	
+	// Long distance connections with trails
+	bDrawConnections.set(true);
+	connectionDistance.set(60.0f);
+	connectionAlpha.set(30.0f);
+	bOnlyNearConnections.set(false);
+	bDrawTrails.set(true);
+	trailLength.set(25);
+	trailFade.set(0.95f);
+	
+	refreshPointsString();
 }
 
 //--------------------------------------------------------------
@@ -870,6 +998,7 @@ void OrganicText::randomizeShapeParams() {
 	pointsRadiusMin.set(ofRandom(pointsRadiusMin.getMin(), pointsRadiusMin.getMax()));
 	shapeType.set(static_cast<int>(ofRandom(shapeType.getMin(), shapeType.getMax() + 1)));
 	triangleRatio.set(ofRandom(triangleRatio.getMin(), triangleRatio.getMax()));
+	shapeRotation.set(ofRandom(shapeRotation.getMin(), shapeRotation.getMax()));
 }
 
 //--------------------------------------------------------------
@@ -877,6 +1006,7 @@ void OrganicText::randomizeColorParams() {
 	colorMode.set(static_cast<int>(ofRandom(colorMode.getMin(), colorMode.getMax() + 1)));
 	colorSpeed.set(ofRandom(colorSpeed.getMin(), colorSpeed.getMax()));
 	colorMixFactor.set(ofRandom(colorMixFactor.getMin(), colorMixFactor.getMax()));
+	bColorByDistance.set(ofRandom(1.0f) > 0.5f);
 }
 
 //--------------------------------------------------------------
@@ -891,12 +1021,78 @@ void OrganicText::randomizeAnimationParams() {
 	animationMode.set(static_cast<int>(ofRandom(animationMode.getMin(), animationMode.getMax() + 1)));
 	animSpeed.set(ofRandom(animSpeed.getMin(), animSpeed.getMax()));
 	noiseSize.set(ofRandom(noiseSize.getMin(), noiseSize.getMax()));
+	waveFrequency.set(ofRandom(waveFrequency.getMin(), waveFrequency.getMax()));
+	waveAmplitude.set(ofRandom(waveAmplitude.getMin(), waveAmplitude.getMax()));
+	spiralTightness.set(ofRandom(spiralTightness.getMin(), spiralTightness.getMax()));
+	pulseIntensity.set(ofRandom(pulseIntensity.getMin(), pulseIntensity.getMax()));
 }
 
 //--------------------------------------------------------------
 void OrganicText::randomizeConnectionParams() {
+	bDrawConnections.set(ofRandom(1.0f) > 0.5f);
 	connectionDistance.set(ofRandom(connectionDistance.getMin(), connectionDistance.getMax()));
 	connectionAlpha.set(ofRandom(connectionAlpha.getMin(), connectionAlpha.getMax()));
 	bOnlyNearConnections.set(ofRandom(1.0f) > 0.5f);
-	bDrawConnections.set(ofRandom(1.0f) > 0.3f);
+	bDrawTrails.set(ofRandom(1.0f) > 0.5f);
+	trailLength.set(static_cast<int>(ofRandom(trailLength.getMin(), trailLength.getMax() + 1)));
+	trailFade.set(ofRandom(trailFade.getMin(), trailFade.getMax()));
+}
+
+//--------------------------------------------------------------
+// Simplified preset loading function that delegates to OrganicTextPresets
+void OrganicText::loadPreset(int presetNumber) {
+	OrganicTextPresets::loadPreset(this, presetNumber);
+}
+
+//--------------------------------------------------------------
+// Debug visualization function
+void OrganicText::drawDebugInfo() const {
+	ofPushStyle();
+	ofNoFill();
+	ofSetLineWidth(1.0f);
+	
+	// Draw coordinate system axes
+	ofSetColor(ofColor::red, 100);
+	ofDrawLine(-100, 0, 100, 0); // X axis
+	ofSetColor(ofColor::green, 100);
+	ofDrawLine(0, -100, 0, 100); // Y axis
+	
+	// Draw text center point
+	ofSetColor(ofColor::yellow, 150);
+	ofDrawCircle(textCenter, 5);
+	
+	// Draw text bounding box
+	ofSetColor(ofColor::cyan, 80);
+	float textWidth = font.stringWidth(sText);
+	float textHeight = font.stringHeight(sText);
+	ofDrawRectangle(0, -textHeight, textWidth, textHeight);
+	
+	// Draw original sampled points
+	ofSetColor(ofColor::magenta, 120);
+	for (const auto& point : pointsString) {
+		ofDrawCircle(point, 1);
+	}
+	
+	// Draw connection radius for first few points
+	if (bDrawConnections && pointsString.size() > 0) {
+		ofSetColor(ofColor::orange, 60);
+		for (size_t i = 0; i < std::min(size_t(5), pointsString.size()); i++) {
+			ofDrawCircle(pointsString[i], connectionDistance.get());
+		}
+	}
+	
+	// Draw animation vectors
+	if (bEnableAnimation && pointsString.size() > 0) {
+		ofSetColor(ofColor::white, 100);
+		for (size_t i = 0; i < std::min(size_t(10), pointsString.size()); i += 2) {
+			float phase = t + 0.123f * static_cast<float>(i);
+			vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
+			vec2 startPoint = pointsString[i];
+			vec2 endPoint = startPoint + offset;
+			ofDrawLine(startPoint, endPoint);
+			ofDrawCircle(endPoint, 2);
+		}
+	}
+	
+	ofPopStyle();
 }

@@ -2,7 +2,21 @@
 #include "organicText.h"
 
 //--------------------------------------------------------------
-OrganicTextPresets::OrganicTextPresets() {
+// Main preset loading function
+void OrganicTextPresets::loadPreset(OrganicText* ot, int presetNumber) {
+    switch(presetNumber) {
+        case 0: loadPreset0_Minimal(ot); break;
+        case 1: loadPreset1_CyberWave(ot); break;
+        case 2: loadPreset2_OrganicFlow(ot); break;
+        case 3: loadPreset3_NeonPulse(ot); break;
+        case 4: loadPreset4_CosmicDance(ot); break;
+        case 5: loadPreset5_RetroGrid(ot); break;
+        case 6: loadPreset6_BioLuminous(ot); break;
+        case 7: loadPreset7_QuantumField(ot); break;
+        case 8: loadPreset8_TribalRitual(ot); break;
+        case 9: loadPreset9_GalaxyStorm(ot); break;
+        default: loadPreset0_Minimal(ot); break; // Default to minimal
+    }
 }
 
 //--------------------------------------------------------------
