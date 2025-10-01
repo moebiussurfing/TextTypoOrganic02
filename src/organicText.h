@@ -62,7 +62,7 @@ public:
 	// Basic parameters
 	ofParameter<bool> bKeys;
 	ofParameter<bool> bDebug;
-	ofParameter<bool> bFill; // Fill shapes 
+	ofParameter<bool> bDrawFill; // Fill shapes 
 	ofParameter<bool> bEnablePlain;
 	ofParameter<bool> bDrawShapes; // Enable shape drawing (renamed from bEnableShapes)
 	ofParameter<bool> bEnableAnimation; // Enable animation

@@ -10,7 +10,7 @@ void OrganicText::setup() {
 
 	// Basic parameters
 	bDebug.set("Debug", false);
-	bFill.set("Fill", true);
+	bDrawFill.set("Draw Fill", true);
 	bEnablePlain.set("Enable Plain", false);
 	bDrawOutline.set("Draw Outline", false);
 	bDrawShapes.set("Draw Shapes", true); // Renamed from bEnableShapes
@@ -435,7 +435,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 			star.addVertex(cos(angle) * radius, sin(angle) * radius);
 		}
 		star.close();
-		if (bFill.get())
+		if (bDrawFill.get())
 			star.draw();
 		else
 			star.draw();
@@ -606,7 +606,7 @@ void OrganicText::draw() {
 			ofColor color = getPointColor(static_cast<int>(i), newPoint, phase);
 			ofSetColor(color);
 
-			if (bFill.get())
+			if (bDrawFill.get())
 				ofFill();
 			else
 				ofNoFill();
@@ -705,7 +705,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'o' || key == 'O') {
 		bDrawOutline.set(!bDrawOutline.get());
 	} else if (key == 'f' || key == 'F') {
-		bFill.set(!bFill.get());
+		bDrawFill.set(!bDrawFill.get());
 	}
 
 	// Background color
@@ -832,7 +832,7 @@ void OrganicText::resetAllParams() {
 	
 	// Reset basic parameters
 	bDebug.set(false);
-	bFill.set(true);
+	bDrawFill.set(true);
 	bDrawOutline.set(false);
 	bDrawShapes.set(true);
 	bEnableAnimation.set(true);
