@@ -546,10 +546,6 @@ void OrganicText::drawDebugInfo() const {
 void OrganicText::drawPerformanceInfo() const {
 	if (!bDebug.get()) return;
 	
-	// Quick debug test - draw simple text to verify function is called
-	ofSetColor(255, 0, 0); // Red color
-	ofDrawBitmapString("DEBUG ACTIVE - Performance Box Working!", 50, 50);
-	
 	ofPushStyle();
 	
 	// === INTERNAL APP METRICS ===
