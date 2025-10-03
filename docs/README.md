@@ -1,7 +1,7 @@
 # TextTypoOrganic02
 
 > [!NOTE]  
-> Meaningless tests to try out the workflow with GitHub Copilot CLI (as an AI agent assistant) starting from an original OF sketch from [colormotor](https://github.com/colormotor).
+> MEANINGLESS TESTS TO TRY OUT THE WORKFLOW WITH GITHUB COPILOT CLI (AS AN AI AGENT ASSISTANT) STARTING FROM AN ORIGINAL OF SKETCH FROM [colormotor](https://github.com/colormotor).
 
 An enhanced openFrameworks application that creates organic, animated visualizations from text using customizable shapes, colors, and animations.
 
