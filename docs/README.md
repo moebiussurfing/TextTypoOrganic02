@@ -1,5 +1,7 @@
 # TextTypoOrganic02
 
+** Meaningless tests to try out the workflow with GitHub Copilot CLI (as an AI agent assistant) starting from an original OF sketch from https://github.com/colormotor. **
+
 An enhanced openFrameworks application that creates organic, animated visualizations from text using customizable shapes, colors, and animations.
 
 *Enhanced version based on original code from [PFAD/examples/week_5/organicTypographyWorked](https://github.com/colormotor/PFAD/tree/main/examples/week_5/organicTypographyWorked)*
