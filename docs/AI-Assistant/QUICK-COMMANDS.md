@@ -108,21 +108,6 @@ float fps = ofGetFrameRate();
 if(fps < 30) ofLogWarning() << "Low FPS: " << fps;
 ```
 
-### GIT WORKFLOW
-```bash
-# Check status
-git status
-
-# Add changes
-git add .
-
-# Commit with descriptive message
-git commit -m "✨ Add new animation mode: YourMode"
-
-# Push
-git push
-```
-
 ### KEYBOARD SHORTCUTS (for testing)
 - **0-9**: Load presets
 - **R**: Reset all parameters  
