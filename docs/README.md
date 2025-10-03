@@ -29,6 +29,8 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 ### 👨‍💻 For Developers  
 - **[Code Architecture](Developer/Architecture.md)** - System design and structure
 - **[API Reference](Developer/API-Reference.md)** - Complete function documentation
+- **[cpp_concepts_explained.md](Learning/cpp_concepts_explained.md.md)**
+- **[shader_conversion_strategy.md.md](Learning/shader_conversion_strategy.md.md.md)**
 
 ### 📋 Project Management
 - **[Current Tasks](TODO/Current-Tasks.md)** - Immediate work needed ⭐
