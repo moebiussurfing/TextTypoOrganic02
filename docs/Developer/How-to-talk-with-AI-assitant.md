@@ -49,7 +49,7 @@
 
    #### Quick Start:
 
-     "Context: Texttypoorganic02, Lee /docs/ai-Assistant/project-context.md and tell me the current state"
+     "Context: Texttypoorganic02, Read /docs/ai-Assistant/project-context.md and tell me the current state"
 
    #### Code analysis:
 
@@ -126,7 +126,7 @@
 
    ## 🔄 Workflow full example
 
-     User: "Context: TexttyPoorganic02. Lee Ai-Assistant/Current-state.md and tell me what task of high priority should do now"
+     User: "Context: TexttyPoorganic02. Read Ai-Assistant/Current-state.md and tell me what task of high priority should do now"
 
      COPILOT: [LEE CURRENT-STATE.MD] "High priority: Add comments to samplestringpoints (). I show you the function and suggest comments ..."
 
