@@ -73,22 +73,13 @@
 - O(n²) connection algorithm (acceptable for current scale)
 
 ## FUTURE ROADMAP PRIORITIES
-1. **Audio Reactive System** (3-6 months) - Live music visualization
-2. **3D Visualization** (6-12 months) - Volumetric text effects
-3. **GPU Acceleration** (6-9 months) - 10x-100x performance boost
-4. **Export System** (2-4 months) - Image/video export capabilities
+- **GPU Acceleration** (6-9 months) - 10x-100x performance boost
 
 ## FILES MOST LIKELY TO CHANGE
 1. **`src/organicText.cpp`** - Core functionality improvements
 2. **`src/organicText.h`** - New parameters and methods
 3. **`docs/TODO/Current-Tasks.md`** - Task tracking updates
 4. **`src/organicTextPresets.cpp`** - New preset additions
-
-## COMMON USER WORKFLOWS
-1. **Quick Exploration**: Load presets 0-9, adjust zoom/speed
-2. **Creative Work**: Start with preset, fine-tune parameters, save
-3. **Performance**: Test different density levels, optimize settings
-4. **Development**: Modify code, test with multiple presets
 
 ## BUILD ENVIRONMENT STATUS
 - **IDE**: Visual Studio 2019+ configured

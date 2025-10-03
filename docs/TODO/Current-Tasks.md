@@ -13,11 +13,11 @@
 
 ### ✅ **Performance box implementado exitosamente**
 
-- **Caja negra semi-transparente** en esquina superior derecha
-- **Métricas en tiempo real**: FPS, Frame Time, Point Count, Memory usage
-- **Color coding**: Verde/Amarillo/Rojo para FPS según performance  
-- **Indicadores útiles**: Connection Cost (O(n²)), Trail Points, System Status
-- **Solo visible** con Debug mode activado
+- ** Semi-transparent black box ** in the upper right corner**
+- **Metric in real time **: FPS, Frame Time, Point Count, Memory Usage**
+- ** Coding color **: green/yellow/red for fps according to performance**
+- ** Useful indicators **: Connection Cost (O (n²)), Trail Points, System Status**
+- ** Only visible **With debug mode activated**
 
 ### User Experience  
 

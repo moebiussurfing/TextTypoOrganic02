@@ -8,14 +8,6 @@
 - **Memory growth with long trails** - Memory increases over time
   - Workaround: Restart periodically or use shorter trails
 
-### GUI Related  
-- **Parameter refresh lag** - Some sliders don't update immediately when presets load
-  - Workaround: Move slider slightly to refresh
-
-### Rendering Related
-- **Zoom edge cases** - Very high zoom levels (> 4x) may clip elements
-  - Workaround: Use moderate zoom levels (< 4x)
-
 ## 🔧 Bug Investigation Process
 
 1. **Reproduce** - Confirm bug exists

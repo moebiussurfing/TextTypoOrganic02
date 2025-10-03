@@ -1,159 +1,159 @@
-## 🚀 FLUJO DE TRABAJO RECOMENDADO
+## 🚀 Recommended workflow
 
-   ### 1. INICIO DE SESIÓN ⭐
+   ### 1. Login ⭐
 
-     "Lee /docs/AI-Assistant/PROJECT-CONTEXT.md para entender el proyecto"
+     "Read /docs/Ai-Assistant/project-context.md to understand the project"
 
-   Resultado: Tengo contexto completo en 30 segundos sin explicaciones largas.
+   Result: I have a complete context in 30 seconds without long explanations.
 
-   ### 2. CHECK STATUS ACTUAL
+   ### 2. Check Status Current
 
-     "Revisa /docs/AI-Assistant/CURRENT-STATE.md y /docs/TODO/Current-Tasks.md - ¿qué debería hacer ahora?"
+     "Check /docs/ai-assistant/current-state.md and /docs/todo/current-tasks.md-What should you do now?"
 
-   Resultado: Te doy prioridades claras basadas en el estado actual.
+   Result: I give you clear priorities based on the current state.
 
-   ### 3. DESARROLLO DIRIGIDO
+   ### 3. Directed Development
 
-   #### Para tareas específicas:
+   #### for specific tasks:
 
-     "Quiero añadir tooltips a los parámetros GUI - muéstrame cómo"
-     "Necesito crear un nuevo preset número 10 - ayúdame"
-     "El rendimiento está lento - diagnostica y optimiza"
+     "I want to add tooltips to gui parameters - show me how"
+     "I need to create a new count number 10 - Help me"
+     "The performance is slow - diagnosis and optimizes"
 
-   #### Para exploración:
+   #### for exploration:
 
-     "Revisa el código y sugiere 3 mejoras prioritarias"
-     "¿Qué funciones necesitan comentarios urgentemente?"
-     "Encuentra posibles bugs o problemas de rendimiento"
+     "Check the code and suggest 3 priority improvements"
+     "What functions need comments urgently?"
+     "Find possible bugs or performance problems"
 
-   ### 4. IMPLEMENTACIÓN GUIADA
+   ### 4. Guided implementation
 
-     "Implementa [tarea] siguiendo los patrones en /docs/AI-Assistant/CODE-PATTERNS.md"
+     "Implement [task] following the patterns in /docs/ai-assistant/code-patterns.md"
 
-   Resultado: Código consistente con las convenciones del proyecto.
+   Result: Code consisting of project conventions.
 
-   ### 5. TESTING Y VALIDACIÓN
+   ### 5. Testing and Validation
 
-     "Compila, testa y verifica que todos los presets 0-9 funcionen"
-     "Ejecuta el checklist de /docs/AI-Assistant/QUICK-COMMANDS.md"
+     "Compila, test and verify that all 0-9 presets work"
+     "Run the Checklist of /docs/ai-Assistant/quick-commands.md"
 
-   ### 6. COMMIT Y DOCUMENTACIÓN
+   ### 6. Commit and documentation
 
-     "Haz commit de los cambios y actualiza /docs/AI-Assistant/CURRENT-STATE.md si es necesario"
+     "Make Commit of the changes and update /docs/ai-assistant/current-state.md if necessary"
 
-   -------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------------
 
-   ## 💡 COMANDOS ESPECÍFICOS MÁS ÚTILES
+   ## 💡 most useful specific commands
 
-   ### 🔥 COMANDOS FRECUENTES
+   ### 🔥 Frequent Commands
 
-   #### Inicio rápido:
+   #### Quick Start:
 
-     "Context: TextTypoOrganic02, lee /docs/AI-Assistant/PROJECT-CONTEXT.md y dime el estado actual"
+     "Context: Texttypoorganic02, Lee /docs/ai-Assistant/project-context.md and tell me the current state"
 
-   #### Análisis de código:
+   #### Code analysis:
 
-     "Revisa src/organicText.cpp y sugiere mejoras basándote en /docs/TODO/Current-Tasks.md"
+     "Check SRC/organictext.cpp and suggests improvements based on /docs/todo/current-tasks.md"
 
-   #### Desarrollo guiado:
+   #### Guided development:
 
-     "Implementa [función X] siguiendo el patrón de /docs/AI-Assistant/CODE-PATTERNS.md"
+     "Implement [function x] following the pattern of /docs/ai-assistant/code-patterns.md"
 
    #### Debugging:
 
-     "El preset 3 no funciona bien - diagnostica usando los patrones de debug de CODE-PATTERNS.md"
+     "The preset 3 does not work well - diagnosis using the Code -Patterns.md" debug patterns "
 
    #### Performance:
 
-     "Analiza el rendimiento y sugiere optimizaciones basándote en CURRENT-STATE.md"
+     "Analyze performance and suggest optimizations based on Current-State.MD"
 
-   ### 🎯 COMANDOS POR TIPO DE TAREA
+   ### 🎯 Commands by type of task
 
-   #### Nuevas características:
+   #### New features:
 
-     "Quiero añadir [característica X] - muéstrame el plan paso a paso usando QUICK-COMMANDS.md"
+     "I want to add [feature x] - show me the step step by step using quick -commands.md"
 
-   #### Bug fixing:
+   #### Bug Fixing:
 
-     "Hay un problema con [X] - revisa Known-Bugs.md y dame solución"
+     "There is a problem with [x] - check Known -Bugs.md and give me solution"
 
    #### Refactoring:
 
-     "Mejora la función [X] manteniendo los patrones de CODE-PATTERNS.md"
+     "Improve the function [x] keeping the patterns of code-patterns.md"
 
    #### Testing:
 
-     "Crea tests para [función] siguiendo las convenciones del proyecto"
+     "Create tests for [function] following project conventions"
 
-   -------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------------
 
-   ## 🎨 COMANDOS CREATIVOS Y AVANZADOS
+   ## 🎨 Creative and advanced commands
 
-   ### Exploración creativa:
+   ### Creative exploration:
 
-     "Sugiere 3 nuevos presets visuales interesantes basándote en los existentes"
-     "¿Qué nuevos tipos de animación serían fáciles de implementar?"
+     "Suggest 3 new interesting visual presets based on existing ones"
+     "What new types of animation would be easy to implement?"
 
-   ### Optimización específica:
+   ### Specific optimization:
 
-     "El connectionDistance está causando lag - optimiza esta función"
-     "Los trails consumen mucha memoria - mejora la gestión"
+     "The Connectiontenance is causing LAG - optimizes this function"
+     "The trails consume a lot of memory - improves management"
 
-   ### Desarrollo dirigido por objetivos:
+   ### Development directed by objectives:
 
-     "Objetivo: añadir FPS counter. Planifica, implementa y testa siguiendo nuestras convenciones"
+     "OBJECTIVE: Add FPS Counter. Plan, implement and testify our conventions"
 
-   -------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------------
 
-   ## ⚡ TIPS PARA MÁXIMA EFICIENCIA
+   ## ⚡ Tips for maximum efficiency
 
-   ### DO's ✅
+   ### do's ✅
 
-     * Siempre empieza mencionando el archivo AI-Assistant relevante
-     * Sé específico sobre qué parte del código te interesa
-     * Referencia las convenciones de CODE-PATTERNS.md cuando pidas código
-     * Pide testing después de cambios importantes
-     * Actualiza documentación cuando hagas cambios significativos
+     * Start by mentioning the relevant A-Assistant file
+     * Be specific about which part of the code you are interested in
+     * Reference Code-Patterns.md conventions when you ask for code
+     * Ask Testing after important changes
+     * Update documentation when you make significant changes
 
-   ### DON'Ts ❌
+   ### Don'ts ❌
 
-     * No pidas explicaciones del proyecto desde cero (usa PROJECT-CONTEXT.md)
-     * No ignores las prioridades de CURRENT-STATE.md
-     * No rompas las convenciones de naming establecidas
-     * No olvides testar los presets después de cambios
+     * Do not ask for project explanations (USA PROJECT-context.md)
+     * Do not ignore the priorities of Current-State.MD
+     * Do not break the established Naming conventions
+     * Do not forget to test the presets after changes
 
-   -------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------------
 
-   ## 🔄 WORKFLOW EJEMPLO COMPLETO
+   ## 🔄 Workflow full example
 
-     Usuario: "Context: TextTypoOrganic02. Lee AI-Assistant/CURRENT-STATE.md y dime qué tarea de alta prioridad debería hacer ahora"
+     User: "Context: TexttyPoorganic02. Lee Ai-Assistant/Current-state.md and tell me what task of high priority should do now"
 
-     Copilot: [Lee CURRENT-STATE.md] "Prioridad alta: añadir comentarios a sampleStringPoints(). Te muestro la función y sugiero comentarios..."
+     COPILOT: [LEE CURRENT-STATE.MD] "High priority: Add comments to samplestringpoints (). I show you the function and suggest comments ..."
 
-     Usuario: "Perfecto, implementa esos comentarios siguiendo CODE-PATTERNS.md"
+     User: "Perfect, implement those comments following code-patterns.md"
 
-     Copilot: [Implementa comentarios siguiendo convenciones]
+     COPILOT: [Implement comments following conventions]
 
-     Usuario: "Compila y testa que todo funcione"
+     User: "Compila and Testa that everything works"
 
-     Copilot: [Compila, testa presets 0-9, reporta resultados]
+     COPILOT: [COMPILA, TESTS PRESETS 0-9, report results]
 
-     Usuario: "Haz commit con mensaje apropiado"
+     User: "Make Commit with appropriate message"
 
-     Copilot: [Hace git commit con mensaje descriptivo]
+     COPILOT: [MAKES GIT COMMIT WITH DESCRIPTIVE MESSAGE]
 
-     Usuario: "Actualiza CURRENT-STATE.md marcando esta tarea como completada"
+     User: "Update Current-State.MD Marking this task as completed"
 
-     Copilot: [Actualiza documentación]
+     COPILOT: [Update documentation]
 
-   -------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------------
 
-   ## 🎯 RESULTADO ESPERADO
+   ## 🎯 Expected result
 
-   Con este flujo conseguirás:
+   With this flow you will get:
 
-   ✅ Sesiones más eficientes - Sin tiempo perdido en explicaciones
-   ✅ Código consistente - Siguiendo siempre las convenciones
-   ✅ Desarrollo dirigido - Enfocado en prioridades reales
-   ✅ Menos errores - Testing sistemático después de cambios
-   ✅ Documentación actualizada - El proyecto siempre refleja el estado real
+   ✅ Most efficient sessions - without wasting time in explanations
+   ✅ Consistent Code - Always following conventions
+   ✅ Directed Development - Focused on real priorities
+   ✅ Less errors - systematic testing after changes
+   ✅ Updated documentation - The project always reflects the real state
