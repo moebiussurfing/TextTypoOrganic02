@@ -21,8 +21,8 @@ void OrganicText::exit() {
 //--------------------------------------------------------------
 void OrganicText::setup() {
 	// Basic parameters - Simplified names
-	bDebugDraw.set("Debug", false);
-	bDebugDrawInfo.set("Debug Draw", false);
+	bDebugDraw.set("Debug Draw", false);
+	bDebugDrawInfo.set("Debug Draw Info", false);
 	bDrawFill.set("Fill", true);
 	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
@@ -110,8 +110,9 @@ void OrganicText::setup() {
 	densityGroup.add(resetDensity);
 
 	shapeGroup.setName("Shape");
+	shapeGroup.add(bDrawFill);
 	shapeGroup.add(shapeType);
-	shapeGroup.add(shapeTypeName); // NEW: Shows current shape name
+	shapeGroup.add(shapeTypeName);
 	shapeGroup.add(shapePointRadius);
 	shapeGroup.add(shapePointsRadiusMin);
 	shapeGroup.add(shapeTriangleRatio);
@@ -119,28 +120,28 @@ void OrganicText::setup() {
 	shapeGroup.add(randomShape);
 	shapeGroup.add(resetShape);
 
-	colorGroup.setName("Colors");
+	colorGroup.setName("Colors Modes");
 	colorGroup.add(colorMode);
-	colorGroup.add(colorModeName); // NEW: Shows current color mode name
+	colorGroup.add(colorModeName);
 	colorGroup.add(colorSpeed);
 	colorGroup.add(colorMixFactor);
 	colorGroup.add(bColorByDistance);
 	colorGroup.add(randomColor);
 	colorGroup.add(resetColor);
 
-	globalColorGroup.setName("Global Colors"); // Simplified name
+	globalColorGroup.setName("Colors");
 	globalColorGroup.add(color1);
 	globalColorGroup.add(color2);
 	globalColorGroup.add(color3);
-	globalColorGroup.add(colorOutline); // NEW: Outline color
-	globalColorGroup.add(colorConnection); // NEW: Connection color
+	globalColorGroup.add(colorOutline);
+	globalColorGroup.add(colorConnection);
 	globalColorGroup.add(randomGlobalColors);
 	globalColorGroup.add(resetGlobalColors);
 
 	animGroup.setName("Animation");
 	animGroup.add(bEnableAnimation);
 	animGroup.add(animationMode);
-	animGroup.add(animationModeName); // NEW: Shows current animation mode name
+	animGroup.add(animationModeName);
 	animGroup.add(animSpeed);
 	animGroup.add(animPower);
 	animGroup.add(animWaveFrequency);
@@ -154,7 +155,7 @@ void OrganicText::setup() {
 	connectionGroup.add(bDrawConnections);
 	connectionGroup.add(connectionsDistance);
 	connectionGroup.add(connectionsAlpha);
-	connectionGroup.add(connectionQuality); // NEW: Performance control
+	connectionGroup.add(connectionQuality);
 	connectionGroup.add(bConnectionOnlyNear);
 	connectionGroup.add(bDrawTrails);
 	connectionGroup.add(trailLength);
@@ -167,7 +168,6 @@ void OrganicText::setup() {
 	parameters.add(sText);
 	parameters.add(zoomGlobal);
 	parameters.add(bDrawOutline);
-	parameters.add(bDrawFill);
 	parameters.add(bDrawShapes);
 	parameters.add(bDrawConnections);
 	parameters.add(bEnableAnimation);
@@ -545,7 +545,7 @@ void OrganicText::drawConnections() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawDebug() const {
-	if (!bDebugDraw.get()) return;
+	//if (!bDebugDraw.get()) return;
 
 	ofPushStyle();
 	ofSetColor(ofColor::red);
@@ -584,7 +584,7 @@ void OrganicText::drawDebug() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawDebugInfo() const {
-	if (!bDebugDrawInfo.get()) return;
+	//if (!bDebugDrawInfo.get()) return;
 
 	ofPushStyle();
 
@@ -629,8 +629,8 @@ void OrganicText::drawDebugInfo() const {
 	// === BUILD INFO STRINGS ===
 	vector<string> infoLines;
 	infoLines.push_back("=== APP PERFORMANCE ===");
-	infoLines.push_back("FPS: " + ofToString(fps, 1) + " (" + perfStatus + ")");
-	infoLines.push_back("Frame Time: " + ofToString(frameTime, 2) + " ms");
+	infoLines.push_back("FPS: " + ofToString(fps, 0) + " (" + perfStatus + ")");
+	infoLines.push_back("Frame Time: " + ofToString(frameTime, 0) + " ms");
 	infoLines.push_back("");
 	infoLines.push_back("=== RENDERING LOAD ===");
 	infoLines.push_back("Text Points: " + ofToString(pointCount));
@@ -762,34 +762,35 @@ void OrganicText::draw() {
 
 			ofPopStyle();
 		}
+	}
 
-		//--
+	//--
 
-		// Show original text outline with custom color
-		if (bDrawOutline) {
-			ofPushStyle();
-			ofNoFill();
-			ofSetColor(colorOutline.get()); // NEW: Use custom outline color
-			ofSetLineWidth(1 / zoomFactor); // Adjust line width for zoom
-			font.drawStringAsShapes(sText, 0, 0);
-			ofPopStyle();
-		}
+	// Show original text outline with custom color
+	if (bDrawOutline) {
+		ofPushStyle();
+		ofNoFill();
+		ofSetColor(colorOutline.get()); // NEW: Use custom outline color
+		ofSetLineWidth(1 / zoomFactor); // Adjust line width for zoom
+		font.drawStringAsShapes(sText, 0, 0);
+		ofPopStyle();
+	}
 
-		// Debug mode visualization
-		if (bDebugDraw) {
-			drawDebug();
-		}
-		if (bDebugDrawInfo) {
-			drawDebugInfo();
-		}
+	// Debug mode visualization
+	if (bDebugDraw) {
+		drawDebug();
 	}
 
 	ofPopMatrix();
 
-	// Draw performance info box (outside transformations)
-	drawDebugInfo();
+	//--
 
 	gui.draw();
+
+	// Draw performance info box (outside transformations)
+	if (bDebugDrawInfo) {
+		drawDebugInfo();
+	}
 }
 
 //--------------------------------------------------------------
@@ -916,10 +917,14 @@ void OrganicText::loadSettings() {
 	}
 }
 
+//--
+
+// All default settings must be settled here, instead of in setup() ofParamas init.
+
 //--------------------------------------------------------------
 void OrganicText::resetDensityParams() {
 	densityPointsSpacing.set(0.2f);
-	densityPoints.set(1.0f);
+	densityPoints.set(0.2f);
 	densityMinSpacing.set(0.1f);
 	densityContourSampling.set(2.0f);
 	refreshPointsString();
@@ -927,6 +932,7 @@ void OrganicText::resetDensityParams() {
 
 //--------------------------------------------------------------
 void OrganicText::resetShapeParams() {
+	bDrawFill.set(false);
 	shapePointRadius.set(0.f);
 	shapePointsRadiusMin.set(0.2f);
 	shapeType.set(0);
@@ -945,17 +951,17 @@ void OrganicText::resetColorParams() {
 //--------------------------------------------------------------
 void OrganicText::resetGlobalColorParams() {
 	color1.set(ofColor::orange);
-	color2.set(ofColor::blue);
-	color3.set(ofColor::green);
+	color2.set(ofColor::greenYellow);
+	color3.set(ofColor::lightSkyBlue);
 	colorConnection.set(ofColor::yellow);
-	colorOutline.set(ofColor::white);
+	colorOutline.set(ofColor::black);
 }
 
 //--------------------------------------------------------------
 void OrganicText::resetAnimationParams() {
 	animationMode.set(0);
 	animSpeed.set(1.0f);
-	animPower.set(5.0f);
+	animPower.set(0.1f);
 	animWaveFrequency.set(0.02f);
 	animIntensity.set(0.1f);
 	animSpiral.set(0.1f);
@@ -984,8 +990,8 @@ void OrganicText::resetAllParams() {
 	resetConnectionParams();
 
 	// Reset basic parameters
-	bDebugDraw.set(false);
-	bDrawFill.set(false);
+	//bDebugDraw.set(false);
+	//bDebugDrawInfo.set(false);
 	bDrawOutline.set(false);
 	bDrawShapes.set(true);
 	bEnableAnimation.set(false);
