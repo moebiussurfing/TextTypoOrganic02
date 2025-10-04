@@ -1,51 +1,64 @@
 # ======================================================================
 # generate-files-tree-current-folder.ps1
 #
-# Genera un árbol de archivos y directorios en formato Markdown.
-# - Se ejecuta desde la carpeta actual y escanea recursivamente.
-# - Crea un archivo .md con el mismo nombre que la carpeta actual.
-# - Utiliza caracteres de línea para una estética "bonita".
+# Generates a Markdown file with a tree structure of files and directories.
+# Features:
+# - Scans recursively from the current folder
+# - Creates a .md file with pattern: [folder-name]-current-folder-tree.md
+# - Uses pretty box drawing characters for the tree structure
+# - Excludes common system and build folders
+# - Sorts directories first, then files
 # ======================================================================
 
-# --- Setup paths ---
+# --- Setup paths and initialize logging ---
 $root = Get-Location
 $folderName = Split-Path $root -Leaf
-$outputFile = Join-Path $root "$folderName.md"
+$outputFile = Join-Path $root "$folderName-current-folder-tree.md"
 
-# --- Box drawing characters ---
-$VERT = '│'
-$HORI = '─'
-$BRANCH = '├'
-$LAST = '└'
+Write-Host "🔍 Starting file tree generation..."
+Write-Host "📂 Current folder: $root"
+Write-Host "📝 Output will be saved to: $outputFile"
+
+# --- Box drawing characters for pretty tree structure ---
+$VERT = '│'   # Vertical line
+$HORI = '─'   # Horizontal line
+$BRANCH = '├'  # Branch connection
+$LAST = '└'    # Last item connection
 
 # --- Items to exclude from the tree ---
 $exclude = @(
-    ".git",
-    ".vs",
-    ".vscode",
-    "bin",
-    "obj",
-    "node_modules",
-    ".DS_Store"
+    ".git",      # Git repository
+    ".vs",       # Visual Studio files
+    ".vscode",   # VS Code files
+    "bin",       # Binary output
+    "obj",       # Object files
+    "node_modules", # NPM packages
+    ".DS_Store"  # macOS system files
 )
 
-# --- Global lines buffer ---
+Write-Host "🚫 Excluding: $($exclude -join ', ')"
+
+# --- Global lines buffer for tree content ---
 $lines = [System.Collections.Generic.List[string]]::new()
-$lines.Add("# File Tree for '$folderName'")
+$lines.Add("# Current Folder Tree for '$folderName'")
+$lines.Add("Generated on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')")
 $lines.Add('```text')
 $lines.Add($folderName)
 
+# --- Process items (directories and files) recursively ---
 function Process-Items {
     param(
         [array]$Items,
         [string]$Prefix
     )
 
-    # Separar directorios y archivos
+    # Separate directories and files for sorted processing
     $directories = $Items | Where-Object { $_.PSIsContainer }
     $files = $Items | Where-Object { -not $_.PSIsContainer }
 
-    # Procesar directorios primero
+    Write-Host "  📁 Processing directory with $($directories.Count) subdirectories and $($files.Count) files"
+
+    # Process directories first
     for ($i = 0; $i -lt $directories.Count; $i++) {
         $dir = $directories[$i]
         $isLastDir = ($i -eq $directories.Count - 1) -and ($files.Count -eq 0)
@@ -58,7 +71,7 @@ function Process-Items {
             $newPrefix = $Prefix + $VERT + '   '
         }
 
-        # Procesar contenido del directorio
+        # Process subdirectory contents
         $children = Get-ChildItem -LiteralPath $dir.FullName -Force -Exclude $exclude -ErrorAction SilentlyContinue |
             Sort-Object @{Expression = { $_.PSIsContainer }; Descending = $true}, Name
         
@@ -67,7 +80,7 @@ function Process-Items {
         }
     }
 
-    # Luego procesar archivos
+    # Then process files
     for ($i = 0; $i -lt $files.Count; $i++) {
         $file = $files[$i]
         $isLastFile = ($i -eq $files.Count - 1)
@@ -82,19 +95,31 @@ function Process-Items {
 
 # --- Start processing ---
 try {
-    # Obtener items del directorio actual y procesar recursivamente
+    Write-Host "🔄 Processing files and directories..."
+    
+    # Get and sort items from current directory
     $rootItems = Get-ChildItem -LiteralPath $root -Force -Exclude $exclude -ErrorAction SilentlyContinue |
         Sort-Object @{Expression = { $_.PSIsContainer }; Descending = $true}, Name
 
     if ($rootItems) {
         Process-Items -Items $rootItems -Prefix ''
+    } else {
+        Write-Host "⚠️ No items found in directory"
     }
 
     $lines.Add('```')
 
     # --- Save result ---
     $lines | Out-File -FilePath $outputFile -Encoding utf8
-    Write-Host "✅ Tree saved to: $outputFile"
+    Write-Host "✅ Tree successfully saved to: $outputFile"
+    
+    # --- Display the generated tree ---
+    Write-Host "`n📋 Generated Tree Content:"
+    Write-Host "------------------------"
+    Get-Content $outputFile | ForEach-Object { Write-Host $_ }
+    Write-Host "------------------------"
+
 } catch {
     Write-Host "❌ Error: $_"
+    Write-Host "Stack Trace: $($_.ScriptStackTrace)"
 }
