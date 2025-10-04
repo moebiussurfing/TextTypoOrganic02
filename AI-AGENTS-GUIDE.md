@@ -35,17 +35,17 @@
 
 ## 📚 AI-Assistant Files (docs/AI-Assistant/)
 
-**PROJECT-CONTEXT.md** - Full project overview. Read on first session or when lost.
+[**PROJECT-CONTEXT.md**](/docs/AI-Assistant/PROJECT-CONTEXT.md) - Full project overview. Read on first session or when lost.
 
-**CURRENT-STATE.md** - Current priorities. Read at every session start.
+[**CURRENT-STATE.md**](/docs/AI-Assistant/CURRENT-STATE.md) - Current priorities. Read at every session start.
 
-**CODE-PATTERNS.md** - Coding conventions. Check before writing code.
+[**CODE-PATTERNS.md**](/docs/AI-Assistant/CODE-PATTERNS.md) - Coding conventions. Check before writing code.
 
-**QUICK-COMMANDS.md** - Common operations and workflows.
+[**QUICK-COMMANDS.md**](/docs/AI-Assistant/QUICK-COMMANDS.md) - Common operations and workflows.
 
-**RULES.md** - Automated rules for assistants.
+[**RULES.md**](/docs/AI-Assistant/RULES.md) - Automated rules for assistants.
 
-**HOW-TO-INTERACT.md** - Best practices for collaboration.
+[**HOW-TO-INTERACT.md**](/docs/AI-Assistant/HOW-TO-INTERACT.md) - Best practices for collaboration.
 
 ---
 
