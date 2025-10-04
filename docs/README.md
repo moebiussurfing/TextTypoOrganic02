@@ -25,9 +25,9 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 4. **Follow** [`AI-Assistant/CODE-PATTERNS.md`](AI-Assistant/CODE-PATTERNS.md) - Keep code consistent
 
 ### Typical Commands
-- `"Read /AI-Assistant/PROJECT-CONTEXT.md and tell me current priorities"`
-- `"Check /TODO/Current-Tasks.md and suggest which task to start"`
-- `"Review /AI-Assistant/CODE-PATTERNS.md before modifying code"`
+- `"Read /docs/AI-Assistant/PROJECT-CONTEXT.md and tell me current priorities"`
+- `"Check /docs/TODO/Current-Tasks.md and suggest which task to start"`
+- `"Review /docs/AI-Assistant/CODE-PATTERNS.md before modifying code"`
 
 **Status for AI**: Production ready codebase • Zero compilation errors • Well-documented • Clear development paths
 
