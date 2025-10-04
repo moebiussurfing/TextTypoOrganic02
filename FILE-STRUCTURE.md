@@ -6,7 +6,6 @@ TextTypoOrganic02/
 │   ├── AI-Assistant/
 │   │   ├── CODE-PATTERNS.md
 │   │   ├── CURRENT-STATE.md
-│   │   ├── FILE-STRUCTURE.md
 │   │   ├── HOW-TO-INTERACT.md
 │   │   ├── PROJECT-CONTEXT.md
 │   │   ├── QUICK-COMMANDS.md
@@ -31,9 +30,7 @@ TextTypoOrganic02/
 │   │   ├── Quick-Start.md
 │   │   ├── Troubleshooting.md
 │   │   └── User-Manual.md
-│   ├── CHANGELOG.md
-│   ├── FILE-STRUCTURE.md
-│   └── README.md
+│   └── CHANGELOG.md
 ├── src/
 │   ├── main.cpp
 │   ├── ofApp.cpp
@@ -42,6 +39,7 @@ TextTypoOrganic02/
 │   ├── organicText.h
 │   ├── organicTextPresets.cpp
 │   └── organicTextPresets.h
+├── FILE-STRUCTURE.md
+├── README.md
 ├── generate-FILE-STRUCTURE.py
-└── refresh_gitignore.ps1
 ```

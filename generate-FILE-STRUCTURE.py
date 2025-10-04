@@ -83,7 +83,8 @@ HARDCODED_EXCLUSIONS_NAMES = [
     'addons.make',          # Specific configuration file
     '.gitignore',           # Exclude the .gitignore file itself from output
     'dll',                  # Exclude the 'dll' directory entirely (not just its contents)
-    'Capture.PNG'
+    'Capture.PNG',
+    'refresh_gitignore.ps1'
 ]
 
 # Hardcoded glob-like patterns for path-based exclusions.
