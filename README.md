@@ -17,41 +17,20 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 
 ## 🤖 For AI Assistants & Coding Agents
 
+**Are you an AI assistant?** → **[Read the Complete AI Agents Guide](AI-AGENTS-GUIDE.md)** ⭐
+
+**Quick links for AI assistants:**
+- 📖 **[Complete AI Guide](AI-AGENTS-GUIDE.md)** - Full onboarding, workflows & best practices
+- 🎯 **[Project Context](docs/AI-Assistant/PROJECT-CONTEXT.md)** - Complete project overview
+- ✅ **[Current Tasks](docs/Active/Current-Tasks.md)** - What to work on now
+- 📁 **[File Structure](FILE-STRUCTURE.md)** - Project file map
+- 📋 **[Current State](docs/AI-Assistant/CURRENT-STATE.md)** - Status & priorities
+
 **Compatible with**: GitHub Copilot, Gemini, Claude, Cline (via OpenRouter), Cursor, and other AI coding assistants in VS Code or similar IDEs.
-
-> **📌 Important for AI Assistants:**  
-> Beyond the `AI-Assistant/` folder, you should also regularly consult:
-> - **`Active/`** - Current tasks, bugs, and TODOs (check before every session)
-> - **`Future/`** - Roadmap and planned features (for context on project direction)
-> - **`Developer/`** - Architecture and API reference (for code changes)
-> - **`Learning/`** - Technical concepts and patterns (for implementation guidance)
-> - **`Archive/`** - Completed tasks and project history (for context on past decisions)
-
-### Quick Start (2 minutes to full context)
-1. **Read** [`docs/AI-Assistant/PROJECT-CONTEXT.md`](docs/AI-Assistant/PROJECT-CONTEXT.md) ⭐ - Complete project overview
-2. **Check** [`docs/AI-Assistant/CURRENT-STATE.md`](docs/AI-Assistant/CURRENT-STATE.md) - Current status and priorities
-3. **Use** [`docs/AI-Assistant/QUICK-COMMANDS.md`](docs/AI-Assistant/QUICK-COMMANDS.md) - Common operations ready to use
-4. **Follow** [`docs/AI-Assistant/CODE-PATTERNS.md`](docs/AI-Assistant/CODE-PATTERNS.md) - Keep code consistent
-5. **See** [`FILE-STRUCTURE.md`](FILE-STRUCTURE.md) - Complete project file map
-
-### Typical Commands
-- `"Read /docs/AI-Assistant/PROJECT-CONTEXT.md and tell me current priorities"`
-- `"Check /docs/Active/Current-Tasks.md and suggest which task to start"`
-- `"Review /docs/AI-Assistant/CODE-PATTERNS.md before modifying code"`
-
-**Status for AI**: Production ready codebase • Zero compilation errors • Well-documented • Clear development paths
 
 ---
 
 ## 📚 Documentation Structure
-
-### 🤖 AI Assistants & Coding Agents
-- **[PROJECT-CONTEXT.md](docs/AI-Assistant/PROJECT-CONTEXT.md)** - Complete project overview ⭐
-- **[CURRENT-STATE.md](docs/AI-Assistant/CURRENT-STATE.md)** - Current status and priorities
-- **[QUICK-COMMANDS.md](docs/AI-Assistant/QUICK-COMMANDS.md)** - Common operations and workflows
-- **[CODE-PATTERNS.md](docs/AI-Assistant/CODE-PATTERNS.md)** - Coding conventions and patterns
-- **[RULES.md](docs/AI-Assistant/RULES.md)** - Automated rules for assistants
-- **[HOW-TO-INTERACT.md](docs/AI-Assistant/HOW-TO-INTERACT.md)** - Best practices for AI interaction
 
 ### 👤 For Users
 - **[Quick Start Guide](docs/User/Quick-Start.md)** - Get started in 30 seconds
