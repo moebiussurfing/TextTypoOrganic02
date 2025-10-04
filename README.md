@@ -25,6 +25,7 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 > - **`Future/`** - Roadmap and planned features (for context on project direction)
 > - **`Developer/`** - Architecture and API reference (for code changes)
 > - **`Learning/`** - Technical concepts and patterns (for implementation guidance)
+> - **`Archive/`** - Completed tasks and project history (for context on past decisions)
 
 ### Quick Start (2 minutes to full context)
 1. **Read** [`docs/AI-Assistant/PROJECT-CONTEXT.md`](docs/AI-Assistant/PROJECT-CONTEXT.md) ⭐ - Complete project overview
