@@ -4,16 +4,19 @@
 # Generates a Markdown file with a tree structure of files and directories.
 # Features:
 # - Scans recursively from the project root
-# - Creates a .md file with pattern: [folder-name]-all-project-tree.md
+# - Creates a .md file with pattern: [project-name]-all-project-tree.md
 # - Uses pretty box drawing characters for the tree structure
 # - Excludes common system and build folders
 # - Sorts directories first, then files
 # ======================================================================
 
 # --- Setup paths and initialize logging ---
-$root = Get-Location
-$folderName = Split-Path $root -Leaf
-$outputFile = Join-Path $root "$folderName-all-project-tree.md"
+# Get project root (one level up from docs folder)
+$scriptPath = $MyInvocation.MyCommand.Path
+$docsFolder = Split-Path $scriptPath -Parent
+$root = Split-Path $docsFolder -Parent
+$projectName = Split-Path $root -Leaf
+$outputFile = Join-Path $root "$projectName-all-project-tree.md"
 
 Write-Host "🔍 Starting project file tree generation..."
 Write-Host "📂 Project root: $root"
@@ -40,10 +43,10 @@ Write-Host "🚫 Excluding: $($exclude -join ', ')"
 
 # --- Global lines buffer for tree content ---
 $lines = [System.Collections.Generic.List[string]]::new()
-$lines.Add("# Complete Project Tree for '$folderName'")
+$lines.Add("# Project Tree for '$projectName'")
 $lines.Add("Generated on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')")
 $lines.Add('```text')
-$lines.Add($folderName)
+$lines.Add($projectName)
 
 # --- Process items (directories and files) recursively ---
 function Process-Items {
