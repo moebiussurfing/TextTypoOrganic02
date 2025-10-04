@@ -2,8 +2,6 @@
 
 ```
 TextTypoOrganic02/
-├── dll/
-│   ├── ARM64EC/
 ├── docs/
 │   ├── AI-Assistant/
 │   │   ├── CODE-PATTERNS.md
@@ -34,6 +32,7 @@ TextTypoOrganic02/
 │   │   ├── Troubleshooting.md
 │   │   └── User-Manual.md
 │   ├── CHANGELOG.md
+│   ├── FILE-STRUCTURE.md
 │   └── README.md
 ├── src/
 │   ├── main.cpp
@@ -43,9 +42,6 @@ TextTypoOrganic02/
 │   ├── organicText.h
 │   ├── organicTextPresets.cpp
 │   └── organicTextPresets.h
-├── .gitignore
-├── Capture.PNG
-├── addons.make
-├── generate-files-tree-all-project.py
+├── generate-FILE-STRUCTURE.py
 └── refresh_gitignore.ps1
 ```
