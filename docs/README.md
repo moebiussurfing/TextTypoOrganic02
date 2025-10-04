@@ -11,6 +11,7 @@ An enhanced openFrameworks application that creates organic, animated visualizat
 
 **New to TextTypoOrganic02?** → Start with [`/User/Quick-Start.md`](User/Quick-Start.md) for a 30-second introduction.
 
+See the [User Manual](User/User-Manual.md) for all keyboard shortcuts and GUI parameters.
 Press any number key **0-9** to load instant visual presets and begin creating immediately!
 
 ## 🤖 For AI Assistants & Coding Agents
@@ -62,10 +63,6 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 - ✅ **Full feature set** - All planned v1.0 features implemented
 - ✅ **Comprehensive documentation** - Complete user and developer guides
 - ✅ **Stable performance** - Smooth operation at reasonable settings
-
-## 🎮 Essential Controls
-
-See the [User Manual](User/User-Manual.md) for all keyboard shortcuts and GUI parameters.
 
 ## 💻 Tested Systems
 
