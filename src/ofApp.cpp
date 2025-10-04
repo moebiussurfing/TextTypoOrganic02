@@ -2,8 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	//ofBackground(0); // Changed to black for better color effects
-	//ofSetFrameRate(60);
+	ofBackground(24);
 
 	#if 0
 	ofSetWindowShape(512, 512);

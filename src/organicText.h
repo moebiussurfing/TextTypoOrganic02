@@ -43,6 +43,8 @@ public:
 	~OrganicText();
 
 	void setup();
+	void setupParams();
+	void setupCallbacks();
 	void draw();
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
@@ -58,8 +60,8 @@ public:
 	ofParameterGroup parameters;
 	ofParameterGroup shapeGroup;
 	ofParameterGroup densityGroup;
-	ofParameterGroup colorGroup; // Color controls
-	ofParameterGroup globalColorGroup; // New: Global color controls
+	ofParameterGroup colorModesGroup; // Color controls
+	ofParameterGroup colorGlobalGroup; // New: Global color controls
 	ofParameterGroup animGroup; // Animation controls
 	ofParameterGroup connectionGroup; // Connection controls
 

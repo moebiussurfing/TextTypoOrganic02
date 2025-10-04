@@ -19,7 +19,7 @@ void OrganicText::exit() {
 }
 
 //--------------------------------------------------------------
-void OrganicText::setup() {
+void OrganicText::setupParams() {
 	// Basic parameters - Simplified names
 	bDebugDraw.set("Debug Draw", false);
 	bDebugDrawInfo.set("Debug Draw Info", false);
@@ -65,7 +65,7 @@ void OrganicText::setup() {
 	color1.set("Color 1", ofColor::cyan);
 	color2.set("Color 2", ofColor::magenta);
 	color3.set("Color 3", ofColor::yellow);
-	
+
 	// NEW: Outline and connection colors
 	colorOutline.set("Color Outline", ofColor::white);
 	colorConnection.set("Color Connection", ofColor::white);
@@ -78,7 +78,7 @@ void OrganicText::setup() {
 	animationModeName.setSerializable(false); // Don't save to settings
 	animSpeed.set("Speed", 1.0, 0.1, 3.0);
 	animPower.set("Power", 0.1, 0.0, 1.0); // Normalized 0-1
-	animWaveFrequency.set("Wave", 0.5, 0.0, 1.0); // Normalized 0-1  
+	animWaveFrequency.set("Wave", 0.5, 0.0, 1.0); // Normalized 0-1
 	animIntensity.set("Intensity", 0.2, 0.0, 1.0); // Normalized 0-1
 	animSpiral.set("Spiral", 0.2, 0.0, 1.0); // Normalized 0-1
 	animPulseIntensity.set("Pulse", 0.2, 0.0, 1.0); // Normalized 0-1
@@ -120,23 +120,23 @@ void OrganicText::setup() {
 	shapeGroup.add(randomShape);
 	shapeGroup.add(resetShape);
 
-	colorGroup.setName("Colors Modes");
-	colorGroup.add(colorMode);
-	colorGroup.add(colorModeName);
-	colorGroup.add(colorSpeed);
-	colorGroup.add(colorMixFactor);
-	colorGroup.add(bColorByDistance);
-	colorGroup.add(randomColor);
-	colorGroup.add(resetColor);
+	colorModesGroup.setName("Colors Modes");
+	colorModesGroup.add(colorMode);
+	colorModesGroup.add(colorModeName);
+	colorModesGroup.add(colorSpeed);
+	colorModesGroup.add(colorMixFactor);
+	colorModesGroup.add(bColorByDistance);
+	colorModesGroup.add(randomColor);
+	colorModesGroup.add(resetColor);
 
-	globalColorGroup.setName("Colors");
-	globalColorGroup.add(color1);
-	globalColorGroup.add(color2);
-	globalColorGroup.add(color3);
-	globalColorGroup.add(colorOutline);
-	globalColorGroup.add(colorConnection);
-	globalColorGroup.add(randomGlobalColors);
-	globalColorGroup.add(resetGlobalColors);
+	colorGlobalGroup.setName("Colors");
+	colorGlobalGroup.add(color1);
+	colorGlobalGroup.add(color2);
+	colorGlobalGroup.add(color3);
+	colorGlobalGroup.add(colorOutline);
+	colorGlobalGroup.add(colorConnection);
+	colorGlobalGroup.add(randomGlobalColors);
+	colorGlobalGroup.add(resetGlobalColors);
 
 	animGroup.setName("Animation");
 	animGroup.add(bEnableAnimation);
@@ -173,15 +173,19 @@ void OrganicText::setup() {
 	parameters.add(bEnableAnimation);
 
 	// Groups
-	parameters.add(densityGroup);
 	parameters.add(shapeGroup);
-	parameters.add(colorGroup);
-	parameters.add(globalColorGroup);
+	parameters.add(densityGroup);
+	parameters.add(colorGlobalGroup);
+	parameters.add(colorModesGroup);
 	parameters.add(animGroup);
 	parameters.add(connectionGroup);
 	parameters.add(bDebugDraw);
 	parameters.add(bDebugDrawInfo);
 	parameters.add(resetAll);
+}
+
+//--------------------------------------------------------------
+void OrganicText::setupCallbacks() {
 
 	// Event listeners
 	e_PointsSize = densityPointsSpacing.newListener([this](float & v) { refreshPointsString(); });
@@ -209,6 +213,11 @@ void OrganicText::setup() {
 	e_RandomGlobalColor = randomGlobalColors.newListener([this](void) { randomizeGlobalColorParams(); });
 	e_RandomAnimation = randomAnimation.newListener([this](void) { randomizeAnimationParams(); });
 	e_RandomConnection = randomConnection.newListener([this](void) { randomizeConnectionParams(); });
+}
+//--------------------------------------------------------------
+void OrganicText::setup() {
+	setupParams();
+	setupCallbacks();
 
 	//--
 
@@ -217,11 +226,11 @@ void OrganicText::setup() {
 	gui.setup(parameters);
 	gui.getGroup(densityGroup.getName()).minimizeAll();
 	gui.getGroup(shapeGroup.getName()).minimizeAll();
-	gui.getGroup(colorGroup.getName()).minimizeAll();
-	gui.getGroup(globalColorGroup.getName()).minimizeAll();
+	gui.getGroup(colorModesGroup.getName()).minimizeAll();
+	gui.getGroup(colorGlobalGroup.getName()).minimizeAll();
 	gui.getGroup(animGroup.getName()).minimizeAll();
 	gui.getGroup(connectionGroup.getName()).minimizeAll();
-	gui.getGroup(globalColorGroup.getName()).minimizeAll();
+	gui.getGroup(colorGlobalGroup.getName()).minimizeAll();
 	gui.minimizeAll();
 
 	//--
@@ -543,7 +552,7 @@ void OrganicText::drawConnections() const {
 			float distance = glm::distance(pos1, pos2);
 			if (distance < connectionsDistance.get()) {
 				float alpha = ofMap(distance, 0, connectionsDistance.get(), connectionsAlpha.get(), 0);
-				ofSetColor(255, alpha);
+				ofSetColor(colorConnection, alpha);
 				ofDrawLine(pos1, pos2);
 				connections++;
 			}
