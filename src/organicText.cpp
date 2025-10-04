@@ -22,20 +22,21 @@ void OrganicText::exit() {
 void OrganicText::setup() {
 	// Basic parameters - Simplified names
 	bDebugDraw.set("Debug", false);
+	bDebugDrawInfo.set("Debug Draw", false);
 	bDrawFill.set("Fill", true);
-	bDrawShapes.set("Draw", true);
+	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
-	bDrawOutline.set("Outline", false);
-	sceneZoom.set("Zoom", 0.0f, 0.0f, 1.0f); // 0=1x, 1=5x zoom
+	bDrawOutline.set("Draw Outline", false);
+	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f); // 0=1x, 1=5x zoom
 	sText.set("Text", ORGANICTEXT);
 
 	// Density group - Simplified names, removed bEnableDensity
 	resetDensity.set("Reset");
 	randomDensity.set("Random");
-	pointsSpacing.set("Spacing", 0.2, 0.05, 1);
-	pointDensity.set("Density", 1.0, 0.1, 5.0);
-	minSpacing.set("Min Gap", 0.1, 0.01, 0.5);
-	contourSampling.set("Sampling", 2.0, 0.5, 10.0);
+	densityPointsSpacing.set("Spacing", 0.2, 0.05, 1);
+	densityPoints.set("Density", 1.0, 0.1, 5.0);
+	densityMinSpacing.set("Min Gap", 0.1, 0.01, 0.5);
+	densityContourSampling.set("Sampling", 2.0, 0.5, 10.0);
 
 	// Shape group - Simplified names, removed bEnableShape + add shape name
 	resetShape.set("Reset");
@@ -43,52 +44,52 @@ void OrganicText::setup() {
 	shapeType.set("Type", 0, 0, 5);
 	shapeTypeName.set("Shape Name", "Circle"); // NEW: Shows current shape name
 	shapeTypeName.setSerializable(false); // Don't save to settings
-	pointRadius.set("Size", 0.5, 0, 1);
-	pointsRadiusMin.set("Min Size", 0.3, 0, 1);
-	triangleRatio.set("Ratio", 1.0, 0.5, 2.0);
+	shapePointRadius.set("Size", 0.5, 0, 1);
+	shapePointsRadiusMin.set("Min Size", 0.3, 0, 1);
+	shapeTriangleRatio.set("Ratio", 1.0, 0.5, 2.0);
 	shapeRotation.set("Rotation", 0, 0, 360);
 
 	// Color group - Remove "Color" prefix, removed bEnableColor + add mode name
 	resetColor.set("Reset");
 	randomColor.set("Random");
 	colorMode.set("Mode", 3, 0, 4); // Default to COLOR_GLOBAL_MIX
-	colorModeName.set("Mode Name", "Mix"); // NEW: Shows current color mode
+	colorModeName.set("Mode Name", "Mix");
 	colorModeName.setSerializable(false); // Don't save to settings
 	colorSpeed.set("Speed", 1.0, 0.1, 5.0);
 	colorMixFactor.set("Mix", 0.5, 0.0, 1.0);
 	bColorByDistance.set("By Distance", false);
 
 	// Colors group - Simplified, removed bEnableGlobalColor
-	resetGlobalColor.set("Reset");
-	randomGlobalColor.set("Random");
-	globalColor1.set("Color 1", ofColor::cyan);
-	globalColor2.set("Color 2", ofColor::magenta);
-	globalColor3.set("Color 3", ofColor::yellow);
+	resetGlobalColors.set("Reset");
+	randomGlobalColors.set("Random");
+	color1.set("Color 1", ofColor::cyan);
+	color2.set("Color 2", ofColor::magenta);
+	color3.set("Color 3", ofColor::yellow);
 	
 	// NEW: Outline and connection colors
-	outlineColor.set("Outline Color", ofColor::white);
-	connectionColor.set("Connection Color", ofColor::white);
+	colorOutline.set("Color Outline", ofColor::white);
+	colorConnection.set("Color Connection", ofColor::white);
 
 	// Animation group - Simplified, removed bEnableAnimationGroup + add mode name
 	resetAnimation.set("Reset");
 	randomAnimation.set("Random");
 	animationMode.set("Mode", 0, 0, 4);
-	animationModeName.set("Mode Name", "Noise"); // NEW: Shows current animation mode
+	animationModeName.set("Mode Name", "Noise");
 	animationModeName.setSerializable(false); // Don't save to settings
 	animSpeed.set("Speed", 1.0, 0.1, 3.0);
-	noiseSize.set("Power", 0.1, 0.0, 1.0); // Normalized 0-1
-	waveFrequency.set("Wave", 0.5, 0.0, 1.0); // Normalized 0-1  
-	waveAmplitude.set("Intensity", 0.2, 0.0, 1.0); // Normalized 0-1
-	spiralTightness.set("Spiral", 0.2, 0.0, 1.0); // Normalized 0-1
-	pulseIntensity.set("Pulse", 0.2, 0.0, 1.0); // Normalized 0-1
+	animPower.set("Power", 0.1, 0.0, 1.0); // Normalized 0-1
+	animWaveFrequency.set("Wave", 0.5, 0.0, 1.0); // Normalized 0-1  
+	animIntensity.set("Intensity", 0.2, 0.0, 1.0); // Normalized 0-1
+	animSpiral.set("Spiral", 0.2, 0.0, 1.0); // Normalized 0-1
+	animPulseIntensity.set("Pulse", 0.2, 0.0, 1.0); // Normalized 0-1
 
 	// Connection group - Simplified names + performance optimization
 	resetConnection.set("Reset");
 	randomConnection.set("Random");
-	bDrawConnections.set("Draw", false);
-	connectionDistance.set("Distance", 30, 5, 100);
-	connectionAlpha.set("Alpha", 100, 0, 255);
-	bOnlyNearConnections.set("Near Only", true);
+	bDrawConnections.set("Draw Connections", false);
+	connectionsDistance.set("Distance", 30, 5, 100);
+	connectionsAlpha.set("Alpha", 100, 0, 255);
+	bConnectionOnlyNear.set("Near Only", true);
 	connectionQuality.set("Quality", 1.0, 0.1, 1.0); // NEW: 1.0=full quality, 0.1=10% connections
 
 	// Trail group (part of connection group) - Simplified names
@@ -101,27 +102,24 @@ void OrganicText::setup() {
 
 	// Organize parameters in groups
 	densityGroup.setName("Density");
-	// REMOVED: bEnableDensity (not needed)
-	densityGroup.add(pointsSpacing);
-	densityGroup.add(pointDensity);
-	densityGroup.add(minSpacing);
-	densityGroup.add(contourSampling);
+	densityGroup.add(densityPointsSpacing);
+	densityGroup.add(densityPoints);
+	densityGroup.add(densityMinSpacing);
+	densityGroup.add(densityContourSampling);
 	densityGroup.add(randomDensity);
 	densityGroup.add(resetDensity);
 
 	shapeGroup.setName("Shape");
-	// REMOVED: bEnableShape (not needed)
 	shapeGroup.add(shapeType);
 	shapeGroup.add(shapeTypeName); // NEW: Shows current shape name
-	shapeGroup.add(pointRadius);
-	shapeGroup.add(pointsRadiusMin);
-	shapeGroup.add(triangleRatio);
+	shapeGroup.add(shapePointRadius);
+	shapeGroup.add(shapePointsRadiusMin);
+	shapeGroup.add(shapeTriangleRatio);
 	shapeGroup.add(shapeRotation);
 	shapeGroup.add(randomShape);
 	shapeGroup.add(resetShape);
 
 	colorGroup.setName("Colors");
-	// REMOVED: bEnableColor (not needed)
 	colorGroup.add(colorMode);
 	colorGroup.add(colorModeName); // NEW: Shows current color mode name
 	colorGroup.add(colorSpeed);
@@ -130,35 +128,34 @@ void OrganicText::setup() {
 	colorGroup.add(randomColor);
 	colorGroup.add(resetColor);
 
-	globalColorGroup.setName("Colors"); // Simplified name
-	// REMOVED: bEnableGlobalColor (not needed)
-	globalColorGroup.add(globalColor1);
-	globalColorGroup.add(globalColor2);
-	globalColorGroup.add(globalColor3);
-	globalColorGroup.add(outlineColor); // NEW: Outline color
-	globalColorGroup.add(connectionColor); // NEW: Connection color
-	globalColorGroup.add(randomGlobalColor);
-	globalColorGroup.add(resetGlobalColor);
+	globalColorGroup.setName("Global Colors"); // Simplified name
+	globalColorGroup.add(color1);
+	globalColorGroup.add(color2);
+	globalColorGroup.add(color3);
+	globalColorGroup.add(colorOutline); // NEW: Outline color
+	globalColorGroup.add(colorConnection); // NEW: Connection color
+	globalColorGroup.add(randomGlobalColors);
+	globalColorGroup.add(resetGlobalColors);
 
 	animGroup.setName("Animation");
-	// REMOVED: bEnableAnimationGroup (use bEnableAnimation instead)
+	animGroup.add(bEnableAnimation);
 	animGroup.add(animationMode);
 	animGroup.add(animationModeName); // NEW: Shows current animation mode name
 	animGroup.add(animSpeed);
-	animGroup.add(noiseSize);
-	animGroup.add(waveFrequency);
-	animGroup.add(waveAmplitude);
-	animGroup.add(spiralTightness);
-	animGroup.add(pulseIntensity);
+	animGroup.add(animPower);
+	animGroup.add(animWaveFrequency);
+	animGroup.add(animIntensity);
+	animGroup.add(animSpiral);
+	animGroup.add(animPulseIntensity);
 	animGroup.add(randomAnimation);
 	animGroup.add(resetAnimation);
 
 	connectionGroup.setName("Connections");
 	connectionGroup.add(bDrawConnections);
-	connectionGroup.add(connectionDistance);
-	connectionGroup.add(connectionAlpha);
+	connectionGroup.add(connectionsDistance);
+	connectionGroup.add(connectionsAlpha);
 	connectionGroup.add(connectionQuality); // NEW: Performance control
-	connectionGroup.add(bOnlyNearConnections);
+	connectionGroup.add(bConnectionOnlyNear);
 	connectionGroup.add(bDrawTrails);
 	connectionGroup.add(trailLength);
 	connectionGroup.add(trailFade);
@@ -168,15 +165,14 @@ void OrganicText::setup() {
 	parameters.setName("OrganicText Enhanced");
 
 	parameters.add(sText);
-	parameters.add(sceneZoom);
+	parameters.add(zoomGlobal);
 	parameters.add(bDrawOutline);
 	parameters.add(bDrawFill);
 	parameters.add(bDrawShapes);
 	parameters.add(bDrawConnections);
-
-	// REMOVED: bEnableDensity, bEnableShape, bEnableColor, bEnableGlobalColor, bEnableAnimationGroup
 	parameters.add(bEnableAnimation);
 
+	// Groups
 	parameters.add(densityGroup);
 	parameters.add(shapeGroup);
 	parameters.add(colorGroup);
@@ -188,11 +184,11 @@ void OrganicText::setup() {
 	parameters.add(resetAll);
 
 	// Event listeners
-	e_PointsSize = pointsSpacing.newListener([this](float & v) { refreshPointsString(); });
-	e_PointsRadius = pointRadius.newListener([this](float & v) { refreshPointsString(); });
+	e_PointsSize = densityPointsSpacing.newListener([this](float & v) { refreshPointsString(); });
+	e_PointsRadius = shapePointRadius.newListener([this](float & v) { refreshPointsString(); });
 	e_sText = sText.newListener([this](string & s) { refreshPointsString(); });
-	e_PointDensity = pointDensity.newListener([this](float & v) { refreshPointsString(); });
-	e_ContourSampling = contourSampling.newListener([this](float & v) { refreshPointsString(); });
+	e_PointDensity = densityPoints.newListener([this](float & v) { refreshPointsString(); });
+	e_ContourSampling = densityContourSampling.newListener([this](float & v) { refreshPointsString(); });
 
 	// Mode name update listeners - NEW
 	shapeType.addListener(this, &OrganicText::updateShapeTypeName);
@@ -202,7 +198,7 @@ void OrganicText::setup() {
 	e_ResetDensity = resetDensity.newListener([this](void) { resetDensityParams(); });
 	e_ResetShape = resetShape.newListener([this](void) { resetShapeParams(); });
 	e_ResetColor = resetColor.newListener([this](void) { resetColorParams(); });
-	e_ResetGlobalColor = resetGlobalColor.newListener([this](void) { resetGlobalColorParams(); });
+	e_ResetGlobalColor = resetGlobalColors.newListener([this](void) { resetGlobalColorParams(); });
 	e_ResetAnimation = resetAnimation.newListener([this](void) { resetAnimationParams(); });
 	e_ResetConnection = resetConnection.newListener([this](void) { resetConnectionParams(); });
 	e_ResetAll = resetAll.newListener([this](void) { resetAllParams(); });
@@ -210,7 +206,7 @@ void OrganicText::setup() {
 	e_RandomDensity = randomDensity.newListener([this](void) { randomizeDensityParams(); });
 	e_RandomShape = randomShape.newListener([this](void) { randomizeShapeParams(); });
 	e_RandomColor = randomColor.newListener([this](void) { randomizeColorParams(); });
-	e_RandomGlobalColor = randomGlobalColor.newListener([this](void) { randomizeGlobalColorParams(); });
+	e_RandomGlobalColor = randomGlobalColors.newListener([this](void) { randomizeGlobalColorParams(); });
 	e_RandomAnimation = randomAnimation.newListener([this](void) { randomizeAnimationParams(); });
 	e_RandomConnection = randomConnection.newListener([this](void) { randomizeConnectionParams(); });
 
@@ -278,7 +274,7 @@ vector<vec2> OrganicText::sampleStringPoints(const string & s, float ds) {
 
 			// Improved contour sampling
 			float totalLength = polyline.getPerimeter();
-			float samplingStep = ds / contourSampling.get(); // Use new contour sampling parameter
+			float samplingStep = ds / densityContourSampling.get(); // Use new contour sampling parameter
 			int numSamples = static_cast<int>(totalLength / samplingStep);
 
 			if (numSamples < 3) numSamples = 3; // Minimum samples
@@ -300,10 +296,10 @@ void OrganicText::refreshPointsString() {
 	// Always refresh points (removed bEnableDensity check)
 	// Removed: if (!bEnableDensity.get()) check
 
-	float baseSpacing = ofMap(pointsSpacing, 0, 1, 0.5, 10, true);
-	float densityMultiplier = pointDensity.get();
+	float baseSpacing = ofMap(densityPointsSpacing, 0, 1, 0.5, 10, true);
+	float densityMultiplier = densityPoints.get();
 	float finalSpacing = baseSpacing / densityMultiplier;
-	finalSpacing = std::max(finalSpacing, minSpacing.get());
+	finalSpacing = std::max(finalSpacing, densityMinSpacing.get());
 
 	pointsString = sampleStringPoints(sText, finalSpacing);
 
@@ -338,12 +334,12 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 	switch ((AnimMode)animationMode.get()) {
 	case ANIM_NOISE:
-		offset = vec2(ofSignedNoise(phase, 0.0), ofSignedNoise(phase, 0.233)) * (noiseSize.get() * 50.0f); // Scale 0-1 to 0-50
+		offset = vec2(ofSignedNoise(phase, 0.0), ofSignedNoise(phase, 0.233)) * (animPower.get() * 50.0f); // Scale 0-1 to 0-50
 		break;
 
 	case ANIM_WAVE: {
-		float freq = waveFrequency.get() * 0.1f; // Scale 0-1 to 0-0.1
-		float amp = waveAmplitude.get() * 100.0f; // Scale 0-1 to 0-100
+		float freq = animWaveFrequency.get() * 0.1f; // Scale 0-1 to 0-0.1
+		float amp = animIntensity.get() * 100.0f; // Scale 0-1 to 0-100
 		float wave = sin(pointsString[index].x * freq + t * animSpeed.get()) * amp;
 		offset = vec2(0, wave);
 		break;
@@ -352,8 +348,8 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_SPIRAL: {
 		float angle = atan2(pointsString[index].y - textCenter.y, pointsString[index].x - textCenter.x);
 		float distance = glm::distance(pointsString[index], textCenter);
-		float tightness = spiralTightness.get() * 0.05f; // Scale 0-1 to 0-0.05
-		float power = noiseSize.get() * 50.0f; // Scale 0-1 to 0-50
+		float tightness = animSpiral.get() * 0.05f; // Scale 0-1 to 0-0.05
+		float power = animPower.get() * 50.0f; // Scale 0-1 to 0-50
 		float spiralOffset = sin(distance * tightness + t * animSpeed.get()) * power;
 		offset = vec2(cos(angle) * spiralOffset, sin(angle) * spiralOffset);
 		break;
@@ -361,7 +357,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 	case ANIM_PULSE: {
 		float distance = glm::distance(pointsString[index], textCenter);
-		float intensity = pulseIntensity.get() * 50.0f; // Scale 0-1 to 0-50
+		float intensity = animPulseIntensity.get() * 50.0f; // Scale 0-1 to 0-50
 		float pulse = sin(t * animSpeed.get() * 2) * intensity;
 		vec2 direction = normalize(pointsString[index] - textCenter);
 		offset = direction * pulse;
@@ -388,15 +384,15 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 	// Always calculate color (removed enable checks)
 	switch ((ColorMode)colorMode.get()) {
 	case COLOR_GLOBAL_1:
-		color = globalColor1.get();
+		color = color1.get();
 		break;
 
 	case COLOR_GLOBAL_2:
-		color = globalColor2.get();
+		color = color2.get();
 		break;
 
 	case COLOR_GLOBAL_3:
-		color = globalColor3.get();
+		color = color3.get();
 		break;
 
 	case COLOR_GLOBAL_MIX: {
@@ -406,12 +402,12 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		float mixFactor = colorMixFactor.get();
 
 		// Create a smooth blend between the three colors
-		ofColor color1 = globalColor1.get();
-		ofColor color2 = globalColor2.get();
-		ofColor color3 = globalColor3.get();
+		ofColor color1_ = color1.get();
+		ofColor color2_ = color2.get();
+		ofColor color3_ = color3.get();
 
 		// First mix between color1 and color2 based on index
-		ofColor color12 = color1.lerp(color2, indexMix);
+		ofColor color12 = color1_.lerp(color2, indexMix);
 		// Then mix with color3 based on time and mix factor
 		color = color12.lerp(color3, timeMix * mixFactor);
 		break;
@@ -423,14 +419,14 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		float distanceFactor = ofMap(distance, 0, maxDist, 0, 1, true);
 
 		// Mix between colors based on distance
-		ofColor color1 = globalColor1.get();
-		ofColor color2 = globalColor2.get();
-		ofColor color3 = globalColor3.get();
+		ofColor color1_ = color1.get();
+		ofColor color2_ = color2.get();
+		ofColor color3_ = color3.get();
 
 		if (distanceFactor < 0.5f) {
-			color = color1.lerp(color2, distanceFactor * 2.0f);
+			color = color1_.lerp(color2, distanceFactor * 2.0f);
 		} else {
-			color = color2.lerp(color3, (distanceFactor - 0.5f) * 2.0f);
+			color = color2_.lerp(color3, (distanceFactor - 0.5f) * 2.0f);
 		}
 		break;
 	}
@@ -461,7 +457,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 		break;
 
 	case SHAPE_TRIANGLE: {
-		float h = size * triangleRatio.get();
+		float h = size * shapeTriangleRatio.get();
 		ofDrawTriangle(0, -h / 2.0f, -size / 2.0f, h / 2.0f, size / 2.0f, h / 2.0f);
 		break;
 	}
@@ -521,14 +517,14 @@ void OrganicText::drawConnections() const {
 	if (!bDrawConnections || !true || pointsString.size() < 2) return;
 
 	// Use custom connection color instead of white
-	ofSetColor(connectionColor.get(), connectionAlpha.get());
+	ofSetColor(colorConnection.get(), connectionsAlpha.get());
 
 	for (size_t i = 0; i < pointsString.size(); i++) {
 		float phase1 = t + 0.123f * static_cast<float>(i);
 		vec2 offset1 = getAnimatedOffset(static_cast<int>(i), phase1);
 		vec2 pos1 = pointsString[i] + offset1;
 
-		int maxConnections = bOnlyNearConnections ? 3 : static_cast<int>(pointsString.size());
+		int maxConnections = bConnectionOnlyNear ? 3 : static_cast<int>(pointsString.size());
 		int connections = 0;
 
 		for (size_t j = i + 1; j < pointsString.size() && connections < maxConnections; j++) {
@@ -537,8 +533,8 @@ void OrganicText::drawConnections() const {
 			vec2 pos2 = pointsString[j] + offset2;
 
 			float distance = glm::distance(pos1, pos2);
-			if (distance < connectionDistance.get()) {
-				float alpha = ofMap(distance, 0, connectionDistance.get(), connectionAlpha.get(), 0);
+			if (distance < connectionsDistance.get()) {
+				float alpha = ofMap(distance, 0, connectionsDistance.get(), connectionsAlpha.get(), 0);
 				ofSetColor(255, alpha);
 				ofDrawLine(pos1, pos2);
 				connections++;
@@ -607,7 +603,7 @@ void OrganicText::drawDebugInfo() const {
 	int activeConnections = 0;
 	float connectionCost = 0.0f; // O(n²) computational cost indicator
 	if (bDrawConnections.get() && true) {
-		float maxDist = connectionDistance.get();
+		float maxDist = connectionsDistance.get();
 		connectionCost = pointCount * pointCount; // Shows O(n²) nature
 
 		// Count actual connections being drawn
@@ -646,7 +642,7 @@ void OrganicText::drawDebugInfo() const {
 	infoLines.push_back("=== SYSTEM STATUS ===");
 	infoLines.push_back("Memory ~: " + ofToString(estimatedMemoryKB) + " KB");
 	infoLines.push_back("Animation: " + string(bEnableAnimation.get() ? "ON" : "OFF"));
-	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (sceneZoom.get() * ZOOM_MAX_X), 1) + "x");
+	infoLines.push_back("Zoom Level: " + ofToString(1.0f + (zoomGlobal.get() * ZOOM_MAX_X), 1) + "x");
 	infoLines.push_back("Current Preset: " + sText.get());
 
 	// === DRAW PERFORMANCE BOX ===
@@ -699,7 +695,7 @@ void OrganicText::drawDebugInfo() const {
 //--------------------------------------------------------------
 void OrganicText::draw() {
 	// Calculate zoom factor (0-1 maps to 1x-5x)
-	float zoomFactor = 1.0f + (sceneZoom.get() * ZOOM_MAX_X);
+	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_MAX_X);
 
 	ofPushMatrix();
 
@@ -711,24 +707,6 @@ void OrganicText::draw() {
 
 	// Move to text position (considering the zoom scaling)
 	ofTranslate(-font.stringWidth(sText) / 2.0f, font.stringHeight(sText) / 2.0f);
-
-	// Show original text outline with custom color
-	if (bDrawOutline) {
-		ofPushStyle();
-		ofNoFill();
-		ofSetColor(outlineColor.get()); // NEW: Use custom outline color
-		ofSetLineWidth(1 / zoomFactor); // Adjust line width for zoom
-		font.drawStringAsShapes(sText, 0, 0);
-		ofPopStyle();
-	}
-
-	// Debug mode visualization
-	if (bDebugDraw) {
-		drawDebug();
-	}
-	if (bDebugDrawInfo) {
-		drawDebugInfo();
-	}
 
 	// Update trails
 	updateTrails();
@@ -766,8 +744,8 @@ void OrganicText::draw() {
 				ofNoFill();
 
 			// Varying size
-			float rmin = ofMap(pointsRadiusMin, 0, 1, MIN_RADIUS, MAX_RADIUS, true);
-			float r = ofMap(pointRadius, 0, 1, rmin, MAX_RADIUS, true);
+			float rmin = ofMap(shapePointsRadiusMin, 0, 1, MIN_RADIUS, MAX_RADIUS, true);
+			float r = ofMap(shapePointRadius, 0, 1, rmin, MAX_RADIUS, true);
 			float pointSize = ofNoise(phase, 0.7232f) * r;
 
 			// Rotation for shapes
@@ -783,6 +761,26 @@ void OrganicText::draw() {
 			}
 
 			ofPopStyle();
+		}
+
+		//--
+
+		// Show original text outline with custom color
+		if (bDrawOutline) {
+			ofPushStyle();
+			ofNoFill();
+			ofSetColor(colorOutline.get()); // NEW: Use custom outline color
+			ofSetLineWidth(1 / zoomFactor); // Adjust line width for zoom
+			font.drawStringAsShapes(sText, 0, 0);
+			ofPopStyle();
+		}
+
+		// Debug mode visualization
+		if (bDebugDraw) {
+			drawDebug();
+		}
+		if (bDebugDrawInfo) {
+			drawDebugInfo();
 		}
 	}
 
@@ -829,9 +827,9 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	// Density controls
 	else if (key == '+' || key == '=') {
-		pointDensity.set(std::min(5.0f, pointDensity.get() + 0.2f));
+		densityPoints.set(std::min(5.0f, densityPoints.get() + 0.2f));
 	} else if (key == '-') {
-		pointDensity.set(std::max(0.1f, pointDensity.get() - 0.2f));
+		densityPoints.set(std::max(0.1f, densityPoints.get() - 0.2f));
 	}
 
 	// Speed controls
@@ -843,9 +841,9 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	// Zoom controls
 	else if (key == OF_KEY_LEFT) {
-		sceneZoom.set(std::max(0.0f, sceneZoom.get() - 0.1f));
+		zoomGlobal.set(std::max(0.0f, zoomGlobal.get() - 0.1f));
 	} else if (key == OF_KEY_RIGHT) {
-		sceneZoom.set(std::min(1.0f, sceneZoom.get() + 0.1f));
+		zoomGlobal.set(std::min(1.0f, zoomGlobal.get() + 0.1f));
 	}
 
 	// Toggle features
@@ -877,7 +875,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	else if (key == 'r' || key == 'R') {
 		t = 0;
 		animSpeed.set(1.0f);
-		pointDensity.set(1.0f);
+		densityPoints.set(1.0f);
 		colorMode.set(1);
 		animationMode.set(0);
 	}
@@ -920,25 +918,25 @@ void OrganicText::loadSettings() {
 
 //--------------------------------------------------------------
 void OrganicText::resetDensityParams() {
-	pointsSpacing.set(0.2f);
-	pointDensity.set(1.0f);
-	minSpacing.set(0.1f);
-	contourSampling.set(2.0f);
+	densityPointsSpacing.set(0.2f);
+	densityPoints.set(1.0f);
+	densityMinSpacing.set(0.1f);
+	densityContourSampling.set(2.0f);
 	refreshPointsString();
 }
 
 //--------------------------------------------------------------
 void OrganicText::resetShapeParams() {
-	pointRadius.set(0.5f);
-	pointsRadiusMin.set(0.3f);
+	shapePointRadius.set(0.f);
+	shapePointsRadiusMin.set(0.2f);
 	shapeType.set(0);
-	triangleRatio.set(1.0f);
+	shapeTriangleRatio.set(1.0f);
 	shapeRotation.set(0.0f);
 }
 
 //--------------------------------------------------------------
 void OrganicText::resetColorParams() {
-	colorMode.set(3); // COLOR_GLOBAL_MIX
+	colorMode.set(0);
 	colorSpeed.set(1.0f);
 	colorMixFactor.set(0.5f);
 	bColorByDistance.set(false);
@@ -946,28 +944,30 @@ void OrganicText::resetColorParams() {
 
 //--------------------------------------------------------------
 void OrganicText::resetGlobalColorParams() {
-	globalColor1.set(ofColor::cyan);
-	globalColor2.set(ofColor::magenta);
-	globalColor3.set(ofColor::yellow);
+	color1.set(ofColor::orange);
+	color2.set(ofColor::blue);
+	color3.set(ofColor::green);
+	colorConnection.set(ofColor::yellow);
+	colorOutline.set(ofColor::white);
 }
 
 //--------------------------------------------------------------
 void OrganicText::resetAnimationParams() {
 	animationMode.set(0);
 	animSpeed.set(1.0f);
-	noiseSize.set(5.0f);
-	waveFrequency.set(0.02f);
-	waveAmplitude.set(20.0f);
-	spiralTightness.set(0.01f);
-	pulseIntensity.set(10.0f);
+	animPower.set(5.0f);
+	animWaveFrequency.set(0.02f);
+	animIntensity.set(0.1f);
+	animSpiral.set(0.1f);
+	animPulseIntensity.set(0.1f);
 }
 
 //--------------------------------------------------------------
 void OrganicText::resetConnectionParams() {
 	bDrawConnections.set(false);
-	connectionDistance.set(30.0f);
-	connectionAlpha.set(100.0f);
-	bOnlyNearConnections.set(true);
+	connectionsDistance.set(20.0f);
+	connectionsAlpha.set(255.f);
+	bConnectionOnlyNear.set(false);
 	bDrawTrails.set(false);
 	trailLength.set(10);
 	trailFade.set(0.9f);
@@ -985,11 +985,11 @@ void OrganicText::resetAllParams() {
 
 	// Reset basic parameters
 	bDebugDraw.set(false);
-	bDrawFill.set(true);
+	bDrawFill.set(false);
 	bDrawOutline.set(false);
 	bDrawShapes.set(true);
-	bEnableAnimation.set(true);
-	sceneZoom.set(0.0f);
+	bEnableAnimation.set(false);
+	zoomGlobal.set(0.1f);
 
 	// Removed all bEnable parameter settings (not needed)
 	// Reset time
@@ -1003,19 +1003,19 @@ void OrganicText::loadPreset(int presetNumber) {
 
 //--------------------------------------------------------------
 void OrganicText::randomizeDensityParams() {
-	pointsSpacing.set(ofRandom(pointsSpacing.getMin(), pointsSpacing.getMax()));
-	pointDensity.set(ofRandom(pointDensity.getMin(), pointDensity.getMax()));
-	minSpacing.set(ofRandom(minSpacing.getMin(), minSpacing.getMax()));
-	contourSampling.set(ofRandom(contourSampling.getMin(), contourSampling.getMax()));
+	densityPointsSpacing.set(ofRandom(densityPointsSpacing.getMin(), densityPointsSpacing.getMax()));
+	densityPoints.set(ofRandom(densityPoints.getMin(), densityPoints.getMax()));
+	densityMinSpacing.set(ofRandom(densityMinSpacing.getMin(), densityMinSpacing.getMax()));
+	densityContourSampling.set(ofRandom(densityContourSampling.getMin(), densityContourSampling.getMax()));
 	refreshPointsString();
 }
 
 //--------------------------------------------------------------
 void OrganicText::randomizeShapeParams() {
-	pointRadius.set(ofRandom(pointRadius.getMin(), pointRadius.getMax()));
-	pointsRadiusMin.set(ofRandom(pointsRadiusMin.getMin(), pointsRadiusMin.getMax()));
+	shapePointRadius.set(ofRandom(shapePointRadius.getMin(), shapePointRadius.getMax()));
+	shapePointsRadiusMin.set(ofRandom(shapePointsRadiusMin.getMin(), shapePointsRadiusMin.getMax()));
 	shapeType.set(static_cast<int>(ofRandom(shapeType.getMin(), shapeType.getMax() + 1)));
-	triangleRatio.set(ofRandom(triangleRatio.getMin(), triangleRatio.getMax()));
+	shapeTriangleRatio.set(ofRandom(shapeTriangleRatio.getMin(), shapeTriangleRatio.getMax()));
 }
 
 //--------------------------------------------------------------
@@ -1027,24 +1027,24 @@ void OrganicText::randomizeColorParams() {
 
 //--------------------------------------------------------------
 void OrganicText::randomizeGlobalColorParams() {
-	globalColor1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	globalColor2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	globalColor3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+	color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+	color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+	color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 }
 
 //--------------------------------------------------------------
 void OrganicText::randomizeAnimationParams() {
 	animationMode.set(static_cast<int>(ofRandom(animationMode.getMin(), animationMode.getMax() + 1)));
 	animSpeed.set(ofRandom(animSpeed.getMin(), animSpeed.getMax()));
-	noiseSize.set(ofRandom(noiseSize.getMin(), noiseSize.getMax()));
+	animPower.set(ofRandom(animPower.getMin(), animPower.getMax()));
 }
 
 //--------------------------------------------------------------
 void OrganicText::randomizeConnectionParams() {
-	connectionDistance.set(ofRandom(connectionDistance.getMin(), connectionDistance.getMax()));
-	connectionAlpha.set(ofRandom(connectionAlpha.getMin(), connectionAlpha.getMax()));
+	connectionsDistance.set(ofRandom(connectionsDistance.getMin(), connectionsDistance.getMax()));
+	connectionsAlpha.set(ofRandom(connectionsAlpha.getMin(), connectionsAlpha.getMax()));
 	connectionQuality.set(ofRandom(connectionQuality.getMin(), connectionQuality.getMax())); // NEW
-	bOnlyNearConnections.set(ofRandom(1.0f) > 0.5f);
+	bConnectionOnlyNear.set(ofRandom(1.0f) > 0.5f);
 	bDrawConnections.set(ofRandom(1.0f) > 0.3f);
 }
 

@@ -4,7 +4,7 @@
 #include "ofxGui.h"
 using namespace glm;
 
-constexpr const char* ORGANICTEXT = "ARB";
+constexpr const char* ORGANICTEXT = "OF TEXT";
 constexpr float MAX_RADIUS = 50.0f;
 constexpr float MIN_RADIUS = 1.0f;
 constexpr float ZOOM_MAX_X = 10.0f;
@@ -21,9 +21,9 @@ enum ShapeType {
 
 // Color modes (simplified - based only on global colors)
 enum ColorMode {
-	COLOR_GLOBAL_1 = 0,     // Use globalColor1
-	COLOR_GLOBAL_2 = 1,     // Use globalColor2  
-	COLOR_GLOBAL_3 = 2,     // Use globalColor3
+	COLOR_GLOBAL_1 = 0,     // Use color1
+	COLOR_GLOBAL_2 = 1,     // Use color2  
+	COLOR_GLOBAL_3 = 2,     // Use color3
 	COLOR_GLOBAL_MIX = 3,   // Mix all 3 colors
 	COLOR_DISTANCE = 4      // Mix based on distance from center
 };
@@ -69,25 +69,25 @@ public:
 	ofParameter<bool> bDrawShapes; 
 	ofParameter<bool> bEnableAnimation; 
 	ofParameter<bool> bDrawOutline; 
-	ofParameter<float> sceneZoom; 
+	ofParameter<float> zoomGlobal; 
 	ofParameter<string> sText;
 
 	// Density parameters - Removed unused bEnableDensity
 	ofParameter<void> resetDensity; 
 	ofParameter<void> randomDensity; 
-	ofParameter<float> pointsSpacing;
-	ofParameter<float> pointDensity;
-	ofParameter<float> minSpacing;
-	ofParameter<float> contourSampling; 
+	ofParameter<float> densityPointsSpacing;
+	ofParameter<float> densityPoints;
+	ofParameter<float> densityMinSpacing;
+	ofParameter<float> densityContourSampling; 
 
 	// Shape parameters - Removed unused bEnableShape
 	ofParameter<void> resetShape; 
 	ofParameter<void> randomShape; 
 	ofParameter<int> shapeType;
 	ofParameter<string> shapeTypeName; // NEW: Display current shape name
-	ofParameter<float> pointRadius;
-	ofParameter<float> pointsRadiusMin;
-	ofParameter<float> triangleRatio;
+	ofParameter<float> shapePointRadius;
+	ofParameter<float> shapePointsRadiusMin;
+	ofParameter<float> shapeTriangleRatio;
 	ofParameter<float> shapeRotation;
 
 	// Color parameters - Removed unused bEnableColor
@@ -100,15 +100,15 @@ public:
 	ofParameter<bool> bColorByDistance;
 
 	// Colors parameters - Simplified, removed unused bEnableGlobalColor
-	ofParameter<void> resetGlobalColor; 
-	ofParameter<void> randomGlobalColor; 
-	ofParameter<ofColor> globalColor1;
-	ofParameter<ofColor> globalColor2;
-	ofParameter<ofColor> globalColor3;
+	ofParameter<void> resetGlobalColors; 
+	ofParameter<void> randomGlobalColors; 
+	ofParameter<ofColor> color1;
+	ofParameter<ofColor> color2;
+	ofParameter<ofColor> color3;
 	
 	// NEW: Outline and connection colors
-	ofParameter<ofColor> outlineColor;
-	ofParameter<ofColor> connectionColor;
+	ofParameter<ofColor> colorOutline;
+	ofParameter<ofColor> colorConnection;
 
 	// Animation parameters - Removed redundant bEnableAnimationGroup (use bEnableAnimation)
 	ofParameter<void> resetAnimation; 
@@ -116,19 +116,19 @@ public:
 	ofParameter<int> animationMode;
 	ofParameter<string> animationModeName; // NEW: Display current animation mode name
 	ofParameter<float> animSpeed;
-	ofParameter<float> noiseSize; 
-	ofParameter<float> waveFrequency;
-	ofParameter<float> waveAmplitude;
-	ofParameter<float> spiralTightness;
-	ofParameter<float> pulseIntensity;
+	ofParameter<float> animPower; 
+	ofParameter<float> animWaveFrequency;
+	ofParameter<float> animIntensity;
+	ofParameter<float> animSpiral;
+	ofParameter<float> animPulseIntensity;
 
 	// Connection parameters - Removed unused bEnableConnection
 	ofParameter<void> resetConnection; 
 	ofParameter<void> randomConnection; 
 	ofParameter<bool> bDrawConnections;
-	ofParameter<float> connectionDistance;
-	ofParameter<float> connectionAlpha;
-	ofParameter<bool> bOnlyNearConnections;
+	ofParameter<float> connectionsDistance;
+	ofParameter<float> connectionsAlpha;
+	ofParameter<bool> bConnectionOnlyNear;
 	ofParameter<float> connectionQuality; // NEW: 0-1, reduces line count for performance
 
 	// Trail parameters
