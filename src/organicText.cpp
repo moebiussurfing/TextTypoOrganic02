@@ -210,6 +210,10 @@ void OrganicText::setup() {
 	e_RandomAnimation = randomAnimation.newListener([this](void) { randomizeAnimationParams(); });
 	e_RandomConnection = randomConnection.newListener([this](void) { randomizeConnectionParams(); });
 
+	//--
+
+	// Setup GUI
+
 	gui.setup(parameters);
 	gui.getGroup(densityGroup.getName()).minimizeAll();
 	gui.getGroup(shapeGroup.getName()).minimizeAll();
@@ -219,6 +223,10 @@ void OrganicText::setup() {
 	gui.getGroup(connectionGroup.getName()).minimizeAll();
 	gui.getGroup(globalColorGroup.getName()).minimizeAll();
 	gui.minimizeAll();
+
+	//--
+
+	// Initialization
 
 	t = 0.0;
 	textCenter = vec2(0, 0);

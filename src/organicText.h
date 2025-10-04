@@ -51,9 +51,10 @@ private:
 	void update();
 	void update(ofEventArgs & args);
 
-public:
+private:
 	string pathSettings = "OrganicText.json";
 
+public:
 	ofParameterGroup parameters;
 	ofParameterGroup shapeGroup;
 	ofParameterGroup densityGroup;
@@ -158,12 +159,14 @@ private:
 public:
 	void saveSettings();
 	void loadSettings();
-	
-	// Update mode name strings
+
+private:
+// Update mode name strings
 	void updateShapeTypeName(int &);
 	void updateColorModeName(int &);
 	void updateAnimationModeName(int &);
 
+public:
 	// Reset functions
 	void resetDensityParams();
 	void resetShapeParams();
