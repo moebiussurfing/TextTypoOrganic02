@@ -19,6 +19,13 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 
 **Compatible with**: GitHub Copilot, Gemini, Claude, Cline (via OpenRouter), Cursor, and other AI coding assistants in VS Code or similar IDEs.
 
+> **📌 Important for AI Assistants:**  
+> Beyond the `AI-Assistant/` folder, you should also regularly consult:
+> - **`Active/`** - Current tasks, bugs, and TODOs (check before every session)
+> - **`Future/`** - Roadmap and planned features (for context on project direction)
+> - **`Developer/`** - Architecture and API reference (for code changes)
+> - **`Learning/`** - Technical concepts and patterns (for implementation guidance)
+
 ### Quick Start (2 minutes to full context)
 1. **Read** [`docs/AI-Assistant/PROJECT-CONTEXT.md`](docs/AI-Assistant/PROJECT-CONTEXT.md) ⭐ - Complete project overview
 2. **Check** [`docs/AI-Assistant/CURRENT-STATE.md`](docs/AI-Assistant/CURRENT-STATE.md) - Current status and priorities
@@ -59,6 +66,7 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 ### 📋 Project Management
 - **[Current Tasks](docs/Active/Current-Tasks.md)** - Immediate work needed ⭐
 - **[Known Bugs](docs/Active/Known-Bugs.md)** - Issues to be resolved
+- **[TODO](docs/Active/TODO.md)** - General task list
 - **[Future Features](docs/Future/Future-Features.md)** - Long-term roadmap
 - **[Technical Roadmap](docs/Future/Technical-Roadmap.md)** - Implementation strategies
 
