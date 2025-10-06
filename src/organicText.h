@@ -4,31 +4,79 @@
 #include "ofxGui.h"
 using namespace glm;
 
-constexpr const char* ORGANICTEXT = "OF TEXT";
+constexpr const char * ORGANICTEXT = "OF TEXT";
 constexpr float MAX_RADIUS = 50.0f;
 constexpr float MIN_RADIUS = 1.0f;
 constexpr float ZOOM_MAX_X = 10.0f;
 
-// Shape types for drawing points
+// ============================================================================
+// DRAWING & ANIMATION CONSTANTS
+// ============================================================================
+
+// Density Constants
+constexpr float DENSITY_SPACING_MIN = 1.0f;
+constexpr float DENSITY_SPACING_MAX = 25.0f;
+constexpr float DENSITY_MIN_SPACING_MIN = 0.5f;
+constexpr float DENSITY_MIN_SPACING_MAX = 15.0f;
+
+// Animation Displacement Constants
+constexpr float ANIM_NOISE_MAX = 35.0f;
+constexpr float ANIM_WAVE_MAX = 60.0f;
+constexpr float ANIM_SPIRAL_MAX = 45.0f;
+constexpr float ANIM_PULSE_MAX = 50.0f;
+
+// Animation Frequency Constants
+constexpr float ANIM_WAVE_FREQ_MIN = 0.001f;
+constexpr float ANIM_WAVE_FREQ_MAX = 0.08f;
+constexpr float ANIM_SPIRAL_TIGHT_MIN = 0.002f;
+constexpr float ANIM_SPIRAL_TIGHT_MAX = 0.025f;
+
+// Time System
+constexpr float BASE_TIME_STEP = 0.008f;
+
+// Color Constants
+constexpr float COLOR_DISTANCE_MAX = 250.0f;
+constexpr float COLOR_DISTANCE_INNER = 0.4f;
+constexpr float COLOR_DISTANCE_MIDDLE = 0.7f;
+constexpr float COLOR_ALPHA_CENTER = 255.0f;
+constexpr float COLOR_ALPHA_EDGE = 80.0f;
+
+// Connection Constants
+constexpr int CONNECTIONS_SEARCH_NEAR = 50;
+constexpr int CONNECTIONS_SEARCH_FAR = 100;
+constexpr int CONNECTIONS_MAX_PER_POINT_NEAR = 3;
+constexpr int CONNECTIONS_MAX_PER_POINT_FAR = 8;
+
+// Trail Constants
+constexpr float TRAIL_MAX_ALPHA = 180.0f;
+
+// Shape Constants
+constexpr float SHAPE_ROTATION_SPEED = 0.2f;
+constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
+constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
+
+// Outline Constants
+constexpr float OUTLINE_WIDTH_BASE = 1.5f;
+
+// ============================================================================
+
 enum ShapeType {
 	SHAPE_CIRCLE = 0,
 	SHAPE_RECTANGLE = 1,
 	SHAPE_TRIANGLE = 2,
 	SHAPE_STAR = 3,
 	SHAPE_CROSS = 4,
-	SHAPE_POINT = 5  // New: Just points for debug-like visualization
+	SHAPE_POINT = 5
 };
 
-// Color modes (simplified - based only on global colors)
 enum ColorMode {
-	COLOR_GLOBAL_1 = 0,     // Use color1
-	COLOR_GLOBAL_2 = 1,     // Use color2  
-	COLOR_GLOBAL_3 = 2,     // Use color3
-	COLOR_GLOBAL_MIX = 3,   // Mix all 3 colors
-	COLOR_DISTANCE = 4      // Mix based on distance from center
+	COLOR_GLOBAL_1 = 0,
+	COLOR_GLOBAL_2 = 1,
+	COLOR_GLOBAL_3 = 2,
+	COLOR_GLOBAL_MIX = 3,
+	COLOR_DISTANCE = 4
 };
 
-// Animation modes
 enum AnimMode {
 	ANIM_NOISE = 0,
 	ANIM_WAVE = 1,
@@ -49,90 +97,96 @@ public:
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
 
+	// Configuration before setup()
+	void setTargetFPS(float fps) { targetFPS = fps; }
+
 private:
 	void update();
 	void update(ofEventArgs & args);
 
 private:
 	string pathSettings = "OrganicText.json";
+	float targetFPS = 120.0f;
 
 public:
 	ofParameterGroup parameters;
+	ofParameterGroup fontGroup;
 	ofParameterGroup shapeGroup;
 	ofParameterGroup densityGroup;
-	ofParameterGroup colorModesGroup; // Color controls
-	ofParameterGroup colorGlobalGroup; // New: Global color controls
-	ofParameterGroup animGroup; // Animation controls
-	ofParameterGroup connectionGroup; // Connection controls
+	ofParameterGroup colorModesGroup;
+	ofParameterGroup colorGlobalGroup;
+	ofParameterGroup animGroup;
+	ofParameterGroup connectionGroup;
 
-	// Basic parameters - Simplified
+	// Basic parameters
 	ofParameter<bool> bDebugDraw;
 	ofParameter<bool> bDebugDrawInfo;
-	ofParameter<bool> bDrawFill; 
-	ofParameter<bool> bDrawShapes; 
-	ofParameter<bool> bEnableAnimation; 
-	ofParameter<bool> bDrawOutline; 
-	ofParameter<float> zoomGlobal; 
+	ofParameter<bool> bDrawFill;
+	ofParameter<bool> bDrawShapes;
+	ofParameter<bool> bEnableAnimation;
+	ofParameter<bool> bDrawOutline;
+	ofParameter<float> zoomGlobal;
 	ofParameter<string> sText;
 
-	// Density parameters - Removed unused bEnableDensity
-	ofParameter<void> resetDensity; 
-	ofParameter<void> randomDensity; 
-	ofParameter<float> densityPointsSpacing;
-	ofParameter<float> densityPoints;
-	ofParameter<float> densityMinSpacing;
-	ofParameter<float> densityContourSampling; 
+	// Font parameters
+	ofParameter<string> fontPath;
+	ofParameter<float> fontSize;
 
-	// Shape parameters - Removed unused bEnableShape
-	ofParameter<void> resetShape; 
-	ofParameter<void> randomShape; 
+	// Density parameters
+	ofParameter<void> resetDensity;
+	ofParameter<void> randomDensity;
+	ofParameter<float> densitySpacing; // Renamed from densityPointsSpacing
+	ofParameter<float> densityAmount; // Renamed from densityPoints
+	ofParameter<float> densityMinGap; // Renamed from densityMinSpacing
+
+	// Shape parameters
+	ofParameter<void> resetShape;
+	ofParameter<void> randomShape;
 	ofParameter<int> shapeType;
-	ofParameter<string> shapeTypeName; // NEW: Display current shape name
-	ofParameter<float> shapePointRadius;
-	ofParameter<float> shapePointsRadiusMin;
+	ofParameter<string> shapeTypeName;
+	ofParameter<float> shapePointRadius; // Renamed from shapePointRadius
+	ofParameter<float> shapePointsRadiusMin; // Renamed from shapePointsRadiusMin
 	ofParameter<float> shapeTriangleRatio;
 	ofParameter<float> shapeRotation;
 
-	// Color parameters - Removed unused bEnableColor
-	ofParameter<void> resetColor; 
-	ofParameter<void> randomColor; 
-	ofParameter<int> colorMode; 
-	ofParameter<string> colorModeName; // NEW: Display current color mode name
+	// Color parameters
+	ofParameter<void> resetColor;
+	ofParameter<void> randomColor;
+	ofParameter<int> colorMode;
+	ofParameter<string> colorModeName;
 	ofParameter<float> colorSpeed;
-	ofParameter<float> colorMixFactor; 
+	ofParameter<float> colorMixFactor; // Renamed from colorMixFactor
 	ofParameter<bool> bColorByDistance;
 
-	// Colors parameters - Simplified, removed unused bEnableGlobalColor
-	ofParameter<void> resetGlobalColors; 
-	ofParameter<void> randomGlobalColors; 
+	// Colors parameters
+	ofParameter<void> resetGlobalColors;
+	ofParameter<void> randomGlobalColors;
 	ofParameter<ofColor> color1;
 	ofParameter<ofColor> color2;
 	ofParameter<ofColor> color3;
-	
-	// NEW: Outline and connection colors
 	ofParameter<ofColor> colorOutline;
 	ofParameter<ofColor> colorConnection;
 
-	// Animation parameters - Removed redundant bEnableAnimationGroup (use bEnableAnimation)
-	ofParameter<void> resetAnimation; 
-	ofParameter<void> randomAnimation; 
+	// Animation parameters
+	ofParameter<void> resetAnimation;
+	ofParameter<void> randomAnimation;
 	ofParameter<int> animationMode;
-	ofParameter<string> animationModeName; // NEW: Display current animation mode name
+	ofParameter<string> animationModeName;
 	ofParameter<float> animSpeed;
-	ofParameter<float> animPower; 
-	ofParameter<float> animWaveFrequency;
+	ofParameter<float> animPower;
+	ofParameter<float> animWaveFreq; // Renamed from animWaveFrequency
 	ofParameter<float> animIntensity;
 	ofParameter<float> animSpiral;
-	ofParameter<float> animPulseIntensity;
+	ofParameter<float> animPulseIntensity; // Renamed from animPulseIntensity
 
-	// Connection parameters - Removed unused bEnableConnection
-	ofParameter<void> resetConnection; 
-	ofParameter<void> randomConnection; 
+	// Connection parameters
+	ofParameter<void> resetConnection;
+	ofParameter<void> randomConnection;
 	ofParameter<bool> bDrawConnections;
-	ofParameter<float> connectionsDistance;
-	ofParameter<float> connectionsAlpha;
-	ofParameter<bool> bConnectionOnlyNear;
-	ofParameter<float> connectionQuality; // NEW: 0-1, reduces line count for performance
+	ofParameter<float> connectDistance; // Renamed from connectionsDistance
+	ofParameter<float> connectAlpha; // Renamed from connectionsAlpha
+	ofParameter<bool> bConnectNearOnly; // Renamed from bConnectionOnlyNear
+	ofParameter<float> connectQuality; // Renamed from connectionQuality
 
 	// Trail parameters
 	ofParameter<bool> bDrawTrails;
@@ -140,30 +194,33 @@ public:
 	ofParameter<float> trailFade;
 
 	// Global controls
-	ofParameter<void> resetAll; // Reset everything to defaults
+	ofParameter<void> resetAll;
 
 private:
 	// Event listeners
-	ofEventListener e_PointsSize, e_PointsRadius, e_sText, e_PointDensity, e_ContourSampling;
+	ofEventListener e_FontPath, e_FontSize;
+	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
 	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_ResetAll;
 	ofEventListener e_RandomDensity, e_RandomShape, e_RandomColor, e_RandomGlobalColor, e_RandomAnimation, e_RandomConnection;
 
 	// Functions
-	vector<vec2> sampleStringPoints(const string& s, float ds);
+	vector<vec2> sampleStringPoints(const string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
 	void drawConnections() const;
 	void updateTrails();
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
-	void drawDebug() const; // Debug visualization
-	void drawDebugInfo() const; // Performance information box
+	void drawDebug() const;
+	void drawDebugInfo() const;
+
+	// Font management
+	void reloadFont();
 
 public:
 	void saveSettings();
 	void loadSettings();
 
 private:
-// Update mode name strings
 	void updateShapeTypeName(int &);
 	void updateColorModeName(int &);
 	void updateAnimationModeName(int &);
@@ -177,7 +234,7 @@ public:
 	void resetAnimationParams();
 	void resetConnectionParams();
 	void resetAllParams();
-	
+
 	// Randomize functions
 	void randomizeDensityParams();
 	void randomizeShapeParams();
@@ -189,20 +246,21 @@ public:
 private:
 	// Data
 	vector<vec2> pointsString;
-	vector<vector<vec2>> pointTrails; // For trail effect
+	vector<vector<vec2>> pointTrails;
 	ofTrueTypeFont font;
 	float t;
-	vec2 textCenter; // Center of text for distance calculations
+	vec2 textCenter;
 
 	void refreshPointsString();
 
 	float fps;
 	float frameTime;
 
+	// Cached connection count for debug display
+	mutable int cachedConnectionCount = 0;
+
 public:
 	ofxPanel gui;
 
-	// Preset functions (0-9 numerical keys)
 	void loadPreset(int presetNumber);
-
 };
