@@ -30,14 +30,7 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 
 **Compatible with**: GitHub Copilot, Gemini, Claude, Cline (via OpenRouter), Cursor, and other AI coding assistants in VS Code or similar IDEs.
 
----
-
 ## 📚 Documentation Structure
-
-### 👤 For Users
-- **[Quick Start Guide](docs/User/Quick-Start.md)** - Get started in 30 seconds
-- **[Complete User Manual](docs/User/User-Manual.md)** - All features and controls explained  
-- **[Troubleshooting](docs/User/Troubleshooting.md)** - Common issues and solutions
 
 ### 👨‍💻 For Developers  
 - **[Code Architecture](docs/Developer/Architecture.md)** - System design and structure
@@ -56,6 +49,11 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 - **[Changelog](docs/CHANGELOG.md)** - Major milestones and changes
 - **[Major Milestones](docs/Archive/Major-Milestones.md)** - Project evolution history
 
+### 👤 For Users
+- **[Quick Start Guide](docs/User/Quick-Start.md)** - Get started in 30 seconds
+- **[Complete User Manual](docs/User/User-Manual.md)** - All features and controls explained  
+- **[Troubleshooting](docs/User/Troubleshooting.md)** - Common issues and solutions
+
 ## 🎯 Current Status: **PRODUCTION READY** ✅
 
 - ✅ **Zero compilation errors** - Ready to build and run
@@ -67,7 +65,5 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 ## 💻 Tested Systems
 
 - **Windows** (openFrameworks 0.12.1, Visual Studio)
-
----
 
 *Built with openFrameworks - Creative Coding Toolkit*
