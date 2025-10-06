@@ -28,12 +28,9 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
+void ofApp::keyPressed(ofKeyEventArgs & eventArgs){
 	ofKeyEventArgs args;
-	args.key = key;
-	args.keycode = key;
-	args.scancode = 0;
-	args.codepoint = 0;
+	args=eventArgs;
 	t.keyPressed(args);
 }
 

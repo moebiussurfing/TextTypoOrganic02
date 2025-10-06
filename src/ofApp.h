@@ -9,8 +9,8 @@ public:
 	void setup();
 	void update();
 	void draw();
-	void exit(); // New: exit function
-	void keyPressed(int key);
+	void exit();
+	void keyPressed(ofKeyEventArgs & eventArgs);
 
 	OrganicText t;
 };

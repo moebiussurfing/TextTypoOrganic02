@@ -6,7 +6,7 @@ using namespace glm;
 
 constexpr const char * ORGANICTEXT = "OF TEXT";
 constexpr float MAX_RADIUS = 50.0f;
-constexpr float MIN_RADIUS = 1.0f;
+constexpr float MIN_RADIUS = 0.0f;
 constexpr float ZOOM_MAX_X = 10.0f;
 
 // ============================================================================
@@ -56,7 +56,7 @@ constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 
 // Outline Constants
-constexpr float OUTLINE_WIDTH_BASE = 1.5f;
+constexpr float OUTLINE_WIDTH_BASE = 0.5f;
 
 // ============================================================================
 
@@ -91,8 +91,11 @@ public:
 	~OrganicText();
 
 	void setup();
+private:
+	void setupGui();
 	void setupParams();
 	void setupCallbacks();
+public:
 	void draw();
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
@@ -110,13 +113,14 @@ private:
 
 public:
 	ofParameterGroup parameters;
-	ofParameterGroup fontGroup;
-	ofParameterGroup shapeGroup;
-	ofParameterGroup densityGroup;
-	ofParameterGroup colorModesGroup;
-	ofParameterGroup colorGlobalGroup;
-	ofParameterGroup animGroup;
-	ofParameterGroup connectionGroup;
+	ofParameterGroup paramsFont;
+	ofParameterGroup paramsShape;
+	ofParameterGroup paramsDensity;
+	ofParameterGroup paramsColorModes;
+	ofParameterGroup paramsColors;
+	ofParameterGroup paramsAnim;
+	ofParameterGroup paramsConnections;
+	ofParameterGroup paramsSettings;
 
 	// Basic parameters
 	ofParameter<bool> bDebugDraw;
@@ -166,6 +170,7 @@ public:
 	ofParameter<ofColor> color3;
 	ofParameter<ofColor> colorOutline;
 	ofParameter<ofColor> colorConnection;
+	ofParameter<ofColor> colorTrails;
 
 	// Animation parameters
 	ofParameter<void> resetAnimation;
@@ -195,6 +200,11 @@ public:
 
 	// Global controls
 	ofParameter<void> resetAll;
+	
+	// Settings
+	ofParameter<bool> bAutosave;
+	ofParameter<void> vLoadSettigs;
+	ofParameter<void> vSaveSettigs;
 
 private:
 	// Event listeners
@@ -202,7 +212,8 @@ private:
 	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
 	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_ResetAll;
 	ofEventListener e_RandomDensity, e_RandomShape, e_RandomColor, e_RandomGlobalColor, e_RandomAnimation, e_RandomConnection;
-
+	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
+	
 	// Functions
 	vector<vec2> sampleStringPoints(const string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
@@ -253,6 +264,7 @@ private:
 
 	void refreshPointsString();
 
+	// Fps
 	float fps;
 	float frameTime;
 
