@@ -121,7 +121,7 @@ public:
 	// Basic parameters
 	ofParameter<bool> bDebugDraw;
 	ofParameter<bool> bDebugDrawInfo;
-	ofParameter<bool> bDrawFill;
+	ofParameter<bool> bDrawShapesFill;
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
 	ofParameter<bool> bDrawOutline;

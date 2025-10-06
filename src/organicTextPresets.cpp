@@ -37,7 +37,7 @@ void OrganicTextPresets::loadPreset0_Minimal(OrganicText * ot) {
 	ot->shapeType.set(0);
 	ot->shapePointRadius.set(0.3f);
 	ot->shapePointsRadiusMin.set(0.2f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0);
 	ot->animSpeed.set(0.5f);
@@ -68,7 +68,7 @@ void OrganicTextPresets::loadPreset1_CyberWave(OrganicText * ot) {
 	ot->shapeType.set(5); // POINT
 	ot->shapePointRadius.set(0.2f);
 	ot->shapePointsRadiusMin.set(0.1f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(1); // WAVE
 	ot->animSpeed.set(1.0f);
@@ -109,7 +109,7 @@ void OrganicTextPresets::loadPreset2_OrganicFlow(OrganicText * ot) {
 	ot->shapeType.set(0); // CIRCLE
 	ot->shapePointRadius.set(0.6f);
 	ot->shapePointsRadiusMin.set(0.3f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(2); // SPIRAL
 	ot->animSpeed.set(0.8f);
@@ -147,7 +147,7 @@ void OrganicTextPresets::loadPreset3_NeonPulse(OrganicText * ot) {
 	ot->shapePointRadius.set(0.35f);
 	ot->shapePointsRadiusMin.set(0.2f);
 	ot->shapeRotation.set(45.0f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(3); // PULSE
 	ot->animSpeed.set(1.2f);
@@ -180,7 +180,7 @@ void OrganicTextPresets::loadPreset4_CosmicDance(OrganicText * ot) {
 	ot->shapePointRadius.set(0.5f);
 	ot->shapePointsRadiusMin.set(0.3f);
 	ot->shapeTriangleRatio.set(1.3f);
-	ot->bDrawFill.set(false);
+	ot->bDrawShapesFill.set(false);
 
 	ot->animationMode.set(4); // ORBIT
 	ot->animSpeed.set(0.6f);
@@ -219,7 +219,7 @@ void OrganicTextPresets::loadPreset5_RetroGrid(OrganicText * ot) {
 	ot->shapePointRadius.set(0.4f);
 	ot->shapePointsRadiusMin.set(0.25f);
 	ot->shapeRotation.set(0.0f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(1); // WAVE
 	ot->animSpeed.set(0.8f);
@@ -257,7 +257,7 @@ void OrganicTextPresets::loadPreset6_BioLuminous(OrganicText * ot) {
 	ot->shapeType.set(0);
 	ot->shapePointRadius.set(0.3f);
 	ot->shapePointsRadiusMin.set(0.15f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0); // NOISE
 	ot->animSpeed.set(0.7f);
@@ -295,7 +295,7 @@ void OrganicTextPresets::loadPreset7_QuantumField(OrganicText * ot) {
 	ot->shapeType.set(5); // POINT
 	ot->shapePointRadius.set(0.15f);
 	ot->shapePointsRadiusMin.set(0.08f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0); // NOISE
 	ot->animSpeed.set(1.5f);
@@ -332,7 +332,7 @@ void OrganicTextPresets::loadPreset8_TribalRitual(OrganicText * ot) {
 	ot->shapePointRadius.set(0.5f);
 	ot->shapePointsRadiusMin.set(0.35f);
 	ot->shapeRotation.set(15.0f);
-	ot->bDrawFill.set(true);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(3); // PULSE
 	ot->animSpeed.set(1.0f);
@@ -370,7 +370,7 @@ void OrganicTextPresets::loadPreset9_GalaxyStorm(OrganicText * ot) {
 	ot->shapePointRadius.set(0.4f);
 	ot->shapePointsRadiusMin.set(0.2f);
 	ot->shapeRotation.set(90.0f);
-	ot->bDrawFill.set(false);
+	ot->bDrawShapesFill.set(false);
 
 	ot->animationMode.set(4); // ORBIT
 	ot->animSpeed.set(1.3f);

@@ -4,12 +4,17 @@
 void ofApp::setup(){
 	ofBackground(24);
 
-	#if 0
-	ofSetWindowShape(512, 512);
-	int p = 50;
-	ofSetWindowPosition(-ofGetWidth()-p, +p);
+	#if 1
+	int w = 1920;
+	int h = 1080;
+	int p = 25;
+	ofSetWindowShape(w, h-p);
+	ofSetWindowPosition(-w,p);
 	#endif
 
+	float fps = 60;
+	t.setTargetFPS(fps);
+	ofSetFrameRate(fps);
 	t.setup();
 }
 

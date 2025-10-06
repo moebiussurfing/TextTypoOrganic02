@@ -1,6 +1,7 @@
 #include "organicText.h"
 #include <algorithm>
 #include <cmath>
+#include "organicTextPresets.h"
 
 //--------------------------------------------------------------
 OrganicText::OrganicText() {
@@ -22,10 +23,10 @@ void OrganicText::setupParams() {
 	// Basic parameters
 	bDebugDraw.set("Debug Draw", false);
 	bDebugDrawInfo.set("Debug Info", false);
-	bDrawFill.set("Fill", true);
-	bDrawShapes.set("Shapes", true);
+	bDrawShapesFill.set("Shape Fill", true);
+	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
-	bDrawOutline.set("Outline", false);
+	bDrawOutline.set("Draw Outline", false);
 	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
 	sText.set("Text", ORGANICTEXT);
 
@@ -67,8 +68,8 @@ void OrganicText::setupParams() {
 	color1.set("Color 1", ofColor::cyan);
 	color2.set("Color 2", ofColor::magenta);
 	color3.set("Color 3", ofColor::yellow);
-	colorOutline.set("Outline", ofColor::white);
-	colorConnection.set("Connect", ofColor::white);
+	colorOutline.set("Color Outline", ofColor::black);
+	colorConnection.set("Color Connections", ofColor::white);
 
 	// Animation group
 	resetAnimation.set("Reset");
@@ -86,7 +87,7 @@ void OrganicText::setupParams() {
 	// Connection group
 	resetConnection.set("Reset");
 	randomConnection.set("Random");
-	bDrawConnections.set("Draw", false);
+	bDrawConnections.set("Draw Connections", false);
 	connectDistance.set("Distance", 30, 5, 100);
 	connectAlpha.set("Alpha", 100, 0, 255);
 	bConnectNearOnly.set("Near Only", true);
@@ -113,7 +114,7 @@ void OrganicText::setupParams() {
 	densityGroup.add(resetDensity);
 
 	shapeGroup.setName("Shape");
-	shapeGroup.add(bDrawFill);
+	shapeGroup.add(bDrawShapesFill);
 	shapeGroup.add(shapeType);
 	shapeGroup.add(shapeTypeName);
 	shapeGroup.add(shapePointRadius);
@@ -171,6 +172,7 @@ void OrganicText::setupParams() {
 	parameters.add(zoomGlobal);
 	parameters.add(bDrawOutline);
 	parameters.add(bDrawShapes);
+	parameters.add(bDrawShapesFill);
 	parameters.add(bDrawConnections);
 	parameters.add(bEnableAnimation);
 
@@ -290,7 +292,7 @@ void OrganicText::update() {
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
-	string wt = ("FPS: " + ofToString(fps, 0) + " / " + ofToString(targetFPS, 0) + " | " + ofToString(frameTime, 2) + "ms");
+	string wt = ("FPS: " + ofToString(fps, 0) + " / " + ofToString(targetFPS, 0) + " | " + ofToString(frameTime, 0) + "ms");
 	ofSetWindowTitle(wt);
 }
 
@@ -672,19 +674,19 @@ void OrganicText::drawDebugInfo() const {
 	// Use cached connection count from last draw
 	int activeConnections = cachedConnectionCount;
 
-	string perfStatus = fps >= 55 ? "GOOD" : (fps >= 30 ? "OK" : "POOR");
-	ofColor perfColor = fps >= 55 ? ofColor(100, 255, 100) : (fps >= 30 ? ofColor(255, 255, 100) : ofColor(255, 100, 100));
+	string perfStatus = (fps >= (targetFPS * 0.8f)) ? "GOOD" : ((fps <= (targetFPS * 0.5f)) ? "OK" : "POOR");
+	ofColor perfColor = (fps >= (targetFPS * 0.8f)) ? ofColor(100, 255, 100) : ((fps <= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
 
 	vector<string> lines;
 	lines.push_back("=== PERFORMANCE ===");
-	lines.push_back("FPS: " + ofToString(fps, 1) + " / " + ofToString(targetFPS, 0) + " (" + perfStatus + ")");
-	lines.push_back("Frame: " + ofToString(frameTime, 2) + " ms");
+	lines.push_back("FPS: " + ofToString(fps, 0) + " | " + ofToString(targetFPS, 0) + " (" + perfStatus + ")");
+	lines.push_back("Frame: " + ofToString(frameTime, 0) + " ms");
 	lines.push_back("");
 	lines.push_back("=== GEOMETRY ===");
 	lines.push_back("Points: " + ofToString(totalPoints));
 	lines.push_back("Shapes: " + ofToString(bDrawShapes.get() ? totalPoints : 0));
-	lines.push_back("Trails: " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 	lines.push_back("Connections: " + ofToString(bDrawConnections.get() ? activeConnections : 0));
+	lines.push_back("Trails: " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 	lines.push_back("");
 	lines.push_back("=== CONFIG ===");
 	lines.push_back("Font: " + ofToString(fontSize.get(), 0) + "px");
@@ -783,7 +785,7 @@ void OrganicText::draw() {
 			ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 			ofSetColor(color);
 
-			if (bDrawFill.get())
+			if (bDrawShapesFill.get())
 				ofFill();
 			else
 				ofNoFill();
@@ -864,7 +866,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'o' || key == 'O') {
 		bDrawOutline.set(!bDrawOutline.get());
 	} else if (key == 'f' || key == 'F') {
-		bDrawFill.set(!bDrawFill.get());
+		bDrawShapesFill.set(!bDrawShapesFill.get());
 	} else if (key == 'D') {
 		bDebugDraw.set(!bDebugDraw.get());
 	} else if (key == 'd') {
@@ -910,7 +912,7 @@ void OrganicText::loadSettings() {
 //--------------------------------------------------------------
 
 void OrganicText::resetAllParams() {
-	bDrawFill.set(true);
+	bDrawShapesFill.set(true);
 	bDrawShapes.set(true);
 	bDrawOutline.set(false);
 	bEnableAnimation.set(true);
@@ -967,7 +969,7 @@ void OrganicText::resetDensityParams() {
 }
 
 void OrganicText::resetShapeParams() {
-	bDrawFill.set(true);
+	bDrawShapesFill.set(true);
 	shapePointRadius.set(0.4f);
 	shapePointsRadiusMin.set(0.3f);
 	shapeType.set(0);
@@ -1078,4 +1080,5 @@ void OrganicText::updateAnimationModeName(int &) {
 void OrganicText::loadPreset(int presetNumber) {
 	ofLogNotice("OrganicText") << "Loading preset " << presetNumber;
 	// Preset implementation will go in separate file
+	OrganicTextPresets::loadPreset(this, presetNumber);
 }
