@@ -552,13 +552,20 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 		}
 		star.close();
 
-		//TODO: fill polyline
-		// if (bDrawShapesFill.get())
-		// 	ofFill();
-		// else
-		// 	ofNoFill();
+		// Convert polyline to path for fill support
+		ofPath starPath;
+		starPath.setFilled(bDrawShapesFill.get());      // enable or disable fill
+		starPath.setFillColor(ofGetStyle().color);      // use current drawing color
+		starPath.setStrokeColor(ofGetStyle().color);    // outline uses same color
+		starPath.setStrokeWidth(1.0f);
 
-		star.draw();
+		starPath.moveTo(star[0]);
+		for (std::size_t i = 1; i < star.size(); ++i) {
+			starPath.lineTo(star[i]);
+		}
+		starPath.close();
+
+		starPath.draw();  // draw filled or not depending on flag
 		break;
 	}
 
