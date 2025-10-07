@@ -734,17 +734,17 @@ void OrganicText::drawDebugInfo() const {
 	lines.push_back("");
 	lines.push_back("= PRESETS =");
 	lines.push_back("0-9 : Load presets");
-	lines.push_back("Shift + 1-5: Shapes");
+	// lines.push_back("Shift + 1-5: Shapes");
 	lines.push_back("");
 	lines.push_back("= PARAMS =");
 	lines.push_back("LEFT/RIGHT: Zoom");
 	lines.push_back("UP/DOWN: Anima Speed");
 	lines.push_back("+/-: Point Density");
 	lines.push_back("");
-	lines.push_back("T: Trails");
-	lines.push_back("L: Connections");
-	lines.push_back("O: Outline");
 	lines.push_back("F: Shape Fill");
+	lines.push_back("L: Connections");
+	lines.push_back("T: Trails");
+	lines.push_back("O: Outline");
 	lines.push_back("B: Background Color");
 	lines.push_back("");
 	lines.push_back("C: Color Modes");
@@ -896,10 +896,10 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (key >= '0' && key <= '9') {
 		loadPreset(key - '0');
 	}
-	else if (key >= '1' && key <= '5' && mod_SHIFT) {
-		shapeType.set(key - '1');
-	}
-	
+
+	// else if (key >= '1' && key <= '5' && mod_SHIFT) {
+	// 	shapeType.set(key - '1');
+	// }
 	
 	else if (key == 'c' || key == 'C') {
 		colorMode.set((colorMode.get() + 1) % 5);
@@ -943,15 +943,15 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 		resetAllParams();
 	}
 	
-	else if (key == 's' || key == 'S') {
-		if (mod_CTRL || mod_CMD) {
-			saveSettings();
-		}
-	} else if (key == 'l' || key == 'L') {
-		if (mod_CTRL || mod_CMD) {
-			loadSettings();
-		}
-	}
+	// else if (key == 's' || key == 'S') {
+	// 	if (mod_CTRL || mod_CMD) {
+	// 		saveSettings();
+	// 	}
+	// } else if (key == 'l' || key == 'L') {
+	// 	if (mod_CTRL || mod_CMD) {
+	// 		loadSettings();
+	// 	}
+	// }
 }
 
 //--------------------------------------------------------------
@@ -960,7 +960,7 @@ void OrganicText::saveSettings() {
 	ofSerialize(settings, parameters);
 	ofSavePrettyJson(pathSettings, settings);
 	ofLogNotice("OrganicText") << "Settings saved";
-	ofLogNotice("OrganicText") << settings;
+	// ofLogNotice("OrganicText") << settings;
 }
 
 //--------------------------------------------------------------
