@@ -577,7 +577,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 	}
 
 	case SHAPE_POINT: {
-		ofDrawCircle(0, 0, size * 0.3f);
+		ofDrawCircle(0, 0, size * 0.1f);
 		break;
 	}
 	}
@@ -721,8 +721,8 @@ void OrganicText::drawDebugInfo() const {
 	// Use cached connection count from last draw
 	int activeConnections = cachedConnectionCount;
 
-	string perfStatus = (fps >= (targetFPS * 0.8f)) ? "GOOD" : ((fps <= (targetFPS * 0.5f)) ? "OK" : "POOR");
-	ofColor perfColor = (fps >= (targetFPS * 0.8f)) ? ofColor(100, 255, 100) : ((fps <= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
+	string perfStatus = (fps >= (targetFPS * 0.9f)) ? "GOOD" : ((fps <= (targetFPS * 0.5f)) ? "OK" : "POOR");
+	ofColor perfColor = (fps >= (targetFPS * 0.9f)) ? ofColor(100, 255, 100) : ((fps >= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
 
 	vector<string> lines;
 	lines.push_back("=== PERFORMANCE ===");
@@ -755,10 +755,10 @@ void OrganicText::drawDebugInfo() const {
 	lines.push_back("UP/DOWN: Anima Speed");
 	lines.push_back("+/-: Point Density");
 	lines.push_back("");
+	lines.push_back("O: Outline");
 	lines.push_back("F: Shape Fill");
 	lines.push_back("L: Connections");
 	lines.push_back("T: Trails");
-	lines.push_back("O: Outline");
 	lines.push_back("B: Background Color");
 	lines.push_back("");
 	lines.push_back("C: Color Modes");
@@ -903,9 +903,9 @@ void OrganicText::draw() {
 //--------------------------------------------------------------
 void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	const int key = eventArgs.key;
-	bool mod_CMD = eventArgs.hasModifier(OF_KEY_COMMAND);
-	bool mod_CTRL = eventArgs.hasModifier(OF_KEY_CONTROL);
-	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+	//bool mod_CMD = eventArgs.hasModifier(OF_KEY_COMMAND);
+	//bool mod_CTRL = eventArgs.hasModifier(OF_KEY_CONTROL);
+	//bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
 	if (key >= '0' && key <= '9') {
 		loadPreset(key - '0');
