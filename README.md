@@ -65,5 +65,6 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 ## 💻 Tested Systems
 
 - **Windows** (openFrameworks 0.12.1, Visual Studio)
+- **macOS** (openFrameworks 0.12.1, Xcode)
 
 *Built with openFrameworks - Creative Coding Toolkit*
