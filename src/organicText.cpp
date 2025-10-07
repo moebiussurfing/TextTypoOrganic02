@@ -14,11 +14,6 @@ OrganicText::~OrganicText() {
 }
 
 //--------------------------------------------------------------
-void OrganicText::exit() {
-	if(bAutosave) saveSettings();
-}
-
-//--------------------------------------------------------------
 void OrganicText::setupParams() {
 	// Basic parameters
 	bDebugDraw.set("Debug Draw", false);
@@ -1115,4 +1110,10 @@ void OrganicText::updateAnimationModeName(int &) {
 void OrganicText::loadPreset(int presetNumber) {
 	ofLogNotice("OrganicText") << "Loading preset " << presetNumber;
 	OrganicTextPresets::loadPreset(this, presetNumber);
+}
+
+
+//--------------------------------------------------------------
+void OrganicText::exit() {
+	if(bAutosave) saveSettings();
 }
