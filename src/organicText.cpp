@@ -551,6 +551,13 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 			star.addVertex(cos(angle) * radius, sin(angle) * radius);
 		}
 		star.close();
+
+		//TODO: fill polyline
+		// if (bDrawShapesFill.get())
+		// 	ofFill();
+		// else
+		// 	ofNoFill();
+
 		star.draw();
 		break;
 	}
@@ -733,7 +740,7 @@ void OrganicText::drawDebugInfo() const {
 	lines.push_back("Font: " + ofToString(fontSize.get(), 0) + "px");
 	lines.push_back("");
 	lines.push_back("= PRESETS =");
-	lines.push_back("0-9 : Load presets");
+	lines.push_back("0-9: Load presets");
 	// lines.push_back("Shift + 1-5: Shapes");
 	lines.push_back("");
 	lines.push_back("= PARAMS =");
