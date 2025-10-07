@@ -107,8 +107,8 @@ void OrganicTextPresets::loadPreset2_OrganicFlow(OrganicText * ot) {
 	ot->densityMinGap.set(0.12f);
 
 	ot->shapeType.set(0); // CIRCLE
-	ot->shapePointRadius.set(0.6f);
-	ot->shapePointsRadiusMin.set(0.3f);
+	ot->shapePointRadius.set(0.2f);
+	ot->shapePointsRadiusMin.set(0.2f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(2); // SPIRAL
@@ -139,7 +139,7 @@ void OrganicTextPresets::loadPreset3_NeonPulse(OrganicText * ot) {
 	ot->colorSpeed.set(1.5f);
 	ot->colorMixFactor.set(0.8f);
 
-	ot->densitySpacing.set(0.18f);
+	ot->densitySpacing.set(1.0f);
 	ot->densityAmount.set(1.5f);
 	ot->densityMinGap.set(0.05f);
 
@@ -172,21 +172,21 @@ void OrganicTextPresets::loadPreset4_CosmicDance(OrganicText * ot) {
 	ot->colorMixFactor.set(0.4f);
 	ot->bColorByDistance.set(true);
 
-	ot->densitySpacing.set(0.4f);
-	ot->densityAmount.set(0.6f);
+	ot->densitySpacing.set(1.0f);
+	ot->densityAmount.set(2.0f);
 	ot->densityMinGap.set(0.15f);
 
 	ot->shapeType.set(2); // TRIANGLE
-	ot->shapePointRadius.set(0.5f);
+	ot->shapePointRadius.set(0.2f);
 	ot->shapePointsRadiusMin.set(0.3f);
 	ot->shapeTriangleRatio.set(1.3f);
-	ot->bDrawShapesFill.set(false);
+	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(4); // ORBIT
 	ot->animSpeed.set(0.6f);
 	ot->animPower.set(0.15f);
 
-	ot->bDrawConnections.set(true);
+	ot->bDrawConnections.set(false);
 	ot->connectDistance.set(50.0f);
 	ot->connectAlpha.set(40.0f);
 	ot->connectQuality.set(0.3f);
@@ -212,13 +212,13 @@ void OrganicTextPresets::loadPreset5_RetroGrid(OrganicText * ot) {
 	ot->colorMixFactor.set(0.6f);
 
 	ot->densitySpacing.set(0.25f);
-	ot->densityAmount.set(1.0f);
+	ot->densityAmount.set(0.5f);
 	ot->densityMinGap.set(0.1f);
 
 	ot->shapeType.set(1); // RECTANGLE
-	ot->shapePointRadius.set(0.4f);
+	ot->shapePointRadius.set(0.5f);
 	ot->shapePointsRadiusMin.set(0.25f);
-	ot->shapeRotation.set(0.0f);
+	ot->shapeRotation.set(0.25f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(1); // WAVE
@@ -251,7 +251,7 @@ void OrganicTextPresets::loadPreset6_BioLuminous(OrganicText * ot) {
 	ot->bColorByDistance.set(true);
 
 	ot->densitySpacing.set(0.22f);
-	ot->densityAmount.set(1.3f);
+	ot->densityAmount.set(0.5f);
 	ot->densityMinGap.set(0.08f);
 
 	ot->shapeType.set(0);
@@ -293,13 +293,13 @@ void OrganicTextPresets::loadPreset7_QuantumField(OrganicText * ot) {
 	ot->densityMinGap.set(0.05f);
 
 	ot->shapeType.set(5); // POINT
-	ot->shapePointRadius.set(0.15f);
+	ot->shapePointRadius.set(0.5f);
 	ot->shapePointsRadiusMin.set(0.08f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0); // NOISE
-	ot->animSpeed.set(1.5f);
-	ot->animPower.set(0.18f);
+	ot->animSpeed.set(0.5f);
+	ot->animPower.set(0.1f);
 
 	ot->bDrawConnections.set(true);
 	ot->connectDistance.set(18.0f);
@@ -324,14 +324,14 @@ void OrganicTextPresets::loadPreset8_TribalRitual(OrganicText * ot) {
 	ot->colorSpeed.set(0.9f);
 	ot->colorMixFactor.set(0.5f);
 
-	ot->densitySpacing.set(0.26f);
-	ot->densityAmount.set(1.1f);
+	ot->densitySpacing.set(0.25f);
+	ot->densityAmount.set(1.0f);
 	ot->densityMinGap.set(0.1f);
 
 	ot->shapeType.set(4); // CROSS
 	ot->shapePointRadius.set(0.5f);
 	ot->shapePointsRadiusMin.set(0.35f);
-	ot->shapeRotation.set(15.0f);
+	ot->shapeRotation.set(0.25f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(3); // PULSE
@@ -362,7 +362,7 @@ void OrganicTextPresets::loadPreset9_GalaxyStorm(OrganicText * ot) {
 	ot->colorMixFactor.set(0.8f);
 	ot->bColorByDistance.set(true);
 
-	ot->densitySpacing.set(0.16f);
+	ot->densitySpacing.set(1.0f);
 	ot->densityAmount.set(1.6f);
 	ot->densityMinGap.set(0.06f);
 

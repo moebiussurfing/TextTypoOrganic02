@@ -960,6 +960,7 @@ void OrganicText::saveSettings() {
 	ofSerialize(settings, parameters);
 	ofSavePrettyJson(pathSettings, settings);
 	ofLogNotice("OrganicText") << "Settings saved";
+	ofLogNotice("OrganicText") << settings;
 }
 
 //--------------------------------------------------------------
@@ -1023,7 +1024,7 @@ void OrganicText::resetGlobalColorParams() {
 void OrganicText::resetAnimationParams() {
 	animationMode.set(0);
 	animSpeed.set(0.8f);
-	animPower.set(0.15f);
+	animPower.set(0.05f);
 	animWaveFreq.set(0.3f);
 	animIntensity.set(0.2f);
 	animSpiral.set(0.2f);
