@@ -582,3 +582,4 @@ of.entitlements
 .vscode/browse.db-wal
 TextTypoOrganic02.code-workspace
 .gitignore
+.vscode/browse.db-shm

@@ -271,6 +271,9 @@ private:
 	// Cached connection count for debug display
 	mutable int cachedConnectionCount = 0;
 
+	void printStatus() const;
+	void printStatusParam(const ofAbstractParameter &param) const;
+
 public:
 	ofxPanel gui;
 
