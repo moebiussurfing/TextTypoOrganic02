@@ -577,3 +577,8 @@ MigrationBackup/
 .ionide/
 bin/data/.gitkeep
 of.entitlements
+.vscode/browse.db
+.gitignore
+.vscode/browse.db-wal
+TextTypoOrganic02.code-workspace
+.gitignore
