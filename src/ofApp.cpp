@@ -13,8 +13,9 @@ void ofApp::setup(){
 	#endif
 
 	float fps = 60;
-	t.setTargetFPS(fps);
 	ofSetFrameRate(fps);
+	
+	t.setTargetFPS(fps);
 	t.setup();
 }
 
@@ -29,9 +30,7 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(ofKeyEventArgs & eventArgs){
-	ofKeyEventArgs args;
-	args=eventArgs;
-	t.keyPressed(args);
+	t.keyPressed(eventArgs);
 }
 
 //--------------------------------------------------------------
