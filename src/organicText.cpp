@@ -42,9 +42,9 @@ void OrganicText::setupParams() {
 	shapeType.set("Type", 0, 0, 5);
 	shapeTypeName.set("Name", "Circle");
 	shapeTypeName.setSerializable(false);
-	shapePointRadius.set("Size", 0.5, 0, 1);
-	shapePointsRadiusMin.set("Min Size", 0.3, 0, 1);
-	shapeTriangleRatio.set("Tri Ratio", .5, 0, 1.0f);
+	shapeSize.set("Size", 0.5, 0, 1);
+	shapeSizeMin.set("Min Size", 0.3, 0, 1);
+	shapeRatio.set("Ratio", .5, 0, 1.0f);
 	shapeRotation.set("Rotation", 0, 0, 1.0f);
 
 	// Color group
@@ -120,9 +120,9 @@ void OrganicText::setupParams() {
 	paramsShape.add(bDrawShapesFill);
 	paramsShape.add(shapeType);
 	paramsShape.add(shapeTypeName);
-	paramsShape.add(shapePointRadius);
-	paramsShape.add(shapePointsRadiusMin);
-	paramsShape.add(shapeTriangleRatio);
+	paramsShape.add(shapeSize);
+	paramsShape.add(shapeSizeMin);
+	paramsShape.add(shapeRatio);
 	paramsShape.add(shapeRotation);
 	paramsShape.add(randomShape);
 	paramsShape.add(resetShape);
@@ -526,6 +526,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 	ofPushMatrix();
 	ofTranslate(position);
 	ofRotateDeg(rotation);
+	float h = size * ofMap(shapeRatio.get(), 0.f, 1.f, 1.f, 10.f);
 
 	switch (shape) {
 	case SHAPE_CIRCLE:
@@ -533,11 +534,10 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 		break;
 
 	case SHAPE_RECTANGLE:
-		ofDrawRectangle(-size * 0.5f, -size * 0.5f, size, size);
+		ofDrawRectangle(-size * 0.5f, -size * 0.5f, size, h);
 		break;
 
 	case SHAPE_TRIANGLE: {
-		float h = size * ofMap(shapeTriangleRatio.get(),0.f,1.f,0.5f,2.f);
 		ofDrawTriangle(0, -h * 0.5f, -size * 0.5f, h * 0.5f, size * 0.5f, h * 0.5f);
 		break;
 	}
@@ -577,7 +577,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 	}
 
 	case SHAPE_POINT: {
-		ofDrawCircle(0, 0, size * 0.3f);
+		ofDrawCircle(0, 0, size * 0.05f);
 		break;
 	}
 	}
@@ -861,13 +861,13 @@ void OrganicText::draw() {
 			else
 				ofNoFill();
 
-			float maxSize = ofMap(shapePointRadius.get(), 0, 1, MIN_RADIUS, MAX_RADIUS, true);
-			float minSize = ofMap(shapePointsRadiusMin.get(), 0, 1, 0, maxSize, true);
+			float maxSize = ofMap(shapeSize.get(), 0, 1, MIN_RADIUS, MAX_RADIUS, true);
+			float minSize = ofMap(shapeSizeMin.get(), 0, 1, 0, maxSize, true);
 
 			float sizeNoise = ofNoise(phase * SHAPE_SIZE_NOISE_SCALE, static_cast<float>(i) * SHAPE_SIZE_INDEX_SCALE);
 			float pointSize = ofLerp(minSize, maxSize, sizeNoise);
 
-			float rotation = ofMap(shapeRotation.get(),0,1,0,180);
+			float rotation = ofMap(shapeRotation.get(),0,1,0,360);
 
 			drawShape(finalPos, pointSize, (ShapeType)shapeType.get(), rotation);
 
@@ -1013,10 +1013,10 @@ void OrganicText::resetDensityParams() {
 
 void OrganicText::resetShapeParams() {
 	bDrawShapesFill.set(true);
-	shapePointRadius.set(0.1f);
-	shapePointsRadiusMin.set(0.f);
+	shapeSize.set(0.1f);
+	shapeSizeMin.set(0.f);
 	shapeType.set(0);
-	shapeTriangleRatio.set(.5f);
+	shapeRatio.set(.5f);
 	shapeRotation.set(0.0f);
 }
 
@@ -1068,10 +1068,10 @@ void OrganicText::randomizeDensityParams() {
 }
 
 void OrganicText::randomizeShapeParams() {
-	shapePointRadius.set(ofRandom(0.0f, 1.0f));
-	shapePointsRadiusMin.set(ofRandom(0.0f, 1.0f));
+	shapeSize.set(ofRandom(0.0f, 1.0f));
+	shapeSizeMin.set(ofRandom(0.0f, 1.0f));
 	shapeType.set(static_cast<int>(ofRandom(0, 6)));
-	shapeTriangleRatio.set(ofRandom(0.f, 1.0f));
+	shapeRatio.set(ofRandom(0.f, 1.0f));
 }
 
 void OrganicText::randomizeColorParams() {
