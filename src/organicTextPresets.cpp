@@ -35,8 +35,8 @@ void OrganicTextPresets::loadPreset0_Minimal(OrganicText * ot) {
 	ot->densityMinGap.set(0.15f);
 
 	ot->shapeType.set(0);
-	ot->shapePointRadius.set(0.3f);
-	ot->shapePointsRadiusMin.set(0.2f);
+	ot->shapeSize.set(0.3f);
+	ot->shapeSizeMin.set(0.2f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0);
@@ -47,7 +47,7 @@ void OrganicTextPresets::loadPreset0_Minimal(OrganicText * ot) {
 	ot->bDrawTrails.set(false);
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(true);
+	//ot->bDrawOutline.set(true);
 }
 
 //--------------------------------------------------------------
@@ -66,8 +66,8 @@ void OrganicTextPresets::loadPreset1_CyberWave(OrganicText * ot) {
 	ot->densityMinGap.set(0.08f);
 
 	ot->shapeType.set(5); // POINT
-	ot->shapePointRadius.set(0.2f);
-	ot->shapePointsRadiusMin.set(0.1f);
+	ot->shapeSize.set(0.2f);
+	ot->shapeSizeMin.set(0.1f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(1); // WAVE
@@ -86,7 +86,7 @@ void OrganicTextPresets::loadPreset1_CyberWave(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 
 	ot->colorConnection.set(ofColor(150, 200, 255, 80));
 }
@@ -107,9 +107,9 @@ void OrganicTextPresets::loadPreset2_OrganicFlow(OrganicText * ot) {
 	ot->densityMinGap.set(0.12f);
 
 	ot->shapeType.set(0); // CIRCLE
-	ot->shapePointRadius.set(0.2f);
-	ot->shapePointsRadiusMin.set(0.2f);
-	ot->bDrawShapesFill.set(true);
+	ot->shapeSize.set(0.2f);
+	ot->shapeSizeMin.set(0.2f);
+	ot->bDrawShapesFill.set(false);
 
 	ot->animationMode.set(2); // SPIRAL
 	ot->animSpeed.set(0.8f);
@@ -125,7 +125,7 @@ void OrganicTextPresets::loadPreset2_OrganicFlow(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(true);
+	//ot->bDrawOutline.set(true);
 }
 
 //--------------------------------------------------------------
@@ -144,8 +144,8 @@ void OrganicTextPresets::loadPreset3_NeonPulse(OrganicText * ot) {
 	ot->densityMinGap.set(0.05f);
 
 	ot->shapeType.set(3); // STAR
-	ot->shapePointRadius.set(0.35f);
-	ot->shapePointsRadiusMin.set(0.2f);
+	ot->shapeSize.set(0.35f);
+	ot->shapeSizeMin.set(0.2f);
 	ot->shapeRotation.set(45.0f);
 	ot->bDrawShapesFill.set(true);
 
@@ -157,7 +157,7 @@ void OrganicTextPresets::loadPreset3_NeonPulse(OrganicText * ot) {
 	ot->bDrawTrails.set(false);
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 }
 
 //--------------------------------------------------------------
@@ -177,9 +177,9 @@ void OrganicTextPresets::loadPreset4_CosmicDance(OrganicText * ot) {
 	ot->densityMinGap.set(0.15f);
 
 	ot->shapeType.set(2); // TRIANGLE
-	ot->shapePointRadius.set(0.2f);
-	ot->shapePointsRadiusMin.set(0.3f);
-	ot->shapeTriangleRatio.set(1.3f);
+	ot->shapeSize.set(0.2f);
+	ot->shapeSizeMin.set(0.3f);
+	ot->shapeRatio.set(0.f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(4); // ORBIT
@@ -197,7 +197,7 @@ void OrganicTextPresets::loadPreset4_CosmicDance(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 }
 
 //--------------------------------------------------------------
@@ -211,31 +211,32 @@ void OrganicTextPresets::loadPreset5_RetroGrid(OrganicText * ot) {
 	ot->colorSpeed.set(0.7f);
 	ot->colorMixFactor.set(0.6f);
 
-	ot->densitySpacing.set(0.25f);
+	ot->densitySpacing.set(0.1f);
 	ot->densityAmount.set(0.5f);
-	ot->densityMinGap.set(0.1f);
+	ot->densityMinGap.set(0.01f);
 
 	ot->shapeType.set(1); // RECTANGLE
-	ot->shapePointRadius.set(0.5f);
-	ot->shapePointsRadiusMin.set(0.25f);
+	ot->shapeSize.set(0.2f);
+	ot->shapeSizeMin.set(0.05f);
 	ot->shapeRotation.set(0.25f);
-	ot->bDrawShapesFill.set(true);
+	ot->shapeRatio.set(0.15f);
+	ot->bDrawShapesFill.set(false);
 
 	ot->animationMode.set(1); // WAVE
 	ot->animSpeed.set(0.8f);
 	ot->animWaveFreq.set(0.2f);
 	ot->animIntensity.set(0.1f);
 
-	ot->bDrawConnections.set(true);
+	ot->bDrawConnections.set(false);
 	ot->connectDistance.set(30.0f);
 	ot->connectAlpha.set(80.0f);
 	ot->connectQuality.set(0.6f);
 	ot->bConnectNearOnly.set(true);
 	ot->bDrawTrails.set(false);
 
-	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(true);
+	ot->bDrawShapes.set(true);
+	//ot->bDrawOutline.set(true);
 }
 
 //--------------------------------------------------------------
@@ -255,8 +256,8 @@ void OrganicTextPresets::loadPreset6_BioLuminous(OrganicText * ot) {
 	ot->densityMinGap.set(0.08f);
 
 	ot->shapeType.set(0);
-	ot->shapePointRadius.set(0.3f);
-	ot->shapePointsRadiusMin.set(0.15f);
+	ot->shapeSize.set(0.3f);
+	ot->shapeSizeMin.set(0.15f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0); // NOISE
@@ -274,7 +275,7 @@ void OrganicTextPresets::loadPreset6_BioLuminous(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 }
 
 //--------------------------------------------------------------
@@ -293,13 +294,13 @@ void OrganicTextPresets::loadPreset7_QuantumField(OrganicText * ot) {
 	ot->densityMinGap.set(0.05f);
 
 	ot->shapeType.set(5); // POINT
-	ot->shapePointRadius.set(0.5f);
-	ot->shapePointsRadiusMin.set(0.08f);
+	ot->shapeSize.set(0.5f);
+	ot->shapeSizeMin.set(0.08f);
 	ot->bDrawShapesFill.set(true);
 
 	ot->animationMode.set(0); // NOISE
 	ot->animSpeed.set(0.5f);
-	ot->animPower.set(0.1f);
+	ot->animPower.set(0.01f);
 
 	ot->bDrawConnections.set(true);
 	ot->connectDistance.set(18.0f);
@@ -310,7 +311,7 @@ void OrganicTextPresets::loadPreset7_QuantumField(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 }
 
 //--------------------------------------------------------------
@@ -324,13 +325,13 @@ void OrganicTextPresets::loadPreset8_TribalRitual(OrganicText * ot) {
 	ot->colorSpeed.set(0.9f);
 	ot->colorMixFactor.set(0.5f);
 
-	ot->densitySpacing.set(0.25f);
+	ot->densitySpacing.set(0.15f);
 	ot->densityAmount.set(1.0f);
 	ot->densityMinGap.set(0.1f);
 
 	ot->shapeType.set(4); // CROSS
-	ot->shapePointRadius.set(0.5f);
-	ot->shapePointsRadiusMin.set(0.35f);
+	ot->shapeSize.set(0.1f);
+	ot->shapeSizeMin.set(0.f);
 	ot->shapeRotation.set(0.25f);
 	ot->bDrawShapesFill.set(true);
 
@@ -347,7 +348,7 @@ void OrganicTextPresets::loadPreset8_TribalRitual(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 }
 
 //--------------------------------------------------------------
@@ -367,8 +368,8 @@ void OrganicTextPresets::loadPreset9_GalaxyStorm(OrganicText * ot) {
 	ot->densityMinGap.set(0.06f);
 
 	ot->shapeType.set(3); // STAR
-	ot->shapePointRadius.set(0.4f);
-	ot->shapePointsRadiusMin.set(0.2f);
+	ot->shapeSize.set(0.4f);
+	ot->shapeSizeMin.set(0.2f);
 	ot->shapeRotation.set(90.0f);
 	ot->bDrawShapesFill.set(false);
 
@@ -387,7 +388,7 @@ void OrganicTextPresets::loadPreset9_GalaxyStorm(OrganicText * ot) {
 
 	ot->bDrawShapes.set(true);
 	ot->bEnableAnimation.set(true);
-	ot->bDrawOutline.set(false);
+	//ot->bDrawOutline.set(false);
 }
 
 //--------------------------------------------------------------
@@ -450,21 +451,21 @@ void OrganicTextPresets::loadAnimOnlyPreset_Electric(OrganicText* ot) {
 
 void OrganicTextPresets::loadShapeOnlyPreset_Geometric(OrganicText* ot) {
     ot->shapeType.set(1); // SHAPE_RECTANGLE
-    ot->shapePointRadius.set(0.6f);
-    ot->shapePointsRadiusMin.set(0.4f);
+    ot->shapeSize.set(0.6f);
+    ot->shapeSizeMin.set(0.4f);
     ot->shapeRotation.set(45.0f);
 }
 
 void OrganicTextPresets::loadShapeOnlyPreset_Organic(OrganicText* ot) {
     ot->shapeType.set(0); // SHAPE_CIRCLE
-    ot->shapePointRadius.set(0.8f);
-    ot->shapePointsRadiusMin.set(0.2f);
+    ot->shapeSize.set(0.8f);
+    ot->shapeSizeMin.set(0.2f);
     ot->shapeRotation.set(0.0f);
 }
 
 void OrganicTextPresets::loadShapeOnlyPreset_Minimal(OrganicText* ot) {
     ot->shapeType.set(5); // SHAPE_POINT
-    ot->shapePointRadius.set(0.2f);
-    ot->shapePointsRadiusMin.set(0.1f);
+    ot->shapeSize.set(0.2f);
+    ot->shapeSizeMin.set(0.1f);
     ot->shapeRotation.set(0.0f);
 }

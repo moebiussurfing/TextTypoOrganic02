@@ -148,9 +148,9 @@ public:
 	ofParameter<void> randomShape;
 	ofParameter<int> shapeType;
 	ofParameter<string> shapeTypeName;
-	ofParameter<float> shapePointRadius; // Renamed from shapePointRadius
-	ofParameter<float> shapePointsRadiusMin; // Renamed from shapePointsRadiusMin
-	ofParameter<float> shapeTriangleRatio;
+	ofParameter<float> shapeSize; // Renamed from shapeSize
+	ofParameter<float> shapeSizeMin; // Renamed from shapeSizeMin
+	ofParameter<float> shapeRatio;
 	ofParameter<float> shapeRotation;
 
 	// Color parameters
