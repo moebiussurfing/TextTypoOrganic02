@@ -177,12 +177,13 @@ void OrganicTextPresets::loadPreset4_CosmicDance(OrganicText * ot) {
 	ot->densityMinGap.set(0.15f);
 
 	ot->shapeType.set(2); // TRIANGLE
-	ot->shapeSize.set(0.2f);
+	ot->shapeSize.set(0.3f);
 	ot->shapeSizeMin.set(0.3f);
-	ot->shapeRatio.set(0.f);
+	ot->shapeRatio.set(0.1f);
+	ot->shapeRotation.set(0.1f);
 	ot->bDrawShapesFill.set(true);
 
-	ot->animationMode.set(4); // ORBIT
+	ot->animationMode.set(3);
 	ot->animSpeed.set(0.6f);
 	ot->animPower.set(0.15f);
 
@@ -293,10 +294,12 @@ void OrganicTextPresets::loadPreset7_QuantumField(OrganicText * ot) {
 	ot->densityAmount.set(2.0f);
 	ot->densityMinGap.set(0.05f);
 
-	ot->shapeType.set(5); // POINT
-	ot->shapeSize.set(0.5f);
-	ot->shapeSizeMin.set(0.08f);
-	ot->bDrawShapesFill.set(true);
+	ot->shapeType.set(1);
+	ot->shapeSize.set(0.2f);
+	ot->shapeSizeMin.set(0.1f);
+	ot->shapeRotation.set(0.9f);
+	ot->shapeRatio.set(0.1f);
+	ot->bDrawShapesFill.set(false);
 
 	ot->animationMode.set(0); // NOISE
 	ot->animSpeed.set(0.5f);
