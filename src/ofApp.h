@@ -10,6 +10,7 @@
  - set ofxgui style mini
  - refresh trails callback
  - add define remove preset 
+ - add W key full screen
 
  - browse presets ?
  - smooth transients ?
