@@ -4,10 +4,10 @@
 #include "ofxGui.h"
 using namespace glm;
 
-constexpr const char * ORGANICTEXT = "OF TEXT";
+constexpr const char * ORGANICTEXT = "ofWorks";
 constexpr float MAX_RADIUS = 50.0f;
 constexpr float MIN_RADIUS = 0.0f;
-constexpr float ZOOM_MAX_X = 10.0f;
+constexpr float ZOOM_MAX_X = 4.0f;
 
 // ============================================================================
 // DRAWING & ANIMATION CONSTANTS
@@ -58,6 +58,9 @@ constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
 
+constexpr float MAX_LINE_WIDTH_CONNECTIONS = 3.F;
+constexpr float MAX_LINE_WIDTH_TRAIL = 5.F;
+
 // ============================================================================
 
 enum ShapeType {
@@ -91,12 +94,21 @@ public:
 	~OrganicText();
 
 	void setup();
+	void setup(float fps) {
+		targetFPS = fps;
+		setup();
+	}
 private:
 	void setupGui();
 	void setupParams();
 	void setupCallbacks();
 public:
 	void draw();
+	
+	void drawGui();
+	ofParameter<bool> bGui { "OrganicText", true };
+	ofParameter<bool> bKeys { "Keys", false };
+	
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
 
@@ -114,6 +126,7 @@ private:
 public:
 	ofParameterGroup parameters;
 	ofParameterGroup paramsFont;
+	ofParameterGroup paramsPreset;
 	ofParameterGroup paramsShape;
 	ofParameterGroup paramsDensity;
 	ofParameterGroup paramsColorModes;
@@ -135,7 +148,10 @@ public:
 	// Font parameters
 	ofParameter<string> fontPath;
 	ofParameter<float> fontSize;
-
+	ofParameter<float> letterSpacing;
+//	ofParameter<float> heightLine;
+	ofParameter<void> vResetFont;
+	
 	// Density parameters
 	ofParameter<void> resetDensity;
 	ofParameter<void> randomDensity;
@@ -188,18 +204,20 @@ public:
 	ofParameter<void> resetConnection;
 	ofParameter<void> randomConnection;
 	ofParameter<bool> bDrawConnections;
-	ofParameter<float> connectDistance; // Renamed from connectionsDistance
-	ofParameter<float> connectAlpha; // Renamed from connectionsAlpha
-	ofParameter<bool> bConnectNearOnly; // Renamed from bConnectionOnlyNear
-	ofParameter<float> connectQuality; // Renamed from connectionQuality
+	ofParameter<float> connectDistance;
+	ofParameter<float> connectLineWidth;
+	ofParameter<float> connectAlpha;
+	ofParameter<bool> bConnectNearOnly;
+	ofParameter<float> connectQuality;
 
 	// Trail parameters
 	ofParameter<bool> bDrawTrails;
 	ofParameter<int> trailLength;
+	ofParameter<float> trailLineWidth;
 	ofParameter<float> trailFade;
 
 	// Global controls
-	ofParameter<void> resetAll;
+	ofParameter<void> vResetAll;
 	
 	// Settings
 	ofParameter<bool> bAutosave;
@@ -208,9 +226,9 @@ public:
 
 private:
 	// Event listeners
-	ofEventListener e_FontPath, e_FontSize;
+	ofEventListener e_FontPath, e_vFontSize,e_letterSpacing, e_vResetFont;//,e_heightLine;
 	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
-	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_ResetAll;
+	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_vResetAll;
 	ofEventListener e_RandomDensity, e_RandomShape, e_RandomColor, e_RandomGlobalColor, e_RandomAnimation, e_RandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 	
@@ -244,6 +262,7 @@ public:
 	void resetGlobalColorParams();
 	void resetAnimationParams();
 	void resetConnectionParams();
+	void resetFonts();
 	void resetAllParams();
 
 	// Randomize functions
@@ -273,6 +292,8 @@ private:
 
 public:
 	ofxPanel gui;
-
-	void loadPreset(int presetNumber);
+	
+	ofxGuiGroup & getGroupGui();
+	void refreshGui(ofxPanel & ui);
+	void refreshGui(ofxGuiGroup & g);
 };

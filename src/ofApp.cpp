@@ -3,38 +3,63 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofBackground(24);
-
-	#if 1
-//	int w = 1920;
-//	int h = 1080;
-//	int p = 25;
-//	ofSetWindowShape(w, h-p);
-//	ofSetWindowPosition(-w,p);
-	int w = 1200;
-	int h = 550;
-	ofSetWindowShape(w, h);
-	ofSetWindowPosition(ofGetWidth()*0.5-w*0.5,ofGetHeight()*0.5-h*0.5);
-	#endif
-
+	
+	resetWindow();
+	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindow(); });
+	
 	float fps = 60;
 	ofSetFrameRate(fps);
 	
-	t.setTargetFPS(fps);
-	t.setup();
+	// text organic
+	t.setup(fps);
+	t.gui.setPosition(ofGetWidth() - t.gui.getWidth() - 5, 5);
+	
+	// presets manger
+	p.setup(t.paramsPreset);
+	p.gui.add(vResetWindow);
+	p.gui.add(t.bGui);
+	
+	//TODO
+	// refresh ui
+//	p.guiParams.minimize();
+//	t.refreshGui(p.gui);
+	t.refreshGui(p.guiParams);
+//	ofxGuiGroup & g = p.getGroupGui();
+}
+
+//--------------------------------------------------------------
+void ofApp::resetWindow(){ // set window size and centered
+	const int w = OFWORKS_APP_WIDTH;
+	const int h = OFWORKS_APP_HEIGHT;
+	ofSetWindowShape(w, h);
+	ofSetWindowPosition(ofGetScreenWidth()*0.5f-w*0.5f,ofGetScreenHeight()*0.5f-h*0.5f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	fps = ofGetFrameRate();
+	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
+	string sp ="";
+	if(t.bDebugDraw) sp = "  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"+ ofToString(fps, 0) + "Fps (" + ofToString(frameTime, 0) + "ms)";
+	string wt = ofToString(SURFING_APP_TITLE) + sp;
+	ofSetWindowTitle(wt);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	t.draw();
+	
+	if(!bGui) return;
+	t.drawGui();
+	p.drawGui();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(ofKeyEventArgs & eventArgs){
 	t.keyPressed(eventArgs);
+	
+	if(eventArgs.key == 'g') bGui=!bGui;
+	if(eventArgs.key == 'w') resetWindow();
 }
 
 //--------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "organicText.h"
+
 #include <algorithm>
 #include <cmath>
-#include "organicTextPresets.h"
 
 //--------------------------------------------------------------
 OrganicText::OrganicText() {
@@ -27,8 +27,11 @@ void OrganicText::setupParams() {
 
 	// Font parameters
 	fontPath.set("Font Path", "NotoSansMono-Regular.ttf");
-	fontSize.set("Font Size", 150, 50, 500);
-
+	fontSize.set("Size", 150, 50, 500);
+	letterSpacing.set("Spacing", 0, -1, 1);
+//	heightLine.set("Height Line", 0, -1, 1);
+	vResetFont.set("Reset");
+	
 	// Density group (simplified names)
 	resetDensity.set("Reset");
 	randomDensity.set("Random");
@@ -85,6 +88,7 @@ void OrganicText::setupParams() {
 	randomConnection.set("Random");
 	bDrawConnections.set("Draw Connections", false);
 	connectDistance.set("Distance", 30, 5, 100);
+	connectLineWidth.set("Line Width", 1.0f, 0.1f, MAX_LINE_WIDTH_CONNECTIONS);
 	connectAlpha.set("Alpha", 100, 0, 255);
 	bConnectNearOnly.set("Near Only", true);
 	connectQuality.set("Quality", 1.0, 0.1, 1.0);
@@ -92,6 +96,7 @@ void OrganicText::setupParams() {
 	// Trail group
 	bDrawTrails.set("Trails", false);
 	trailLength.set("Length", 10, 3, 50);
+	trailLineWidth.set("Line Width", 1.0f, 0.1f, MAX_LINE_WIDTH_TRAIL);
 	trailFade.set("Fade", 0.9, 0.5, 0.99);
 
 	// Settings group
@@ -100,7 +105,7 @@ void OrganicText::setupParams() {
 	vLoadSettigs.set("Load");
 	
 	// Global reset
-	resetAll.set("Reset All");
+	vResetAll.set("Reset All");
 	
 	//--
 
@@ -108,6 +113,9 @@ void OrganicText::setupParams() {
 	paramsFont.setName("Font");
 	paramsFont.add(fontPath);
 	paramsFont.add(fontSize);
+	paramsFont.add(letterSpacing);
+//	paramsFont.add(heightLine);
+	paramsFont.add(vResetFont);
 
 	paramsDensity.setName("Density");
 	paramsDensity.add(densitySpacing);
@@ -162,10 +170,12 @@ void OrganicText::setupParams() {
 	paramsConnections.setName("Connections");
 	paramsConnections.add(bDrawConnections);
 	paramsConnections.add(connectDistance);
+	paramsConnections.add(connectLineWidth);
 	paramsConnections.add(connectAlpha);
 	paramsConnections.add(connectQuality);
 	paramsConnections.add(bConnectNearOnly);
 	paramsConnections.add(bDrawTrails);
+	paramsConnections.add(trailLineWidth);
 	paramsConnections.add(trailLength);
 	paramsConnections.add(trailFade);
 	paramsConnections.add(resetConnection);
@@ -175,38 +185,47 @@ void OrganicText::setupParams() {
 	parameters.add(sText);
 	parameters.add(zoomGlobal);
 	parameters.add(bDrawOutline);
-	parameters.add(bDrawShapes);
-	parameters.add(bDrawShapesFill);
-	parameters.add(bDrawConnections);
-	parameters.add(bDrawTrails);
-	parameters.add(bEnableAnimation);
 
 	paramsSettings.setName("Settings");
-	paramsSettings.add(fontPath);
-	paramsSettings.add(fontSize);
+	paramsSettings.add(paramsFont);
 	paramsSettings.add(bAutosave);
 	paramsSettings.add(vLoadSettigs);
 	paramsSettings.add(vSaveSettigs);
 	
-	parameters.add(paramsFont);
-	parameters.add(paramsShape);
-	parameters.add(paramsDensity);
-	parameters.add(paramsColors);
-	parameters.add(paramsColorModes);
-	parameters.add(paramsAnim);
-	parameters.add(paramsConnections);
+	// Preset
+	paramsPreset.setName("TextTypoOrgnic");
+	paramsPreset.add(bDrawShapes);
+	paramsPreset.add(bDrawShapesFill);
+	paramsPreset.add(bDrawConnections);
+	paramsPreset.add(bDrawTrails);
+	paramsPreset.add(bEnableAnimation);
+	paramsPreset.add(paramsShape);
+	paramsPreset.add(paramsDensity);
+	paramsPreset.add(paramsColors);
+	paramsPreset.add(paramsColorModes);
+	paramsPreset.add(paramsAnim);
+	paramsPreset.add(paramsConnections);
+	
+	// exclude these settings from settings, as will be handled by presets manager externally
+	parameters.add(paramsPreset);
+	
 	parameters.add(bDebugDraw);
 	parameters.add(bDebugDrawInfo);
 	parameters.add(paramsSettings);
-	parameters.add(resetAll);
+	parameters.add(bGui);
+	parameters.add(bKeys);
+	parameters.add(vResetAll);
 }
 
 //--------------------------------------------------------------
 void OrganicText::setupCallbacks() {
 	// Font listeners
 	e_FontPath = fontPath.newListener([this](string & s) { reloadFont(); });
-	e_FontSize = fontSize.newListener([this](float & f) { reloadFont(); });
-
+	e_vFontSize = fontSize.newListener([this](float & f) { reloadFont(); });
+	e_letterSpacing = letterSpacing.newListener([this](float & f) { reloadFont(); });
+//	e_heightLine = heightLine.newListener([this](float & f) { reloadFont(); });
+	e_vResetFont=vResetFont.newListener([this](void) { resetFonts(); });
+	
 	// Density listeners
 	e_DensitySpacing = densitySpacing.newListener([this](float & v) { refreshPointsString(); });
 	e_DensityAmount = densityAmount.newListener([this](float & v) { refreshPointsString(); });
@@ -230,7 +249,7 @@ void OrganicText::setupCallbacks() {
 	e_ResetGlobalColor = resetGlobalColors.newListener([this](void) { resetGlobalColorParams(); });
 	e_ResetAnimation = resetAnimation.newListener([this](void) { resetAnimationParams(); });
 	e_ResetConnection = resetConnection.newListener([this](void) { resetConnectionParams(); });
-	e_ResetAll = resetAll.newListener([this](void) { resetAllParams(); });
+	e_vResetAll = vResetAll.newListener([this](void) { resetAllParams(); });
 
 	// Random listeners
 	e_RandomDensity = randomDensity.newListener([this](void) { randomizeDensityParams(); });
@@ -242,17 +261,40 @@ void OrganicText::setupCallbacks() {
 }
 
 //--------------------------------------------------------------
+void OrganicText::refreshGui(ofxPanel & ui) {
+	ui.getGroup(paramsFont.getName()).minimizeAll();
+	ui.getGroup(paramsDensity.getName()).minimizeAll();
+	ui.getGroup(paramsShape.getName()).minimizeAll();
+	ui.getGroup(paramsColorModes.getName()).minimizeAll();
+	ui.getGroup(paramsColors.getName()).minimizeAll();
+	ui.getGroup(paramsAnim.getName()).minimizeAll();
+	ui.getGroup(paramsConnections.getName()).minimizeAll();
+	ui.minimizeAll();
+}
+
+//--------------------------------------------------------------
+void OrganicText::refreshGui(ofxGuiGroup & g){
+	g.getGroup(paramsDensity.getName()).minimizeAll();
+	g.getGroup(paramsShape.getName()).minimizeAll();
+	g.getGroup(paramsColorModes.getName()).minimizeAll();
+	g.getGroup(paramsColors.getName()).minimizeAll();
+	g.getGroup(paramsAnim.getName()).minimizeAll();
+	g.getGroup(paramsConnections.getName()).minimizeAll();
+	g.minimizeAll();
+}
+
+////--------------------------------------------------------------
+//ofxGuiGroup & OrganicText::getGroupGui(){
+//	return gui.getGroup(paramsPreset.getName());
+//}
+
+//--------------------------------------------------------------
 void OrganicText::setupGui() {
 	// Setup GUI
 	gui.setup(parameters);
-	gui.getGroup(paramsFont.getName()).minimizeAll();
-	gui.getGroup(paramsDensity.getName()).minimizeAll();
-	gui.getGroup(paramsShape.getName()).minimizeAll();
-	gui.getGroup(paramsColorModes.getName()).minimizeAll();
-	gui.getGroup(paramsColors.getName()).minimizeAll();
-	gui.getGroup(paramsAnim.getName()).minimizeAll();
-	gui.getGroup(paramsConnections.getName()).minimizeAll();
-	gui.minimizeAll();
+	
+	//TODO
+//	refreshGui(&gui);
 }
 
 //--------------------------------------------------------------
@@ -291,6 +333,20 @@ void OrganicText::setup() {
 void OrganicText::reloadFont() {
 	bool success = font.load(fontPath.get(), fontSize.get(), false, false, true);
 
+	//https://forum.openframeworks.cc/t/calculate-letter-spacing-for-oftruetypefont-setletterspacing/42897/5?u=moebiussurfing
+	font.setLetterSpacing(letterSpacing);
+	font.setSpaceSize(font.getSpaceSize() * letterSpacing);
+
+	// letterSpacing
+	const float spMin = 0.2f;
+	const float spMax = 4.f;
+	float sp = 1.f;
+	if (letterSpacing < 0)
+		sp = ofMap(letterSpacing, 0, -1, 1, spMin);
+	else if (letterSpacing > 0)
+		sp = ofMap(letterSpacing, 0, 1, 1, spMax);
+	font.setLetterSpacing(sp);
+	
 	if (success) {
 		ofLogNotice("OrganicText") << "Font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";
 		refreshPointsString();
@@ -311,12 +367,9 @@ void OrganicText::update() {
 		float normalizedDt = dt / (1.0f / targetFPS);
 		t += BASE_TIME_STEP * animSpeed.get() * normalizedDt;
 	}
-
+	
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
-
-	string wt = ("FPS: " + ofToString(fps, 0) + " [" + ofToString(targetFPS, 0) + "] " + ofToString(frameTime, 0) + "ms");
-	ofSetWindowTitle(wt);
 }
 
 //--------------------------------------------------------------
@@ -613,7 +666,9 @@ void OrganicText::drawConnections() const {
 
 	// Reset cached count
 	cachedConnectionCount = 0;
-
+	ofPushStyle();
+	ofSetLineWidth(connectLineWidth);
+	
 	for (size_t i = 0; i < pointsString.size(); i += skipFactor) {
 		float phase1 = t + 0.123f * static_cast<float>(i);
 		vec2 offset1 = getAnimatedOffset(static_cast<int>(i), phase1);
@@ -641,6 +696,8 @@ void OrganicText::drawConnections() const {
 			}
 		}
 	}
+	
+	ofPopStyle();
 }
 
 //--
@@ -651,7 +708,7 @@ void OrganicText::drawDebug() const {
 
 	// Smooth alpha blinking using sine wave
 	float t = ofGetElapsedTimef();             // Elapsed time in seconds
-	float speed = 1.0f;                        // Blink speed (cycles per second)
+	float speed = 3.0f;                        // Blink speed (cycles per second)
 	float amax =150;//Sset max alpha here
 	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * amax;
 	// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
@@ -685,25 +742,25 @@ void OrganicText::drawDebug() const {
 		ofNoFill();
 		ofSetLineWidth(3);
 		ofDrawRectangle(minP.x, minP.y, maxP.x - minP.x, maxP.y - minP.y);
-#if 0
-		// Dimensions text
-		ofDrawBitmapStringHighlight(
-			"W:" + ofToString(maxP.x - minP.x, 0) + " H:" + ofToString(maxP.y - minP.y, 0),
-			minP.x, minP.y - 20,
-			ofColor(255, 0, 255,static_cast<int>(alpha)),
-			ofColor(0, 0, 0));
-#endif
+//#if 0
+//		// Dimensions text
+//		ofDrawBitmapStringHighlight(
+//			"W:" + ofToString(maxP.x - minP.x, 0) + " H:" + ofToString(maxP.y - minP.y, 0),
+//			minP.x, minP.y - 20,
+//			ofColor(255, 0, 255,static_cast<int>(alpha)),
+//			ofColor(0, 0, 0));
+//#endif
 	}
-#if 0
-	// Show normalized densityMinGap mapped value
-	float fontScale = fontSize.get() / 150.0f;
-	float minGapMapped = ofMap(densityMinGap.get(), 0, 1, DENSITY_MIN_SPACING_MIN, DENSITY_MIN_SPACING_MAX, true) * fontScale;
-	ofDrawBitmapStringHighlight(
-		"MinGap: " + ofToString(densityMinGap.get(), 2) + " -> " + ofToString(minGapMapped, 1) + "px",
-		textCenter.x - 100, textCenter.y + fontSize.get()*0.65f,
-		ofColor(255, 0, 255,static_cast<int>(alpha)),
-		ofColor(0, 0, 0));
-#endif
+//#if 0
+//	// Show normalized densityMinGap mapped value
+//	float fontScale = fontSize.get() / 150.0f;
+//	float minGapMapped = ofMap(densityMinGap.get(), 0, 1, DENSITY_MIN_SPACING_MIN, DENSITY_MIN_SPACING_MAX, true) * fontScale;
+//	ofDrawBitmapStringHighlight(
+//		"MinGap: " + ofToString(densityMinGap.get(), 2) + " -> " + ofToString(minGapMapped, 1) + "px",
+//		textCenter.x - 100, textCenter.y + fontSize.get()*0.65f,
+//		ofColor(255, 0, 255,static_cast<int>(alpha)),
+//		ofColor(0, 0, 0));
+//#endif
 	ofPopStyle();
 }
 
@@ -833,6 +890,9 @@ void OrganicText::draw() {
 
 	// Layer 2: Trails
 	if (bDrawTrails) {
+		ofPushStyle();
+		ofSetLineWidth(trailLineWidth);
+		
 		for (size_t i = 0; i < pointTrails.size(); i++) {
 			for (size_t j = 1; j < pointTrails[i].size(); j++) {
 				float fadeAmount = pow(trailFade.get(), static_cast<float>(j));
@@ -842,6 +902,8 @@ void OrganicText::draw() {
 				ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
 			}
 		}
+		
+		ofPopStyle();
 	}
 
 	// Layer 3: Shapes
@@ -879,8 +941,13 @@ void OrganicText::draw() {
 	if (bDrawOutline) {
 		ofPushStyle();
 		ofNoFill();
-		ofSetColor(colorOutline.get());
-		ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
+		if (bDebugDraw) {ofSetColor(255, 0, 255,255);
+			ofSetLineWidth(2.f);
+		}
+		else{
+			ofSetColor(colorOutline.get());
+			ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
+		}
 		font.drawStringAsShapes(sText, 0, 0);
 		ofPopStyle();
 	}
@@ -891,10 +958,15 @@ void OrganicText::draw() {
 	}
 
 	ofPopMatrix();
+}
 
+//--------------------------------------------------------------
+void OrganicText::drawGui() {
+	if(!bGui) return;
+	
 	// UI overlays
 	gui.draw();
-
+	
 	if (bDebugDrawInfo) {
 		drawDebugInfo();
 	}
@@ -902,20 +974,15 @@ void OrganicText::draw() {
 
 //--------------------------------------------------------------
 void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
+	if(!bKeys)return;
+	
 	const int key = eventArgs.key;
-	//bool mod_CMD = eventArgs.hasModifier(OF_KEY_COMMAND);
-	//bool mod_CTRL = eventArgs.hasModifier(OF_KEY_CONTROL);
-	//bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
-
-	if (key >= '0' && key <= '9') {
-		loadPreset(key - '0');
-	}
 
 	// else if (key >= '1' && key <= '5' && mod_SHIFT) {
 	// 	shapeType.set(key - '1');
 	// }
 	
-	else if (key == 'c' || key == 'C') {
+	if (key == 'c' || key == 'C') {
 		colorMode.set((colorMode.get() + 1) % 5);
 	} else if (key == 'a' || key == 'A') {
 		animationMode.set((animationMode.get() + 1) % 5);
@@ -945,9 +1012,9 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 		bDrawShapesFill.set(!bDrawShapesFill.get());
 	}
 	
-	else if (key == 'D') {
+	else if (key == 'd') {
 		bDebugDraw.set(!bDebugDraw.get());
-	} else if (key == 'd') {
+	} else if (key == 'D') {
 		bDebugDrawInfo.set(!bDebugDrawInfo.get());
 	} else if (key == 'b' || key == 'B') {
 		static bool darkBg = true;
@@ -974,7 +1041,6 @@ void OrganicText::saveSettings() {
 	ofSerialize(settings, parameters);
 	ofSavePrettyJson(pathSettings, settings);
 	ofLogNotice("OrganicText") << "Settings saved";
-	// ofLogNotice("OrganicText") << settings;
 }
 
 //--------------------------------------------------------------
@@ -999,9 +1065,19 @@ void OrganicText::resetAllParams() {
 	resetGlobalColorParams();
 	resetAnimationParams();
 	resetConnectionParams();
-
+	resetFonts();
+	
+	zoomGlobal.set(0.f);
 	t = 0.0f;
+	
 	refreshPointsString();
+}
+
+//--------------------------------------------------------------
+void OrganicText::resetFonts() {
+	fontPath.set("NotoSansMono-Regular.ttf");
+	fontSize.set(150);
+	letterSpacing.set(0);
 }
 
 void OrganicText::resetDensityParams() {
@@ -1048,10 +1124,12 @@ void OrganicText::resetAnimationParams() {
 void OrganicText::resetConnectionParams() {
 	bDrawConnections.set(false);
 	connectDistance.set(30.0f);
+	connectLineWidth.set(1.5f);
 	connectAlpha.set(100.0f);
 	connectQuality.set(0.5f);
 	bConnectNearOnly.set(true);
 	bDrawTrails.set(false);
+	trailLineWidth.set(1.5f);
 	trailLength.set(10);
 	trailFade.set(0.9f);
 }
@@ -1120,13 +1198,6 @@ void OrganicText::updateAnimationModeName(int &) {
 	const char * names[] = { "Noise", "Wave", "Spiral", "Pulse", "Orbit" };
 	animationModeName.set(names[(int)ofClamp(animationMode.get(), 0, 4)]);
 }
-
-//--------------------------------------------------------------
-void OrganicText::loadPreset(int presetNumber) {
-	ofLogNotice("OrganicText") << "Loading preset " << presetNumber;
-	OrganicTextPresets::loadPreset(this, presetNumber);
-}
-
 
 //--------------------------------------------------------------
 void OrganicText::exit() {
