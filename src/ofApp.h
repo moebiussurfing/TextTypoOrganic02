@@ -5,9 +5,14 @@
  - mouse interact/dist
  - same help box styles black
  - fix gui groups collappse. collapse fonts 
- - lock ui right
- - fix save debug
- - set ofxgui style
+ - lock ui right + help left
+ - fix save debug (auto save ok)
+ - set ofxgui style mini
+ - refresh trails callback
+ - add define remove preset 
+
+ - browse presets ?
+ - smooth transients ?
  
  */
 
