@@ -1,13 +1,21 @@
-#pragma once
+﻿#pragma once
 
 #include "ofMain.h"
+
+// comment to use internal preset params handling
+#define SURFING_USE_EXTERNAL_PRESET_MANAGER
+
+constexpr const char * ORGANICTEXT = "ofWorks";
 
 #include "ofxGui.h"
 using namespace glm;
 
-constexpr const char * ORGANICTEXT = "ofWorks";
-constexpr float MAX_RADIUS = 50.0f;
-constexpr float MIN_RADIUS = 0.0f;
+//TODO: when not using glm lib as in ofWorks...
+#ifndef TWO_PI
+	constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
+#endif
+
+
 constexpr float ZOOM_MAX_X = 3.0f;
 
 // ============================================================================
@@ -52,6 +60,8 @@ constexpr int CONNECTIONS_MAX_PER_POINT_FAR = 8;
 constexpr float TRAIL_MAX_ALPHA = 180.0f;
 
 // Shape Constants
+constexpr float SHAPE_MAX_RADIUS = 50.0f;
+constexpr float SHAPE_MIN_RADIUS = 0.0f;
 constexpr float SHAPE_ROTATION_SPEED = 0.2f;
 constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
@@ -59,8 +69,8 @@ constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
 
-constexpr float MAX_LINE_WIDTH_CONNECTIONS = 3.F;
-constexpr float MAX_LINE_WIDTH_TRAIL = 5.F;
+constexpr float MAX_LINE_WIDTH_CONNECTIONS = 3.f;
+constexpr float MAX_LINE_WIDTH_TRAIL = 5.f;
 
 // ============================================================================
 
@@ -94,38 +104,33 @@ public:
 	OrganicText();
 	~OrganicText();
 
+	// Must set before setup()
+	void setTargetFPS(float fps);
+
 	void setup();
-	void setup(float fps) {
-		targetFPS = fps;
-		setup();
-	}
+	void setup(float fps);
+
 private:
-	void setupGui();
 	void setupParams();
 	void setupCallbacks();
+	void setupGui();
+	void setupScene();
+	void startup();
+
 public:
 	void draw();
-	
 	void drawGui();
-	ofParameter<bool> bGui { "OrganicText", true };
-	ofParameter<bool> bKeys { "Keys", false };
-	
+
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
-
-	// Configuration before setup()
-	void setTargetFPS(float fps) { targetFPS = fps; }
 
 private:
 	void update();
 	void update(ofEventArgs & args);
 
-private:
-	string pathSettings = "OrganicText.json";
-	float targetFPS = 120.0f;
-
 public:
-	ofParameterGroup parameters;
+	ofParameterGroup parameters; // for preset usage
+
 	ofParameterGroup paramsFont;
 	ofParameterGroup paramsPreset;
 	ofParameterGroup paramsShape;
@@ -134,15 +139,17 @@ public:
 	ofParameterGroup paramsColors;
 	ofParameterGroup paramsAnim;
 	ofParameterGroup paramsConnections;
-	ofParameterGroup paramsSettings;
+
+	ofParameterGroup paramsSessionSettings; // for session status
+	ofParameterGroup paramsInternal; // some internal settings
 
 	// Basic parameters
+	ofParameter<bool> bHelp;
 	ofParameter<bool> bDebugDraw;
-	ofParameter<bool> bDebugDrawInfo;
+	ofParameter<bool> bDrawOutline;
 	ofParameter<bool> bDrawShapesFill;
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
-	ofParameter<bool> bDrawOutline;
 	ofParameter<float> zoomGlobal;
 	ofParameter<string> sText;
 
@@ -151,17 +158,17 @@ public:
 	ofParameter<float> fontSize;
 	ofParameter<float> letterSpacing;
 	ofParameter<void> vResetFont;
-	
+
 	// Density parameters
-	ofParameter<void> resetDensity;
-	ofParameter<void> randomDensity;
+	ofParameter<void> vResetDensity;
+	ofParameter<void> vRandomDensity;
 	ofParameter<float> densitySpacing;
 	ofParameter<float> densityAmount;
 	ofParameter<float> densityMinGap;
 
 	// Shape parameters
-	ofParameter<void> resetShape;
-	ofParameter<void> randomShape;
+	ofParameter<void> vResetShape;
+	ofParameter<void> vRandomShape;
 	ofParameter<int> shapeType;
 	ofParameter<string> shapeTypeName;
 	ofParameter<float> shapeSize;
@@ -170,17 +177,17 @@ public:
 	ofParameter<float> shapeRotation;
 
 	// Color parameters
-	ofParameter<void> resetColor;
-	ofParameter<void> randomColor;
+	ofParameter<void> vResetColor;
+	ofParameter<void> vRandomColor;
 	ofParameter<int> colorMode;
 	ofParameter<string> colorModeName;
 	ofParameter<float> colorSpeed;
-	ofParameter<float> colorMixFactor; // Renamed from colorMixFactor
+	ofParameter<float> colorMixFactor;
 	ofParameter<bool> bColorByDistance;
 
 	// Colors parameters
-	ofParameter<void> resetGlobalColors;
-	ofParameter<void> randomGlobalColors;
+	ofParameter<void> vResetGlobalColors;
+	ofParameter<void> vRandomGlobalColors;
 	ofParameter<ofColor> color1;
 	ofParameter<ofColor> color2;
 	ofParameter<ofColor> color3;
@@ -189,8 +196,8 @@ public:
 	ofParameter<ofColor> colorTrails;
 
 	// Animation parameters
-	ofParameter<void> resetAnimation;
-	ofParameter<void> randomAnimation;
+	ofParameter<void> vResetAnimation;
+	ofParameter<void> vRandomAnimation;
 	ofParameter<int> animationMode;
 	ofParameter<string> animationModeName;
 	ofParameter<float> animSpeed;
@@ -201,8 +208,8 @@ public:
 	ofParameter<float> animPulseIntensity;
 
 	// Connection parameters
-	ofParameter<void> resetConnection;
-	ofParameter<void> randomConnection;
+	ofParameter<void> vResetConnection;
+	ofParameter<void> vRandomConnection;
 	ofParameter<bool> bDrawConnections;
 	ofParameter<float> connectDistance;
 	ofParameter<float> connectLineWidth;
@@ -218,32 +225,45 @@ public:
 
 	// Global controls
 	ofParameter<void> vResetAll;
-	
+
 	// Settings
 	ofParameter<bool> bAutosave;
 	ofParameter<void> vLoadSettigs;
 	ofParameter<void> vSaveSettigs;
 
+	ofParameter<bool> bGui { "OrganicText", true };
+	ofParameter<bool> bKeys { "Keys", false };
+
 private:
 	// Event listeners
-	ofEventListener e_FontPath, e_vFontSize,e_letterSpacing, e_vResetFont;//,e_heightLine;
+	ofEventListener e_FontPath, e_vFontSize, e_letterSpacing, e_vResetFont;
 	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
-	ofEventListener e_ResetDensity, e_ResetShape, e_ResetColor, e_ResetGlobalColor, e_ResetAnimation, e_ResetConnection, e_vResetAll;
-	ofEventListener e_RandomDensity, e_RandomShape, e_RandomColor, e_RandomGlobalColor, e_RandomAnimation, e_RandomConnection;
+	ofEventListener e_vResetDensity, e_vResetShape, e_vResetColor;
+	ofEventListener e_vResetGlobalColor, e_vResetAnimation, e_vResetConnection, e_vResetAll;
+	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor;
+	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
-	
+
 	// Functions
 	vector<vec2> sampleStringPoints(const string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
+
 	void drawConnections() const;
+	void initTrails();
 	void updateTrails();
+
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
+
 	void drawDebug() const;
-	void drawDebugInfo() const;
+	ofColor colorDebug;
+
+	void drawHelp() const;
 
 	// Font management
 	void reloadFont();
+	bool bFlagReloadFont = false; // avoids multiple calls in a single frame
+	void flagReloadFont();
 
 public:
 	void saveSettings();
@@ -263,7 +283,7 @@ public:
 	void resetAnimationParams();
 	void resetConnectionParams();
 	void resetFonts();
-	void resetAllParams();
+	void resetAll();
 
 	// Randomize functions
 	void randomizeDensityParams();
@@ -284,16 +304,26 @@ private:
 	void refreshPointsString();
 
 	// Fps
-	float fps;
 	float frameTime;
+	float fps;
+	float targetFPS = 120.0f;
+
+	string pathSettings = "OrganicText.json";
 
 	// Cached connection count for debug display
 	mutable int cachedConnectionCount = 0;
 
 public:
 	ofxPanel gui;
-	
-	ofxGuiGroup & getGroupGui();
-	void refreshGui(ofxPanel & ui);
-	void refreshGui(ofxGuiGroup & g);
+
+	// collapse groups for preset settings (if included when not using external preset manager)
+	void refreshGuiPanel(ofxPanel & ui);
+	void refreshGuiGroup(ofxGuiGroup & g);
+
+private:
+	std::string sHelp;
+
+	void windowResized(ofResizeEventArgs & resize); // auto call when window resized
+
+	//ofxGuiGroup & getGroupGui();
 };
