@@ -1,13 +1,14 @@
 #pragma once
 
 #include "ofMain.h"
+
 #include "ofxGui.h"
 using namespace glm;
 
 constexpr const char * ORGANICTEXT = "ofWorks";
 constexpr float MAX_RADIUS = 50.0f;
 constexpr float MIN_RADIUS = 0.0f;
-constexpr float ZOOM_MAX_X = 4.0f;
+constexpr float ZOOM_MAX_X = 3.0f;
 
 // ============================================================================
 // DRAWING & ANIMATION CONSTANTS
@@ -149,23 +150,22 @@ public:
 	ofParameter<string> fontPath;
 	ofParameter<float> fontSize;
 	ofParameter<float> letterSpacing;
-//	ofParameter<float> heightLine;
 	ofParameter<void> vResetFont;
 	
 	// Density parameters
 	ofParameter<void> resetDensity;
 	ofParameter<void> randomDensity;
-	ofParameter<float> densitySpacing; // Renamed from densityPointsSpacing
-	ofParameter<float> densityAmount; // Renamed from densityPoints
-	ofParameter<float> densityMinGap; // Renamed from densityMinSpacing
+	ofParameter<float> densitySpacing;
+	ofParameter<float> densityAmount;
+	ofParameter<float> densityMinGap;
 
 	// Shape parameters
 	ofParameter<void> resetShape;
 	ofParameter<void> randomShape;
 	ofParameter<int> shapeType;
 	ofParameter<string> shapeTypeName;
-	ofParameter<float> shapeSize; // Renamed from shapeSize
-	ofParameter<float> shapeSizeMin; // Renamed from shapeSizeMin
+	ofParameter<float> shapeSize;
+	ofParameter<float> shapeSizeMin;
 	ofParameter<float> shapeRatio;
 	ofParameter<float> shapeRotation;
 
@@ -195,10 +195,10 @@ public:
 	ofParameter<string> animationModeName;
 	ofParameter<float> animSpeed;
 	ofParameter<float> animPower;
-	ofParameter<float> animWaveFreq; // Renamed from animWaveFrequency
+	ofParameter<float> animWaveFreq;
 	ofParameter<float> animIntensity;
 	ofParameter<float> animSpiral;
-	ofParameter<float> animPulseIntensity; // Renamed from animPulseIntensity
+	ofParameter<float> animPulseIntensity;
 
 	// Connection parameters
 	ofParameter<void> resetConnection;

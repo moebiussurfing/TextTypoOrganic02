@@ -47,6 +47,7 @@ public:
 	ofParameter<void> vResetWindow{"Reset Window"};
 	ofEventListener e_vResetWindow;
 	void resetWindow();
+	void resetWindowFullScreen();
 	
 	float fps;
 	float frameTime;

@@ -708,7 +708,7 @@ void OrganicText::drawDebug() const {
 
 	// Smooth alpha blinking using sine wave
 	float t = ofGetElapsedTimef();             // Elapsed time in seconds
-	float speed = 3.0f;                        // Blink speed (cycles per second)
+	float speed = 2.0f;                        // Blink speed (cycles per second)
 	float amax =150;//Sset max alpha here
 	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * amax;
 	// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
@@ -766,6 +766,7 @@ void OrganicText::drawDebug() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawDebugInfo() const {
+	ofPushMatrix();
 	ofPushStyle();
 
 	int totalPoints = pointsString.size();
@@ -827,19 +828,22 @@ void OrganicText::drawDebugInfo() const {
 	float boxWidth = 240;
 	float boxHeight = lines.size() * lineHeight + padding * 2;
 
-	float boxX = ofGetWidth() - boxWidth - 15;
-	float boxY = 15;
+	// float boxX = ofGetWidth() - boxWidth - 15;
+	// float boxY = 15;
+
+float boxX=gui.getPosition().x-200;
+float boxY=gui.getPosition().y - 10;
 
 	// Background
 	ofSetColor(0, 0, 0, 220);
 	ofFill();
 	ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
 
-	// Border
-	ofSetColor(perfColor);
-	ofNoFill();
-	ofSetLineWidth(2);
-	ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
+	// // Border
+	// ofSetColor(perfColor);
+	// ofNoFill();
+	// ofSetLineWidth(2);
+	// ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
 
 	// Text
 	for (size_t i = 0; i < lines.size(); i++) {
@@ -864,6 +868,7 @@ void OrganicText::drawDebugInfo() const {
 	}
 
 	ofPopStyle();
+	ofPopMatrix();
 }
 
 //--

@@ -10,7 +10,7 @@ void ofApp::setup(){
 	float fps = 60;
 	ofSetFrameRate(fps);
 	
-	// text organic
+	// text typo organic
 	t.setup(fps);
 	t.gui.setPosition(ofGetWidth() - t.gui.getWidth() - 5, 5);
 	
@@ -28,14 +28,6 @@ void ofApp::setup(){
 }
 
 //--------------------------------------------------------------
-void ofApp::resetWindow(){ // set window size and centered
-	const int w = OFWORKS_APP_WIDTH;
-	const int h = OFWORKS_APP_HEIGHT;
-	ofSetWindowShape(w, h);
-	ofSetWindowPosition(ofGetScreenWidth()*0.5f-w*0.5f,ofGetScreenHeight()*0.5f-h*0.5f);
-}
-
-//--------------------------------------------------------------
 void ofApp::update(){
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
@@ -49,7 +41,7 @@ void ofApp::update(){
 void ofApp::draw(){
 	t.draw();
 	
-	if(!bGui) return;
+	// if(!bGui) return;
 	t.drawGui();
 	p.drawGui();
 }
@@ -60,6 +52,21 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs){
 	
 	if(eventArgs.key == 'g') bGui=!bGui;
 	if(eventArgs.key == 'w') resetWindow();
+	if(eventArgs.key == 'W') resetWindowFullScreen();
+}
+
+//--------------------------------------------------------------
+void ofApp::resetWindow(){ // set window size and centered
+	const int w = OFWORKS_APP_WIDTH;
+	const int h = OFWORKS_APP_HEIGHT;
+	ofSetWindowShape(w, h);
+	ofSetWindowPosition(ofGetScreenWidth()*0.5f-w*0.5f,ofGetScreenHeight()*0.5f-h*0.5f);
+}
+
+//--------------------------------------------------------------
+void ofApp::resetWindowFullScreen(){ // set window full screen
+	ofSetWindowShape(ofGetScreenWidth(),ofGetScreenHeight());
+	ofSetWindowPosition(0,0);
 }
 
 //--------------------------------------------------------------
