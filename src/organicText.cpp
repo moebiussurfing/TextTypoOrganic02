@@ -102,7 +102,7 @@ void OrganicText::setupParams() {
 	letterSpacing.set("Spacing", 0, -1, 1);
 	vResetFont.set("Reset");
 
-	// Density group (simplified names)
+	// Density group
 	vResetDensity.set("Reset");
 	vRandomDensity.set("Random");
 	densitySpacing.set("Spacing", 0.2, 0.05, 1);
@@ -399,6 +399,8 @@ void OrganicText::reloadFont() {
 
 	refreshPointsString();
 }
+
+//--
 
 //--------------------------------------------------------------
 void OrganicText::update(ofEventArgs & args) {
@@ -926,6 +928,8 @@ void OrganicText::drawGui() {
 	}
 }
 
+//--
+
 //--------------------------------------------------------------
 void OrganicText::drawHelp() const {
 	ofPushMatrix();
@@ -1041,21 +1045,29 @@ void OrganicText::drawHelp() const {
 
 //--------------------------------------------------------------
 void OrganicText::saveSettings() {
+	ofLogNotice("OrganicText") << "saveSettings()";
+
 	ofJson settings;
 	ofSerialize(settings, parameters);
-	ofSavePrettyJson(pathSettings, settings);
-	ofLogNotice("OrganicText") << "Settings saved";
+	bool b = ofSavePrettyJson(pathSettings, settings);
+	if (b)
+		ofLogNotice("OrganicText") << "Settings saved";
+	else
+		ofLogError("OrganicText") << "Unable to save settings!";
 }
 
 //--------------------------------------------------------------
 void OrganicText::loadSettings() {
+	ofLogNotice("OrganicText") << "loadSettings()";
+
 	ofFile file(pathSettings);
 	if (file.exists()) {
 		ofJson settings = ofLoadJson(pathSettings);
 		ofDeserialize(settings, parameters);
 		refreshPointsString();
 		ofLogNotice("OrganicText") << "Settings loaded";
-	}
+	} else
+		ofLogWarning("OrganicText") << "Unable to load settings file or not found!";
 }
 
 //--------------------------------------------------------------
@@ -1107,6 +1119,8 @@ void OrganicText::refreshGuiGroup(ofxGuiGroup & g) {
 void OrganicText::exit() {
 	if (bAutosave) saveSettings();
 }
+
+//--
 
 //--------------------------------------------------------------
 // RESET FUNCTIONS
@@ -1233,6 +1247,8 @@ void OrganicText::randomizeConnectionParams() {
 	bConnectNearOnly.set(ofRandom(1.0f) > 0.5f);
 	bDrawConnections.set(ofRandom(1.0f) > 0.3f);
 }
+
+//--
 
 //--------------------------------------------------------------
 void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {

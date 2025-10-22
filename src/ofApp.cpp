@@ -18,7 +18,7 @@ void ofApp::setup() {
 	p.setup(t.paramsPreset);
 	p.gui.add(vResetWindow);
 	p.gui.add(t.bGui);
-
+	
 	//TODO
 	// refresh ui
 	t.refreshGuiPanel(p.guiParams);
