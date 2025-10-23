@@ -11,9 +11,7 @@ An enhanced **openFrameworks** application that creates organic, animated visual
 
 ## ✨ Quick Start
 
-**New to TextTypoOrganic02?** → Start with [`docs/User/Quick-Start.md`](docs/User/Quick-Start.md) for a 30-second introduction.
-
-See the [User Manual](docs/User/User-Manual.md) for all keyboard shortcuts and GUI parameters.
+**New to TextTypoOrganic02?** → Start with [Quick-Start.md](docs/User/Quick-Start.md) for a 30-second introduction.
 
 ## 🤖 For AI Assistants & Coding Agents
 
@@ -43,7 +41,6 @@ See the [User Manual](docs/User/User-Manual.md) for all keyboard shortcuts and G
 
 ### 📖 Project History
 - **[Changelog](docs/CHANGELOG.md)** - Major milestones and changes
-- **[Major Milestones](docs/Archive/Major-Milestones.md)** - Project evolution history
 
 ### 👤 For Users
 - **[Quick Start Guide](docs/User/Quick-Start.md)** - Get started in 30 seconds
