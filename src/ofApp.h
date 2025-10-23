@@ -1,23 +1,17 @@
 /*
 
-	BUG
-	- startup loading fails some trail.
-		connections amount..
-	- min gap does nothing ?
- 
 	TODO
 
 	- gradient bg
-	- player next presets timed
-		browse presets ?
 	- smooth transients ?
 		new smooth class
+	- player next presets timed
+		browse presets ?
 
 	- fix tweak ranges
 		check not normalized 0-1 all params ?
 	- mouse interact/dist ?
-		radius distort
-		next prev preset
+		radius distort. debug affected points
 	- zoom lines ratio ?
 		related to fullscreen/screen size?
 		ofCamera ?

@@ -55,9 +55,13 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	const auto k = eventArgs.key;
 
-	if (k == 'w') resetWindowCustom();
-	if (k == 'W') resetWindowFullScreen();
-	if ((k == 'd') || (k == 'd'))
+	if (k == 'w') {
+		resetWindowCustom();
+		if (p.bGui) p.bGui = false; // user workflow
+	} else if (k == 'W') {
+		resetWindowFullScreen();
+		//if (p.bGui) p.bGui = false;
+	} else if ((k == 'd') || (k == 'd'))
 		if (!t.bKeys) t.bDebug = !t.bDebug;
 }
 

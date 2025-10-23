@@ -169,7 +169,7 @@ void OrganicText::setupParams() {
 	bDrawConnections.set("Draw Connections", false);
 	connectDistance.set("Distance", 30, 5, 100);
 	connectLineWidth.set("Line Width", 1.0f, 0.1f, CONNECTIONS_MAX_LINE_WIDTH);
-	connectAlpha.set("Alpha", 100, 0, 255);
+	connectAlpha.set("Alpha", 0.5, 0, 1);
 	bConnectNearOnly.set("Near Only", true);
 	connectQuality.set("Quality", 1.0, 0.1, 1.0);
 
@@ -265,9 +265,9 @@ void OrganicText::setupParams() {
 	paramsTrails.add(vRandomConnection);
 
 	paramsSessionSettings.setName("Session Settings");
-	paramsSessionSettings.add(bAutosave);
 	paramsSessionSettings.add(vLoadSettigs);
 	paramsSessionSettings.add(vSaveSettigs);
+	paramsSessionSettings.add(bAutosave);
 
 	paramsInternal.setName("Internal");
 	paramsInternal.add(bGui);
@@ -799,7 +799,10 @@ void OrganicText::drawConnections() const {
 			float dist = glm::distance(pos1, pos2);
 
 			if (dist < maxDist) {
-				float alpha = ofMap(dist, 0, maxDist, connectAlpha.get(), 0, true);
+				float alpha = ofMap(dist, 0, maxDist, 255, 0, true);
+				float acolor = ofMap(colorConnection.get().a, 0, 255, 0.f, 1.f, true);
+				float o = 2.f;//power
+				alpha = ofMap(alpha * (acolor * o * connectAlpha.get()), 0, 255, 0, 255, true);
 				ofSetColor(colorConnection.get(), alpha);
 				ofDrawLine(pos1, pos2);
 				connectionsDrawn++;
@@ -1305,7 +1308,7 @@ void OrganicText::resetConnectionParams() {
 	bDrawConnections.set(false);
 	connectDistance.set(30.0f);
 	connectLineWidth.set(1.5f);
-	connectAlpha.set(100.0f);
+	connectAlpha.set(0.5f);
 	connectQuality.set(0.5f);
 	bConnectNearOnly.set(true);
 	bDrawTrails.set(false);
