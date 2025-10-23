@@ -272,6 +272,8 @@ void OrganicText::setupParams() {
 	paramsInternal.setName("Internal");
 	paramsInternal.add(bGui);
 
+	//--
+
 	// Preset
 	paramsPreset.setName("OrganicText");
 	paramsPreset.add(bDrawShapes);
@@ -286,8 +288,11 @@ void OrganicText::setupParams() {
 	paramsPreset.add(paramsAnim);
 	paramsPreset.add(paramsConnections);
 	paramsPreset.add(paramsTrails);
+	paramsPreset.add(vRandomAll);
 	paramsPreset.add(vResetPreset);
 
+	//--
+	
 	// gui
 	parameters.setName("OrganicText");
 	parameters.add(sText);
@@ -307,7 +312,7 @@ void OrganicText::setupParams() {
 	parameters.add(paramsPreset);
 #endif
 
-	//parameters.add(vRandomAll); // not useful
+	parameters.add(vRandomAll); // not useful
 	parameters.add(vResetPreset);
 	parameters.add(vResetAll);
 }
