@@ -55,9 +55,15 @@ constexpr int CONNECTIONS_SEARCH_NEAR = 50;
 constexpr int CONNECTIONS_SEARCH_FAR = 100;
 constexpr int CONNECTIONS_MAX_PER_POINT_NEAR = 3;
 constexpr int CONNECTIONS_MAX_PER_POINT_FAR = 8;
+constexpr float CONNECTIONS_MAX_LINE_WIDTH = 3.f;
 
-// Trail Constants
-constexpr float TRAIL_MAX_ALPHA = 180.0f;
+// Trails Constants
+constexpr float TRAILS_ALPHA_MAX = 180.0f;
+constexpr float TRAILS_LINE_WIDTH_MAX = 5.f;
+constexpr float TRAILS_LENGTH_MIN = 3.f;
+constexpr float TRAILS_LENGTH_MAX = 50.f;
+constexpr float TRAILS_FADE_MIN = 0.85f;
+constexpr float TRAILS_FADE_MAX = 0.999f;
 
 // Shape Constants
 constexpr float SHAPE_MAX_RADIUS = 50.0f;
@@ -70,9 +76,6 @@ constexpr int DEBUG_MAX_ALPHA = 64;
 
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
-
-constexpr float MAX_LINE_WIDTH_CONNECTIONS = 3.f;
-constexpr float MAX_LINE_WIDTH_TRAIL = 5.f;
 
 // ============================================================================
 

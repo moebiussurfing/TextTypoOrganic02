@@ -154,16 +154,16 @@ void OrganicText::setupParams() {
 	vRandomConnection.set("Random");
 	bDrawConnections.set("Draw Connections", false);
 	connectDistance.set("Distance", 30, 5, 100);
-	connectLineWidth.set("Line Width", 1.0f, 0.1f, MAX_LINE_WIDTH_CONNECTIONS);
+	connectLineWidth.set("Line Width", 1.0f, 0.1f, CONNECTIONS_MAX_LINE_WIDTH);
 	connectAlpha.set("Alpha", 100, 0, 255);
 	bConnectNearOnly.set("Near Only", true);
 	connectQuality.set("Quality", 1.0, 0.1, 1.0);
 
 	// Trail
 	bDrawTrails.set("Draw Trails", false);
-	trailLength.set("Length", .5, 0, 1);
-	trailLineWidth.set("Line Width", 1.0f, 0.1f, MAX_LINE_WIDTH_TRAIL);
-	trailFade.set("Fade", 0.5, 0, 1);
+	trailLength.set("Length", 0.5f, 0, 1.f);
+	trailLineWidth.set("Line Width", 1.0f, 0.1f, TRAILS_LINE_WIDTH_MAX);
+	trailFade.set("Fade", 0.5f, 0, 1.f);
 
 	// Settings group
 	bAutosave.set("Autosave", false);
@@ -715,8 +715,8 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 void OrganicText::initTrails() {
 	pointTrails.clear();
 	pointTrails.resize(pointsString.size());
-	
-	int tl = (int) ofMap(trailLength.get(),0.f,1.f,3.f,50.f);
+
+	int tl = (int)ofMap(trailLength.get(), 0.f, 1.f, TRAILS_LENGTH_MIN, TRAILS_LENGTH_MAX, true);
 	for (size_t i = 0; i < pointsString.size(); i++) {
 		pointTrails[i].resize(tl);
 		for (int j = 0; j < tl; j++) {
@@ -878,12 +878,12 @@ void OrganicText::draw() {
 
 		ofPushStyle();
 		ofSetLineWidth(trailLineWidth);
-		float tf=ofMap(trailFade,0.f,1.f,0.85f,0.999f, true);
-		
+		float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
+
 		for (size_t i = 0; i < pointTrails.size(); i++) {
 			for (size_t j = 1; j < pointTrails[i].size(); j++) {
 				float fadeAmount = pow(tf, static_cast<float>(j));
-				float alpha = fadeAmount * TRAIL_MAX_ALPHA;
+				float alpha = fadeAmount * TRAILS_ALPHA_MAX;
 
 				ofSetColor(colorTrails.get(), alpha);
 				ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);

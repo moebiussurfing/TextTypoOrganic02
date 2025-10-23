@@ -28,15 +28,15 @@ void ofApp::update() {
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
+	// window title
+	std::string s1 = "";
+	if (t.bDebugDraw||!p.bGui) s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 	static std::string s2 = "";
 	if (p.isChangedIndex()) {
-		s2 = "\t\tPRESET #" + ofToString(p.getPresetIndex());
+		s2 = "PRESET #" + ofToString(p.getPresetIndex());
 	}
-	std::string s1 = "";
-	if (t.bDebugDraw||!p.bGui) s1 = "\t\t" + ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
-	string wt = ofToString(SURFING_APP_TITLE) + s1 + s2;
+	string wt = ofToString(SURFING_APP_TITLE) + "\t\t" + s1 + "\t\t" + s2;
 	ofSetWindowTitle(wt);
-
 }
 
 //--------------------------------------------------------------
