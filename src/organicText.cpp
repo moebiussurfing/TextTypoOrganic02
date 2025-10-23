@@ -241,12 +241,14 @@ void OrganicText::setupParams() {
 	paramsConnections.add(connectAlpha);
 	paramsConnections.add(connectQuality);
 	paramsConnections.add(bConnectNearOnly);
-	paramsConnections.add(bDrawTrails);
-	paramsConnections.add(trailLineWidth);
-	paramsConnections.add(trailLength);
-	paramsConnections.add(trailFade);
-	paramsConnections.add(vResetConnection);
-	paramsConnections.add(vRandomConnection);
+
+	paramsTrails.setName("Trails");
+	paramsTrails.add(bDrawTrails);
+	paramsTrails.add(trailLineWidth);
+	paramsTrails.add(trailLength);
+	paramsTrails.add(trailFade);
+	paramsTrails.add(vResetConnection);
+	paramsTrails.add(vRandomConnection);
 
 	paramsSessionSettings.setName("Session Settings");
 	paramsSessionSettings.add(bAutosave);
@@ -269,6 +271,7 @@ void OrganicText::setupParams() {
 	paramsPreset.add(paramsColorModes);
 	paramsPreset.add(paramsAnim);
 	paramsPreset.add(paramsConnections);
+	paramsPreset.add(paramsTrails);
 	paramsPreset.add(vResetPreset);
 
 	// gui

@@ -24,6 +24,7 @@ icon.rc
 *\addons\*
 enc_temp_folder\*
 *\enc_temp_folder\*
+enc_temp_folder/
 
 ## scripts
 # *.ps1

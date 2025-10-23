@@ -141,6 +141,7 @@ public:
 	ofParameterGroup paramsColors;
 	ofParameterGroup paramsAnim;
 	ofParameterGroup paramsConnections;
+	ofParameterGroup paramsTrails;
 
 	ofParameterGroup paramsSessionSettings; // for session status
 	ofParameterGroup paramsInternal; // some internal settings
