@@ -247,6 +247,7 @@ private:
 	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor, e_vRandomAll;
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
+	ofEventListener e_trailLength;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const string & s, float ds);

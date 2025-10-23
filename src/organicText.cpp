@@ -318,6 +318,8 @@ void OrganicText::setupCallbacks() {
 	colorMode.addListener(this, &OrganicText::updateColorModeName);
 	animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 
+	e_trailLength = trailLength.newListener([this](int & v) { initTrails(); });
+
 	//--
 
 	// Reset listeners
@@ -990,23 +992,25 @@ void OrganicText::drawHelp() const {
 	lines.push_back("Color:    " + colorModeName.get());
 	lines.push_back("Anim:     " + animationModeName.get());
 	lines.push_back("");
-	lines.push_back("KEY SHORTCUTS");
-	lines.push_back("Font:     " + ofToString(fontSize.get(), 0) + "px");
-	lines.push_back("");
-	lines.push_back("PARAMS");
-	lines.push_back("< >:      Zoom");
-	lines.push_back("UP/DOWN:  Anima Speed");
-	lines.push_back("+/-:      Point Density");
-	lines.push_back("");
-	lines.push_back("O:        Outline");
-	lines.push_back("F:        Shape Fill");
-	lines.push_back("L:        Connections");
-	lines.push_back("T:        Trails");
-	lines.push_back("B:        Background Color");
-	lines.push_back("");
-	lines.push_back("C:        Color Modes");
-	lines.push_back("A:        Animation Modes");
-	lines.push_back("R:        Reset all");
+	if (bKeys) {
+		lines.push_back("KEYS");
+		lines.push_back("Font:     " + ofToString(fontSize.get(), 0) + "px");
+		lines.push_back("");
+		lines.push_back("PARAMS");
+		lines.push_back("< >:      Zoom");
+		lines.push_back("UP/DOWN:  Anima Speed");
+		lines.push_back("+/-:      Point Density");
+		lines.push_back("");
+		lines.push_back("O:        Outline");
+		lines.push_back("F:        Shape Fill");
+		lines.push_back("L:        Connections");
+		lines.push_back("T:        Trails");
+		lines.push_back("B:        Background Color");
+		lines.push_back("");
+		lines.push_back("C:        Color Modes");
+		lines.push_back("A:        Animation Modes");
+		lines.push_back("R:        Reset all");
+	}
 
 	float lineHeight = 16;
 	float padding = 10;
