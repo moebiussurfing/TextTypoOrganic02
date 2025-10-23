@@ -2,25 +2,35 @@
 
 #include "ofMain.h"
 
-// comment to use internal preset params handling
-#define SURFING_USE_EXTERNAL_PRESET_MANAGER
+//----------------------------------------------------------------------------
 
+// OFAPP 
+
+// Window size
+constexpr float OFWORKS_APP_WIDTH = 1200;
+constexpr float OFWORKS_APP_HEIGHT = 550;
+
+// Default text
 constexpr const char * ORGANICTEXT = "ofWorks";
+
+//----------------------------------------------------------------------------
+
+//TODO: Comment to use internal preset params handling (instead of using an external preset manager)
+#define SURFING_USE_EXTERNAL_PRESET_MANAGER
 
 #include "ofxGui.h"
 using namespace glm;
 
-//TODO: when not using glm lib as in ofWorks...
+// ============================================================================
+// DRAWING & ANIMATION CONSTANTS
+// ============================================================================
+
+//TODO: when not using glm lib...
 #ifndef TWO_PI
 	constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
 #endif
 
-
-constexpr float ZOOM_MAX_X = 3.0f;
-
-// ============================================================================
-// DRAWING & ANIMATION CONSTANTS
-// ============================================================================
+constexpr float ZOOM_GLOBAL_MAX = 1.1f;
 
 // Density Constants
 constexpr float DENSITY_SPACING_MIN = 1.0f;
@@ -72,8 +82,8 @@ constexpr float SHAPE_ROTATION_SPEED = 0.2f;
 constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 
-constexpr int DEBUG_ALPHA_MAX = 128;
-constexpr int DEBUG_ALPHA_MIN_OFFSET = 50;
+constexpr int DEBUG_ALPHA_MAX = 120;
+constexpr int DEBUG_ALPHA_MIN_OFFSET = 40;
 constexpr float DEBUG_SPEED = 2.0f;
 
 // Outline Constants
@@ -136,7 +146,8 @@ private:
 	void update(ofEventArgs & args);
 
 public:
-	ofParameterGroup parameters; // for preset usage
+	ofParameterGroup parameters; // For gui usage
+	// Will include preset settings only when not using an external preset manager
 
 	ofParameterGroup paramsFont;
 	ofParameterGroup paramsPreset;
@@ -148,8 +159,8 @@ public:
 	ofParameterGroup paramsConnections;
 	ofParameterGroup paramsTrails;
 
-	ofParameterGroup paramsSessionSettings; // for session status
-	ofParameterGroup paramsInternal; // some internal settings
+	ofParameterGroup paramsSessionSettings; // For session status, not preset
+	ofParameterGroup paramsInternal; // Some internal settings
 
 	// Basic parameters
 	ofParameter<bool> bHelp;
@@ -159,10 +170,11 @@ public:
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
 	ofParameter<float> zoomGlobal;
-	ofParameter<string> sText;
+	ofParameter<bool> bAutoZoomGlobal;
+	ofParameter<std::string> sText;
 
 	// Font parameters
-	ofParameter<string> fontPath;
+	ofParameter<std::string> fontPath;
 	ofParameter<float> fontSize;
 	ofParameter<float> letterSpacing;
 	ofParameter<void> vResetFont;
@@ -172,13 +184,13 @@ public:
 	ofParameter<void> vRandomDensity;
 	ofParameter<float> densitySpacing;
 	ofParameter<float> densityAmount;
-	ofParameter<float> densityMinGap;
 
 	// Shape parameters
 	ofParameter<void> vResetShape;
 	ofParameter<void> vRandomShape;
 	ofParameter<int> shapeType;
-	ofParameter<string> shapeTypeName;
+	ofParameter<std::string> shapeTypeName;
+	ofParameter<bool> bShapeBack;
 	ofParameter<float> shapeSize;
 	ofParameter<float> shapeSizeMin;
 	ofParameter<float> shapeRatio;
@@ -188,7 +200,7 @@ public:
 	ofParameter<void> vResetColor;
 	ofParameter<void> vRandomColor;
 	ofParameter<int> colorMode;
-	ofParameter<string> colorModeName;
+	ofParameter<std::string> colorModeName;
 	ofParameter<float> colorSpeed;
 	ofParameter<float> colorMixFactor;
 	ofParameter<bool> bColorByDistance;
@@ -207,7 +219,7 @@ public:
 	ofParameter<void> vResetAnimation;
 	ofParameter<void> vRandomAnimation;
 	ofParameter<int> animationMode;
-	ofParameter<string> animationModeName;
+	ofParameter<std::string> animationModeName;
 	ofParameter<float> animSpeed;
 	ofParameter<float> animPower;
 	ofParameter<float> animWaveFreq;
@@ -241,8 +253,9 @@ public:
 	ofParameter<void> vLoadSettigs;
 	ofParameter<void> vSaveSettigs;
 
-	ofParameter<bool> bGui { "OrganicText", true };
-	ofParameter<bool> bKeys { "Keys", false };
+	// Internal
+	ofParameter<bool> bGui;
+	ofParameter<bool> bKeys;
 
 private:
 	// Event listeners
@@ -256,25 +269,22 @@ private:
 	ofEventListener e_trailLength;
 
 	// Functions
-	vector<vec2> sampleStringPoints(const string & s, float ds);
+	vector<vec2> sampleStringPoints(const std::string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
+	void drawShapes();
 
 	void drawConnections() const;
+
 	void initTrails();
 	void updateTrails();
 
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
 
-	void drawDebug() const;
-	ofColor colorDebug;
-
-	void drawHelp() const;
-
 	// Font management
 	void loadFont();
 	void refreshFont();
-	bool bFlagRefreshFont = false; // avoids multiple calls in a single frame
+	bool bFlagRefreshFont = false; // Avoids multiple calls in a single frame
 	void flagRefreshFont();
 
 public:
@@ -312,17 +322,21 @@ private:
 	vector<vec2> pointsString;
 	vector<vector<vec2>> pointTrails;
 	ofTrueTypeFont font;
-	float t;
+	std::string FONT_DEFAULT; 
+	float t;	
 	vec2 textCenter;
 
 	void refreshPointsString();
+
+	//--
 
 	// Fps
 	float frameTime;
 	float fps;
 	float targetFPS = 120.0f;
 
-	string pathSettings = "OrganicText.json";
+	// Settings
+	std::string pathSettings = "OrganicText.json";
 
 	// Cached connection count for debug display
 	mutable int cachedConnectionCount = 0;
@@ -330,7 +344,7 @@ private:
 public:
 	ofxPanel gui;
 
-	// collapse groups for preset settings (if included when not using external preset manager)
+	// Collapse groups for preset settings (if included when not using external preset manager)
 	void refreshGuiPanel(ofxPanel & ui);
 	void refreshGuiGroup(ofxGuiGroup & g);
 	void refreshGuiSession();
@@ -338,9 +352,14 @@ public:
 private:
 	std::string sHelp;
 
-	void windowResized(ofResizeEventArgs & resize); // auto call when window resized
+	void drawHelp() const;
 
-	//ofxGuiGroup & getGroupGui();
+	void drawDebug() const;
+	ofColor colorDebug;
 
+	void windowResized(ofResizeEventArgs & resize); // Auto call when window resized
+	void refreshWindowResized();
+
+	// Bench measure time elapsed on draw() in microseconds
 	uint64_t tBench = 0;
 };

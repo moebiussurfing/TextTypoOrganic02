@@ -27,6 +27,7 @@
 		hardcode json files to one .h file. replace workflow
 	- ofxSurfingPresetsLiteOfxGui
 		copy presets to next or other
+			but copy to mem + move without load + save
  
  */
 
@@ -38,10 +39,6 @@
 
 // Window title
 const std::string SURFING_APP_TITLE = "DEMO - ofWorks";
-
-// Window size
-constexpr float OFWORKS_APP_WIDTH = 1200;
-constexpr float OFWORKS_APP_HEIGHT = 550;
 
 //---
 
@@ -56,6 +53,10 @@ public:
 	void draw();
 	void exit();
 	void keyPressed(ofKeyEventArgs & eventArgs);
+	void mouseMoved(int x, int y);
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
 
 	// Organic Text
 	OrganicText t;
@@ -71,4 +72,6 @@ public:
 
 	float fps;
 	float frameTime;
+
+	ofParameter<bool> bMouseInteract;
 };

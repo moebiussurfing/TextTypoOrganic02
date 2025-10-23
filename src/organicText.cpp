@@ -38,6 +38,13 @@ void OrganicText::setup(float fps) {
 void OrganicText::setup() {
 	ofLogNotice("OrganicText") << "setup()";
 
+	// Default font
+	//FONT_DEFAULT = "NotoSansMono-Regular.ttf";
+	// Bundled OF fonts
+	FONT_DEFAULT = OF_TTF_SANS;
+	//FONT_DEFAULT = OF_TTF_SERIF;
+	//FONT_DEFAULT = OF_TTF_MONO;
+
 	setupScene();
 	setupParams();
 	setupCallbacks();
@@ -59,6 +66,8 @@ void OrganicText::startup() {
 
 	// Load saved settings
 	loadSettings();
+
+	refreshWindowResized();
 }
 
 //--------------------------------------------------------------
@@ -83,17 +92,21 @@ void OrganicText::setupParams() {
 	ofLogNotice("OrganicText") << "setupParams()";
 
 	// Basic parameters
+	bGui.set("OrganicText", true);
+	bKeys.set("Keys", false);
 	bDebug.set("Debug", false);
 	bHelp.set("Help", false);
+
 	bDrawFill.set("Draw Fill", true);
 	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
 	bDrawOutline.set("Draw Outline", false);
 	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
+	bAutoZoomGlobal.set("Auto Zoom", true);
 	sText.set("Text", ORGANICTEXT);
 
 	// Font parameters
-	fontPath.set("Font Path", "NotoSansMono-Regular.ttf"); // File not required! Currently using OF bundled OF_TTF
+	fontPath.set("Font Path", FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
 	fontSize.set("Size", 150, 50, 500);
 	letterSpacing.set("Spacing", 0, -1, 1);
 	vResetFont.set("Reset");
@@ -102,8 +115,7 @@ void OrganicText::setupParams() {
 	vResetDensity.set("Reset");
 	vRandomDensity.set("Random");
 	densitySpacing.set("Spacing", 0.2, 0.05, 1);
-	densityAmount.set("Amount", 1.0, 0.1, 5.0);
-	densityMinGap.set("Min Gap", 0.1, 0.0, 1.0);
+	densityAmount.set("Amount", 0.5f, 0.0f, 1.f);
 
 	// Shape group
 	vResetShape.set("Reset");
@@ -111,6 +123,8 @@ void OrganicText::setupParams() {
 	shapeType.set("Type", 0, 0, 5);
 	shapeTypeName.set("Name", "Circle");
 	shapeTypeName.setSerializable(false);
+	bDrawOutline.set("Draw Outline", false);
+	bShapeBack.set("Back", false);
 	shapeSize.set("Size", 0.5, 0, 1);
 	shapeSizeMin.set("Min Size", 0.3, 0, 1);
 	shapeRatio.set("Ratio", .5, 0, 1.0f);
@@ -187,12 +201,12 @@ void OrganicText::setupParams() {
 	paramsDensity.setName("Density");
 	paramsDensity.add(densitySpacing);
 	paramsDensity.add(densityAmount);
-	paramsDensity.add(densityMinGap);
 	paramsDensity.add(vRandomDensity);
 	paramsDensity.add(vResetDensity);
 
 	paramsShape.setName("Shape");
 	paramsShape.add(bDrawFill);
+	paramsShape.add(bShapeBack);
 	paramsShape.add(shapeType);
 	paramsShape.add(shapeTypeName);
 	paramsShape.add(shapeSize);
@@ -279,6 +293,7 @@ void OrganicText::setupParams() {
 	parameters.add(sText);
 	parameters.add(paramsFont);
 	parameters.add(zoomGlobal);
+	parameters.add(bAutoZoomGlobal);
 	parameters.add(bDrawOutline);
 	parameters.add(bDebug);
 	parameters.add(bHelp);
@@ -373,10 +388,23 @@ void OrganicText::refreshGuiSession() {
 void OrganicText::windowResized(ofResizeEventArgs & resize) {
 	ofLogNotice("OrganicText") << "windowResized()";
 
-	// Move the gui panel
+	refreshWindowResized();
+}
+
+//--------------------------------------------------------------
+void OrganicText::refreshWindowResized() {
+	ofLogNotice("OrganicText") << "refreshWindowResized()";
+
+	// Move the gui panel to right border
 	auto pad = 5;
 	auto w = gui.getWidth();
 	gui.setPosition(ofGetWidth() - w - pad, pad);
+
+	// Auto Zoom
+	if (bAutoZoomGlobal) {
+		auto ww = 2560; // callibarted for QHD / 2K screen but will work ok for others
+		zoomGlobal = ofMap(ofGetWidth(), 1200, ww, 0.f, 1.0f, false);
+	}
 }
 
 //--------------------------------------------------------------
@@ -396,7 +424,8 @@ void OrganicText::loadFont() {
 		ofLogNotice("OrganicText") << "Font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";
 	} else {
 		ofLogError("OrganicText") << "Failed to load font: " << fontPath.get();
-		fontPath.set(OF_TTF_SANS);
+
+		//fontPath.set(FONT_DEFAULT);
 		success = font.load(fontPath.get(), fontSize.get(), false, false, true);
 		if (success) {
 			ofLogNotice("OrganicText") << "Forced font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";
@@ -418,9 +447,9 @@ void OrganicText::refreshFont() {
 	const float spMax = 4.f;
 	float sp = 1.f;
 	if (letterSpacing < 0)
-		sp = ofMap(letterSpacing, 0, -1, 1, spMin);
+		sp = ofMap(letterSpacing, 0, -1, 1, spMin, true);
 	else if (letterSpacing > 0)
-		sp = ofMap(letterSpacing, 0, 1, 1, spMax);
+		sp = ofMap(letterSpacing, 0, 1, 1, spMax, true);
 	font.setLetterSpacing(sp);
 
 	refreshPointsString();
@@ -482,16 +511,11 @@ vector<vec2> OrganicText::sampleStringPoints(const string & s, float ds) {
 
 //--------------------------------------------------------------
 void OrganicText::refreshPointsString() {
+	ofLogNotice("OrganicText") << "refreshPointsString()";
+
 	// Map spacing (0-1 normalized)
 	float baseSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
 	float finalSpacing = baseSpacing / densityAmount.get();
-
-	// Map min gap (0-1 normalized) with font scaling
-	float fontScale = fontSize.get() / 150.0f;
-	float minGap = ofMap(densityMinGap.get(), 0, 1, DENSITY_MIN_SPACING_MIN, DENSITY_MIN_SPACING_MAX, true);
-	minGap *= fontScale;
-
-	finalSpacing = ofClamp(finalSpacing, minGap, 1000.0f);
 
 	pointsString = sampleStringPoints(sText, finalSpacing);
 
@@ -652,7 +676,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 	ofPushMatrix();
 	ofTranslate(position);
 	ofRotateDeg(rotation);
-	float h = size * ofMap(shapeRatio.get(), 0.f, 1.f, 1.f, 10.f);
+	float h = size * ofMap(shapeRatio.get(), 0.f, 1.f, 1.f, 10.f, true);
 
 	switch (shape) {
 	case SHAPE_CIRCLE:
@@ -713,6 +737,8 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 
 //--------------------------------------------------------------
 void OrganicText::initTrails() {
+	ofLogNotice("OrganicText") << "initTrails()";
+
 	pointTrails.clear();
 	pointTrails.resize(pointsString.size());
 
@@ -802,15 +828,15 @@ void OrganicText::drawDebug() const {
 	ofSetLineWidth(1);
 
 	// Text center crosshair
-	float crossSize = 2.5f;
+	float crossSize = 10;
 	ofDrawLine(textCenter - vec2(crossSize, 0), textCenter + vec2(crossSize, 0));
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
-	ofDrawCircle(textCenter, 2);
+	ofDrawCircle(textCenter, crossSize * 0.7);
 
 	// All sample points
 	ofFill();
 	for (const auto & point : pointsString) {
-		ofDrawCircle(point, 3);
+		ofDrawCircle(point, 2.f);
 	}
 
 	// Bounding box
@@ -823,7 +849,7 @@ void OrganicText::drawDebug() const {
 		}
 
 		ofNoFill();
-		ofSetLineWidth(3);
+		ofSetLineWidth(1);
 		ofDrawRectangle(minP.x, minP.y, maxP.x - minP.x, maxP.y - minP.y);
 
 		//#if 0
@@ -853,101 +879,115 @@ void OrganicText::drawDebug() const {
 //--
 
 //--------------------------------------------------------------
+void OrganicText::drawShapes() {
+	for (size_t i = 0; i < pointsString.size(); i++) {
+		ofPushStyle();
+
+		float phase = t + 0.123f * static_cast<float>(i);
+		vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
+		vec2 finalPos = pointsString[i] + offset;
+
+		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
+		ofSetColor(color);
+
+		if (bDrawFill.get())
+			ofFill();
+		else
+			ofNoFill();
+
+		float maxSize = ofMap(shapeSize.get(), 0, 1, SHAPE_MIN_RADIUS, SHAPE_MAX_RADIUS, true);
+		float minSize = ofMap(shapeSizeMin.get(), 0, 1, 0, maxSize, true);
+
+		float sizeNoise = ofNoise(phase * SHAPE_SIZE_NOISE_SCALE, static_cast<float>(i) * SHAPE_SIZE_INDEX_SCALE);
+		float pointSize = ofLerp(minSize, maxSize, sizeNoise);
+
+		float rotation = ofMap(shapeRotation.get(), 0, 1, 0, 360, true);
+
+		drawShape(finalPos, pointSize, (ShapeType)shapeType.get(), rotation);
+
+		ofPopStyle();
+	}
+}
+
+//--------------------------------------------------------------
 void OrganicText::draw() {
 	auto td = ofGetElapsedTimeMicros();
 
-	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_MAX_X);
+	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
 
 	ofPushMatrix();
+	{
+		float centerX = ofGetWidth() * 0.5f;
+		float centerY = ofGetHeight() * 0.5f;
+		ofTranslate(centerX, centerY);
+		ofScale(zoomFactor, zoomFactor);
 
-	float centerX = ofGetWidth() * 0.5f;
-	float centerY = ofGetHeight() * 0.5f;
-	ofTranslate(centerX, centerY);
-	ofScale(zoomFactor, zoomFactor);
+		ofTranslate(-font.stringWidth(sText) * 0.5f, font.stringHeight(sText) * 0.5f);
 
-	ofTranslate(-font.stringWidth(sText) * 0.5f, font.stringHeight(sText) * 0.5f);
+		//--
 
-	// Layer 1: Connections
-	if (bDrawConnections) {
-		drawConnections();
-	}
-
-	// Layer 2: Trails
-	if (bDrawTrails) {
-		updateTrails();
-
-		ofPushStyle();
-		ofSetLineWidth(trailLineWidth);
-		float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
-
-		for (size_t i = 0; i < pointTrails.size(); i++) {
-			for (size_t j = 1; j < pointTrails[i].size(); j++) {
-				float fadeAmount = pow(tf, static_cast<float>(j));
-				float alpha = fadeAmount * TRAILS_ALPHA_MAX;
-
-				ofSetColor(colorTrails.get(), alpha);
-				ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
-			}
+		// Layer 0: Shapes
+		if (bDrawShapes && bShapeBack) {
+			drawShapes();
 		}
 
-		ofPopStyle();
-	}
+		// Layer 1: Connections
+		if (bDrawConnections) {
+			drawConnections();
+		}
 
-	// Layer 3: Shapes
-	if (bDrawShapes) {
-		for (size_t i = 0; i < pointsString.size(); i++) {
+		// Layer 2: Trails
+		if (bDrawTrails) {
+			updateTrails();
+
 			ofPushStyle();
+			ofSetLineWidth(trailLineWidth);
+			float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
 
-			float phase = t + 0.123f * static_cast<float>(i);
-			vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
-			vec2 finalPos = pointsString[i] + offset;
+			for (size_t i = 0; i < pointTrails.size(); i++) {
+				for (size_t j = 1; j < pointTrails[i].size(); j++) {
+					float fadeAmount = pow(tf, static_cast<float>(j));
+					float alpha = fadeAmount * TRAILS_ALPHA_MAX;
 
-			ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
-			ofSetColor(color);
-
-			if (bDrawFill.get())
-				ofFill();
-			else
-				ofNoFill();
-
-			float maxSize = ofMap(shapeSize.get(), 0, 1, SHAPE_MIN_RADIUS, SHAPE_MAX_RADIUS, true);
-			float minSize = ofMap(shapeSizeMin.get(), 0, 1, 0, maxSize, true);
-
-			float sizeNoise = ofNoise(phase * SHAPE_SIZE_NOISE_SCALE, static_cast<float>(i) * SHAPE_SIZE_INDEX_SCALE);
-			float pointSize = ofLerp(minSize, maxSize, sizeNoise);
-
-			float rotation = ofMap(shapeRotation.get(), 0, 1, 0, 360);
-
-			drawShape(finalPos, pointSize, (ShapeType)shapeType.get(), rotation);
+					ofSetColor(colorTrails.get(), alpha);
+					ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
+				}
+			}
 
 			ofPopStyle();
 		}
-	}
 
-	// Layer 4: Outline
-	if (bDrawOutline) {
-		if (!bDebug) {
+		// Layer 3: Shapes
+		if (bDrawShapes && !bShapeBack) {
+			drawShapes();
+		}
+
+		//--
+
+		// Layer 4: Outline
+		if (bDrawOutline) {
+			if (!bDebug) {
+				ofPushStyle();
+				ofNoFill();
+				ofSetColor(colorOutline.get());
+				ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
+				font.drawStringAsShapes(sText, 0, 0);
+				ofPopStyle();
+			}
+		} else if (bDebug) {
 			ofPushStyle();
 			ofNoFill();
-			ofSetColor(colorOutline.get());
-			ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
+			ofSetColor(colorDebug, DEBUG_ALPHA_MAX);
+			ofSetLineWidth(1.f);
 			font.drawStringAsShapes(sText, 0, 0);
 			ofPopStyle();
 		}
-	} else if (bDebug) {
-		ofPushStyle();
-		ofNoFill();
-		ofSetColor(colorDebug, DEBUG_ALPHA_MAX);
-		ofSetLineWidth(1.f);
-		font.drawStringAsShapes(sText, 0, 0);
-		ofPopStyle();
-	}
 
-	// Layer 5: Debug (always on top)
-	if (bDebug) {
-		drawDebug();
+		// Layer 5: Debug (always on top)
+		if (bDebug) {
+			drawDebug();
+		}
 	}
-
 	ofPopMatrix();
 
 	// Debug bench measuring drawing performance
@@ -992,7 +1032,8 @@ void OrganicText::drawHelp() const {
 	lines.push_back("PERFORMANCE");
 	lines.push_back("FPS      " + ofToString(fps, 0) + " [" + ofToString(targetFPS, 0) + "] " + perfStatus + "");
 	lines.push_back("Frame    " + ofToString(frameTime, 0) + " ms");
-	lines.push_back("Draw t   " + ofToString(tBench) + " mics");
+	lines.push_back("Draw t   " + ofToString(tBench / 1000) + " ms");
+	lines.push_back("         " + ofToString(tBench % 1000) + " micros");
 	lines.push_back("");
 	lines.push_back("GEOMETRY");
 	lines.push_back("Points   " + ofToString(totalPoints));
@@ -1009,8 +1050,8 @@ void OrganicText::drawHelp() const {
 	lines.push_back("Anim     " + animationModeName.get());
 	lines.push_back("");
 	lines.push_back("Font     " + ofToString(fontSize.get(), 0) + "px");
-	lines.push_back("");
 	if (bKeys) {
+		lines.push_back("");
 		lines.push_back("KEYS");
 		lines.push_back("");
 		lines.push_back("PARAMS");
@@ -1051,12 +1092,6 @@ void OrganicText::drawHelp() const {
 	ofSetColor(0, 0, 0, 220);
 	ofFill();
 	ofDrawRectRounded(boxX, boxY, boxWidth, boxHeight, 4);
-
-	// // Decoration Border
-	// ofSetColor(perfColor);
-	// ofNoFill();
-	// ofSetLineWidth(2);
-	// ofDrawRectangle(boxX, boxY, boxWidth, boxHeight);
 
 	// Text
 	for (size_t i = 0; i < lines.size(); i++) {
@@ -1105,7 +1140,6 @@ void OrganicText::loadSettings() {
 	if (file.exists()) {
 		ofJson settings = ofLoadJson(pathSettings);
 		ofDeserialize(settings, parameters);
-		//refreshPointsString();
 		ofLogNotice("OrganicText") << "Settings loaded";
 	} else
 		ofLogWarning("OrganicText") << "Unable to load settings file or not found!";
@@ -1189,9 +1223,9 @@ void OrganicText::resetAll() {
 	resetFonts();
 
 	zoomGlobal.set(0.f);
-	t = 0.0f;
+	bAutoZoomGlobal = true;
 
-	//refreshPointsString();
+	t = 0.0f;
 }
 
 //--------------------------------------------------------------
@@ -1204,8 +1238,6 @@ void OrganicText::randomAll() {
 	randomizeGlobalColorParams();
 	randomizeAnimationParams();
 	randomizeConnectionParams();
-
-	//refreshPointsString();
 }
 
 //--------------------------------------------------------------
@@ -1221,10 +1253,7 @@ void OrganicText::resetDensityParams() {
 	ofLogNotice("OrganicText") << "resetDensityParams()";
 
 	densitySpacing.set(0.25f);
-	densityAmount.set(0.8f);
-	densityMinGap.set(0.1f);
-
-	//refreshPointsString();
+	densityAmount.set(0.5f);
 }
 
 void OrganicText::resetShapeParams() {
@@ -1292,9 +1321,6 @@ void OrganicText::resetConnectionParams() {
 void OrganicText::randomizeDensityParams() {
 	densitySpacing.set(ofRandom(densitySpacing.getMin(), densitySpacing.getMax()));
 	densityAmount.set(ofRandom(densityAmount.getMin(), densityAmount.getMax()));
-	densityMinGap.set(ofRandom(densityMinGap.getMin(), densityMinGap.getMax()));
-
-	//refreshPointsString();
 }
 
 void OrganicText::randomizeShapeParams() {
@@ -1369,9 +1395,9 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'a' || key == 'A') {
 		animationMode.set((animationMode.get() + 1) % 5);
 	} else if (key == '+' || key == '=') {
-		densityAmount.set(ofClamp(densityAmount.get() + 0.2f, 0.1f, 5.0f));
+		densityAmount.set(ofClamp(densityAmount.get() + 0.05f, densityAmount.getMin(), densityAmount.getMax()));
 	} else if (key == '-') {
-		densityAmount.set(ofClamp(densityAmount.get() - 0.2f, 0.1f, 5.0f));
+		densityAmount.set(ofClamp(densityAmount.get() - 0.05f, densityAmount.getMin(), densityAmount.getMax()));
 	}
 
 	else if (key == OF_KEY_UP) {

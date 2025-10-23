@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofBackground(24);
+	bMouseInteract.set("Mouse Interact", true);
 
 	resetWindowCustom();
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
@@ -17,6 +18,7 @@ void ofApp::setup() {
 	// Presets manger
 	p.setup(t.paramsPreset);
 	p.gui.add(t.bGui);
+	p.gui.add(bMouseInteract);
 	p.gui.add(vResetWindow);
 
 	//TODO
@@ -52,10 +54,11 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	t.keyPressed(eventArgs);
 
 	const auto k = eventArgs.key;
+
 	if (k == 'w') resetWindowCustom();
 	if (k == 'W') resetWindowFullScreen();
-	if (k == 'd') if (!t.bKeys) t.bDebug = !t.bDebug;
-	
+	if ((k == 'd') || (k == 'd'))
+		if (!t.bKeys) t.bDebug = !t.bDebug;
 }
 
 //--------------------------------------------------------------
@@ -79,4 +82,26 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 //--------------------------------------------------------------
 void ofApp::exit() {
 	t.exit();
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y) {
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button) {
+}
+
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button) {
+	if (!bMouseInteract) return;
+
+	if (button == 0)
+		p.doLoadNext();
+	else if (button == 2)
+		p.doLoadPrevious();
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseReleased(int x, int y, int button) {
 }
