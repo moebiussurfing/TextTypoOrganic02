@@ -225,6 +225,7 @@ public:
 
 	// Global controls
 	ofParameter<void> vResetAll;
+	ofParameter<void> vRandomAll;
 
 	// Settings
 	ofParameter<bool> bAutosave;
@@ -240,7 +241,7 @@ private:
 	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
 	ofEventListener e_vResetDensity, e_vResetShape, e_vResetColor;
 	ofEventListener e_vResetGlobalColor, e_vResetAnimation, e_vResetConnection, e_vResetAll;
-	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor;
+	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor, e_vRandomAll;
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 
@@ -284,6 +285,7 @@ public:
 	void resetConnectionParams();
 	void resetFonts();
 	void resetAll();
+	void randomAll();
 
 	// Randomize functions
 	void randomizeDensityParams();
@@ -319,6 +321,7 @@ public:
 	// collapse groups for preset settings (if included when not using external preset manager)
 	void refreshGuiPanel(ofxPanel & ui);
 	void refreshGuiGroup(ofxGuiGroup & g);
+	void refreshGuiSession();
 
 private:
 	std::string sHelp;

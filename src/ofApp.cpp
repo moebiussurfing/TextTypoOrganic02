@@ -16,8 +16,8 @@ void ofApp::setup() {
 
 	// presets manger
 	p.setup(t.paramsPreset);
-	p.gui.add(vResetWindow);
 	p.gui.add(t.bGui);
+	p.gui.add(vResetWindow);
 	
 	//TODO
 	// refresh ui
