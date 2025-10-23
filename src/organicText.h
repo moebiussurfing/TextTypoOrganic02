@@ -74,6 +74,7 @@ constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 
 constexpr int DEBUG_ALPHA_MAX = 128;
 constexpr int DEBUG_ALPHA_MIN_OFFSET = 50;
+constexpr float DEBUG_SPEED = 2.0f;
 
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
@@ -152,7 +153,7 @@ public:
 
 	// Basic parameters
 	ofParameter<bool> bHelp;
-	ofParameter<bool> bDebugDraw;
+	ofParameter<bool> bDebug;
 	ofParameter<bool> bDrawOutline;
 	ofParameter<bool> bDrawFill;
 	ofParameter<bool> bDrawShapes;

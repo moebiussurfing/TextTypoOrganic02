@@ -83,7 +83,7 @@ void OrganicText::setupParams() {
 	ofLogNotice("OrganicText") << "setupParams()";
 
 	// Basic parameters
-	bDebugDraw.set("Debug", false);
+	bDebug.set("Debug", false);
 	bHelp.set("Help", false);
 	bDrawFill.set("Draw Fill", true);
 	bDrawShapes.set("Draw Shapes", true);
@@ -280,7 +280,7 @@ void OrganicText::setupParams() {
 	parameters.add(paramsFont);
 	parameters.add(zoomGlobal);
 	parameters.add(bDrawOutline);
-	parameters.add(bDebugDraw);
+	parameters.add(bDebug);
 	parameters.add(bHelp);
 	parameters.add(bKeys);
 	parameters.add(paramsSessionSettings);
@@ -793,7 +793,7 @@ void OrganicText::drawDebug() const {
 
 	// Smooth alpha blinking using sine wave
 	float t = ofGetElapsedTimef(); // Elapsed time in seconds
-	float speed = 1.0f; // Blink speed (cycles per second)
+	float speed = DEBUG_SPEED; // Blink speed (cycles per second)
 	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * DEBUG_ALPHA_MAX + DEBUG_ALPHA_MIN_OFFSET;
 	// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
 	ofSetColor(colorDebug.r, colorDebug.g, colorDebug.b, static_cast<int>(alpha));
@@ -926,7 +926,7 @@ void OrganicText::draw() {
 
 	// Layer 4: Outline
 	if (bDrawOutline) {
-		if (!bDebugDraw) {
+		if (!bDebug) {
 			ofPushStyle();
 			ofNoFill();
 			ofSetColor(colorOutline.get());
@@ -934,7 +934,7 @@ void OrganicText::draw() {
 			font.drawStringAsShapes(sText, 0, 0);
 			ofPopStyle();
 		}
-	} else if (bDebugDraw) {
+	} else if (bDebug) {
 		ofPushStyle();
 		ofNoFill();
 		ofSetColor(colorDebug, DEBUG_ALPHA_MAX);
@@ -944,7 +944,7 @@ void OrganicText::draw() {
 	}
 
 	// Layer 5: Debug (always on top)
-	if (bDebugDraw) {
+	if (bDebug) {
 		drawDebug();
 	}
 
@@ -1353,7 +1353,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	const int key = eventArgs.key;
 
 	if (key == 'd') {
-		bDebugDraw.set(!bDebugDraw.get());
+		bDebug.set(!bDebug.get());
 	} else if (key == 'D') {
 		bHelp.set(!bHelp.get());
 	} else if (key == 'b' || key == 'B') {

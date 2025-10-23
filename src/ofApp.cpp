@@ -30,7 +30,7 @@ void ofApp::update() {
 
 	// Window title
 	std::string s1 = "";
-	if (t.bDebugDraw || !p.bGui) s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
+	if (t.bDebug || !p.bGui) s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 	static std::string s2 = "";
 	if (p.isChangedIndex()) {
 		s2 = "PRESET " + ofToString(p.getPresetIndex());
@@ -51,8 +51,11 @@ void ofApp::draw() {
 void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	t.keyPressed(eventArgs);
 
-	if (eventArgs.key == 'w') resetWindowCustom();
-	if (eventArgs.key == 'W') resetWindowFullScreen();
+	const auto k = eventArgs.key;
+	if (k == 'w') resetWindowCustom();
+	if (k == 'W') resetWindowFullScreen();
+	if (k == 'd') if (!t.bKeys) t.bDebug = !t.bDebug;
+	
 }
 
 //--------------------------------------------------------------
