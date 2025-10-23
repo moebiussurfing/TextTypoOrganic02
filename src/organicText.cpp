@@ -158,8 +158,7 @@ void OrganicText::setupParams() {
 	connectAlpha.set("Alpha", 100, 0, 255);
 	bConnectNearOnly.set("Near Only", true);
 	connectQuality.set("Quality", 1.0, 0.1, 1.0);
-
-	// Trail group
+	// Trail
 	bDrawTrails.set("Draw Trails", false);
 	trailLength.set("Length", 10, 3, 50);
 	trailLineWidth.set("Line Width", 1.0f, 0.1f, MAX_LINE_WIDTH_TRAIL);
@@ -323,7 +322,7 @@ void OrganicText::setupCallbacks() {
 	// Reset listeners
 	e_vResetDensity = vResetDensity.newListener([this](void) { resetDensityParams(); });
 	e_vResetShape = vResetShape.newListener([this](void) { resetShapeParams(); });
-	e_vResetColor = vResetColor.newListener([this](void) { resetColorParams(); });
+	e_vResetColor = vResetColor.newListener([this](void) { resetColorModes(); });
 	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { resetGlobalColorParams(); });
 	e_vResetAnimation = vResetAnimation.newListener([this](void) { resetAnimationParams(); });
 	e_vResetConnection = vResetConnection.newListener([this](void) { resetConnectionParams(); });
@@ -334,7 +333,7 @@ void OrganicText::setupCallbacks() {
 	// Random listeners
 	e_vRandomDensity = vRandomDensity.newListener([this](void) { randomizeDensityParams(); });
 	e_vRandomShape = vRandomShape.newListener([this](void) { randomizeShapeParams(); });
-	e_vRandomColor = vRandomColor.newListener([this](void) { randomizeColorParams(); });
+	e_vRandomColor = vRandomColor.newListener([this](void) { randomizeColorModes(); });
 	e_vRandomGlobalColor = vRandomGlobalColors.newListener([this](void) { randomizeGlobalColorParams(); });
 	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { randomizeAnimationParams(); });
 	e_vRandomConnection = vRandomConnection.newListener([this](void) { randomizeConnectionParams(); });
@@ -785,10 +784,9 @@ void OrganicText::drawDebug() const {
 	ofPushStyle();
 
 	// Smooth alpha blinking using sine wave
-	float amax = 64; // Set max alpha here!
 	float t = ofGetElapsedTimef(); // Elapsed time in seconds
 	float speed = 1.0f; // Blink speed (cycles per second)
-	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * amax;
+	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * DEBUG_MAX_ALPHA;
 	// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
 	ofSetColor(colorDebug.r, colorDebug.g, colorDebug.b, static_cast<int>(alpha));
 
@@ -920,7 +918,7 @@ void OrganicText::draw() {
 		ofPushStyle();
 		ofNoFill();
 		if (bDebugDraw) {
-			ofSetColor(colorDebug);
+			ofSetColor(colorDebug, DEBUG_MAX_ALPHA);
 			ofSetLineWidth(1.f);
 		} else {
 			ofSetColor(colorOutline.get());
@@ -1155,7 +1153,7 @@ void OrganicText::resetPreset() {
 
 	resetDensityParams();
 	resetShapeParams();
-	resetColorParams();
+	resetColorModes();
 	resetGlobalColorParams();
 	resetAnimationParams();
 	resetConnectionParams();
@@ -1180,7 +1178,7 @@ void OrganicText::randomAll() {
 
 	randomizeDensityParams();
 	randomizeShapeParams();
-	randomizeColorParams();
+	randomizeColorModes();
 	randomizeGlobalColorParams();
 	randomizeAnimationParams();
 	randomizeConnectionParams();
@@ -1219,8 +1217,8 @@ void OrganicText::resetShapeParams() {
 	shapeRotation.set(0.0f);
 }
 
-void OrganicText::resetColorParams() {
-	ofLogNotice("OrganicText") << "resetColorParams()";
+void OrganicText::resetColorModes() {
+	ofLogNotice("OrganicText") << "resetColorModes()";
 
 	colorMode.set(3);
 	colorSpeed.set(0.5f);
@@ -1270,24 +1268,26 @@ void OrganicText::resetConnectionParams() {
 //--------------------------------------------------------------
 
 void OrganicText::randomizeDensityParams() {
-	densitySpacing.set(ofRandom(0.05f, 1.0f));
-	densityAmount.set(ofRandom(0.1f, 5.0f));
-	densityMinGap.set(ofRandom(0.0f, 1.0f));
+	densitySpacing.set(ofRandom(densitySpacing.getMin(), densitySpacing.getMax()));
+	densityAmount.set(ofRandom(densityAmount.getMin(), densityAmount.getMax()));
+	densityMinGap.set(ofRandom(densityMinGap.getMin(), densityMinGap.getMax()));
 
 	//refreshPointsString();
 }
 
 void OrganicText::randomizeShapeParams() {
-	shapeSize.set(ofRandom(0.0f, 1.0f));
-	shapeSizeMin.set(ofRandom(0.0f, 1.0f));
+	shapeSize.set(ofRandom(shapeSize.getMin(), shapeSize.getMax()));
+	shapeSizeMin.set(ofRandom(shapeSizeMin.getMin(), shapeSizeMin.getMax()));
 	shapeType.set(static_cast<int>(ofRandom(0, 6)));
-	shapeRatio.set(ofRandom(0.f, 1.0f));
+	shapeRatio.set(ofRandom(shapeRatio.getMin(), shapeRatio.getMax()));
+	shapeRotation.set(ofRandom(shapeRotation.getMin(), shapeRotation.getMax()));
 }
 
-void OrganicText::randomizeColorParams() {
+void OrganicText::randomizeColorModes() {
 	colorMode.set(static_cast<int>(ofRandom(0, 5)));
-	colorSpeed.set(ofRandom(0.1f, 5.0f));
-	colorMixFactor.set(ofRandom(0.0f, 1.0f));
+	colorSpeed.set(ofRandom(colorSpeed.getMin(), colorSpeed.getMax()));
+	colorMixFactor.set(ofRandom(colorMixFactor.getMin(), colorMixFactor.getMax()));
+	bColorByDistance.set(ofRandom(1.0f) > 0.5f);
 }
 
 void OrganicText::randomizeGlobalColorParams() {
@@ -1296,20 +1296,29 @@ void OrganicText::randomizeGlobalColorParams() {
 	color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	colorOutline.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	colorConnection.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+	colorTrails.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 }
 
 void OrganicText::randomizeAnimationParams() {
 	animationMode.set(static_cast<int>(ofRandom(0, 5)));
-	animSpeed.set(ofRandom(0.1f, 3.0f));
-	animPower.set(ofRandom(0.0f, 1.0f));
+	animSpeed.set(ofRandom(animSpeed.getMin(), animSpeed.getMax()));
+	animPower.set(ofRandom(animPower.getMin(), animPower.getMax()));
+	animWaveFreq.set(ofRandom(animWaveFreq.getMin(), animWaveFreq.getMax()));
+	animIntensity.set(ofRandom(animIntensity.getMin(), animIntensity.getMax()));
+	animSpiral.set(ofRandom(animSpiral.getMin(), animSpiral.getMax()));
+	animPulseIntensity.set(ofRandom(animPulseIntensity.getMin(), animPulseIntensity.getMax()));
 }
 
 void OrganicText::randomizeConnectionParams() {
-	connectDistance.set(ofRandom(5.0f, 100.0f));
-	connectAlpha.set(ofRandom(0.0f, 255.0f));
-	connectQuality.set(ofRandom(0.1f, 1.0f));
-	bConnectNearOnly.set(ofRandom(1.0f) > 0.5f);
+	connectDistance.set(ofRandom(connectDistance.getMin(), connectDistance.getMax()));
+	connectAlpha.set(ofRandom(connectAlpha.getMin(), connectAlpha.getMax()));
+	connectQuality.set(ofRandom(connectQuality.getMin(), connectQuality.getMax()));
 	bDrawConnections.set(ofRandom(1.0f) > 0.3f);
+	bConnectNearOnly.set(ofRandom(1.0f) > 0.5f);
+	bDrawTrails.set(ofRandom(1.0f) > 0.3f);
+	trailLength.set(ofRandom(trailLength.getMin(), trailLength.getMax()));
+	trailLineWidth.set(ofRandom(trailLineWidth.getMin(), trailLineWidth.getMax()));
+	trailFade.set(ofRandom(trailFade.getMin(), trailFade.getMax()));
 }
 
 //--

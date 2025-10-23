@@ -10,10 +10,10 @@ constexpr const char * ORGANICTEXT = "ofWorks";
 #include "ofxGui.h"
 using namespace glm;
 
-////TODO: when not using glm lib as in ofWorks...
-//#ifndef TWO_PI
-//	constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
-//#endif
+//TODO: when not using glm lib as in ofWorks...
+#ifndef TWO_PI
+	constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
+#endif
 
 
 constexpr float ZOOM_MAX_X = 3.0f;
@@ -65,6 +65,8 @@ constexpr float SHAPE_MIN_RADIUS = 0.0f;
 constexpr float SHAPE_ROTATION_SPEED = 0.2f;
 constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
+
+constexpr int DEBUG_MAX_ALPHA = 64;
 
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
@@ -281,7 +283,7 @@ public:
 	// Reset functions
 	void resetDensityParams();
 	void resetShapeParams();
-	void resetColorParams();
+	void resetColorModes();
 	void resetGlobalColorParams();
 	void resetAnimationParams();
 	void resetConnectionParams();
@@ -293,7 +295,7 @@ public:
 	// Randomize functions
 	void randomizeDensityParams();
 	void randomizeShapeParams();
-	void randomizeColorParams();
+	void randomizeColorModes();
 	void randomizeGlobalColorParams();
 	void randomizeAnimationParams();
 	void randomizeConnectionParams();
