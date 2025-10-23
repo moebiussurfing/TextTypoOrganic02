@@ -10,10 +10,10 @@ constexpr const char * ORGANICTEXT = "ofWorks";
 #include "ofxGui.h"
 using namespace glm;
 
-//TODO: when not using glm lib as in ofWorks...
-#ifndef TWO_PI
-	constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
-#endif
+////TODO: when not using glm lib as in ofWorks...
+//#ifndef TWO_PI
+//	constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
+//#endif
 
 
 constexpr float ZOOM_MAX_X = 3.0f;
@@ -147,7 +147,7 @@ public:
 	ofParameter<bool> bHelp;
 	ofParameter<bool> bDebugDraw;
 	ofParameter<bool> bDrawOutline;
-	ofParameter<bool> bDrawShapesFill;
+	ofParameter<bool> bDrawFill;
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
 	ofParameter<float> zoomGlobal;
@@ -224,6 +224,7 @@ public:
 	ofParameter<float> trailFade;
 
 	// Global controls
+	ofParameter<void> vResetPreset;
 	ofParameter<void> vResetAll;
 	ofParameter<void> vRandomAll;
 
@@ -240,7 +241,7 @@ private:
 	ofEventListener e_FontPath, e_vFontSize, e_letterSpacing, e_vResetFont;
 	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
 	ofEventListener e_vResetDensity, e_vResetShape, e_vResetColor;
-	ofEventListener e_vResetGlobalColor, e_vResetAnimation, e_vResetConnection, e_vResetAll;
+	ofEventListener e_vResetGlobalColor, e_vResetAnimation, e_vResetConnection, e_vResetAll, e_vResetPreset;
 	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor, e_vRandomAll;
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
@@ -262,9 +263,10 @@ private:
 	void drawHelp() const;
 
 	// Font management
-	void reloadFont();
-	bool bFlagReloadFont = false; // avoids multiple calls in a single frame
-	void flagReloadFont();
+	void loadFont();
+	void refreshFont();
+	bool bFlagRefreshFont = false; // avoids multiple calls in a single frame
+	void flagRefreshFont();
 
 public:
 	void saveSettings();
@@ -285,6 +287,7 @@ public:
 	void resetConnectionParams();
 	void resetFonts();
 	void resetAll();
+	void resetPreset();
 	void randomAll();
 
 	// Randomize functions

@@ -52,7 +52,7 @@ void OrganicText::startup() {
 	ofLogNotice("OrganicText") << "startup()";
 
 	//// Load font
-	//reloadFont();
+	//refreshFont();
 
 	// Set defaults settings on these methods instead of into setupParams() init params!
 	resetAll();
@@ -85,7 +85,7 @@ void OrganicText::setupParams() {
 	// Basic parameters
 	bDebugDraw.set("Debug", false);
 	bHelp.set("Help", false);
-	bDrawShapesFill.set("Shape Fill", true);
+	bDrawFill.set("Draw Fill", true);
 	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
 	bDrawOutline.set("Draw Outline", false);
@@ -172,6 +172,7 @@ void OrganicText::setupParams() {
 
 	// Global reset
 	vResetAll.set("Reset All");
+	vResetPreset.set("Reset Preset");
 	vRandomAll.set("Random All");
 
 	//--
@@ -191,7 +192,7 @@ void OrganicText::setupParams() {
 	paramsDensity.add(vResetDensity);
 
 	paramsShape.setName("Shape");
-	paramsShape.add(bDrawShapesFill);
+	paramsShape.add(bDrawFill);
 	paramsShape.add(shapeType);
 	paramsShape.add(shapeTypeName);
 	paramsShape.add(shapeSize);
@@ -256,9 +257,9 @@ void OrganicText::setupParams() {
 	paramsInternal.add(bGui);
 
 	// Preset
-	paramsPreset.setName("OrganicTextPreset");
+	paramsPreset.setName("OrganicText");
 	paramsPreset.add(bDrawShapes);
-	paramsPreset.add(bDrawShapesFill);
+	paramsPreset.add(bDrawFill);
 	paramsPreset.add(bDrawConnections);
 	paramsPreset.add(bDrawTrails);
 	paramsPreset.add(bEnableAnimation);
@@ -268,8 +269,7 @@ void OrganicText::setupParams() {
 	paramsPreset.add(paramsColorModes);
 	paramsPreset.add(paramsAnim);
 	paramsPreset.add(paramsConnections);
-	paramsPreset.add(vResetAll);
-	paramsPreset.add(vRandomAll);
+	paramsPreset.add(vResetPreset);
 
 	// gui
 	parameters.setName("OrganicText");
@@ -289,8 +289,9 @@ void OrganicText::setupParams() {
 	parameters.add(paramsPreset);
 #endif
 
+	//parameters.add(vRandomAll); // not useful
+	parameters.add(vResetPreset);
 	parameters.add(vResetAll);
-	parameters.add(vRandomAll);
 }
 
 //--------------------------------------------------------------
@@ -298,9 +299,9 @@ void OrganicText::setupCallbacks() {
 	ofLogNotice("OrganicText") << "setupCallbacks()";
 
 	// Font listeners
-	e_FontPath = fontPath.newListener([this](string & s) { flagReloadFont(); });
-	e_vFontSize = fontSize.newListener([this](float & f) { flagReloadFont(); });
-	e_letterSpacing = letterSpacing.newListener([this](float & f) { flagReloadFont(); });
+	e_FontPath = fontPath.newListener([this](string & s) { loadFont(); });
+	e_vFontSize = fontSize.newListener([this](float & f) { loadFont(); });
+	e_letterSpacing = letterSpacing.newListener([this](float & f) { flagRefreshFont(); });
 	e_vResetFont = vResetFont.newListener([this](void) { resetFonts(); });
 
 	// Density listeners
@@ -326,8 +327,9 @@ void OrganicText::setupCallbacks() {
 	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { resetGlobalColorParams(); });
 	e_vResetAnimation = vResetAnimation.newListener([this](void) { resetAnimationParams(); });
 	e_vResetConnection = vResetConnection.newListener([this](void) { resetConnectionParams(); });
-	e_vResetAll = vResetAll.newListener([this](void) { resetAll(); });
 	e_vRandomAll = vRandomAll.newListener([this](void) { randomAll(); });
+	e_vResetAll = vResetAll.newListener([this](void) { resetAll(); });
+	e_vResetPreset = vResetPreset.newListener([this](void) { resetPreset(); });
 
 	// Random listeners
 	e_vRandomDensity = vRandomDensity.newListener([this](void) { randomizeDensityParams(); });
@@ -358,7 +360,7 @@ void OrganicText::refreshGuiSession() {
 
 	gui.getGroup(paramsFont.getName()).minimize();
 	gui.getGroup(paramsInternal.getName()).minimize();
-	auto g = gui.getGroup(paramsSessionSettings.getName());
+	auto & g = gui.getGroup(paramsSessionSettings.getName());
 	g.minimize();
 }
 
@@ -373,15 +375,15 @@ void OrganicText::windowResized(ofResizeEventArgs & resize) {
 }
 
 //--------------------------------------------------------------
-void OrganicText::flagReloadFont() {
-	ofLogNotice("OrganicText") << "flagReloadFont()";
+void OrganicText::flagRefreshFont() {
+	ofLogNotice("OrganicText") << "flagRefreshFont()";
 
-	bFlagReloadFont = true;
+	bFlagRefreshFont = true;
 }
 
 //--------------------------------------------------------------
-void OrganicText::reloadFont() {
-	ofLogNotice("OrganicText") << "reloadFont(): " << fontPath.get();
+void OrganicText::loadFont() {
+	ofLogNotice("OrganicText") << "loadFont()";
 
 	bool success = font.load(fontPath.get(), fontSize.get(), false, false, true);
 
@@ -399,6 +401,11 @@ void OrganicText::reloadFont() {
 			return;
 		}
 	}
+}
+
+//--------------------------------------------------------------
+void OrganicText::refreshFont() {
+	ofLogNotice("OrganicText") << "refreshFont(): " << fontPath.get();
 
 	font.setSpaceSize(font.getSpaceSize() * letterSpacing);
 
@@ -432,9 +439,9 @@ void OrganicText::update() {
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
-	if (bFlagReloadFont) {
-		reloadFont();
-		bFlagReloadFont = false;
+	if (bFlagRefreshFont) {
+		refreshFont();
+		bFlagRefreshFont = false;
 	}
 }
 
@@ -668,7 +675,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 
 		// Convert polyline to path for fill support
 		ofPath starPath;
-		starPath.setFilled(bDrawShapesFill.get()); // enable or disable fill
+		starPath.setFilled(bDrawFill.get()); // enable or disable fill
 		starPath.setFillColor(ofGetStyle().color); // use current drawing color
 		starPath.setStrokeColor(ofGetStyle().color); // outline uses same color
 		starPath.setStrokeWidth(1.0f);
@@ -780,7 +787,7 @@ void OrganicText::drawDebug() const {
 	// Smooth alpha blinking using sine wave
 	float amax = 64; // Set max alpha here!
 	float t = ofGetElapsedTimef(); // Elapsed time in seconds
-	float speed = 2.0f; // Blink speed (cycles per second)
+	float speed = 1.0f; // Blink speed (cycles per second)
 	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * amax;
 	// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
 	ofSetColor(colorDebug.r, colorDebug.g, colorDebug.b, static_cast<int>(alpha));
@@ -889,7 +896,7 @@ void OrganicText::draw() {
 			ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 			ofSetColor(color);
 
-			if (bDrawShapesFill.get())
+			if (bDrawFill.get())
 				ofFill();
 			else
 				ofNoFill();
@@ -914,7 +921,7 @@ void OrganicText::draw() {
 		ofNoFill();
 		if (bDebugDraw) {
 			ofSetColor(colorDebug);
-			ofSetLineWidth(2.f);
+			ofSetLineWidth(1.f);
 		} else {
 			ofSetColor(colorOutline.get());
 			ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
@@ -1143,8 +1150,8 @@ void OrganicText::exit() {
 //--------------------------------------------------------------
 
 //--------------------------------------------------------------
-void OrganicText::resetAll() {
-	ofLogNotice("OrganicText") << "resetAll()";
+void OrganicText::resetPreset() {
+	ofLogNotice("OrganicText") << "resetPreset()";
 
 	resetDensityParams();
 	resetShapeParams();
@@ -1152,6 +1159,13 @@ void OrganicText::resetAll() {
 	resetGlobalColorParams();
 	resetAnimationParams();
 	resetConnectionParams();
+}
+
+//--------------------------------------------------------------
+void OrganicText::resetAll() {
+	ofLogNotice("OrganicText") << "resetAll()";
+
+	resetPreset();
 	resetFonts();
 
 	zoomGlobal.set(0.f);
@@ -1196,7 +1210,8 @@ void OrganicText::resetDensityParams() {
 void OrganicText::resetShapeParams() {
 	ofLogNotice("OrganicText") << "resetShapeParams()";
 
-	bDrawShapesFill.set(true);
+	bDrawShapes.set(true);
+	bDrawFill.set(true);
 	shapeSize.set(0.1f);
 	shapeSizeMin.set(0.f);
 	shapeType.set(0);
@@ -1344,7 +1359,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'o' || key == 'O') {
 		bDrawOutline.set(!bDrawOutline.get());
 	} else if (key == 'f' || key == 'F') {
-		bDrawShapesFill.set(!bDrawShapesFill.get());
+		bDrawFill.set(!bDrawFill.get());
 	}
 }
 

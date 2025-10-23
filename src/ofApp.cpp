@@ -20,11 +20,7 @@ void ofApp::setup() {
 	p.gui.add(vResetWindow);
 	
 	//TODO
-	// refresh ui
 	t.refreshGuiPanel(p.guiParams);
-	//	p.guiParams.minimize();
-	//	t.refreshGui(p.gui);
-	//	ofxGuiGroup & g = p.getGroupGui();
 }
 
 //--------------------------------------------------------------
