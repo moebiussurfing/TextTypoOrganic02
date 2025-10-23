@@ -1,18 +1,23 @@
 /*
- 
- TODO
 
- - fix tweak ranges
- - gradient bg
- - mouse interact/dist ?
- - zoom lines ratio ?
-	related to fullscreen/screen size?
-	ofCamera ?
-	fbo overscaled?
- - play next presets timed
-	- browse presets ?
- - smooth transients ?
- - add define remove preset 
+	BUG
+	- startup loading fails some trail.
+		connections amount..
+
+	TODO
+
+	- fix tweak ranges
+	- gradient bg
+	- mouse interact/dist ?
+	- zoom lines ratio ?
+		related to fullscreen/screen size?
+		ofCamera ?
+		fbo overscaled?
+	- player next presets timed
+		browse presets ?
+	- smooth transients ?
+		new smooth class
+	- add define remove preset 
  
  */
 

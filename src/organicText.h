@@ -336,4 +336,6 @@ private:
 	void windowResized(ofResizeEventArgs & resize); // auto call when window resized
 
 	//ofxGuiGroup & getGroupGui();
+
+	uint64_t tBench = 0;
 };

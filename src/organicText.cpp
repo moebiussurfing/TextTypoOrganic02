@@ -852,6 +852,8 @@ void OrganicText::drawDebug() const {
 
 //--------------------------------------------------------------
 void OrganicText::draw() {
+	auto td = ofGetElapsedTimeMicros();
+
 	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_MAX_X);
 
 	ofPushMatrix();
@@ -940,6 +942,8 @@ void OrganicText::draw() {
 	}
 
 	ofPopMatrix();
+
+	tBench = ofGetElapsedTimeMicros() - td;
 }
 
 //--------------------------------------------------------------
@@ -980,6 +984,7 @@ void OrganicText::drawHelp() const {
 	lines.push_back("PERFORMANCE");
 	lines.push_back("FPS      " + ofToString(fps, 0) + " [" + ofToString(targetFPS, 0) + "] " + perfStatus + "");
 	lines.push_back("Frame    " + ofToString(frameTime, 0) + " ms");
+	lines.push_back("Draw t   " + ofToString(tBench) + " mics");
 	lines.push_back("");
 	lines.push_back("GEOMETRY");
 	lines.push_back("Points   " + ofToString(totalPoints));
