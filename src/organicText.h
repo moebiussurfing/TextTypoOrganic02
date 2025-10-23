@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "ofMain.h"
 
@@ -32,7 +32,7 @@ constexpr float DENSITY_MIN_SPACING_MAX = 15.0f;
 constexpr float ANIM_NOISE_MAX = 35.0f;
 constexpr float ANIM_WAVE_MAX = 60.0f;
 constexpr float ANIM_SPIRAL_MAX = 45.0f;
-constexpr float ANIM_PULSE_MAX = 50.0f;
+constexpr float ANIM_PULSE_MAX = 20.0f;
 
 // Animation Frequency Constants
 constexpr float ANIM_WAVE_FREQ_MIN = 0.001f;
@@ -222,7 +222,7 @@ public:
 
 	// Trail parameters
 	ofParameter<bool> bDrawTrails;
-	ofParameter<int> trailLength;
+	ofParameter<float> trailLength;
 	ofParameter<float> trailLineWidth;
 	ofParameter<float> trailFade;
 

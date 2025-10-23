@@ -3,7 +3,9 @@
 	BUG
 	- startup loading fails some trail.
 		connections amount..
-
+	- min gap does nothing ?
+	- normalize 0-1 all params ?
+ 
 	TODO
 
 	- fix tweak ranges
@@ -18,6 +20,7 @@
 	- smooth transients ?
 		new smooth class
 	- add define remove preset 
+	- unde history
  
  */
 

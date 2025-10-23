@@ -161,9 +161,9 @@ void OrganicText::setupParams() {
 
 	// Trail
 	bDrawTrails.set("Draw Trails", false);
-	trailLength.set("Length", 10, 3, 50);
+	trailLength.set("Length", .5, 0, 1);
 	trailLineWidth.set("Line Width", 1.0f, 0.1f, MAX_LINE_WIDTH_TRAIL);
-	trailFade.set("Fade", 0.9, 0.5, 0.99);
+	trailFade.set("Fade", 0.5, 0, 1);
 
 	// Settings group
 	bAutosave.set("Autosave", false);
@@ -321,7 +321,7 @@ void OrganicText::setupCallbacks() {
 	colorMode.addListener(this, &OrganicText::updateColorModeName);
 	animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 
-	e_trailLength = trailLength.newListener([this](int & v) { initTrails(); });
+	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
 
 	//--
 
@@ -715,9 +715,11 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 void OrganicText::initTrails() {
 	pointTrails.clear();
 	pointTrails.resize(pointsString.size());
+	
+	int tl = (int) ofMap(trailLength.get(),0.f,1.f,3.f,50.f);
 	for (size_t i = 0; i < pointsString.size(); i++) {
-		pointTrails[i].resize(trailLength.get());
-		for (int j = 0; j < trailLength.get(); j++) {
+		pointTrails[i].resize(tl);
+		for (int j = 0; j < tl; j++) {
 			pointTrails[i][j] = pointsString[i];
 		}
 	}
@@ -876,10 +878,11 @@ void OrganicText::draw() {
 
 		ofPushStyle();
 		ofSetLineWidth(trailLineWidth);
-
+		float tf=ofMap(trailFade,0.f,1.f,0.85f,0.999f, true);
+		
 		for (size_t i = 0; i < pointTrails.size(); i++) {
 			for (size_t j = 1; j < pointTrails[i].size(); j++) {
-				float fadeAmount = pow(trailFade.get(), static_cast<float>(j));
+				float fadeAmount = pow(tf, static_cast<float>(j));
 				float alpha = fadeAmount * TRAIL_MAX_ALPHA;
 
 				ofSetColor(colorTrails.get(), alpha);
@@ -1273,8 +1276,8 @@ void OrganicText::resetConnectionParams() {
 	bConnectNearOnly.set(true);
 	bDrawTrails.set(false);
 	trailLineWidth.set(1.5f);
-	trailLength.set(10);
-	trailFade.set(0.9f);
+	trailLength.set(0.5);
+	trailFade.set(0.5f);
 }
 
 //--------------------------------------------------------------

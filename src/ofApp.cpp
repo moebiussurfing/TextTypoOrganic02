@@ -33,7 +33,7 @@ void ofApp::update() {
 		s2 = "\t\tPRESET #" + ofToString(p.getPresetIndex());
 	}
 	std::string s1 = "";
-	if (t.bDebugDraw) s1 = "\t\t" + ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
+	if (t.bDebugDraw||!p.bGui) s1 = "\t\t" + ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 	string wt = ofToString(SURFING_APP_TITLE) + s1 + s2;
 	ofSetWindowTitle(wt);
 
