@@ -15,26 +15,22 @@ An enhanced **openFrameworks** application that creates organic, animated visual
 
 See the [User Manual](docs/User/User-Manual.md) for all keyboard shortcuts and GUI parameters.
 
-Press any number key **0-9** to load instant visual presets and begin creating immediately!
-
 ## 🤖 For AI Assistants & Coding Agents
 
 **Are you an AI assistant?** → **[Read the Complete AI Agents Guide](AI-AGENTS-GUIDE.md)** ⭐
 
 **Quick links for AI assistants:**
-- 📖 **[Complete AI Guide](AI-AGENTS-GUIDE.md)** - Full onboarding, workflows & best practices
-- 🎯 **[Project Context](docs/AI-Assistant/PROJECT-CONTEXT.md)** - Complete project overview
-- ✅ **[Current Tasks](docs/Active/Current-Tasks.md)** - What to work on now
 - 📁 **[File Structure](FILE-STRUCTURE.md)** - Project file map
+- 📖 **[Complete AI Guide](docs/AI-Assistant/AGENTS.md)** - Full onboarding, workflows & best practices
+- 🎯 **[Project Context](docs/AI-Assistant/PROJECT-CONTEXT.md)** - Complete project overview
 - 📋 **[Current State](docs/AI-Assistant/CURRENT-STATE.md)** - Status & priorities
+- ✅ **[Current Tasks](docs/Active/Current-Tasks.md)** - What to work on now
 
 **Compatible with**: GitHub Copilot, Gemini, Claude, Cline (via OpenRouter), Cursor, and other AI coding assistants in VS Code or similar IDEs.
 
 ## 📚 Documentation Structure
 
 ### 👨‍💻 For Developers  
-- **[Code Architecture](docs/Developer/Architecture.md)** - System design and structure
-- **[API Reference](docs/Developer/API-Reference.md)** - Complete function documentation
 - **[cpp_concepts_explained.md](docs/Learning/cpp_concepts_explained.md)** - C++ concepts guide
 - **[shader_conversion_strategy.md](docs/Learning/shader_conversion_strategy.md)** - Shader implementation notes
 
@@ -51,20 +47,10 @@ Press any number key **0-9** to load instant visual presets and begin creating i
 
 ### 👤 For Users
 - **[Quick Start Guide](docs/User/Quick-Start.md)** - Get started in 30 seconds
-- **[Complete User Manual](docs/User/User-Manual.md)** - All features and controls explained  
-- **[Troubleshooting](docs/User/Troubleshooting.md)** - Common issues and solutions
-
-## 🎯 Current Status: **PRODUCTION READY** ✅
-
-- ✅ **Zero compilation errors** - Ready to build and run
-- ✅ **10 complete presets** - Instant professional results  
-- ✅ **Full feature set** - All planned v1.0 features implemented
-- ✅ **Comprehensive documentation** - Complete user and developer guides
-- ✅ **Stable performance** - Smooth operation at reasonable settings
 
 ## 💻 Tested Systems
 
 - **Windows** (openFrameworks 0.12.1, Visual Studio)
 - **macOS** (openFrameworks 0.12.1, Xcode)
 
-*Built with openFrameworks - Creative Coding Toolkit*
+*Built with openFrameworks C++ - Creative Coding Toolkit*

@@ -34,13 +34,13 @@
 ### 3D Architecture
 ```cpp
 // Current 2D system
-vector<ofPoint> points;         // x, y coordinates
-ofDrawCircle(point, radius);    // 2D shapes
+vector<ofPoint> points; // x, y coordinates
+ofDrawCircle(point, radius); // 2D shapes
 
 // Target 3D system  
-vector<ofVec3f> points;         // x, y, z coordinates
-ofDrawSphere(point, radius);    // 3D shapes
-ofEasyCam camera;              // 3D navigation
+vector<ofVec3f> points; // x, y, z coordinates
+ofDrawSphere(point, radius); // 3D shapes
+ofEasyCam camera; // 3D navigation
 ```
 
 ### 3D Features

@@ -4,6 +4,7 @@
 TextTypoOrganic02/
 ├── docs/
 │   ├── AI-Assistant/
+│   │   ├── AGENTS.md
 │   │   ├── CODE-PATTERNS.md
 │   │   ├── CURRENT-STATE.md
 │   │   ├── HOW-TO-INTERACT.md
@@ -36,9 +37,8 @@ TextTypoOrganic02/
 │   ├── ofApp.cpp
 │   ├── ofApp.h
 │   ├── organicText.cpp
-│   ├── organicText.h
-│   ├── organicTextPresets.cpp
-│   └── organicTextPresets.h
+│   └── organicText.h
+├── AI-AGENTS-GUIDE.md
 ├── FILE-STRUCTURE.md
 ├── README.md
 ├── generate-FILE-STRUCTURE.py

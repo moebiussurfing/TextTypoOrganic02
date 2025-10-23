@@ -48,8 +48,8 @@ generate-FILE-STRUCTURE.py
   # Analyze an absolute path
   python generate-FILE-STRUCTURE.py /path/to/project/docs
 
-Author: Your Name
-Date: 2023-10-01
+Author: moebiusSurfing (https://github.com/moebiussurfing)
+Date: 2025-10-10
 """
 
 import os
