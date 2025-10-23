@@ -10,6 +10,7 @@
 
 	- fix tweak ranges
 		check not normalized 0-1 all params ?
+			anim speed, mix
 	- mouse interact/dist ?
 		radius distort. debug affected points
 	- zoom lines ratio ?

@@ -612,7 +612,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 //--------------------------------------------------------------
 ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const {
-	ofColor color = ofColor::white;
+	ofColor color = ofColor(ofColor::white,255);
 
 	if (pointsString.empty()) return color;
 
@@ -919,7 +919,7 @@ void OrganicText::drawShapes() {
 
 //--------------------------------------------------------------
 void OrganicText::draw() {
-	auto td = ofGetElapsedTimeMicros();
+	auto td = ofGetElapsedTimeMicros();//benchmark measure performance
 
 	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
 
