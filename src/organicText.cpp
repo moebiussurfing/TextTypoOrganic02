@@ -158,6 +158,7 @@ void OrganicText::setupParams() {
 	connectAlpha.set("Alpha", 100, 0, 255);
 	bConnectNearOnly.set("Near Only", true);
 	connectQuality.set("Quality", 1.0, 0.1, 1.0);
+
 	// Trail
 	bDrawTrails.set("Draw Trails", false);
 	trailLength.set("Length", 10, 3, 50);
@@ -1300,6 +1301,7 @@ void OrganicText::randomizeGlobalColorParams() {
 }
 
 void OrganicText::randomizeAnimationParams() {
+	if (!bEnableAnimation) bEnableAnimation = true;
 	animationMode.set(static_cast<int>(ofRandom(0, 5)));
 	animSpeed.set(ofRandom(animSpeed.getMin(), animSpeed.getMax()));
 	animPower.set(ofRandom(animPower.getMin(), animPower.getMax()));

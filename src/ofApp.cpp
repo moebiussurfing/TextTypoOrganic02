@@ -37,16 +37,14 @@ void ofApp::update() {
 void ofApp::draw() {
 	t.draw();
 
-	// if(!bGui) return;
-	t.drawGui();
 	p.drawGui();
+	if (p.bGui) t.drawGui();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	t.keyPressed(eventArgs);
 
-	if (eventArgs.key == 'g') bGui = !bGui;
 	if (eventArgs.key == 'w') resetWindow();
 	if (eventArgs.key == 'W') resetWindowFullScreen();
 }

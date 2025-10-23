@@ -51,6 +51,4 @@ public:
 
 	float fps;
 	float frameTime;
-
-	bool bGui = true;
 };
