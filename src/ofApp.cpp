@@ -4,21 +4,21 @@
 void ofApp::setup() {
 	ofBackground(24);
 
-	resetWindow();
-	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindow(); });
+	resetWindowCustom();
+	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
 
 	float fps = 60;
 	ofSetFrameRate(fps);
 
-	// organic text
+	// Organic text
 	t.setup(fps);
 	t.gui.setPosition(ofGetWidth() - t.gui.getWidth() - 5, 5);
 
-	// presets manger
+	// Presets manger
 	p.setup(t.paramsPreset);
 	p.gui.add(t.bGui);
 	p.gui.add(vResetWindow);
-	
+
 	//TODO
 	t.refreshGuiPanel(p.guiParams);
 }
@@ -28,12 +28,12 @@ void ofApp::update() {
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
-	// window title
+	// Window title
 	std::string s1 = "";
-	if (t.bDebugDraw||!p.bGui) s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
+	if (t.bDebugDraw || !p.bGui) s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 	static std::string s2 = "";
 	if (p.isChangedIndex()) {
-		s2 = "PRESET #" + ofToString(p.getPresetIndex());
+		s2 = "PRESET " + ofToString(p.getPresetIndex());
 	}
 	string wt = ofToString(SURFING_APP_TITLE) + "\t\t" + s1 + "\t\t" + s2;
 	ofSetWindowTitle(wt);
@@ -51,12 +51,12 @@ void ofApp::draw() {
 void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	t.keyPressed(eventArgs);
 
-	if (eventArgs.key == 'w') resetWindow();
+	if (eventArgs.key == 'w') resetWindowCustom();
 	if (eventArgs.key == 'W') resetWindowFullScreen();
 }
 
 //--------------------------------------------------------------
-void ofApp::resetWindow() { // set window size and centered
+void ofApp::resetWindowCustom() { // Set window size and centered
 	const int w = OFWORKS_APP_WIDTH;
 	const int h = OFWORKS_APP_HEIGHT;
 
@@ -68,7 +68,7 @@ void ofApp::resetWindow() { // set window size and centered
 }
 
 //--------------------------------------------------------------
-void ofApp::resetWindowFullScreen() { // set window full screen
+void ofApp::resetWindowFullScreen() { // Set window full screen
 	ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
 	ofSetWindowPosition(0, 0);
 }

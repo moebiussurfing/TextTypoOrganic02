@@ -34,12 +34,16 @@
 
 #include "ofMain.h"
 
+//---
+
 // Window title
 const std::string SURFING_APP_TITLE = "DEMO - ofWorks";
 
 // Window size
 constexpr float OFWORKS_APP_WIDTH = 1200;
 constexpr float OFWORKS_APP_HEIGHT = 550;
+
+//---
 
 #include "ofxSurfingPresetsLiteOfxGui.h"
 #include "organicText.h"
@@ -53,13 +57,16 @@ public:
 	void exit();
 	void keyPressed(ofKeyEventArgs & eventArgs);
 
+	// Organic Text
 	OrganicText t;
 
+	// Presets Manager
 	SurfingPresetsLiteOfxGui p;
 
+	// Reset app window custom shape
 	ofParameter<void> vResetWindow { "Reset Window" };
 	ofEventListener e_vResetWindow;
-	void resetWindow();
+	void resetWindowCustom();
 	void resetWindowFullScreen();
 
 	float fps;
