@@ -991,11 +991,10 @@ void OrganicText::drawHelp() const {
 	lines.push_back("Shape    " + shapeTypeName.get());
 	lines.push_back("Color    " + colorModeName.get());
 	lines.push_back("Anim     " + animationModeName.get());
-	lines.push_back("");
-	lines.push_back("Font     " + ofToString(fontSize.get(), 0) + "px");
-	lines.push_back("");
 	if (bKeys) {
+		lines.push_back("");
 		lines.push_back("KEYS");
+		lines.push_back("Font     " + ofToString(fontSize.get(), 0) + "px");
 		lines.push_back("");
 		lines.push_back("PARAMS");
 		lines.push_back("< >      Zoom");

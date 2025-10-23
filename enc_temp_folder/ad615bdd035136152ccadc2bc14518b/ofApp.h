@@ -1,18 +1,19 @@
 /*
  
  TODO
-
- - fix tweak ranges
- - gradient bg
- - mouse interact/dist ?
- - zoom lines ratio ?
-	related to fullscreen/screen size?
-	ofCamera ?
-	fbo overscaled?
- - play next presets timed
-	- browse presets ?
- - smooth transients ?
+ 
+ - mouse interact/dist
+ - same help box styles black
+ - fix gui groups collappse. collapse fonts 
+ - lock ui right + help left
+ - fix save debug (auto save ok)
+ - set ofxgui style mini
+ - refresh trails callback
  - add define remove preset 
+ - add W key full screen
+ - play next presets timed
+ - browse presets ?
+ - smooth transients ?
  
  */
 
