@@ -14,7 +14,7 @@
 		new smooth class
 
 	- fix tweak ranges
-		- check not normalized 0-1 all params ?
+		check not normalized 0-1 all params ?
 	- mouse interact/dist ?
 		radius distort
 		next prev preset
@@ -25,6 +25,8 @@
 	- undo history
 	- add define remove preset addon
 		hardcode json files to one .h file. replace workflow
+	- ofxSurfingPresetsLiteOfxGui
+		copy presets to next or other
  
  */
 

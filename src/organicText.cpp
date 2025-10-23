@@ -794,7 +794,7 @@ void OrganicText::drawDebug() const {
 	// Smooth alpha blinking using sine wave
 	float t = ofGetElapsedTimef(); // Elapsed time in seconds
 	float speed = 1.0f; // Blink speed (cycles per second)
-	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * DEBUG_MAX_ALPHA;
+	float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * DEBUG_ALPHA_MAX + DEBUG_ALPHA_MIN_OFFSET;
 	// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
 	ofSetColor(colorDebug.r, colorDebug.g, colorDebug.b, static_cast<int>(alpha));
 
@@ -926,15 +926,19 @@ void OrganicText::draw() {
 
 	// Layer 4: Outline
 	if (bDrawOutline) {
-		ofPushStyle();
-		ofNoFill();
-		if (bDebugDraw) {
-			ofSetColor(colorDebug, DEBUG_MAX_ALPHA);
-			ofSetLineWidth(1.f);
-		} else {
+		if (!bDebugDraw) {
+			ofPushStyle();
+			ofNoFill();
 			ofSetColor(colorOutline.get());
 			ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
+			font.drawStringAsShapes(sText, 0, 0);
+			ofPopStyle();
 		}
+	} else if (bDebugDraw) {
+		ofPushStyle();
+		ofNoFill();
+		ofSetColor(colorDebug, DEBUG_ALPHA_MAX);
+		ofSetLineWidth(1.f);
 		font.drawStringAsShapes(sText, 0, 0);
 		ofPopStyle();
 	}
@@ -946,6 +950,7 @@ void OrganicText::draw() {
 
 	ofPopMatrix();
 
+	// Debug bench measuring drawing performance
 	tBench = ofGetElapsedTimeMicros() - td;
 }
 

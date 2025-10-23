@@ -72,7 +72,8 @@ constexpr float SHAPE_ROTATION_SPEED = 0.2f;
 constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 
-constexpr int DEBUG_MAX_ALPHA = 64;
+constexpr int DEBUG_ALPHA_MAX = 128;
+constexpr int DEBUG_ALPHA_MIN_OFFSET = 50;
 
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
