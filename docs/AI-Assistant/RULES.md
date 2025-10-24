@@ -44,4 +44,4 @@ Defines the minimal operational rules for the AI coding agent to safely interact
 - Do **not** perform any `git commit`, `push`, or version control actions automatically.
   - You may **suggest** a commit when several code changes have accumulated.
 - Do **not** compile, run, or execute the project automatically.
-  - The user is responsible for manual builds and runs.
+  - The developer is responsible for manual builds and runs.
