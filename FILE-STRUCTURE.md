@@ -2,25 +2,25 @@
 
 ```
 TextTypoOrganic02/
-├── .fleet/
 ├── docs/
 │   ├── AI-Assistant/
 │   │   ├── AGENTS.md
 │   │   ├── CURRENT-STATE.md
 │   │   ├── PROJECT-CONTEXT.md
 │   │   └── RULES.md
-│   ├── Active/
-│   │   ├── Current-Tasks.md
-│   │   ├── Known-Bugs.md
+│   ├── Developer/
+│   │   ├── Future/
+│   │   │   ├── FUTURE-FEATURES.md
+│   │   │   └── FUTURE-ROADMAP.md
+│   │   └── Learning/
+│   │       ├── CPP-CONCEPTS.md
+│   │       └── SHADER-CONVERSION-STRATEGY.md
+│   ├── Status/
+│   │   ├── CURRENT-TASKS.md
+│   │   ├── KNOWN-BUGS.md
 │   │   └── TODO.md
-│   ├── Future/
-│   │   ├── Future-Features.md
-│   │   └── Technical-Roadmap.md
-│   ├── Learning/
-│   │   ├── cpp_concepts_explained.md
-│   │   └── shader_conversion_strategy.md
 │   ├── User/
-│   │   └── Quick-Start.md
+│   │   └── QUICK-START.md
 │   └── CHANGELOG.md
 ├── src/
 │   ├── main.cpp
