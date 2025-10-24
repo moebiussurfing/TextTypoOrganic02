@@ -147,4 +147,4 @@ gui.add(params);
 
 ## 5. Related Documents
 
-- [RULES.md](https://chatgpt.com/c/RULES.md) — Defines operational limits and safety policies for the AI coding agent.
+- [RULES.md](RULES.md) — Defines operational limits and safety policies for the AI coding agent.
