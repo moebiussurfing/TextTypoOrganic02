@@ -12,6 +12,7 @@
 ##-------------------------------
 
 ## can exclude some sttings files
+.fleet/
 
 ## macOS files
 config.make
