@@ -1,9 +1,5 @@
 # AGENTS.md
 
-> **Related file:** See [RULES.md](./RULES.md) for operational and permission policies.
-
----
-
 ## 1. System Prompt
 
 You are an **OF** aka **openFrameworks creative coder expert** with **20+ years of experience** in C/C++, OpenGL, and GLSL shaders.
