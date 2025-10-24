@@ -5,26 +5,29 @@
 TextTypoOrganic02 creates beautiful, animated text visualizations. Here's how to get started immediately:
 
 ### 1. Launch the Application
-- Run `TextTypoOrganic02.exe`
-- The app displays and animated text line by default
+- First compile the OF project for your platform. (Tested Systems: Windows/macOS)
+- Run `TextTypoOrganic02.exe` (Windows)
+- The app displays an animated text line with an animated creative code scene
 
 ### 2. Try the Presets (Recommended!)
-- Using `ofxSurfingPresetsLite`
+- Uses `ofxSurfingPresetsLite`, but can be disabled for Deployment Release
 
-### 3. Basic Navigation
+### 3. Key Commands
+
+#### TextTypoOrganic02
 - **←/→** - Zoom in/out (1x to 5x magnification)
 - **↑/↓** - Adjust animation speed
 - **+/-** - Adjust point density (more/fewer particles)
-
-### 4. Quick Visual Toggles
-- **T** - Toggle trails/particle effects
-- **L** - Toggle connections between points
-- **O** - Toggle text outline
-- **F** - Toggle shape fill
-- **B** - Toggle background color
-
-### 5. Cycle Through Options
-- **C** - Cycle through color modes
+- **A** - Toggle animate
 - **A** - Cycle through animation modes
+- **C** - Cycle through color modes
+- **O** - Toggle text outline
+- **F** - Toggle shapes fill
+- **L** - Toggle connections between points
+- **T** - Toggle trails/particle effects
+
+#### ofxSurfingPresetsLite
+- **←/→** - Browse presets
+- **SPACE** - Toggle full-screen and custom size app window
 
 ## That's It!

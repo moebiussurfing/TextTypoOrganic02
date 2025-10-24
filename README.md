@@ -8,6 +8,7 @@
 An enhanced **openFrameworks** application that creates organic, animated visualizations from text using customizable shapes, colors, and animations.
 
 *Enhanced version based on original code from [PFAD/examples/week_5/organicTypographyWorked](https://github.com/colormotor/PFAD/tree/main/examples/week_5/organicTypographyWorked)*
+![](Capture-v0.1.PNG)
 
 ## ✨ Quick Start
 
@@ -15,16 +16,7 @@ An enhanced **openFrameworks** application that creates organic, animated visual
 
 ## 🤖 For AI Assistants & Coding Agents
 
-**Are you an AI assistant?** → **[Read the Complete AI Agents Guide](AI-AGENTS-GUIDE.md)** ⭐
-
-**Quick links for AI assistants:**
-- 📁 **[File Structure](FILE-STRUCTURE.md)** - Project file map
-- 📖 **[Complete AI Guide](docs/AI-Assistant/AGENTS.md)** - Full onboarding, workflows & best practices
-- 🎯 **[Project Context](docs/AI-Assistant/PROJECT-CONTEXT.md)** - Complete project overview
-- 📋 **[Current State](docs/AI-Assistant/CURRENT-STATE.md)** - Status & priorities
-- ✅ **[Current Tasks](docs/Active/Current-Tasks.md)** - What to work on now
-
-**Compatible with**: GitHub Copilot, Gemini, Claude, Cline (via OpenRouter), Cursor, and other AI coding assistants in VS Code or similar IDEs.
+**Are you an AI assistant?** → **[Read the Complete AI Agents Guide](AI-AGENTS-GUIDE.md)**
 
 ## 📚 Documentation Structure
 

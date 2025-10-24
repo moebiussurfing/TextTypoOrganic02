@@ -67,6 +67,8 @@ import argparse
 # Hardcoded list of file/directory names to exclude (case-insensitive).
 # These are matched against the basename of each file/directory.
 HARDCODED_EXCLUSIONS_NAMES = [
+    # 'addons.make',          # Specific configuration file
+    # 'Capture.PNG',
     '.git',
     'bin',
     'obj',
@@ -80,10 +82,8 @@ HARDCODED_EXCLUSIONS_NAMES = [
     '.vscode',
     '.DS_Store',
     'Thumbs.db',
-    'addons.make',          # Specific configuration file
     '.gitignore',           # Exclude the .gitignore file itself from output
     'dll',                  # Exclude the 'dll' directory entirely (not just its contents)
-    'Capture.PNG',
     'refresh_gitignore.ps1'
 ]
 
