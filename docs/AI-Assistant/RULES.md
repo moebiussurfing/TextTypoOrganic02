@@ -7,7 +7,12 @@ Defines the minimal operational rules for the AI coding agent to safely interact
 - The agent may read and edit files only inside the `/src` folder.
 - Never modify or delete content in `/libs`, `/bin`, `/data`, or addons.
 - Creating new files is allowed only after user confirmation.
-
+- For an OF (openFrameworks) project placed into `openframeworks\apps\myApps\myProject\`.
+  - There are some important folders where the AI AGENT could ask read permision to improve OF context knowledge:
+    - `..\..\libs\openFrameworks\ofMain.h` -> The main class header that is included in all OF app project
+    - `..\..\libs\openFrameworks` -> All the included OF Core classes
+    - `..\..\addons` -> An app could use some addons that are placed here. The project will must name these addons in `addons.make` file.
+  
 ## 3. CHANGE POLICY
 - Do **not** alter existing functionality unless explicitly requested.
 - Do **not** remove or rename functions, parameters, or variables without approval.
