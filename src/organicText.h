@@ -89,6 +89,8 @@ constexpr float DEBUG_SPEED = 2.0f;
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
 
+constexpr float MOUSE_RADIUS = 50.0f;
+
 // ============================================================================
 
 enum ShapeType {
@@ -120,7 +122,18 @@ class OrganicText {
 public:
 	OrganicText();
 	~OrganicText();
-
+	
+	//TODO
+	ofParametrGroup parametersDrawing{"Drawing"};
+	ofParameter<float> inPoint{"In",0,0,1};
+	ofParameter<float> outPoint{"Out",1,0,1};
+	ofParameter<float> centerPoint{"Center",0.5,0,1};
+	ofParameter<float> widthPoint{"Width",0.15,0,1};
+	ofEventListener e_inPoint,e_outPoint,e_centerPoint,e_widthPoint;
+	
+	ofParameter<float> radiusMouse{"radiusMouse",0.1,0,1};
+	mutable glm::vec2 mousePos;
+	
 	// Must set before setup()
 	void setTargetFPS(float fps);
 

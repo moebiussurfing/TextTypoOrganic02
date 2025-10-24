@@ -8,7 +8,7 @@ void ofApp::setup() {
 	resetWindowCustom();
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
 
-	float fps = 60;
+	float fps = 120;
 	ofSetFrameRate(fps);
 
 	// Organic text

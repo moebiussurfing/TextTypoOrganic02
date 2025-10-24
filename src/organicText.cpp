@@ -74,6 +74,8 @@ void OrganicText::startup() {
 void OrganicText::setupScene() {
 	ofLogNotice("OrganicText") << "setupScene()";
 
+	ofSetCircleResolution(100);
+	
 	// Initialize
 	t = 0.0;
 	textCenter = vec2(0, 0);
@@ -315,6 +317,17 @@ void OrganicText::setupParams() {
 	parameters.add(vRandomAll); // not useful
 	parameters.add(vResetPreset);
 	parameters.add(vResetAll);
+	
+	//--
+	
+	//TODO
+	parametersDrawing.add(centerPoint);
+	parametersDrawing.add(widthPoint);
+	parametersDrawing.add(inPoint);
+	parametersDrawing.add(outPoint);
+	parameters.add(parametersDrawing);
+	
+	parameters.add(radiusMouse);
 }
 
 //--------------------------------------------------------------
@@ -342,6 +355,16 @@ void OrganicText::setupCallbacks() {
 	animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
+	
+	//TODO
+	e_centerPoint = centerPoint.newListener([this](float & v) {
+		inPoint=ofClamp(centerPoint-widthPoint,0,1);
+		outPoint=ofClamp(centerPoint+widthPoint,0,1);
+	});
+	e_widthPoint = widthPoint.newListener([this](float & v) {
+		inPoint=ofClamp(centerPoint-widthPoint,0,1);
+		outPoint=ofClamp(centerPoint+widthPoint,0,1);
+	});
 
 	//--
 
@@ -785,7 +808,8 @@ void OrganicText::drawConnections() const {
 	ofPushStyle();
 	ofSetLineWidth(connectLineWidth);
 
-	for (size_t i = 0; i < pointsString.size(); i += skipFactor) {
+	for (size_t i = pointsString.size() *inPoint.get(); i < pointsString.size() && i<pointsString.size() *outPoint.get(); i += skipFactor) {
+//	for (size_t i = 0; i < pointsString.size(); i += skipFactor) {
 		float phase1 = t + 0.123f * static_cast<float>(i);
 		vec2 offset1 = getAnimatedOffset(static_cast<int>(i), phase1);
 		vec2 pos1 = pointsString[i] + offset1;
@@ -841,11 +865,17 @@ void OrganicText::drawDebug() const {
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
 
+	// Mouse interact
+	mousePos = glm::vec2(ofGetMouseX(),ofGetMouseY());
+	ofDrawCircle(mousePos, radiusMouse.get() * MOUSE_RADIUS);
+	
 	// All sample points
 	ofFill();
 	for (const auto & point : pointsString) {
 		ofDrawCircle(point, 2.f);
 	}
+	
+	//--
 
 	// Bounding box
 	if (!pointsString.empty()) {
@@ -868,7 +898,8 @@ void OrganicText::drawDebug() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawShapes() {
-	for (size_t i = 0; i < pointsString.size(); i++) {
+	for (size_t i = pointsString.size() *inPoint.get(); i < pointsString.size() && i<pointsString.size() *outPoint.get(); i++) {
+//	for (size_t i = 0; i < pointsString.size(); i++) {
 		ofPushStyle();
 
 		float phase = t + 0.123f * static_cast<float>(i);
@@ -876,6 +907,12 @@ void OrganicText::drawShapes() {
 		vec2 finalPos = pointsString[i] + offset;
 
 		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
+		
+		if(bDebug){
+			bool bInside = (glm::distance(pointsString[i], mousePos) < radiusMouse.get() * MOUSE_RADIUS);
+			color = ofColor(colorDebug,DEBUG_ALPHA_MAX);
+		}
+		
 		ofSetColor(color);
 
 		if (bDrawFill.get())
@@ -932,7 +969,8 @@ void OrganicText::draw() {
 			ofSetLineWidth(trailLineWidth);
 			float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
 
-			for (size_t i = 0; i < pointTrails.size(); i++) {
+			for (size_t i = pointsString.size() *inPoint.get(); i < pointTrails.size()&&i<pointsString.size() *outPoint.get(); i++) {
+//			for (size_t i = 0; i < pointTrails.size(); i++) {
 				for (size_t j = 1; j < pointTrails[i].size(); j++) {
 					float fadeAmount = pow(tf, static_cast<float>(j));
 					float alpha = fadeAmount * TRAILS_ALPHA_MAX;
@@ -970,6 +1008,8 @@ void OrganicText::draw() {
 			font.drawStringAsShapes(sText, 0, 0);
 			ofPopStyle();
 		}
+		
+		//--
 
 		// Layer 5: Debug (always on top)
 		if (bDebug) {
