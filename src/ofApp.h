@@ -7,6 +7,7 @@
 		new smooth class
 	- player next presets timed
 		browse presets ?
+	- fix swith windoResise glitch. call update
 
 	- fix tweak ranges
 		check not normalized 0-1 all params ?

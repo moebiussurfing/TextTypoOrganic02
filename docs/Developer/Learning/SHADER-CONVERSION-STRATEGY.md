@@ -97,10 +97,10 @@ void main() {
     float phase = time + 0.123 * pointIndex;
     vec2 animatedOffset = getAnimatedOffset(basePosition, pointIndex, phase);
     vAnimatedPosition = basePosition + animatedOffset;
-    
+
     vPointIndex = pointIndex;
     vPointSize = radiusMultiplier;
-    
+
     // Apply scene zoom and center
     vec2 finalPos = vAnimatedPosition * sceneZoom;
     gl_Position = vec4(finalPos, 0.0, 1.0);
@@ -153,30 +153,30 @@ vec3 getPointColor(vec2 position, float index, float phase) {
 
 void drawShape(vec2 uv, int shape, bool fill) {
     float alpha = 0.0;
-    
+
     if (shape == 0) { // CIRCLE
         float dist = length(uv);
         alpha = fill ? step(dist, 0.5) : smoothstep(0.4, 0.5, dist) - smoothstep(0.5, 0.6, dist);
     } else if (shape == 1) { // RECTANGLE
         vec2 d = abs(uv) - vec2(0.4);
-        alpha = fill ? step(max(d.x, d.y), 0.0) : 
+        alpha = fill ? step(max(d.x, d.y), 0.0) :
                        smoothstep(0.05, 0.0, abs(max(d.x, d.y)));
     } else if (shape == 5) { // POINT
         float dist = length(uv);
         alpha = 1.0 - smoothstep(0.0, 0.3, dist);
     }
     // Add other shapes...
-    
+
     if (alpha < 0.01) discard;
     fragColor.a = alpha;
 }
 
 void main() {
     vec2 uv = (gl_PointCoord - 0.5) * 2.0; // -1 to 1
-    
+
     float phase = time + 0.123 * vPointIndex;
     vec3 color = getPointColor(vAnimatedPosition, vPointIndex, phase);
-    
+
     fragColor = vec4(color, 1.0);
     drawShape(uv, shapeType, bFill);
 }
@@ -194,11 +194,11 @@ uniform int numPoints;
 
 void main() {
     vec2 currentPos = gl_in[0].gl_Position.xy;
-    
+
     for (int i = 0; i < numPoints; i++) {
         vec2 otherPos = texelFetch(pointPositions, ivec2(i, 0), 0).xy;
         float dist = distance(currentPos, otherPos);
-        
+
         if (dist < connectionDistance && dist > 0.0) {
             gl_Position = vec4(currentPos, 0.0, 1.0);
             EmitVertex();
@@ -221,13 +221,13 @@ private:
     ofShader pointShader;
     ofShader connectionShader;
     ofFbo renderTarget;
-    
+
     // Point data
     vector<InstanceData> pointData;
-    
+
     // Uniforms (keep existing ofParameter system)
     // All existing parameters remain the same!
-    
+
 public:
     void setupGPU();
     void updateUniforms();
@@ -247,13 +247,13 @@ void OrganicTextGPU::setupGPU() {
         data.radiusMultiplier = ofRandom(0.5, 1.0);
         pointData.push_back(data);
     }
-    
+
     // Upload to VBO
     pointsVBO.setVertexData(&pointData[0], pointData.size(), GL_STATIC_DRAW);
     pointsVBO.setVertexAttribute(0, 2, GL_FLOAT, false, sizeof(InstanceData), 0); // basePosition
     pointsVBO.setVertexAttribute(1, 1, GL_FLOAT, false, sizeof(InstanceData), 8); // pointIndex
     pointsVBO.setVertexAttribute(2, 1, GL_FLOAT, false, sizeof(InstanceData), 12); // radiusMultiplier
-    
+
     // Load shaders
     pointShader.load("shaders/points.vert", "shaders/points.frag");
 }
@@ -271,7 +271,7 @@ void OrganicTextGPU::updateUniforms() {
 
 void OrganicTextGPU::drawGPU() {
     updateUniforms();
-    
+
     pointShader.begin();
     pointsVBO.draw(GL_POINTS, 0, pointData.size());
     pointShader.end();
@@ -282,7 +282,7 @@ void OrganicTextGPU::drawGPU() {
 
 ### Massive Performance Gains:
 
-1. **Point Processing**: 
+1. **Point Processing**:
    - CPU: ~1,000 points at 60fps = limited by CPU single-thread performance
    - GPU: ~100,000+ points at 60fps = parallel processing on thousands of cores
 

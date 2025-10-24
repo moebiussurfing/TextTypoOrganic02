@@ -4,7 +4,7 @@
 
 ### Current CPU Limitations
 - Point processing: O(n) per frame
-- Connection rendering: O(n²) complexity  
+- Connection rendering: O(n²) complexity
 - Color calculations: CPU-bound
 - Trail management: Memory-intensive
 
@@ -15,7 +15,7 @@
 - Implement color calculation in fragment shader
 - Expected gain: 5-10x performance
 
-#### Phase 2: Compute Shaders (1-2 months)  
+#### Phase 2: Compute Shaders (1-2 months)
 - GPU-accelerated connections
 - GPU-based trail management
 - Expected gain: 10-50x total
@@ -37,7 +37,7 @@
 vector<ofPoint> points; // x, y coordinates
 ofDrawCircle(point, radius); // 2D shapes
 
-// Target 3D system  
+// Target 3D system
 vector<ofVec3f> points; // x, y, z coordinates
 ofDrawSphere(point, radius); // 3D shapes
 ofEasyCam camera; // 3D navigation
@@ -45,7 +45,7 @@ ofEasyCam camera; // 3D navigation
 
 ### 3D Features
 - **3D Point Cloud**: Extrude 2D text into 3D space
-- **3D Camera System**: ofEasyCam for navigation  
+- **3D Camera System**: ofEasyCam for navigation
 - **3D Animation Modes**: Enhanced algorithms for 3D space
 - **3D Shape Rendering**: Spheres, cubes, custom meshes
 - **3D Connections**: Spatial connection networks

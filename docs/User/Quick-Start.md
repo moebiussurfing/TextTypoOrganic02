@@ -19,7 +19,7 @@ TextTypoOrganic02 creates beautiful, animated text visualizations. Here's how to
 - **↑/↓** - Adjust animation speed
 - **+/-** - Adjust point density (more/fewer particles)
 - **A** - Toggle animate
-- **A** - Cycle through animation modes
+- **a** - Cycle through animation modes
 - **C** - Cycle through color modes
 - **O** - Toggle text outline
 - **F** - Toggle shapes fill

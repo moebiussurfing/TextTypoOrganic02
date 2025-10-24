@@ -1,10 +1,10 @@
 # 🤖 PROJECT CONTEXT - TextTypoOrganic02
 
-## ESSENTIAL INFO FOR AI ASSISTANTS
+## ESSENTIAL INFO
 
-**Project Type**: openFrameworks C++ creative coding application  
-**Current Status**: ✅ PRODUCTION READY - All core features implemented  
 **Main Purpose**: Real-time text visualization with organic animations and effects  
+**Project Type**: openFrameworks C++ creative coding application
+**Current Status**: PRODUCTION READY - All core features implemented
 
 ## PROJECT STRUCTURE
 ```
@@ -16,10 +16,10 @@ TextTypoOrganic02/
 │   ├── organicText.cpp
 │   └── organicText.h
 
-ofxAddons/
-ofxGui
-ofxSurfingHelpersLite
-ofxSurfingPresetsLite
+addons.make -> ofxAddons Dependencies
+	ofxGui
+	ofxSurfingHelpersLite
+	ofxSurfingPresetsLite
 ```
 
 ## CORE CLASSES & RESPONSIBILITIES
@@ -32,7 +32,7 @@ ofxSurfingPresetsLite
 - **GUI**: ofxPanel with organized parameter groups
 - **Presets**: `loadPreset(0-9)` - instant visual configurations
 
-### `ofApp` (WRAPPER - minimal functionality)
+### `ofApp`
 - Just delegates setup(), update(), draw(), keyPressed() to OrganicText
 - Handles application lifecycle and auto-save on exit
 
@@ -55,10 +55,7 @@ connectionDistance, trailLength, sceneZoom
 ```
 
 ## BUILD REQUIREMENTS
-- openFrameworks 0.12.1
+- openFrameworks 0.12+ (Tested Systems: Windows/macOS)
 
-## FOR AI ASSISTANTS: MOST USEFUL FILES
-1. **`/AI-Assistant/QUICK-COMMANDS.md`** - Common operations
-2. **`/TODO/Current-Tasks.md`** - What needs to be done NOW
-3. **`/Developer/Architecture.md`** - Detailed code structure
-4. **`src/organicText.h`** - Main class interface
+## MOST USEFUL FILES
+

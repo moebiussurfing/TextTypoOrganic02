@@ -13,8 +13,8 @@
 - [**CURRENT-STATE.md**](docs\AI-Assistant\CURRENT-STATE.md) - Current priorities. Read at every session start
 - [**CODE-PATTERNS.md**](/docs/AI-Assistant/CODE-PATTERNS.md) - Coding conventions. Check before writing code
 - [**RULES.md**](/docs/AI-Assistant/RULES.md) - Automated rules for assistants
-- [**Complete AI Guide**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices
-- [**Current Tasks**](docs/Active/Current-Tasks.md) - What to work on now
+- [**AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices
+- [**Current Tasks**](docs/Status/CURRENT-TASKS.md) - What to work on now
 
 ---
 
