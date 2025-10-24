@@ -8,7 +8,7 @@ void ofApp::setup() {
 	resetWindowCustom();
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
 
-	float fps = 120;
+	float fps = 60;
 	ofSetFrameRate(fps);
 
 	// Organic text
@@ -61,8 +61,17 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (k == 'e') {
 		resetWindowFullScreen();
 		if (!p.bGui) p.bGui = true;
-	} else if (k == 'd')
+	} else if (k == 'd'){
 		if (!t.bKeys) t.bDebug = !t.bDebug;
+	}else if (k == OF_KEY_SPACE) {
+		bWindowFullScreen=!bWindowFullScreen;
+		if (p.bGui) p.bGui = false;
+		if(bWindowFullScreen) {
+			resetWindowFullScreen();
+		}else{
+			resetWindowCustom();
+		}
+	}
 }
 
 //--------------------------------------------------------------

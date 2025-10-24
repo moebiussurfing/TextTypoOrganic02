@@ -67,7 +67,8 @@ public:
 	ofEventListener e_vResetWindow;
 	void resetWindowCustom();
 	void resetWindowFullScreen();
-
+	bool bWindowFullScreen = false;
+	
 	float fps;
 	float frameTime;
 
