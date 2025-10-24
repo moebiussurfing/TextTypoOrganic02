@@ -158,7 +158,7 @@ void OrganicText::setupParams() {
 	animationModeName.setSerializable(false);
 	animSpeed.set("Speed", 1.0, 0.1, 3.0);
 	animPower.set("Power", 0.1, 0.0, 1.0);
-	animWaveFreq.set("Wave Freq", 0.5, 0.0, 1.0);
+	animWaveFreq.set("Wave Freq", 0.3, 0.0, 1.0);
 	animIntensity.set("Intensity", 0.2, 0.0, 1.0);
 	animSpiral.set("Spiral", 0.2, 0.0, 1.0);
 	animPulseIntensity.set("Pulse", 0.2, 0.0, 1.0);
@@ -833,10 +833,10 @@ void OrganicText::drawDebug() const {
 	ofSetColor(colorDebug.r, colorDebug.g, colorDebug.b, static_cast<int>(alpha));
 
 	ofNoFill();
-	ofSetLineWidth(1);
+	ofSetLineWidth(1.2f);
 
 	// Text center crosshair
-	float crossSize = 10;
+	float crossSize = 7;
 	ofDrawLine(textCenter - vec2(crossSize, 0), textCenter + vec2(crossSize, 0));
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
@@ -857,29 +857,9 @@ void OrganicText::drawDebug() const {
 		}
 
 		ofNoFill();
-		ofSetLineWidth(1);
+		ofSetLineWidth(.5f);
 		ofDrawRectangle(minP.x, minP.y, maxP.x - minP.x, maxP.y - minP.y);
-
-		//#if 0
-		//		// Dimensions text
-		//		ofDrawBitmapStringHighlight(
-		//			"W:" + ofToString(maxP.x - minP.x, 0) + " H:" + ofToString(maxP.y - minP.y, 0),
-		//			minP.x, minP.y - 20,
-		//			ofColor(255, 0, 255,static_cast<int>(alpha)),
-		//			ofColor(0, 0, 0));
-		//#endif
 	}
-
-	//#if 0
-	//	// Show normalized densityMinGap mapped value
-	//	float fontScale = fontSize.get() / 150.0f;
-	//	float minGapMapped = ofMap(densityMinGap.get(), 0, 1, DENSITY_MIN_SPACING_MIN, DENSITY_MIN_SPACING_MAX, true) * fontScale;
-	//	ofDrawBitmapStringHighlight(
-	//		"MinGap: " + ofToString(densityMinGap.get(), 2) + " -> " + ofToString(minGapMapped, 1) + "px",
-	//		textCenter.x - 100, textCenter.y + fontSize.get()*0.65f,
-	//		ofColor(255, 0, 255,static_cast<int>(alpha)),
-	//		ofColor(0, 0, 0));
-	//#endif
 
 	ofPopStyle();
 }
@@ -1078,9 +1058,9 @@ void OrganicText::drawHelp() const {
 		lines.push_back("R        Reset all");
 	}
 
+	float boxWidth = 218;
 	float lineHeight = 16;
 	float padding = 10;
-	float boxWidth = 240;
 	float boxHeight = lines.size() * lineHeight + padding * 2;
 
 	float boxX;
@@ -1088,7 +1068,7 @@ void OrganicText::drawHelp() const {
 
 	if (bGui) {
 		// linked to gui anchor
-		boxX = gui.getPosition().x - 246;
+		boxX = gui.getPosition().x - boxWidth - 5;
 		boxY = gui.getPosition().y - 1;
 	} else {
 		// screen border

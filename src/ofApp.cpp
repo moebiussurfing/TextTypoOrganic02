@@ -57,11 +57,11 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	if (k == 'w') {
 		resetWindowCustom();
-		if (p.bGui) p.bGui = false; // user workflow
-	} else if (k == 'W') {
+		if (p.bGui) p.bGui = false;
+	} else if (k == 'e') {
 		resetWindowFullScreen();
-		//if (p.bGui) p.bGui = false;
-	} else if ((k == 'd') || (k == 'd'))
+		if (!p.bGui) p.bGui = true;
+	} else if (k == 'd')
 		if (!t.bKeys) t.bDebug = !t.bDebug;
 }
 

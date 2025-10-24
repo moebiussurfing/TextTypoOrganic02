@@ -24,6 +24,9 @@
 		copy presets to next or other
 			but copy to mem + move without load + save
  
+	IDEAS
+	- add float 0-1 limit draw objects
+ 
  */
 
 #pragma once

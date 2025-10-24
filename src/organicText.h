@@ -46,7 +46,7 @@ constexpr float ANIM_PULSE_MAX = 20.0f;
 
 // Animation Frequency Constants
 constexpr float ANIM_WAVE_FREQ_MIN = 0.001f;
-constexpr float ANIM_WAVE_FREQ_MAX = 0.08f;
+constexpr float ANIM_WAVE_FREQ_MAX = 0.04f;
 constexpr float ANIM_SPIRAL_TIGHT_MIN = 0.002f;
 constexpr float ANIM_SPIRAL_TIGHT_MAX = 0.025f;
 
@@ -70,8 +70,8 @@ constexpr float CONNECTIONS_MAX_LINE_WIDTH = 3.f;
 // Trails Constants
 constexpr float TRAILS_ALPHA_MAX = 180.0f;
 constexpr float TRAILS_LINE_WIDTH_MAX = 5.f;
-constexpr float TRAILS_LENGTH_MIN = 3.f;
-constexpr float TRAILS_LENGTH_MAX = 50.f;
+constexpr float TRAILS_LENGTH_MIN = 3.f;//amount trails per group
+constexpr float TRAILS_LENGTH_MAX = 25.f;//amount trails per group
 constexpr float TRAILS_FADE_MIN = 0.85f;
 constexpr float TRAILS_FADE_MAX = 0.999f;
 
