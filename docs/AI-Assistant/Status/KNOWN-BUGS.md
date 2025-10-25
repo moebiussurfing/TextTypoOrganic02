@@ -3,7 +3,7 @@
 ## Issues Under Investigation
 
 ### Performance Related
-- [] **High density performance drop**
+- [ ] **High density performance drop**
 	- Frame rate drops when density or trails grows
 
 ## Bug Investigation Process
