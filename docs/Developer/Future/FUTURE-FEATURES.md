@@ -1,4 +1,4 @@
-# Future Features - TextTypoOrganic02
+# FUTURE-FEATURES.md
 
 ## 🚀 Major Features
 
@@ -8,6 +8,8 @@
 - **Vertex Shaders**: Point positioning on GPU
 - **Fragment Shaders**: Color calculations on GPU  
 - **Performance Target**: 10x-100x improvement
+
+---
 
 ## 🎨 Visual Enhancements
 
@@ -21,6 +23,8 @@
 - **Font Selection**: Choose from installed fonts
 - **Multi-line Text**: Support longer strings
 
+---
+
 ## 🔧 Technical Improvements
 
 ### Performance
@@ -32,10 +36,3 @@
 - **User Presets**: Save custom configurations  
 - **Preset Interpolation**: Smooth morphing
 - **Preset Categories**: Organize by theme
-
----
-
-## 🎯 Priority Order
-
-### Phase 1
-1. **GPU Shader Implementation**

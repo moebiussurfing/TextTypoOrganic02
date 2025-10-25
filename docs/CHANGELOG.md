@@ -1,4 +1,15 @@
-# Changelog - TextTypoOrganic02
+# CHANGELOG.md
+
+## v0.3 - Current Development Phase [ ]
+
+- Hardcode presets JSON pre generated settings
+- Mouse interaction
+- Smooth drawing and browsing
+- Help app for Deployment version
+
+---
+
+## Major Milestones
 
 ## Key Achievements
 - [x] **Presets Management** can be disabled for Deployment
@@ -10,20 +21,7 @@
 - [x] **Settings Persistence** with auto-save/load functionality
 - [x] **Debug Visualization** for technical insights
 
-## v0.3 - Current Development Phase
-- [ ] DONE
-
-- Hardcode presets JSON pre generated settings
-- Mouse interaction
-- Smooth drawing and browsing
-- Help app for Deployment version
-
----
-
-## Major Milestones
-
-### v0.2 - Current Implementation
-- [x] DONE
+### v0.2 - Current Implementation [x]
 
 **Major Features Added:**
 - Enhanced preset system (Using ofxSurfingPresetsLite)
@@ -33,8 +31,7 @@
 - Zoom functionality
 - Debug mode
 
-### v0.1 - Initial Implementation
-- [x] DONE
+### v0.1 - Initial Implementation [x]
 
 **Foundation:**
 - Basic text-to-points sampling

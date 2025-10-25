@@ -1,4 +1,4 @@
-# 📊 CURRENT STATE - TextTypoOrganic02
+# CURRENT-STATE.md
 
 ## PROJECT STATUS:
 

@@ -14,7 +14,7 @@
 - [**CODE-PATTERNS.md**](/docs/AI-Assistant/CODE-PATTERNS.md) - Coding conventions. Check before writing code
 - [**RULES.md**](/docs/AI-Assistant/RULES.md) - Automated rules for assistants
 - [**AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices
-- [**Current Tasks**](docs/Status/CURRENT-TASKS.md) - What to work on now
+- [**Current Tasks**](docs/AI-Assistant/Status/CURRENT-TASKS.md) - What to work on now
 
 ---
 

@@ -1,4 +1,4 @@
-# 🤖 PROJECT CONTEXT - TextTypoOrganic02
+# PROJECT-CONTEXT.md
 
 ## ESSENTIAL INFO
 
@@ -8,15 +8,13 @@
 
 ## PROJECT STRUCTURE
 ```
-TextTypoOrganic02/
 ├── src/
 │   ├── main.cpp
 │   ├── ofApp.cpp
 │   ├── ofApp.h
 │   ├── organicText.cpp
 │   └── organicText.h
-
-addons.make -> ofxAddons Dependencies
+├── addons.make -> ofxAddons Dependencies
 	ofxGui
 	ofxSurfingHelpersLite
 	ofxSurfingPresetsLite
