@@ -13,32 +13,31 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 
 ## ✨ For Users
 
-**New to TextTypoOrganic02?** → Start with [docs\User\QUICK-START.md](docs\User\QUICK-START.md) for a 30-second app usage introduction
+**New to TextTypoOrganic02?** → Start with [docs\User\QUICK-START.md](docs\User\QUICK-START.md) for an app usage introduction
 
 ## 🤖 For AI Assistants & Coding Agents
 
-**Are you an AI Assistant Agent?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)** and explore the folder content [docs\AI-Assistant](docs\AI-Assistant).
+**Are you an AI Assistant Agent?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)** (Explore also the [docs\AI-Assistant](docs\AI-Assistant) folder.)
 
 ## 👨‍💻 For Developers
 
 - **[docs\Developer](docs\Developer)** - Folder with developer notes, ideas, future roadmap and C++ concepts
 
-## 📋 Project Management
-
-### Status
-- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** - ⭐ TODO: Tasks that need to be done right away!  
-The AI Code Agent will start the session by reading and getting to know the project context. Then, the AI Agent must start putting the instructions into action right away!
-- **[docs\AI-Assistant\Status\CURRENT-TASKS.md](docs\AI-Assistant\Status\CURRENT-TASKS.md)** - A list of recent, completed and next planned tasks
-- **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point
-
 ### Future
 - **[docs\Developer\Future\FUTURE-FEATURES.md](docs\Developer\Future\FUTURE-FEATURES.md)** - A long-term roadmap and ideas for evaluating the implementation or rejection of these ideas.
 - **[docs\Developer\Future\FUTURE-ROADMAP.md](docs\Developer\Future\FUTURE-ROADMAP.md)** - Possible strategies and priorities for implementing these future ideas
 
-### 📖 CHANGELOG
-- **[docs\CHANGELOG.md](docs\CHANGELOG.md)** - Major Milestones and Current Status
+## 📋 Project Management
 
-### 📖 Project History
+### Status
+- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** ⭐ The following tasks must be completed immediately. The AI Code Agent will initiate the session by reading and familiarizing itself with the project context. Subsequently, the AI Agent is required to initiate the execution of the instructions now! Go!.
+- **[docs\AI-Assistant\Status\CURRENT-TASKS.md](docs\AI-Assistant\Status\CURRENT-TASKS.md)** - A list of recent, completed and next planned tasks
+- **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point
+
+### Changelog
+- **[docs\CHANGELOG.md](docs\CHANGELOG.md)** - Project history, major milestones and current ptoject status
+
+### File Structure
 ```
 TextTypoOrganic02/
 ├── docs/
