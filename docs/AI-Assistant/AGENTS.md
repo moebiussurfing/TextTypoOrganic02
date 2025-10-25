@@ -10,7 +10,7 @@ Your role is to assist with development, analysis, and optimization of C++ code 
 
 ## 2. First Contact
 
-- Explore the project structure (e.g., `ofApp` and included `ofxAddons`).
+- Explore the project structure (e.g., `ofApp` and included `ofxAddons` aka `addons`).
 - Do **not** propose or implement anything unless explicitly requested.
 - Carefully modify **only** the source code agreed upon.
   Never touch unrelated code sections.
@@ -23,7 +23,7 @@ Your role is to assist with development, analysis, and optimization of C++ code 
 
 - Use **modern C++** practices: C++17 or C++20.
 - Always use the full `std::` namespace (e.g., `std::string` instead of `string`).
-- Write **all comments in English**, even if the user communicates in Spanish.
+- Write detailed code comments. **All comments in English**, even if the user communicates in Spanish. Use Doxygen (@brief) nonation for more important funcions that helps how some "algorithms" work.
 
 ### Includes
 
@@ -35,12 +35,18 @@ Use angle brackets for system or openFrameworks headers, and quotes for local on
 
 ```
 
-Order of includes:
+### Order of includes:
 
 1. C++ Standard Library
 2. Third-party libraries
 3. openFrameworks headers
 4. Local project files
+
+### Code Organization
+
+- Separate declarations (.h) and definitions (.cpp) unless the function is trivial or templated.
+- Group related functions into classes or namespaces.
+- Keep functions short and focused (ideally under ~40 lines).
 
 ### Formatting
 
@@ -79,16 +85,19 @@ Order of includes:
 
 ## 4. openFrameworks-Specific Details
 
-- Prefer **openFrameworks core functions** (`ofMain.h`) over plain C++ or GL functions whenever possible.
+- Use openFrameworks lifecycle methods (`setup()`, `update()`, `draw()`) consistently. Keep rendering logic (`draw()`) separate from state updates (`update()`).
 
-    Example: use `of::filesystem::path`, `ofFilePath`, `ofToDataPath` for file operations.
+- Prefer **openFrameworks core functions** (`ofMain.h`) over plain C++ or GL functions whenever possible.
+	- Example: use `of::filesystem::path`, `ofFilePath`, `ofToDataPath` for file operations.
 
 - Prefer **openFrameworks drawing and state functions** instead of raw OpenGL calls.
+	- Example: use `ofFill()`, `ofDrawCircle()`, `ofSetColor()`, `ofPushMatrix()`, `ofPopMatrix()`, `ofPushStyle()`, `ofPopStyle()` etc.
 
-    Example: use `ofFill()`, `ofDrawCircle()`, `ofSetColor()`, `ofPushMatrix()`, `ofPopMatrix()`, `ofPushStyle()`, `ofPopStyle()` etc.
+- Use `ofLogNotice()`, `ofLogWarning()`, `ofLogError()` instead of `std::cout` for debugging.
 
+## 4.1 Personal preferences as coder
 
-### Parameters and GUI
+### Parameters, callbacks and GUI
 
 Use `ofParameter` extensively for any variable or setting that can be exposed to the GUI or stored in JSON.
 
@@ -108,7 +117,7 @@ e_vReset = vReset.newListener([this](const void* sender) {
 
 ```
 
-### Setup Pattern
+### Example Setup Pattern
 
 For clarity, initialization should be divided into separate setup phases:
 
@@ -142,6 +151,41 @@ gui.setup("Example");
 gui.add(params);
 
 ```
+
+### Example snippet to make params persistent using JSON OF core
+
+```cpp
+void saveSettings() {
+	ofLogNotice() << "saveSettings()";
+
+	ofJson settings;
+	ofSerialize(settings, parameters);
+	bool b = ofSavePrettyJson(pathSettings, settings);
+	if (b)
+		ofLogNotice() << "Settings saved";
+	else
+		ofLogError() << "Unable to save settings!";
+}
+
+void OrganicText::loadSettings() {
+	ofLogNotice() << "loadSettings()";
+
+	ofFile file(pathSettings);
+	if (file.exists()) {
+		ofJson settings = ofLoadJson(pathSettings);
+		ofDeserialize(settings, parameters);
+		ofLogNotice() << "Settings loaded";
+	} else
+		ofLogWarning() << "Unable to load settings file or not found!";
+}
+```
+
+### Example practice to log when each function is executed
+
+```cpp
+void myApp::myFunction() {
+	ofLogNotice("myApp") << "myFunction()"; // -> add this for all methods except when executing on each frame update/draw!
+}
 
 ---
 
