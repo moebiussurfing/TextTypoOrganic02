@@ -26,7 +26,8 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 ## 📋 Project Management
 
 ### Status
-- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** - TODO tasks that need to be done immediately! ⭐ <- Start Here!
+- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** - ⭐ TODO: Tasks that need to be done right away!  
+The AI Code Agent will start the session by reading and getting to know the project context. Then, the AI Agent must start putting the instructions into action right away!
 - **[docs\AI-Assistant\Status\CURRENT-TASKS.md](docs\AI-Assistant\Status\CURRENT-TASKS.md)** - A list of recent, completed and next planned tasks
 - **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point
 

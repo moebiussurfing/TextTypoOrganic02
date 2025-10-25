@@ -22,7 +22,7 @@
 
 ## CORE CLASSES & RESPONSIBILITIES
 
-### `OrganicText` (PRIMARY CLASS - 90% of functionality)
+### OrganicText (PRIMARY CLASS)
 - **Text sampling**: `sampleStringPoints()` - converts "ARB" text to point cloud
 - **Animation**: `calculateAnimation()` - 5 modes (Noise, Wave, Spiral, Pulse, Orbit)  
 - **Rendering**: `draw()` - shapes, connections, trails, debug info
@@ -30,11 +30,16 @@
 - **GUI**: ofxPanel with organized parameter groups
 - **Presets**: `loadPreset(0-9)` - instant visual configurations
 
-### `ofApp`
-- Just delegates setup(), update(), draw(), keyPressed() to OrganicText
-- Handles application lifecycle and auto-save on exit
+### ofApp
+- Desktop app: Handles application lifecycle and auto-save on exit
+- Calls setup(), update(), draw() etc from OrganicText object
+
+## ofxAddons
+- The function of the presets manager for designing themes and switching scenes will be handled by the 'ofxSurfingPresetsLite' programme when it is enabled.
 
 ## KEY PARAMETERS (all ofParameter<T>)
+
+### VISUAL SCENE
 ```cpp
 // Density - how many points
 pointDensity, contourSampling, pointsSpacing
@@ -51,9 +56,4 @@ colorMode, globalColor1/2/3 (ofColor), colorMixFactor
 // Effects
 connectionDistance, trailLength, sceneZoom
 ```
-
-## BUILD REQUIREMENTS
-- openFrameworks 0.12+ (Tested Systems: Windows/macOS)
-
-## MOST USEFUL FILES
 
