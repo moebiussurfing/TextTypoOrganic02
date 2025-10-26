@@ -7,6 +7,7 @@
 ---
 
 ## 📚 AI-ASSISTANT FILE:
+
 - All the related notes for the `AI AGENT` are placed on this folder:
 [docs/AI-Assistant](docs/AI-Assistant/)
 
@@ -32,8 +33,10 @@
 
 1. **REVIEW**:
 - **[docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md)** - A list of recent, completed and next planned tasks.
+
 2. **CHECK**:
 - **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point.
+
 3. **PLAN & EXECUTE**:
 	⭐ **`START CODING: After reading TODO.md, begin implementation!`**
 	- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** The following tasks must be completed immediately. The AI Code Agent will initiate the session by reading and familiarizing itself with the project context. Subsequently, the AI Agent is required to initiate the execution of the instructions now! Go!.
@@ -42,7 +45,7 @@
 
 1. **DOCUMENT**:
    - Summarize what was accomplished this session
-   - Ask and propose update relevant status .md files
+   - Ask and propose if update relevant status .md files
 
 2. **TEST & VALIDATE**:
    - Ask developer to compile the binary project
