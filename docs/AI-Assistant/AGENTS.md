@@ -30,7 +30,7 @@
 Use angle brackets for system or openFrameworks headers, and quotes for local ones:
 
 ```cpp
-#include <ofMain.h>     // OF or system
+#include <ofMain.h>		// OF Core system
 #include "ofApp.h"      // local project
 ```
 

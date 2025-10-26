@@ -6,9 +6,9 @@
 
 ---
 
-## 📚 AI-ASSISTANT FILE:
+## 📚 AI-ASSISTANT FILES:
 
-- All the related notes for the `AI AGENT` are placed on this folder:
+- All the related .md notes files for the `AI AGENT` are placed on this folder:
 [docs/AI-Assistant](docs/AI-Assistant/)
 
 ---
@@ -20,16 +20,16 @@
 1. **READ**:
 
 - [**FILE-STRUCTURE**](FILE-STRUCTURE.md) - Project file map.
-- [**PROJECT-CONTEXT.md**](/docs/AI-Assistant/PROJECT-CONTEXT.md) - Full project overview. Read on first session or when lost.
+- [**docs/AI-Assistant/PROJECT-CONTEXT.md**](docs/AI-Assistant/PROJECT-CONTEXT.md) - Full project overview. Read on first session or when lost.
 
 2. **CHECK**:
 
-- [**AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices for assistants.
-- [**RULES.md**](/docs/AI-Assistant/RULES.md) - Automated execution rules and constraints for AI assistants.
+- [**docs/AI-Assistant/AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices for assistants.
+- [**docs/AI-Assistant/RULES.md**](docs/AI-Assistant/RULES.md) - Automated execution rules and constraints for AI assistants.
 
 3. **REVIEW**:
 
-- [**CURRENT-STATE.md**](docs/AI-Assistant/CURRENT-STATE.md) - Current priorities. Read at every session start.
+- [**docs/AI-Assistant/CURRENT-STATE.md**](docs/AI-Assistant/CURRENT-STATE.md) - Current priorities. Read at every session start.
 
 ## **BEFORE CODING**
 
@@ -50,20 +50,20 @@
 
 1. **DOCUMENT**:
 
-   - Summarize what was accomplished this session
-   - Ask and propose if update relevant status .md files
+   - Summarize what was accomplished this session.
+   - Ask developer and propose if update relevant status .md files.
 
 2. **TEST & VALIDATE**:
 
-   - Ask developer to compile the binary project
-   - Request testing of new features/fixes
+   - Ask developer to compile the binary project.
+   - Request testing of new features/fixes.
 
 3. **REVIEW STATUS**:
 
-   - Check if persistent problems are resolved
-   - Confirm successfully implemented features
-   - Perform deep review and summarize current project state
+   - Ask developer to check if persistent problems are resolved.
+   - Confirm successfully implemented features.
+   - Perform deep review and summarize current project state.
 
 4. **PLAN NEXT**:
 
-   - Ask if update [docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md) with next priorities
+   - Ask developer if update [docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md) doc with next priorities proposed.
