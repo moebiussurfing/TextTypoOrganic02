@@ -1,6 +1,6 @@
 # AI-AGENTS-GUIDE.md
 
-> [!INFO]
+> [! INFO]
 > Quick reference for AI coding assistants:
 > GitHub Copilot, Gemini, Claude, Cline, Cursor, Windsurf and other AI coding assistants in VS Code, Visual Studio 2026, Xcode or similar IDEs.
 
