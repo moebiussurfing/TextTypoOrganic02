@@ -89,7 +89,7 @@ constexpr float DEBUG_SPEED = 2.0f;
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
 
-constexpr float MOUSE_RADIUS = 50.0f;
+constexpr float MOUSE_RADIUS_INTERACT_MAX = 50.0f;
 
 // ============================================================================
 
@@ -348,6 +348,7 @@ private:
 	float frameTime;
 	float fps;
 	float targetFPS = 120.0f;
+	bool bDebugLowFPS = false;
 
 	// Settings
 	std::string pathSettings = "OrganicText.json";
@@ -375,5 +376,5 @@ private:
 	void refreshWindowResized();
 
 	// Bench measure time elapsed on draw() in microseconds
-	uint64_t tBench = 0;
+	uint64_t timeDrawBenchmark = 0;
 };

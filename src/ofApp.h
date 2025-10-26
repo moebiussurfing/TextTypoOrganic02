@@ -52,9 +52,9 @@ public:
 	void draw();
 	void exit();
 	void keyPressed(ofKeyEventArgs & eventArgs);
+	void mousePressed(int x, int y, int button);
 	void mouseMoved(int x, int y);
 	void mouseDragged(int x, int y, int button);
-	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
 
 	// Organic Text
@@ -73,7 +73,9 @@ public:
 	float fps;
 	float frameTime;
 
-	ofParameter<bool> bMouseInteract;
+	ofParameter<bool> bMouseBrowse;
+
+	//--
 
 	inline void ofxDrawBgGradient(ofColor c1 = ofColor{32}, ofColor c2 = ofColor{16}, ofGradientMode g = OF_GRADIENT_CIRCULAR)
     {

@@ -2,9 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	// ofBackground(24);
-
-	bMouseInteract.set("Mouse Interact", true);
+	bMouseBrowse.set("Mouse Browse", true);
 
 	resetWindowCustom();
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
@@ -19,7 +17,7 @@ void ofApp::setup() {
 	// Presets manger
 	p.setup(t.paramsPreset);
 	p.gui.add(t.bGui);
-	p.gui.add(bMouseInteract);
+	p.gui.add(bMouseBrowse);
 	p.gui.add(vResetWindow);
 
 	//TODO
@@ -101,21 +99,21 @@ void ofApp::exit() {
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y) {
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {
-}
-
-//--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
-	if (!bMouseInteract) return;
+	if (!bMouseBrowse) return;
 
 	if (button == 0)
 		p.doLoadNext();
 	else if (button == 2)
 		p.doLoadPrevious();
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y) {
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
