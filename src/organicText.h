@@ -68,12 +68,12 @@ constexpr int CONNECTIONS_MAX_PER_POINT_FAR = 8;
 constexpr float CONNECTIONS_MAX_LINE_WIDTH = 3.f;
 
 // Trails Constants
-constexpr float TRAILS_ALPHA_MAX = 180.0f;
+constexpr float TRAILS_ALPHA_MAX = 255.0f; // Full alpha range
 constexpr float TRAILS_LINE_WIDTH_MAX = 5.f;
 constexpr float TRAILS_LENGTH_MIN = 3.f;//amount trails per group
-constexpr float TRAILS_LENGTH_MAX = 25.f;//amount trails per group
-constexpr float TRAILS_FADE_MIN = 0.85f;
-constexpr float TRAILS_FADE_MAX = 0.999f;
+constexpr float TRAILS_LENGTH_MAX = 100.f;//amount trails per group - longer trails
+constexpr float TRAILS_FADE_MIN = 0.5f; // More transparent at minimum
+constexpr float TRAILS_FADE_MAX = 1.0f; // Fully opaque at maximum
 
 // Shape Constants
 constexpr float SHAPE_MAX_RADIUS = 50.0f;

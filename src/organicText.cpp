@@ -849,15 +849,36 @@ void OrganicText::drawTrails(){
 		ofSetLineWidth(trailLineWidth);
 		float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
 
-		for (size_t i = pointsString.size() *inPoint.get(); i < pointTrails.size()&&i<pointsString.size() *outPoint.get(); i++) {
-//			for (size_t i = 0; i < pointTrails.size(); i++) {
+		// Use ofMesh for maximum performance - batch all trail lines into single draw call
+		ofMesh trailMesh;
+		trailMesh.setMode(OF_PRIMITIVE_LINES);
+		
+		// Collect all trail segments into a single mesh
+		for (size_t i = pointsString.size() * inPoint.get(); i < pointTrails.size() && i < pointsString.size() * outPoint.get(); i++) {
+			if (pointTrails[i].size() < 2) continue; // Skip if not enough points
+			
+			// Add line segments for this trail
 			for (size_t j = 1; j < pointTrails[i].size(); j++) {
 				float fadeAmount = pow(tf, static_cast<float>(j));
 				float alpha = fadeAmount * TRAILS_ALPHA_MAX;
 
-				ofSetColor(colorTrails.get(), alpha);
-				ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
+				ofColor segmentColor = colorTrails.get();
+				segmentColor.a = alpha;
+				
+				// Add line segment vertices
+				glm::vec3 p1(pointTrails[i][j-1].x, pointTrails[i][j-1].y, 0.0f);
+				glm::vec3 p2(pointTrails[i][j].x, pointTrails[i][j].y, 0.0f);
+				
+				trailMesh.addVertex(p1);
+				trailMesh.addColor(segmentColor);
+				trailMesh.addVertex(p2);
+				trailMesh.addColor(segmentColor);
 			}
+		}
+		
+		// Single draw call for all trails - MUCH faster than individual lines
+		if (trailMesh.getNumVertices() > 0) {
+			trailMesh.draw();
 		}
 
 	ofPopStyle();
