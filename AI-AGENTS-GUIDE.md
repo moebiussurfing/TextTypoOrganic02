@@ -30,7 +30,6 @@
 3. **REVIEW**:
 
 - [**CURRENT-STATE.md**](docs/AI-Assistant/CURRENT-STATE.md) - Current priorities. Read at every session start.
-- [**CURRENT-TASKS.md**](docs/AI-Assistant/Status/CURRENT-TASKS.md) - What to work on now.
 
 ## **BEFORE CODING**
 
