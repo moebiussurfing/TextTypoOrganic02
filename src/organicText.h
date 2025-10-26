@@ -290,6 +290,7 @@ private:
 
 	void initTrails();
 	void updateTrails();
+	void drawTrails();
 
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;

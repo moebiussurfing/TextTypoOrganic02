@@ -843,6 +843,26 @@ void OrganicText::drawConnections() const {
 	ofPopStyle();
 }
 
+//--------------------------------------------------------------
+void OrganicText::drawTrails(){
+	ofPushStyle();
+		ofSetLineWidth(trailLineWidth);
+		float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
+
+		for (size_t i = pointsString.size() *inPoint.get(); i < pointTrails.size()&&i<pointsString.size() *outPoint.get(); i++) {
+//			for (size_t i = 0; i < pointTrails.size(); i++) {
+			for (size_t j = 1; j < pointTrails[i].size(); j++) {
+				float fadeAmount = pow(tf, static_cast<float>(j));
+				float alpha = fadeAmount * TRAILS_ALPHA_MAX;
+
+				ofSetColor(colorTrails.get(), alpha);
+				ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
+			}
+		}
+
+	ofPopStyle();
+}
+
 //--
 
 //--------------------------------------------------------------
@@ -964,23 +984,8 @@ void OrganicText::draw() {
 		// Layer 2: Trails
 		if (bDrawTrails) {
 			updateTrails();
-
-			ofPushStyle();
-			ofSetLineWidth(trailLineWidth);
-			float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
-
-			for (size_t i = pointsString.size() *inPoint.get(); i < pointTrails.size()&&i<pointsString.size() *outPoint.get(); i++) {
-//			for (size_t i = 0; i < pointTrails.size(); i++) {
-				for (size_t j = 1; j < pointTrails[i].size(); j++) {
-					float fadeAmount = pow(tf, static_cast<float>(j));
-					float alpha = fadeAmount * TRAILS_ALPHA_MAX;
-
-					ofSetColor(colorTrails.get(), alpha);
-					ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
-				}
-			}
-
-			ofPopStyle();
+			
+			drawTrails();
 		}
 
 		// Layer 3: Shapes
