@@ -74,4 +74,9 @@ public:
 	float frameTime;
 
 	ofParameter<bool> bMouseInteract;
+
+	inline void ofxDrawBgGradient(ofColor c1 = ofColor{32}, ofColor c2 = ofColor{16}, ofGradientMode g = OF_GRADIENT_CIRCULAR)
+    {
+        ofBackgroundGradient(c1, c2, g);
+    };
 };

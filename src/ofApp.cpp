@@ -2,7 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	ofBackground(24);
+	// ofBackground(24);
+
 	bMouseInteract.set("Mouse Interact", true);
 
 	resetWindowCustom();
@@ -43,6 +44,8 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	ofxDrawBgGradient();
+
 	t.draw();
 
 	p.drawGui();
