@@ -63,7 +63,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		if (!p.bGui) p.bGui = true;
 	} else if (k == 'd'){
 		if (!t.bKeys) t.bDebug = !t.bDebug;
-	}else if (k == OF_KEY_SPACE) {
+	} else if (k == OF_KEY_SPACE) {
 		bWindowFullScreen=!bWindowFullScreen;
 		if (p.bGui) p.bGui = false;
 		if(bWindowFullScreen) {

@@ -808,6 +808,11 @@ void OrganicText::drawConnections() const {
 	ofPushStyle();
 	ofSetLineWidth(connectLineWidth);
 
+	// Use ofMesh for maximum performance - batch all connection lines into single draw call
+	ofMesh connectionMesh;
+	connectionMesh.setMode(OF_PRIMITIVE_LINES);
+
+	// Collect all connection segments into a single mesh
 	for (size_t i = pointsString.size() *inPoint.get(); i < pointsString.size() && i<pointsString.size() *outPoint.get(); i += skipFactor) {
 //	for (size_t i = 0; i < pointsString.size(); i += skipFactor) {
 		float phase1 = t + 0.123f * static_cast<float>(i);
@@ -832,12 +837,28 @@ void OrganicText::drawConnections() const {
 				float acolor = ofMap(colorConnection.get().a, 0, 255, 0.f, 1.f, true);
 				float o = 2.f;//power
 				alpha = ofMap(alpha * (acolor * o * connectAlpha.get()), 0, 255, 0, 255, true);
-				ofSetColor(colorConnection.get(), alpha);
-				ofDrawLine(pos1, pos2);
+				
+				ofColor connectionColor = colorConnection.get();
+				connectionColor.a = alpha;
+				
+				// Add line segment vertices
+				glm::vec3 p1(pos1.x, pos1.y, 0.0f);
+				glm::vec3 p2(pos2.x, pos2.y, 0.0f);
+				
+				connectionMesh.addVertex(p1);
+				connectionMesh.addColor(connectionColor);
+				connectionMesh.addVertex(p2);
+				connectionMesh.addColor(connectionColor);
+				
 				connectionsDrawn++;
 				cachedConnectionCount++;
 			}
 		}
+	}
+
+	// Single draw call for all connections - MUCH faster than individual lines
+	if (connectionMesh.getNumVertices() > 0) {
+		connectionMesh.draw();
 	}
 
 	ofPopStyle();
