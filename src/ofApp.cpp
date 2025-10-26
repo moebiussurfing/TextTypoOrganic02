@@ -79,11 +79,11 @@ void ofApp::resetWindowCustom() { // Set window size and centered
 	const int w = OFWORKS_APP_WIDTH;
 	const int h = OFWORKS_APP_HEIGHT;
 
-	// 2 steps: do twice to fix bug multi monitor un centered well
-	for (int i = 0; i < 2; i++) {
+	// BUG: For Windows: 2 steps: do twice to fix bug multi monitor un centered well
+	// for (int i = 0; i < 2; i++) {
 		ofSetWindowShape(w, h);
 		ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
-	}
+	// }
 }
 
 //--------------------------------------------------------------

@@ -204,7 +204,7 @@ void exit(){
 void myApp::myFunction() {
 	ofLogNotice("myApp") << "myFunction()"; // -> add this for all methods except when executing on each frame update/draw!
 }
-
+```
 ---
 
 ## 5. Related Documents
