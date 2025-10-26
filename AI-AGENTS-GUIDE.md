@@ -57,4 +57,4 @@
    - Perform deep review and summarize current project state
 
 4. **PLAN NEXT**:
-   - Update [docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md) with next priorities
+   - Ask if update [docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md) with next priorities
