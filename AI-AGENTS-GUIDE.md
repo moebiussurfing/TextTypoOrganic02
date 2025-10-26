@@ -42,7 +42,7 @@
 
 1. **DOCUMENT**:
    - Summarize what was accomplished this session
-   - Update relevant status files
+   - Ask and propose update relevant status .md files
 
 2. **TEST & VALIDATE**:
    - Ask developer to compile the binary project
