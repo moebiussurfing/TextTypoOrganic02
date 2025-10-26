@@ -39,7 +39,7 @@
 
 3. **PLAN & EXECUTE**:
 	⭐ **`START CODING: After reading TODO.md, begin implementation!`**
-	- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** The following tasks must be completed immediately. The AI Code Agent will initiate the session by reading and familiarizing itself with the project context. Subsequently, the AI Agent is required to initiate the execution of the instructions now! Go!.
+	- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** The following tasks must be completed immediately. The AI Code Agent will initiate the session by reading and familiarizing itself with the project context. Subsequently, the AI Agent is required to initiate the execution of the instructions now! Go!
 
 ## **AFTER CODING**
 
