@@ -1,3 +1,4 @@
 ofxGui
 ofxSurfingHelpersLite
 ofxSurfingPresetsLite
+ofxTweenLite
