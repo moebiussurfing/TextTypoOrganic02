@@ -5,6 +5,7 @@
 	- gradient bg
 	- smooth transients ?
 		new smooth class
+	- smooth points only ?
 	- player next presets timed
 		browse presets ?
 	- fix swith windoResise glitch. call update
