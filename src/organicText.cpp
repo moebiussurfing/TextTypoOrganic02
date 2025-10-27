@@ -40,6 +40,7 @@ void OrganicText::setup() {
 
 	// Default font
 	//FONT_DEFAULT = "NotoSansMono-Regular.ttf";
+
 	// Bundled OF fonts
 	FONT_DEFAULT = OF_TTF_SANS;
 	//FONT_DEFAULT = OF_TTF_SERIF;
@@ -335,7 +336,7 @@ void OrganicText::setupCallbacks() {
 	ofLogNotice("OrganicText") << "setupCallbacks()";
 
 	// Font listeners
-	e_FontPath = fontPath.newListener([this](string & s) { loadFont(); });
+	e_FontPath = fontPath.newListener([this](std::string & s) { loadFont(); });
 	e_vFontSize = fontSize.newListener([this](float & f) { loadFont(); });
 	e_letterSpacing = letterSpacing.newListener([this](float & f) { flagRefreshFont(); });
 	e_vResetFont = vResetFont.newListener([this](void) { resetFonts(); });
@@ -343,7 +344,7 @@ void OrganicText::setupCallbacks() {
 	// Density listeners
 	e_DensitySpacing = densitySpacing.newListener([this](float & v) { refreshPointsString(); });
 	e_DensityAmount = densityAmount.newListener([this](float & v) { refreshPointsString(); });
-	e_sText = sText.newListener([this](string & s) { refreshPointsString(); });
+	e_sText = sText.newListener([this](std::string & s) { refreshPointsString(); });
 
 	// Settings listeners
 	e_vLoadSettigs = vLoadSettigs.newListener([this](void) { loadSettings(); });
@@ -501,6 +502,9 @@ void OrganicText::update() {
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
+	bDebugLowFPS = (fps < (targetFPS * 0.5f));
+
+	//TODO: improve this flag and avoid re calling system
 	if (bFlagRefreshFont) {
 		refreshFont();
 		bFlagRefreshFont = false;
@@ -510,7 +514,7 @@ void OrganicText::update() {
 //--
 
 //--------------------------------------------------------------
-vector<vec2> OrganicText::sampleStringPoints(const string & s, float ds) {
+vector<vec2> OrganicText::sampleStringPoints(const std::string & s, float ds) {
 	vector<vec2> points;
 	if (s.empty()) return points;
 
@@ -808,6 +812,11 @@ void OrganicText::drawConnections() const {
 	ofPushStyle();
 	ofSetLineWidth(connectLineWidth);
 
+	// Use ofMesh for maximum performance - batch all connection lines into single draw call
+	ofMesh connectionMesh;
+	connectionMesh.setMode(OF_PRIMITIVE_LINES);
+
+	// Collect all connection segments into a single mesh
 	for (size_t i = pointsString.size() *inPoint.get(); i < pointsString.size() && i<pointsString.size() *outPoint.get(); i += skipFactor) {
 //	for (size_t i = 0; i < pointsString.size(); i += skipFactor) {
 		float phase1 = t + 0.123f * static_cast<float>(i);
@@ -832,13 +841,70 @@ void OrganicText::drawConnections() const {
 				float acolor = ofMap(colorConnection.get().a, 0, 255, 0.f, 1.f, true);
 				float o = 2.f;//power
 				alpha = ofMap(alpha * (acolor * o * connectAlpha.get()), 0, 255, 0, 255, true);
-				ofSetColor(colorConnection.get(), alpha);
-				ofDrawLine(pos1, pos2);
+				
+				ofColor connectionColor = colorConnection.get();
+				connectionColor.a = alpha;
+				
+				// Add line segment vertices
+				glm::vec3 p1(pos1.x, pos1.y, 0.0f);
+				glm::vec3 p2(pos2.x, pos2.y, 0.0f);
+				
+				connectionMesh.addVertex(p1);
+				connectionMesh.addColor(connectionColor);
+				connectionMesh.addVertex(p2);
+				connectionMesh.addColor(connectionColor);
+				
 				connectionsDrawn++;
 				cachedConnectionCount++;
 			}
 		}
 	}
+
+	// Single draw call for all connections - MUCH faster than individual lines
+	if (connectionMesh.getNumVertices() > 0) {
+		connectionMesh.draw();
+	}
+
+	ofPopStyle();
+}
+
+//--------------------------------------------------------------
+void OrganicText::drawTrails(){
+	ofPushStyle();
+		ofSetLineWidth(trailLineWidth);
+		float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
+
+		// Use ofMesh for maximum performance - batch all trail lines into single draw call
+		ofMesh trailMesh;
+		trailMesh.setMode(OF_PRIMITIVE_LINES);
+		
+		// Collect all trail segments into a single mesh
+		for (size_t i = pointsString.size() * inPoint.get(); i < pointTrails.size() && i < pointsString.size() * outPoint.get(); i++) {
+			if (pointTrails[i].size() < 2) continue; // Skip if not enough points
+			
+			// Add line segments for this trail
+			for (size_t j = 1; j < pointTrails[i].size(); j++) {
+				float fadeAmount = pow(tf, static_cast<float>(j));
+				float alpha = fadeAmount * TRAILS_ALPHA_MAX;
+
+				ofColor segmentColor = colorTrails.get();
+				segmentColor.a = alpha;
+				
+				// Add line segment vertices
+				glm::vec3 p1(pointTrails[i][j-1].x, pointTrails[i][j-1].y, 0.0f);
+				glm::vec3 p2(pointTrails[i][j].x, pointTrails[i][j].y, 0.0f);
+				
+				trailMesh.addVertex(p1);
+				trailMesh.addColor(segmentColor);
+				trailMesh.addVertex(p2);
+				trailMesh.addColor(segmentColor);
+			}
+		}
+		
+		// Single draw call for all trails - MUCH faster than individual lines
+		if (trailMesh.getNumVertices() > 0) {
+			trailMesh.draw();
+		}
 
 	ofPopStyle();
 }
@@ -864,10 +930,6 @@ void OrganicText::drawDebug() const {
 	ofDrawLine(textCenter - vec2(crossSize, 0), textCenter + vec2(crossSize, 0));
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
-
-	// Mouse interact
-	mousePos = glm::vec2(ofGetMouseX(),ofGetMouseY());
-	ofDrawCircle(mousePos, radiusMouse.get() * MOUSE_RADIUS);
 	
 	// All sample points
 	ofFill();
@@ -908,10 +970,11 @@ void OrganicText::drawShapes() {
 
 		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 		
-		if(bDebug){
-			bool bInside = (glm::distance(pointsString[i], mousePos) < radiusMouse.get() * MOUSE_RADIUS);
-			color = ofColor(colorDebug,DEBUG_ALPHA_MAX);
-		}
+		// //TODO
+		// if(bDebug){
+		// 	bool bInside = (glm::distance(pointsString[i], mousePos) < radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
+		// 	color = ofColor(colorDebug,DEBUG_ALPHA_MAX);
+		// }
 		
 		ofSetColor(color);
 
@@ -964,23 +1027,8 @@ void OrganicText::draw() {
 		// Layer 2: Trails
 		if (bDrawTrails) {
 			updateTrails();
-
-			ofPushStyle();
-			ofSetLineWidth(trailLineWidth);
-			float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
-
-			for (size_t i = pointsString.size() *inPoint.get(); i < pointTrails.size()&&i<pointsString.size() *outPoint.get(); i++) {
-//			for (size_t i = 0; i < pointTrails.size(); i++) {
-				for (size_t j = 1; j < pointTrails[i].size(); j++) {
-					float fadeAmount = pow(tf, static_cast<float>(j));
-					float alpha = fadeAmount * TRAILS_ALPHA_MAX;
-
-					ofSetColor(colorTrails.get(), alpha);
-					ofDrawLine(pointTrails[i][j - 1], pointTrails[i][j]);
-				}
-			}
-
-			ofPopStyle();
+			
+			drawTrails();
 		}
 
 		// Layer 3: Shapes
@@ -1018,14 +1066,40 @@ void OrganicText::draw() {
 	}
 	ofPopMatrix();
 
+	//--
+
+	//TODO
+	// Mouse interact
+	if(bDebug){
+		// if(bDebug){
+		// 	bool bInside = (glm::distance(pointsString[i], mousePos) < radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
+		// 	color = ofColor(colorDebug,DEBUG_ALPHA_MAX);
+		// }
+		ofPushStyle();
+		ofFill();
+		ofSetColor(ofColor(colorDebug,DEBUG_ALPHA_MAX*0.5f));
+		mousePos = glm::vec2(ofGetMouseX(),ofGetMouseY());
+		ofDrawCircle(mousePos, radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
+		ofPopStyle();
+	}
+
 	// Debug bench measuring drawing performance
-	tBench = ofGetElapsedTimeMicros() - td;
+	timeDrawBenchmark = ofGetElapsedTimeMicros() - td;
 }
 
 //--------------------------------------------------------------
 void OrganicText::drawGui() {
 	if (!bGui) return;
 
+	if(bDebugLowFPS) {
+		ofPushStyle();
+		ofNoFill();
+		ofSetLineWidth(2);
+		ofSetColor(ofColor::red);
+		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+		ofPopStyle();
+	}
+	
 	gui.draw();
 
 	if (bHelp) {
@@ -1050,18 +1124,17 @@ void OrganicText::drawHelp() const {
 	// Use cached connection count from last draw
 	int activeConnections = cachedConnectionCount;
 
-	string perfStatus = (fps >= (targetFPS * 0.9f)) ? "GOOD" : ((fps <= (targetFPS * 0.5f)) ? "OK" : "POOR");
+	std::string perfStatus = (fps >= (targetFPS * 0.9f)) ? "GOOD" : ((fps <= (targetFPS * 0.5f)) ? "OK" : "POOR");
 	ofColor perfColor = (fps >= (targetFPS * 0.9f)) ? ofColor(100, 255, 100) : ((fps >= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
 
-	std::vector<string> lines;
+	std::vector<std::string> lines;
 	lines.push_back("ORGANIC");
 	lines.push_back("TEXT");
 	lines.push_back("");
 	lines.push_back("PERFORMANCE");
-	lines.push_back("FPS      " + ofToString(fps, 0) + " [" + ofToString(targetFPS, 0) + "] " + perfStatus + "");
-	lines.push_back("Frame    " + ofToString(frameTime, 0) + " ms");
-	lines.push_back("Draw t   " + ofToString(tBench / 1000) + " ms");
-	lines.push_back("         " + ofToString(tBench % 1000) + " micros");
+	lines.push_back("FPS      " + ofToString(fps, 0) + " (" + ofToString(targetFPS, 0) + ") " + perfStatus);
+	lines.push_back("Frame t  " + ofToString(frameTime, 0) + " ms");
+	lines.push_back("Draw()   " + ofToString(timeDrawBenchmark / 1000) + "ms "+ ofToString(timeDrawBenchmark % 1000) + "mics");
 	lines.push_back("");
 	lines.push_back("GEOMETRY");
 	lines.push_back("Points   " + ofToString(totalPoints));
@@ -1070,32 +1143,27 @@ void OrganicText::drawHelp() const {
 	lines.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 	lines.push_back("");
 	lines.push_back("CONFIG");
-	lines.push_back("Font     " + ofToString(fontSize.get(), 0) + "px");
 	lines.push_back("Density  " + ofToString(densityAmount.get(), 2));
-	lines.push_back("Animate  " + string(bEnableAnimation.get() ? "ON" : "OFF"));
+	lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "ON" : "OFF"));
 	lines.push_back("Shape    " + shapeTypeName.get());
 	lines.push_back("Color    " + colorModeName.get());
 	lines.push_back("Anim     " + animationModeName.get());
-	lines.push_back("");
-	lines.push_back("Font     " + ofToString(fontSize.get(), 0) + "px");
 	if (bKeys) {
 		lines.push_back("");
 		lines.push_back("KEYS");
-		lines.push_back("");
-		lines.push_back("PARAMS");
+		lines.push_back("D        Debug");
+		lines.push_back("H        Help");
 		lines.push_back("< >      Zoom");
-		lines.push_back("UP/DOWN  Anima Speed");
-		lines.push_back("+/-      Point Density");
-		lines.push_back("");
-		lines.push_back("O        Outline");
-		lines.push_back("F        Shape Fill");
-		lines.push_back("L        Connections");
+		lines.push_back("+/-      Density");
+		lines.push_back("UP/DOWN  Speed");
+		lines.push_back("S        Shapes");
+		lines.push_back("F        Shapes Fill");
+		lines.push_back("C        Connections");
 		lines.push_back("T        Trails");
-		lines.push_back("B        Background Color");
-		lines.push_back("");
+		lines.push_back("A        Animate");
+		lines.push_back("a        Anim Modes");
 		lines.push_back("C        Color Modes");
-		lines.push_back("A        Animation Modes");
-		lines.push_back("R        Reset all");
+		lines.push_back("BACKSP   Reset all");
 	}
 
 	float boxWidth = 218;
@@ -1126,18 +1194,16 @@ void OrganicText::drawHelp() const {
 		float textX = boxX + padding;
 		float textY = boxY + padding + (i + 1) * lineHeight - 2;
 
-		if (lines[i].find("FPS:") != string::npos) {
+		if (lines[i].find("FPS") != std::string::npos) {
 			ofSetColor(perfColor);
-		} else if (lines[i].find("===") != string::npos) {
-			ofSetColor(255, 200, 0);
-		} else if (lines[i].find("Points:") != string::npos || lines[i].find("Connections:") != string::npos) {
+		} else if (lines[i].find("Points") != std::string::npos || lines[i].find("Connects") != std::string::npos) {
 			if (totalPoints > 1500 || activeConnections > 5000) {
 				ofSetColor(255, 150, 0);
 			} else {
 				ofSetColor(255);
 			}
 		} else {
-			ofSetColor(255);
+			ofSetColor(255);//white
 		}
 
 		ofDrawBitmapString(lines[i], textX, textY);
@@ -1408,48 +1474,53 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	if (key == 'd') {
 		bDebug.set(!bDebug.get());
-	} else if (key == 'D') {
+	} 
+	else if (key == 'h') {
 		bHelp.set(!bHelp.get());
-	} else if (key == 'b' || key == 'B') {
-		static bool darkBg = true;
-		darkBg = !darkBg;
-		ofBackground(darkBg ? 0 : 255);
-	} else if (key == 'r' || key == 'R') {
+	} 
+
+	else if (key == OF_KEY_BACKSPACE) {
 		resetAll();
 	}
 
 	else if (key == 'c' || key == 'C') {
 		colorMode.set((colorMode.get() + 1) % 5);
-	} else if (key == 'a' || key == 'A') {
+	} 
+	else if (key == 'A') {
+		bEnableAnimation.set(!bEnableAnimation.get());
+	} 
+	else if (key == 'a') {
 		animationMode.set((animationMode.get() + 1) % 5);
-	} else if (key == '+' || key == '=') {
+	} 
+	
+	else if (key == '+' || key == '=') {
 		densityAmount.set(ofClamp(densityAmount.get() + 0.05f, densityAmount.getMin(), densityAmount.getMax()));
 	} else if (key == '-') {
 		densityAmount.set(ofClamp(densityAmount.get() - 0.05f, densityAmount.getMin(), densityAmount.getMax()));
 	}
 
 	else if (key == OF_KEY_UP) {
-		animSpeed.set(ofClamp(animSpeed.get() + 0.1f, 0.1f, 3.0f));
+		animSpeed.set(ofClamp(animSpeed.get() + 0.01f, animSpeed.getMin(), animSpeed.getMax()));
 	} else if (key == OF_KEY_DOWN) {
-		animSpeed.set(ofClamp(animSpeed.get() - 0.1f, 0.1f, 3.0f));
-	} else if (key == OF_KEY_LEFT) {
-		zoomGlobal.set(ofClamp(zoomGlobal.get() - 0.1f, 0.0f, 1.0f));
+		animSpeed.set(ofClamp(animSpeed.get() - 0.01f, animSpeed.getMin(), animSpeed.getMax()));
+	} 
+	
+	else if (key == OF_KEY_LEFT) {
+		zoomGlobal.set(ofClamp(zoomGlobal.get() - 0.01f, 0.0f, 1.0f));
 	} else if (key == OF_KEY_RIGHT) {
-		zoomGlobal.set(ofClamp(zoomGlobal.get() + 0.1f, 0.0f, 1.0f));
+		zoomGlobal.set(ofClamp(zoomGlobal.get() + 0.01f, 0.0f, 1.0f));
 	}
 
-	else if (key == 't' || key == 'T') {
-		bDrawTrails.set(!bDrawTrails.get());
-	} else if (key == 'l' || key == 'L') {
-		bDrawConnections.set(!bDrawConnections.get());
-	} else if (key == 'o' || key == 'O') {
-		bDrawOutline.set(!bDrawOutline.get());
-	} else if (key == 'f' || key == 'F') {
+	else if (key == 's' || key == 'S') {
+		bDrawShapes.set(!bDrawShapes.get());
+	}
+	else if (key == 'f' || key == 'F') {
 		bDrawFill.set(!bDrawFill.get());
 	}
+	else if (key == 'c' || key == 'C') {
+		bDrawConnections.set(!bDrawConnections.get());
+	} 
+	else if (key == 't' || key == 'T') {
+		bDrawTrails.set(!bDrawTrails.get());
+	}
 }
-
-////--------------------------------------------------------------
-//ofxGuiGroup & OrganicText::getGroupGui(){
-//	return gui.getGroup(paramsPreset.getName());
-//}

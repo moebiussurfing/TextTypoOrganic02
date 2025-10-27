@@ -30,7 +30,7 @@
 Use angle brackets for system or openFrameworks headers, and quotes for local ones:
 
 ```cpp
-#include <ofMain.h>     // OF or system
+#include <ofMain.h>		// OF Core system
 #include "ofApp.h"      // local project
 ```
 
@@ -204,7 +204,7 @@ void exit(){
 void myApp::myFunction() {
 	ofLogNotice("myApp") << "myFunction()"; // -> add this for all methods except when executing on each frame update/draw!
 }
-
+```
 ---
 
 ## 5. Related Documents

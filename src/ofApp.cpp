@@ -2,8 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	ofBackground(24);
-	bMouseInteract.set("Mouse Interact", true);
+	bMouseBrowse.set("Mouse Browse", true);
 
 	resetWindowCustom();
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
@@ -18,7 +17,7 @@ void ofApp::setup() {
 	// Presets manger
 	p.setup(t.paramsPreset);
 	p.gui.add(t.bGui);
-	p.gui.add(bMouseInteract);
+	p.gui.add(bMouseBrowse);
 	p.gui.add(vResetWindow);
 
 	//TODO
@@ -43,6 +42,8 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	ofxDrawBgGradient();
+
 	t.draw();
 
 	p.drawGui();
@@ -63,7 +64,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		if (!p.bGui) p.bGui = true;
 	} else if (k == 'd'){
 		if (!t.bKeys) t.bDebug = !t.bDebug;
-	}else if (k == OF_KEY_SPACE) {
+	} else if (k == OF_KEY_SPACE) {
 		bWindowFullScreen=!bWindowFullScreen;
 		if (p.bGui) p.bGui = false;
 		if(bWindowFullScreen) {
@@ -79,11 +80,11 @@ void ofApp::resetWindowCustom() { // Set window size and centered
 	const int w = OFWORKS_APP_WIDTH;
 	const int h = OFWORKS_APP_HEIGHT;
 
-	// 2 steps: do twice to fix bug multi monitor un centered well
-	for (int i = 0; i < 2; i++) {
+	// BUG: For Windows: 2 steps: do twice to fix bug multi monitor un centered well
+	// for (int i = 0; i < 2; i++) {
 		ofSetWindowShape(w, h);
 		ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
-	}
+	// }
 }
 
 //--------------------------------------------------------------
@@ -98,21 +99,21 @@ void ofApp::exit() {
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y) {
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {
-}
-
-//--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
-	if (!bMouseInteract) return;
+	if (!bMouseBrowse) return;
 
 	if (button == 0)
 		p.doLoadNext();
 	else if (button == 2)
 		p.doLoadPrevious();
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y) {
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
