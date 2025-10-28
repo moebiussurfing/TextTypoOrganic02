@@ -94,13 +94,13 @@ void OrganicText::setupScene() {
 	// Setup tweens
 	
 	tweenOutPoint.setFrom(0.0f)
-		.setTo(0.0f)
-		.setDuration(0.0f)
+		.setTo(1.0f)
+		.setDuration(2.0f)
 		.setEase(OF_EASE_QUAD_OUT)
 		.setChainFromCurrentValue(false);
 	tweenInPoint.setFrom(0.0f)
-		.setTo(0.0f)
-		.setDuration(1.0f)
+		.setTo(1.0f)
+		.setDuration(2.0f)
 		.setEase(OF_EASE_QUAD_OUT)
 		.setChainFromCurrentValue(false);
 	
