@@ -92,16 +92,28 @@ void OrganicText::setupScene() {
 	//--
 
 	// Setup tweens
-
-	tweenOutPoint.setFrom(0);
-	tweenOutPoint.setTo(1);
-	tweenOutPoint.setDuration(3.0f);
-	tweenOutPoint.setEase(OF_EASE_QUAD_OUT);
-
-	tweenInPoint.setFrom(0);
-	tweenInPoint.setTo(1);
-	tweenInPoint.setDuration(3.0f);
-	tweenInPoint.setEase(OF_EASE_QUAD_OUT);
+	
+	tweenOutPoint.setFrom(0.0f)
+		.setTo(0.0f)
+		.setDuration(0.0f)
+		.setEase(OF_EASE_QUAD_OUT)
+		.setChainFromCurrentValue(false);
+	tweenInPoint.setFrom(0.0f)
+		.setTo(0.0f)
+		.setDuration(1.0f)
+		.setEase(OF_EASE_QUAD_OUT)
+		.setChainFromCurrentValue(false);
+	
+//	tweenOutPoint.setFrom(0);
+//	tweenOutPoint.setTo(1.0f);
+//	tweenOutPoint.setDuration(3.0f);
+//	tweenOutPoint.setEase(OF_EASE_QUAD_OUT);
+//	tweenOutPoint.setChainFromCurrentValue(false);
+//	tweenInPoint.setFrom(0);
+//	tweenInPoint.setTo(1);
+//	tweenInPoint.setDuration(3.0f);
+//	tweenInPoint.setEase(OF_EASE_QUAD_OUT);
+//	tweenInPoint.setChainFromCurrentValue(false);
 
 	// Setup callback to ensure exact final value
 	tweenOutPoint.onCompleteCallback([this](){
@@ -1515,16 +1527,16 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 		return;
 	} 
 	if (key == '2') {
-		tweenOutPoint.setFrom(0.0f);
-		tweenOutPoint.setTo(1.0f);
+//		tweenOutPoint.setFrom(0.0f);
+//		tweenOutPoint.setTo(1.0f);
 		tweenOutPoint.start();
 		return;
 	} 
 	if (key == '3') {
 		inPoint.set(0.0f);
 		outPoint.set(1.0f);
-		tweenInPoint.setFrom(0.0f);
-		tweenInPoint.setTo(1.0f);
+//		tweenInPoint.setFrom(0.0f);
+//		tweenInPoint.setTo(1.0f);
 		tweenInPoint.start();
 		return;
 	} 
