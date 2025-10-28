@@ -88,6 +88,30 @@ void OrganicText::setupScene() {
 	updateAnimationModeName(dummy);
 
 	colorDebug = ofColor::yellow;
+
+	//--
+
+	// Setup tweens
+
+	tweenOutPoint.setFrom(0);
+	tweenOutPoint.setTo(1);
+	tweenOutPoint.setDuration(3.0f);
+	tweenOutPoint.setEase(OF_EASE_QUAD_OUT);
+
+	tweenInPoint.setFrom(0);
+	tweenInPoint.setTo(1);
+	tweenInPoint.setDuration(3.0f);
+	tweenInPoint.setEase(OF_EASE_QUAD_OUT);
+
+	// Setup callback to ensure exact final value
+	tweenOutPoint.onCompleteCallback([this](){
+		outPoint.set(0.0f); // Force exact final value when tween completes
+		ofLogNotice("ofApp") << "Tween completed - set to 0.0f";
+	});
+	tweenInPoint.onCompleteCallback([this](){
+		inPoint.set(1.0f); // Force exact final value when tween completes
+		ofLogNotice("ofApp") << "Tween completed - set to 1.0f";
+	});
 }
 
 //--------------------------------------------------------------
@@ -322,10 +346,10 @@ void OrganicText::setupParams() {
 	//--
 	
 	//TODO
-	parametersDrawing.add(centerPoint);
-	parametersDrawing.add(widthPoint);
 	parametersDrawing.add(inPoint);
 	parametersDrawing.add(outPoint);
+	parametersDrawing.add(centerPoint);
+	parametersDrawing.add(widthPoint);
 	parameters.add(parametersDrawing);
 	
 	parameters.add(radiusMouse);
@@ -508,6 +532,18 @@ void OrganicText::update() {
 	if (bFlagRefreshFont) {
 		refreshFont();
 		bFlagRefreshFont = false;
+	}
+
+	//--
+
+	// TODO
+	tweenInPoint.update();
+	if(tweenInPoint.isRunning()){
+		inPoint.set(tweenInPoint.getValue());
+	}
+	tweenOutPoint.update();
+	if(tweenOutPoint.isRunning()){
+		outPoint.set(tweenOutPoint.getValue());
 	}
 }
 
@@ -1300,7 +1336,6 @@ void OrganicText::exit() {
 //--------------------------------------------------------------
 void OrganicText::resetPreset() {
 	ofLogNotice("OrganicText") << "resetPreset()";
-
 	resetDensityParams();
 	resetShapeParams();
 	resetColorModes();
@@ -1325,7 +1360,6 @@ void OrganicText::resetAll() {
 //--------------------------------------------------------------
 void OrganicText::randomAll() {
 	ofLogNotice("OrganicText") << "randomAll()";
-
 	randomizeDensityParams();
 	randomizeShapeParams();
 	randomizeColorModes();
@@ -1337,7 +1371,6 @@ void OrganicText::randomAll() {
 //--------------------------------------------------------------
 void OrganicText::resetFonts() {
 	ofLogNotice("OrganicText") << "resetFonts()";
-
 	//fontPath.set("NotoSansMono-Regular.ttf");
 	fontSize.set(150);
 	letterSpacing.set(0);
@@ -1345,14 +1378,12 @@ void OrganicText::resetFonts() {
 
 void OrganicText::resetDensityParams() {
 	ofLogNotice("OrganicText") << "resetDensityParams()";
-
 	densitySpacing.set(0.25f);
 	densityAmount.set(0.5f);
 }
 
 void OrganicText::resetShapeParams() {
 	ofLogNotice("OrganicText") << "resetShapeParams()";
-
 	bDrawShapes.set(true);
 	bDrawFill.set(true);
 	shapeSize.set(0.1f);
@@ -1364,7 +1395,6 @@ void OrganicText::resetShapeParams() {
 
 void OrganicText::resetColorModes() {
 	ofLogNotice("OrganicText") << "resetColorModes()";
-
 	colorMode.set(3);
 	colorSpeed.set(0.5f);
 	colorMixFactor.set(0.4f);
@@ -1373,7 +1403,6 @@ void OrganicText::resetColorModes() {
 
 void OrganicText::resetGlobalColorParams() {
 	ofLogNotice("OrganicText") << "resetGlobalColorParams()";
-
 	color1.set(ofColor(120, 180, 255));
 	color2.set(ofColor(180, 140, 255));
 	color3.set(ofColor(140, 200, 240));
@@ -1383,7 +1412,6 @@ void OrganicText::resetGlobalColorParams() {
 
 void OrganicText::resetAnimationParams() {
 	ofLogNotice("OrganicText") << "resetAnimationParams()";
-
 	animationMode.set(0);
 	animSpeed.set(0.8f);
 	animPower.set(0.05f);
@@ -1395,7 +1423,6 @@ void OrganicText::resetAnimationParams() {
 
 void OrganicText::resetConnectionParams() {
 	ofLogNotice("OrganicText") << "resetConnectionParams()";
-
 	bDrawConnections.set(false);
 	connectDistance.set(30.0f);
 	connectLineWidth.set(1.5f);
@@ -1413,11 +1440,13 @@ void OrganicText::resetConnectionParams() {
 //--------------------------------------------------------------
 
 void OrganicText::randomizeDensityParams() {
+	ofLogNotice("OrganicText") << "randomizeDensityParams()";
 	densitySpacing.set(ofRandom(densitySpacing.getMin(), densitySpacing.getMax()));
 	densityAmount.set(ofRandom(densityAmount.getMin(), densityAmount.getMax()));
 }
 
 void OrganicText::randomizeShapeParams() {
+	ofLogNotice("OrganicText") << "randomizeShapeParams()";
 	shapeSize.set(ofRandom(shapeSize.getMin(), shapeSize.getMax()));
 	shapeSizeMin.set(ofRandom(shapeSizeMin.getMin(), shapeSizeMin.getMax()));
 	shapeType.set(static_cast<int>(ofRandom(0, 6)));
@@ -1426,6 +1455,7 @@ void OrganicText::randomizeShapeParams() {
 }
 
 void OrganicText::randomizeColorModes() {
+	ofLogNotice("OrganicText") << "randomizeColorModes()";
 	colorMode.set(static_cast<int>(ofRandom(0, 5)));
 	colorSpeed.set(ofRandom(colorSpeed.getMin(), colorSpeed.getMax()));
 	colorMixFactor.set(ofRandom(colorMixFactor.getMin(), colorMixFactor.getMax()));
@@ -1433,6 +1463,7 @@ void OrganicText::randomizeColorModes() {
 }
 
 void OrganicText::randomizeGlobalColorParams() {
+	ofLogNotice("OrganicText") << "randomizeGlobalColorParams()";
 	color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
@@ -1442,6 +1473,7 @@ void OrganicText::randomizeGlobalColorParams() {
 }
 
 void OrganicText::randomizeAnimationParams() {
+	ofLogNotice("OrganicText") << "randomizeAnimationParams()";
 	if (!bEnableAnimation) bEnableAnimation = true;
 	animationMode.set(static_cast<int>(ofRandom(0, 5)));
 	animSpeed.set(ofRandom(animSpeed.getMin(), animSpeed.getMax()));
@@ -1453,6 +1485,7 @@ void OrganicText::randomizeAnimationParams() {
 }
 
 void OrganicText::randomizeConnectionParams() {
+	ofLogNotice("OrganicText") << "randomizeConnectionParams()";
 	connectDistance.set(ofRandom(connectDistance.getMin(), connectDistance.getMax()));
 	connectAlpha.set(ofRandom(connectAlpha.getMin(), connectAlpha.getMax()));
 	connectQuality.set(ofRandom(connectQuality.getMin(), connectQuality.getMax()));
@@ -1469,8 +1502,34 @@ void OrganicText::randomizeConnectionParams() {
 //--------------------------------------------------------------
 void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (!bKeys) return;
-
+	
 	const int key = eventArgs.key;
+	ofLogNotice("OrganicText") << "keyPressed() "<<char(key);
+
+	//--
+
+	// TODO
+	if (key == '1') {
+		outPoint.set(0.0f);
+		inPoint.set(0.0f);
+		return;
+	} 
+	if (key == '2') {
+		tweenOutPoint.setFrom(0);
+		tweenOutPoint.setTo(1);
+		tweenOutPoint.start();
+		return;
+	} 
+	if (key == '3') {
+		inPoint.set(0.0f);
+		outPoint.set(1.0f);
+		tweenInPoint.setFrom(0);
+		tweenInPoint.setTo(1);
+		tweenInPoint.start();
+		return;
+	} 
+
+	//--
 
 	if (key == 'd') {
 		bDebug.set(!bDebug.get());

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxTweenLiteHelper.h"
 
 //----------------------------------------------------------------------------
 
@@ -122,17 +123,29 @@ class OrganicText {
 public:
 	OrganicText();
 	~OrganicText();
+
+	//--
 	
 	//TODO
+
 	ofParameterGroup parametersDrawing{"Drawing"};
 	ofParameter<float> inPoint{"In",0,0,1};
 	ofParameter<float> outPoint{"Out",1,0,1};
 	ofParameter<float> centerPoint{"Center",0.5,0,1};
 	ofParameter<float> widthPoint{"Width",0.15,0,1};
 	ofEventListener e_inPoint,e_outPoint,e_centerPoint,e_widthPoint;
+
+	ofxTweenLiteHelper<float> tweenInPoint;
+	ofxTweenLiteHelper<float> tweenOutPoint;
+	ofxTweenLiteHelper<float> tweenCenterPoint;
+	ofxTweenLiteHelper<float> tweenWidthPoint;
+
+	//--
 	
 	ofParameter<float> radiusMouse{"radiusMouse",0.1,0,1};
 	mutable glm::vec2 mousePos;
+
+	//--
 	
 	// Must set before setup()
 	void setTargetFPS(float fps);
