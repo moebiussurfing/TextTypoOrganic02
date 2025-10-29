@@ -4,11 +4,10 @@
 
 	- gradient bg
 	- smooth transients ?
-		new smooth class
-	- smooth points only ?
+		- smooth points only ?
 	- player next presets timed
 		browse presets ?
-	- fix swith windoResise glitch. call update
+	- fix switch windoResise glitch. call update
 
 	- fix tweak ranges
 		check not normalized 0-1 all params ?
@@ -19,15 +18,11 @@
 		related to fullscreen/screen size?
 		ofCamera ?
 		fbo overscaled?
-	- undo history
-	- add define remove preset addon
+	- Deploy: add define remove preset addon
 		hardcode json files to one .h file. replace workflow
 	- ofxSurfingPresetsLiteOfxGui
-		copy presets to next or other
+		copy presets (button) to next or other
 			but copy to mem + move without load + save
- 
-	IDEAS
-	- add float 0-1 limit draw objects
  
  */
 
@@ -54,10 +49,7 @@ public:
 	void exit();
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void mousePressed(int x, int y, int button);
-	void mouseMoved(int x, int y);
-	void mouseDragged(int x, int y, int button);
-	void mouseReleased(int x, int y, int button);
-
+	
 	// Organic Text
 	OrganicText t;
 
