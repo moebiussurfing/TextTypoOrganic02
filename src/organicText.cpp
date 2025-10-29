@@ -48,6 +48,7 @@ void OrganicText::setup() {
 
 	setupScene();
 	setupParams();
+	setupTweens();
 	setupCallbacks();
 	setupGui();
 	startup();
@@ -67,6 +68,10 @@ void OrganicText::startup() {
 
 	// Load saved settings
 	loadSettings();
+
+	// Load tween settings
+	tweenInPoint.loadSettings();
+	tweenOutPoint.loadSettings();
 
 	refreshWindowResized();
 }
@@ -88,42 +93,43 @@ void OrganicText::setupScene() {
 	updateAnimationModeName(dummy);
 
 	colorDebug = ofColor::yellow;
+}
 
-	//--
+//--------------------------------------------------------------
+void OrganicText::setupTweens() {
+	ofLogNotice("OrganicText") << "setupTweens()";
 
-	// Setup tweens
-	
-	tweenOutPoint.setFrom(0.0f)
-		.setTo(1.0f)
-		.setDuration(2.0f)
-		.setEase(OF_EASE_QUAD_OUT)
-		.setChainFromCurrentValue(false);
-	tweenInPoint.setFrom(0.0f)
-		.setTo(1.0f)
-		.setDuration(2.0f)
-		.setEase(OF_EASE_QUAD_OUT)
-		.setChainFromCurrentValue(false);
-	
-//	tweenOutPoint.setFrom(0);
-//	tweenOutPoint.setTo(1.0f);
-//	tweenOutPoint.setDuration(3.0f);
-//	tweenOutPoint.setEase(OF_EASE_QUAD_OUT);
-//	tweenOutPoint.setChainFromCurrentValue(false);
-//	tweenInPoint.setFrom(0);
-//	tweenInPoint.setTo(1);
-//	tweenInPoint.setDuration(3.0f);
-//	tweenInPoint.setEase(OF_EASE_QUAD_OUT);
-//	tweenInPoint.setChainFromCurrentValue(false);
+	// Setup outPoint tween (0 -> 1)
+	tweenOutPoint.setName("Out Tween");
+	tweenOutPoint.setFrom(0.0f);
+	tweenOutPoint.setTo(1.0f);
+	tweenOutPoint.setDuration(2.0f);
+	tweenOutPoint.setEase(OF_EASE_QUAD_OUT);
+	tweenOutPoint.setChainFromCurrentValue(true);
 
 	// Setup callback to ensure exact final value
-	tweenOutPoint.onCompleteCallback([this](){
-		outPoint.set(0.0f); // Force exact final value when tween completes
-		ofLogNotice("ofApp") << "Tween completed - set to 0.0f";
+	tweenOutPoint.onCompleteCallback([this]() {
+		outPoint.set(1.0f);
+		ofLogNotice("OrganicText") << "tweenOutPoint completed - set to 1.0f";
 	});
-	tweenInPoint.onCompleteCallback([this](){
-		inPoint.set(1.0f); // Force exact final value when tween completes
-		ofLogNotice("ofApp") << "Tween completed - set to 1.0f";
+
+	// Setup inPoint tween (0 -> 1)
+	tweenInPoint.setName("In Tween");
+	tweenInPoint.setFrom(0.0f);
+	tweenInPoint.setTo(1.0f);
+	tweenInPoint.setDuration(2.0f);
+	tweenInPoint.setEase(OF_EASE_QUAD_OUT);
+	tweenInPoint.setChainFromCurrentValue(true);
+
+	// Setup callback to ensure exact final value
+	tweenInPoint.onCompleteCallback([this]() {
+		inPoint.set(1.0f);
+		ofLogNotice("OrganicText") << "tweenInPoint completed - set to 1.0f";
 	});
+
+	// Add tween parameters to group
+	paramsTweens.add(tweenOutPoint.getParameters());
+	paramsTweens.add(tweenInPoint.getParameters());
 }
 
 //--------------------------------------------------------------
@@ -357,14 +363,16 @@ void OrganicText::setupParams() {
 	
 	//--
 	
-	//TODO
-	parametersDrawing.add(inPoint);
-	parametersDrawing.add(outPoint);
-	parametersDrawing.add(centerPoint);
-	parametersDrawing.add(widthPoint);
-	parameters.add(parametersDrawing);
+	// Tween drawing controls - will be populated in setupTweens()
+	paramsTweens.setName("Tweens");
+	paramsTweens.add(inPoint);
+	paramsTweens.add(outPoint);
+	paramsTweens.add(centerPoint);
+	paramsTweens.add(widthPoint);
+	paramsTweens.add(radiusMouse);
+	// Tween helper params added in setupTweens()
 	
-	parameters.add(radiusMouse);
+	parameters.add(paramsTweens);
 }
 
 //--------------------------------------------------------------
@@ -393,14 +401,14 @@ void OrganicText::setupCallbacks() {
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
 	
-	//TODO
+	// Center/Width control In/Out
 	e_centerPoint = centerPoint.newListener([this](float & v) {
-		inPoint=ofClamp(centerPoint-widthPoint,0,1);
-		outPoint=ofClamp(centerPoint+widthPoint,0,1);
+		inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
+		outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
 	});
 	e_widthPoint = widthPoint.newListener([this](float & v) {
-		inPoint=ofClamp(centerPoint-widthPoint,0,1);
-		outPoint=ofClamp(centerPoint+widthPoint,0,1);
+		inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
+		outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
 	});
 
 	//--
@@ -548,13 +556,14 @@ void OrganicText::update() {
 
 	//--
 
-	// TODO
+	// Update tweens
 	tweenInPoint.update();
-	if(tweenInPoint.isRunning()){
+	if (tweenInPoint.isRunning()) {
 		inPoint.set(tweenInPoint.getValue());
 	}
+
 	tweenOutPoint.update();
-	if(tweenOutPoint.isRunning()){
+	if (tweenOutPoint.isRunning()) {
 		outPoint.set(tweenOutPoint.getValue());
 	}
 }
@@ -1018,12 +1027,6 @@ void OrganicText::drawShapes() {
 
 		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 		
-		// //TODO
-		// if(bDebug){
-		// 	bool bInside = (glm::distance(pointsString[i], mousePos) < radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
-		// 	color = ofColor(colorDebug,DEBUG_ALPHA_MAX);
-		// }
-		
 		ofSetColor(color);
 
 		if (bDrawFill.get())
@@ -1116,17 +1119,12 @@ void OrganicText::draw() {
 
 	//--
 
-	//TODO
-	// Mouse interact
-	if(bDebug){
-		// if(bDebug){
-		// 	bool bInside = (glm::distance(pointsString[i], mousePos) < radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
-		// 	color = ofColor(colorDebug,DEBUG_ALPHA_MAX);
-		// }
+	// Mouse interact debug visualization
+	if (bDebug) {
 		ofPushStyle();
 		ofFill();
-		ofSetColor(ofColor(colorDebug,DEBUG_ALPHA_MAX*0.5f));
-		mousePos = glm::vec2(ofGetMouseX(),ofGetMouseY());
+		ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
+		mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
 		ofDrawCircle(mousePos, radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
 		ofPopStyle();
 	}
@@ -1336,6 +1334,10 @@ void OrganicText::refreshGuiGroup(ofxGuiGroup & g) {
 void OrganicText::exit() {
 	ofLogNotice("OrganicText") << "exit()";
 
+	// Save tween settings
+	tweenInPoint.saveSettings();
+	tweenOutPoint.saveSettings();
+
 	if (bAutosave) saveSettings();
 }
 
@@ -1516,31 +1518,31 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (!bKeys) return;
 	
 	const int key = eventArgs.key;
-	ofLogNotice("OrganicText") << "keyPressed() "<<char(key);
+	ofLogNotice("OrganicText") << "keyPressed() " << char(key);
 
 	//--
 
-	// TODO
+	// Tween controls
 	if (key == '1') {
+		// Reset to start
 		outPoint.set(0.0f);
 		inPoint.set(0.0f);
 		return;
 	} 
 	if (key == '2') {
-//		tweenOutPoint.setFrom(0.0f);
-//		tweenOutPoint.setTo(1.0f);
+		// Animate outPoint from 0 to 1
+		outPoint.set(0.0f);
 		tweenOutPoint.start();
 		return;
 	} 
 	if (key == '3') {
+		// Animate inPoint from 0 to 1
 		inPoint.set(0.0f);
-		outPoint.set(1.0f);
-//		tweenInPoint.setFrom(0.0f);
-//		tweenInPoint.setTo(1.0f);
 		tweenInPoint.start();
 		return;
 	} 
 	if (key == '4') {
+		// Set to full range
 		inPoint.set(0.0f);
 		outPoint.set(1.0f);
 		return;

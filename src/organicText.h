@@ -126,9 +126,8 @@ public:
 
 	//--
 	
-	//TODO
-
-	ofParameterGroup parametersDrawing{"Drawing"};
+	// Tween controls for drawing range
+	ofParameterGroup paramsTweens{"Tweens"};
 	ofParameter<float> inPoint{"In",0,0,1};
 	ofParameter<float> outPoint{"Out",1,0,1};
 	ofParameter<float> centerPoint{"Center",0.5,0,1};
@@ -137,8 +136,6 @@ public:
 
 	ofxTweenLiteHelper<float> tweenInPoint;
 	ofxTweenLiteHelper<float> tweenOutPoint;
-	ofxTweenLiteHelper<float> tweenCenterPoint;
-	ofxTweenLiteHelper<float> tweenWidthPoint;
 
 	//--
 	
@@ -156,6 +153,7 @@ public:
 private:
 	void setupParams();
 	void setupCallbacks();
+	void setupTweens();
 	void setupGui();
 	void setupScene();
 	void startup();
