@@ -44,7 +44,8 @@ void ofApp::update() {
 void ofApp::draw() {
 	// ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
 	// ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);
-	ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR);
+	// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR);
+	ofClear(20);
 
 	t.draw();
 
