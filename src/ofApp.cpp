@@ -42,7 +42,9 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofxDrawBgGradient();
+	// ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
+	// ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);
+	ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR);
 
 	t.draw();
 
@@ -102,8 +104,17 @@ void ofApp::exit() {
 void ofApp::mousePressed(int x, int y, int button) {
 	if (!bMouseBrowse) return;
 
+	// if (button == 0)
+	// 	p.doLoadNext();
+	// else if (button == 2)
+	// 	p.doLoadPrevious();
+
 	if (button == 0)
-		p.doLoadNext();
-	else if (button == 2)
-		p.doLoadPrevious();
+	{	if(x<ofGetWidth()/2){
+			p.doLoadPrevious();
+		}
+		else{
+			p.doLoadNext();
+		}
+	}
 }

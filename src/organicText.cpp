@@ -98,6 +98,14 @@ void OrganicText::setupScene() {
 //--------------------------------------------------------------
 void OrganicText::setupTweens() {
 	ofLogNotice("OrganicText") << "setupTweens()";
+	
+	// Tween drawing controls - will be populated in setupTweens()
+	paramsTweens.setName("Tweens");
+	paramsTweens.add(inPoint);
+	paramsTweens.add(outPoint);
+	// paramsTweens.add(centerPoint);
+	// paramsTweens.add(widthPoint);
+	// Tween helper params added in setupTweens()
 
 	// Setup outPoint tween (0 -> 1)
 	tweenOutPoint.setName("Out Tween");
@@ -343,6 +351,7 @@ void OrganicText::setupParams() {
 	parameters.add(sText);
 	parameters.add(paramsFont);
 	parameters.add(zoomGlobal);
+	parameters.add(radiusMouse);
 	parameters.add(bAutoZoomGlobal);
 	parameters.add(bDrawOutline);
 	parameters.add(bDebug);
@@ -362,15 +371,6 @@ void OrganicText::setupParams() {
 	parameters.add(vResetAll);
 	
 	//--
-	
-	// Tween drawing controls - will be populated in setupTweens()
-	paramsTweens.setName("Tweens");
-	paramsTweens.add(inPoint);
-	paramsTweens.add(outPoint);
-	paramsTweens.add(centerPoint);
-	paramsTweens.add(widthPoint);
-	paramsTweens.add(radiusMouse);
-	// Tween helper params added in setupTweens()
 	
 	parameters.add(paramsTweens);
 }
@@ -401,15 +401,15 @@ void OrganicText::setupCallbacks() {
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
 	
-	// Center/Width control In/Out
-	e_centerPoint = centerPoint.newListener([this](float & v) {
-		inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
-		outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
-	});
-	e_widthPoint = widthPoint.newListener([this](float & v) {
-		inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
-		outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
-	});
+	// // Center/Width control In/Out
+	// e_centerPoint = centerPoint.newListener([this](float & v) {
+	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
+	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
+	// });
+	// e_widthPoint = widthPoint.newListener([this](float & v) {
+	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
+	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
+	// });
 
 	//--
 
@@ -455,6 +455,9 @@ void OrganicText::refreshGuiSession() {
 	gui.getGroup(paramsInternal.getName()).minimize();
 	auto & g = gui.getGroup(paramsSessionSettings.getName());
 	g.minimize();
+	auto & gt = gui.getGroup(paramsTweens.getName());
+	// gt.getGroup(tweenOutPoint.para).minimize();
+	gt.minimize();
 }
 
 //--------------------------------------------------------------
@@ -1525,20 +1528,16 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	// Tween controls
 	if (key == '1') {
 		// Reset to start
-		outPoint.set(0.0f);
 		inPoint.set(0.0f);
+		outPoint.set(0.0f);
 		return;
 	} 
 	if (key == '2') {
-		// Animate outPoint from 0 to 1
-		outPoint.set(0.0f);
-		tweenOutPoint.start();
+		writeIn();
 		return;
 	} 
 	if (key == '3') {
-		// Animate inPoint from 0 to 1
-		inPoint.set(0.0f);
-		tweenInPoint.start();
+		writeOut();
 		return;
 	} 
 	if (key == '4') {

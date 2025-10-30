@@ -126,14 +126,17 @@ public:
 
 	//--
 	
+private:
 	// Tween controls for drawing range
 	ofParameterGroup paramsTweens{"Tweens"};
 	ofParameter<float> inPoint{"In",0,0,1};
 	ofParameter<float> outPoint{"Out",1,0,1};
-	ofParameter<float> centerPoint{"Center",0.5,0,1};
-	ofParameter<float> widthPoint{"Width",0.15,0,1};
-	ofEventListener e_inPoint,e_outPoint,e_centerPoint,e_widthPoint;
+	ofEventListener e_inPoint,e_outPoint;
+	// ofParameter<float> centerPoint{"Center",0.5,0,1};
+	// ofParameter<float> widthPoint{"Width",0.15,0,1};
+	// ofEventListener e_centerPoint,e_widthPoint;
 
+private:
 	ofxTweenLiteHelper<float> tweenInPoint;
 	ofxTweenLiteHelper<float> tweenOutPoint;
 
@@ -144,6 +147,7 @@ public:
 
 	//--
 	
+public:
 	// Must set before setup()
 	void setTargetFPS(float fps);
 
@@ -388,4 +392,18 @@ private:
 
 	// Bench measure time elapsed on draw() in microseconds
 	uint64_t timeDrawBenchmark = 0;
+	
+public:
+	void writeIn(){
+			// Animate outPoint from 0 to 1
+			inPoint.set(0.0f);
+			outPoint.set(0.0f);
+			tweenOutPoint.start();
+	}
+	void writeOut(){
+		// Animate inPoint from 0 to 1
+		inPoint.set(0.0f);
+		tweenInPoint.start();
+		outPoint.set(1.0f);
+	}
 };

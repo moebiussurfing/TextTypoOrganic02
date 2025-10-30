@@ -49,7 +49,7 @@ public:
 	void exit();
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void mousePressed(int x, int y, int button);
-	
+
 	// Organic Text
 	OrganicText t;
 
@@ -70,7 +70,7 @@ public:
 
 	//--
 
-	inline void ofxDrawBgGradient(ofColor c1 = ofColor{24}, ofColor c2 = ofColor{16}, ofGradientMode g = OF_GRADIENT_CIRCULAR)
+	inline void ofxDrawBgGradient(ofColor c1 = ofColor{70}, ofColor c2 = ofColor{10}, ofGradientMode g = OF_GRADIENT_CIRCULAR)
     {
         ofBackgroundGradient(c1, c2, g);
     };
