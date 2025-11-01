@@ -18,7 +18,7 @@ void ofApp::setup() {
 	// When writeOut completes → load next preset → start writeIn
 	t.setOnCompleteWriteOut([this]() {
 		ofLogNotice("ofApp") << "writeOut completed → loading next preset";
-		p.doLoadNext();
+		// p.doLoadNext();
 		t.writeOut();
 	});
 
@@ -74,12 +74,15 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (k == 'w') {
 		resetWindowCustom();
 		if (p.bGui) p.bGui = false;
-	} else if (k == 'e') {
+	}
+	else if (k == 'd'){
+		if (!t.bKeys) t.bDebug = !t.bDebug;
+	} 
+	else if (k == 'e') {
 		resetWindowFullScreen();
 		if (!p.bGui) p.bGui = true;
-	} else if (k == 'd'){
-		if (!t.bKeys) t.bDebug = !t.bDebug;
-	} else if (k == OF_KEY_SPACE) {
+	} 
+	else if (k == OF_KEY_SPACE) {
 		bWindowFullScreen=!bWindowFullScreen;
 		if (p.bGui) p.bGui = false;
 		if(bWindowFullScreen) {
