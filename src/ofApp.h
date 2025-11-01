@@ -68,6 +68,9 @@ public:
 
 	ofParameter<bool> bMouseBrowse;
 
+	//TODO: WIP
+	void nextScene();
+
 	//--
 
 	inline void ofxDrawBgGradient(ofColor c1 = ofColor{70}, ofColor c2 = ofColor{10}, ofGradientMode g = OF_GRADIENT_CIRCULAR)

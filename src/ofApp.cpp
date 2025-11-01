@@ -96,12 +96,10 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 }
 
 //--------------------------------------------------------------
-void ofApp::exit() {
-	t.exit();
-}
-
-//--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
+	nextScene();
+	return;
+	
 	if (!bMouseBrowse) return;
 
 	// if (button == 0)
@@ -117,4 +115,16 @@ void ofApp::mousePressed(int x, int y, int button) {
 			p.doLoadNext();
 		}
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::nextScene() {
+	ofLogNotice("ofApp") << "nextScene()";
+	t.writeIn();
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+	ofLogNotice("ofApp") << "exit()";
+	t.exit();
 }

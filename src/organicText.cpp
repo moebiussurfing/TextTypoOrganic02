@@ -69,10 +69,6 @@ void OrganicText::startup() {
 	// Load saved settings
 	loadSettings();
 
-	// // Load tween settings
-	// tweenInPoint.loadSettings();
-	// tweenOutPoint.loadSettings();
-
 	refreshWindowResized();
 }
 
@@ -110,6 +106,7 @@ void OrganicText::setupTweens() {
 	// Callback on complete
 	tweenOutPoint.onCompleteCallback([this]() {
 		ofLogNotice("OrganicText") << "tweenOutPoint completed";
+
 	});
 
 	tweenInPoint.setupParameter(inPoint);
@@ -428,9 +425,6 @@ void OrganicText::setupGui() {
 
 	// collapse folders
 	refreshGuiSession();
-
-	tweenInPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
-	tweenOutPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
 }
 
 //--------------------------------------------------------------
@@ -441,8 +435,11 @@ void OrganicText::refreshGuiSession() {
 	gui.getGroup(paramsInternal.getName()).minimize();
 	auto & g = gui.getGroup(paramsSessionSettings.getName());
 	g.minimize();
+
 	auto & gt = gui.getGroup(paramsTweens.getName());
 	gt.minimize();
+	tweenInPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
+	tweenOutPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
 }
 
 //--------------------------------------------------------------
@@ -546,14 +543,7 @@ void OrganicText::update() {
 
 	// Update tweens
 	tweenInPoint.update();
-	// if (tweenInPoint.isRunning()) {
-	// 	inPoint.set(tweenInPoint.getValue());
-	// }
-
 	tweenOutPoint.update();
-	// if (tweenOutPoint.isRunning()) {
-	// 	outPoint.set(tweenOutPoint.getValue());
-	// }
 }
 
 //--
