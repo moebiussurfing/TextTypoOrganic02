@@ -20,7 +20,6 @@ void ofApp::setup() {
 	p.gui.add(bMouseBrowse);
 	p.gui.add(vResetWindow);
 
-	//TODO
 	t.refreshGuiPanel(p.guiParams);
 }
 

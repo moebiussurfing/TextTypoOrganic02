@@ -69,9 +69,9 @@ void OrganicText::startup() {
 	// Load saved settings
 	loadSettings();
 
-	// Load tween settings
-	tweenInPoint.loadSettings();
-	tweenOutPoint.loadSettings();
+	// // Load tween settings
+	// tweenInPoint.loadSettings();
+	// tweenOutPoint.loadSettings();
 
 	refreshWindowResized();
 }
@@ -105,34 +105,17 @@ void OrganicText::setupTweens() {
 	paramsTweens.add(outPoint);
 	// paramsTweens.add(centerPoint);
 	// paramsTweens.add(widthPoint);
-	// Tween helper params added in setupTweens()
 
-	// Setup outPoint tween (0 -> 1)
-	tweenOutPoint.setName("Out Tween");
-	tweenOutPoint.setFrom(0.0f);
-	tweenOutPoint.setTo(1.0f);
-	tweenOutPoint.setDuration(2.0f);
-	tweenOutPoint.setEase(OF_EASE_QUAD_OUT);
-	tweenOutPoint.setChainFromCurrentValue(true);
-
-	// Setup callback to ensure exact final value
+	tweenOutPoint.setupParameter(outPoint);
+	// Callback on complete
 	tweenOutPoint.onCompleteCallback([this]() {
-		outPoint.set(1.0f);
-		ofLogNotice("OrganicText") << "tweenOutPoint completed - set to 1.0f";
+		ofLogNotice("OrganicText") << "tweenOutPoint completed";
 	});
 
-	// Setup inPoint tween (0 -> 1)
-	tweenInPoint.setName("In Tween");
-	tweenInPoint.setFrom(0.0f);
-	tweenInPoint.setTo(1.0f);
-	tweenInPoint.setDuration(2.0f);
-	tweenInPoint.setEase(OF_EASE_QUAD_OUT);
-	tweenInPoint.setChainFromCurrentValue(true);
-
-	// Setup callback to ensure exact final value
+	tweenInPoint.setupParameter(inPoint);
+	// Callback on complete
 	tweenInPoint.onCompleteCallback([this]() {
-		inPoint.set(1.0f);
-		ofLogNotice("OrganicText") << "tweenInPoint completed - set to 1.0f";
+		ofLogNotice("OrganicText") << "tweenInPoint completed";
 	});
 
 	// Add tween parameters to group
@@ -445,6 +428,9 @@ void OrganicText::setupGui() {
 
 	// collapse folders
 	refreshGuiSession();
+
+	tweenInPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
+	tweenOutPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
 }
 
 //--------------------------------------------------------------
@@ -456,7 +442,6 @@ void OrganicText::refreshGuiSession() {
 	auto & g = gui.getGroup(paramsSessionSettings.getName());
 	g.minimize();
 	auto & gt = gui.getGroup(paramsTweens.getName());
-	// gt.getGroup(tweenOutPoint.para).minimize();
 	gt.minimize();
 }
 
@@ -561,14 +546,14 @@ void OrganicText::update() {
 
 	// Update tweens
 	tweenInPoint.update();
-	if (tweenInPoint.isRunning()) {
-		inPoint.set(tweenInPoint.getValue());
-	}
+	// if (tweenInPoint.isRunning()) {
+	// 	inPoint.set(tweenInPoint.getValue());
+	// }
 
 	tweenOutPoint.update();
-	if (tweenOutPoint.isRunning()) {
-		outPoint.set(tweenOutPoint.getValue());
-	}
+	// if (tweenOutPoint.isRunning()) {
+	// 	outPoint.set(tweenOutPoint.getValue());
+	// }
 }
 
 //--
@@ -1338,8 +1323,8 @@ void OrganicText::exit() {
 	ofLogNotice("OrganicText") << "exit()";
 
 	// Save tween settings
-	tweenInPoint.saveSettings();
-	tweenOutPoint.saveSettings();
+	tweenInPoint.exit();
+	tweenOutPoint.exit();
 
 	if (bAutosave) saveSettings();
 }
