@@ -14,6 +14,19 @@ void ofApp::setup() {
 	t.setup(fps);
 	t.gui.setPosition(ofGetWidth() - t.gui.getWidth() - 5, 5);
 
+	// Setup tween callbacks - Custom workflow for preset transitions
+	// When writeOut completes → load next preset → start writeIn
+	t.setOnCompleteWriteOut([this]() {
+		ofLogNotice("ofApp") << "writeOut completed → loading next preset";
+		p.doLoadNext();
+		t.writeOut();
+	});
+
+	// When writeIn completes → ready for next cycle
+	t.setOnCompleteWriteIn([this]() {
+		ofLogNotice("ofApp") << "writeIn completed → scene ready. Standby for next trigger";
+	});
+
 	// Presets manger
 	p.setup(t.paramsPreset);
 	p.gui.add(t.bGui);
@@ -121,6 +134,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 void ofApp::nextScene() {
 	ofLogNotice("ofApp") << "nextScene()";
 	t.writeIn();
+	// t.writeOut();
 }
 
 //--------------------------------------------------------------

@@ -103,14 +103,13 @@ void OrganicText::setupTweens() {
 	// paramsTweens.add(widthPoint);
 
 	tweenOutPoint.setupParameter(outPoint);
-	// Callback on complete
+	// Internal callback (always runs for system state)
 	tweenOutPoint.onCompleteCallback([this]() {
 		ofLogNotice("OrganicText") << "tweenOutPoint completed";
-
 	});
 
 	tweenInPoint.setupParameter(inPoint);
-	// Callback on complete
+	// Internal callback (always runs for system state)
 	tweenInPoint.onCompleteCallback([this]() {
 		ofLogNotice("OrganicText") << "tweenInPoint completed";
 	});

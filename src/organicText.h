@@ -409,4 +409,14 @@ class OrganicText {
 		tweenInPoint.start();
 		outPoint.set(1.0f);
 	}
+
+	/// @brief Set custom callback for when writeOut tween completes
+	void setOnCompleteWriteOut(std::function<void()> callback) {
+		tweenOutPoint.onUserCompleteCallback(callback);
+	}
+
+	/// @brief Set custom callback for when writeIn tween completes
+	void setOnCompleteWriteIn(std::function<void()> callback) {
+		tweenInPoint.onUserCompleteCallback(callback);
+	}
 };
