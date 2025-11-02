@@ -91,33 +91,39 @@ void OrganicText::setupScene() {
 	colorDebug = ofColor::yellow;
 }
 
+//--
+
 //--------------------------------------------------------------
 void OrganicText::setupTweens() {
 	ofLogNotice("OrganicText") << "setupTweens()";
 	
 	// Tween drawing controls - will be populated in setupTweens()
-	paramsTweens.setName("Tweens");
+	paramsTweens.setName("Write Tweens");
 	paramsTweens.add(inPoint);
 	paramsTweens.add(outPoint);
+
+	// Two extra params for more drawing variations to experiment
 	// paramsTweens.add(centerPoint);
 	// paramsTweens.add(widthPoint);
 
-	tweenOutPoint.setupParameter(outPoint);
-	// Internal callback (always runs for system state)
-	tweenOutPoint.onCompleteCallback([this]() {
-		ofLogNotice("OrganicText") << "tweenOutPoint completed";
-	});
-
-	tweenInPoint.setupParameter(inPoint);
+	tweenInPoint.setup(inPoint);
 	// Internal callback (always runs for system state)
 	tweenInPoint.onCompleteCallback([this]() {
 		ofLogNotice("OrganicText") << "tweenInPoint completed";
 	});
 
-	// Add tween parameters to group
-	paramsTweens.add(tweenOutPoint.getParameters());
+	tweenOutPoint.setup(outPoint);
+	// Internal callback (always runs for system state)
+	tweenOutPoint.onCompleteCallback([this]() {
+		ofLogNotice("OrganicText") << "tweenOutPoint completed";
+	});
+
+	// Add tween parameters to paramsTweens group
 	paramsTweens.add(tweenInPoint.getParameters());
+	paramsTweens.add(tweenOutPoint.getParameters());
 }
+
+//--
 
 //--------------------------------------------------------------
 void OrganicText::setupParams() {
@@ -135,7 +141,7 @@ void OrganicText::setupParams() {
 	bDrawOutline.set("Draw Outline", false);
 	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
 	bAutoZoomGlobal.set("Auto Zoom", true);
-	sText.set("Text", ORGANICTEXT);
+	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 
 	// Font parameters
 	fontPath.set("Font Path", FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
@@ -430,15 +436,23 @@ void OrganicText::setupGui() {
 void OrganicText::refreshGuiSession() {
 	ofLogNotice("OrganicText") << "refreshGuiSession()";
 
+	// Font
 	gui.getGroup(paramsFont.getName()).minimize();
+	// Internal
 	gui.getGroup(paramsInternal.getName()).minimize();
+	// Session
 	auto & g = gui.getGroup(paramsSessionSettings.getName());
 	g.minimize();
 
+	// Tweens
 	auto & gt = gui.getGroup(paramsTweens.getName());
-	gt.minimize();
-	tweenInPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
-	tweenOutPoint.refreshGui(gui.getGroup(paramsTweens.getName()));
+	//gt.minimize();
+	tweenInPoint.refreshGui(gt);
+	tweenOutPoint.refreshGui(gt);
+	auto & gt1 = gt.getGroup(tweenInPoint.params_.getName());
+	auto & gt2 = gt.getGroup(tweenOutPoint.params_.getName());
+	gt1.minimize();
+	gt2.minimize();
 }
 
 //--------------------------------------------------------------
@@ -1114,11 +1128,11 @@ void OrganicText::draw() {
 void OrganicText::drawGui() {
 	if (!bGui) return;
 
-	if(bDebugLowFPS) {
+	if (bDebug && bDebugLowFPS) {
 		ofPushStyle();
 		ofNoFill();
 		ofSetLineWidth(2);
-		ofSetColor(ofColor::red);
+		ofSetColor(colorDebug);
 		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 		ofPopStyle();
 	}
@@ -1496,30 +1510,6 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	
 	const int key = eventArgs.key;
 	ofLogNotice("OrganicText") << "keyPressed() " << char(key);
-
-	//--
-
-	// Tween controls
-	if (key == '1') {
-		// Reset to start
-		inPoint.set(0.0f);
-		outPoint.set(0.0f);
-		return;
-	} 
-	if (key == '2') {
-		writeIn();
-		return;
-	} 
-	if (key == '3') {
-		writeOut();
-		return;
-	} 
-	if (key == '4') {
-		// Set to full range
-		inPoint.set(0.0f);
-		outPoint.set(1.0f);
-		return;
-	} 
 
 	//--
 

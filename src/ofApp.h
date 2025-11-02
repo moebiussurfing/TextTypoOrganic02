@@ -2,9 +2,11 @@
 
 	TODO
 
-	- gradient bg
 	- smooth transients ?
 		- smooth points only ?
+		- debug: draw smooth points & shapes 
+	- mouse interact/dist ?
+			radius distort. debug affected points
 	- player next presets timed
 		browse presets ?
 	- fix switch windoResise glitch. call update
@@ -12,14 +14,13 @@
 	- fix tweak ranges
 		check not normalized 0-1 all params ?
 			anim speed, mix
-	- mouse interact/dist ?
-		radius distort. debug affected points
 	- zoom lines ratio ?
 		related to fullscreen/screen size?
 		ofCamera ?
 		fbo overscaled?
 	- Deploy: add define remove preset addon
 		hardcode json files to one .h file. replace workflow
+
 	- ofxSurfingPresetsLiteOfxGui
 		copy presets (button) to next or other
 			but copy to mem + move without load + save
@@ -62,19 +63,26 @@ public:
 	void resetWindowCustom();
 	void resetWindowFullScreen();
 	bool bWindowFullScreen = false;
-	
+
 	float fps;
 	float frameTime;
 
-	ofParameter<bool> bMouseBrowse;
+	//--
 
-	//TODO: WIP
+	// Interaction
+	ofParameter<bool> bMouseBrowsing;
+	ofParameter<bool> bTweeningMode;
+	ofParameterGroup paramsScene;
+
+	// Scene drawing management
+	void setupTweens();
 	void nextScene();
 
 	//--
 
-	inline void ofxDrawBgGradient(ofColor c1 = ofColor{70}, ofColor c2 = ofColor{10}, ofGradientMode g = OF_GRADIENT_CIRCULAR)
-    {
-        ofBackgroundGradient(c1, c2, g);
-    };
+	// Helpers
+
+	inline void ofxDrawBgGradient(ofColor c1 = ofColor { 70 }, ofColor c2 = ofColor { 10 }, ofGradientMode g = OF_GRADIENT_CIRCULAR) {
+		ofBackgroundGradient(c1, c2, g);
+	};
 };
