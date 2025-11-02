@@ -95,7 +95,7 @@ void OrganicText::setupScene() {
 
 //--------------------------------------------------------------
 void OrganicText::setupTweens() {
-	ofLogNotice("OrganicText") << "setupTweens()";
+	ofLogNotice("OrganicText") << "setupTweensCallbacks()";
 	
 	// Tween drawing controls - will be populated in setupTweens()
 	paramsTweens.setName("Write Tweens");

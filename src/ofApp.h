@@ -72,10 +72,16 @@ public:
 	// Interaction
 	ofParameter<bool> bMouseBrowsing;
 	ofParameter<bool> bTweeningMode;
+	enum browseDirection_ {
+		BROWSE_NEXT = 0,
+		BROWSE_PREVIOUS
+	};
+	browseDirection_ browseDirection = BROWSE_NEXT;
+
 	ofParameterGroup paramsScene;
 
 	// Scene drawing management
-	void setupTweens();
+	void setupTweensCallbacks();
 	void nextScene();
 
 	//--

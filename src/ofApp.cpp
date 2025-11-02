@@ -48,12 +48,12 @@ void ofApp::setup() {
 
 	//--
 
-	setupTweens();
+	setupTweensCallbacks();
 }
 
 //--------------------------------------------------------------
-void ofApp::setupTweens() {
-	ofLogNotice("ofApp") << "setupTweens()";
+void ofApp::setupTweensCallbacks() {
+	ofLogNotice("ofApp") << "setupTweensCallbacks()";
 
 	// Setup tween callbacks to be called when completed
 	// Custom workflow for combine with/as preset transitions
@@ -62,14 +62,17 @@ void ofApp::setupTweens() {
 	// Empty space: not drawing nothing on complete
 	//  In=1, Out=1
 	t.setOnCompleteWriteIn([this]() {
-		ofLogNotice("ofApp") << "writeIn completed. (empty space: no draw)";
-		p.doLoadNext(); // Load next preset
+		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
+		if (browseDirection == BROWSE_NEXT)
+			p.doLoadNext(); // Load next preset
+		else
+			p.doLoadPrevious(); // Load previous preset
 		t.writeOut(); // Animate draw tween
 	});
 
 	// writeOut tween completed
 	t.setOnCompleteWriteOut([this]() {
-		ofLogNotice("ofApp") << "writeOut completed. (full range draw)";
+		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
 	});
 }
 
@@ -79,6 +82,7 @@ void ofApp::update() {
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
 	// Window title
+	std::string s = "";
 	std::string s1 = "";
 	std::string s2 = "";
 	if (t.bDebug) {
@@ -86,8 +90,9 @@ void ofApp::update() {
 		if (p.isChangedIndex()) {
 			s2 = "PRESET " + ofToString(p.getPresetIndex());
 		}
+		s = "\t\t" + s1 + "\t\t" + s2;
 	}
-	string wt = ofToString(SURFING_APP_TITLE) + "\t\t" + s1 + "\t\t" + s2;
+	string wt = ofToString(SURFING_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
 }
 
@@ -177,24 +182,16 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 void ofApp::mousePressed(int x, int y, int button) {
 	ofLogNotice("ofApp") << "mousePressed(): " << x << "," << y << " " << button;
 
-	// if (button == 0)
-	// 	p.doLoadNext();
-	// else if (button == 2)
-	// 	p.doLoadPrevious();
-
+	// Get browse direction from mouse click x position (left/reight half = previous/next)
 	if (button == 0 && bMouseBrowsing) {
+		if (x < ofGetWidth() / 2) {
+			browseDirection = BROWSE_PREVIOUS;
+		} else {
+			browseDirection = BROWSE_NEXT;
+		}
 		nextScene();
 		return;
 	}
-
-	//if (!bMouseBrowsing) return;
-	//if (button == 0) {
-	//	if (x < ofGetWidth() / 2) {
-	//		p.doLoadPrevious();
-	//	} else {
-	//		p.doLoadNext();
-	//	}
-	//}
 }
 
 //--------------------------------------------------------------
@@ -210,6 +207,11 @@ void ofApp::nextScene() {
 	ofLogNotice("ofApp") << "nextScene()";
 	if (bTweeningMode)
 		t.writeIn();
-	else
-		p.doLoadNext();
+	else {
+		if (browseDirection == BROWSE_NEXT) {
+			p.doLoadNext();
+		} else {
+			p.doLoadPrevious();
+		}
+	}
 }
