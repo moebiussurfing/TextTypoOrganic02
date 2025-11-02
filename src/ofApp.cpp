@@ -187,6 +187,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 	// Get browse direction from mouse click x position
 	// (left/reight half = previous/next)
 	if (bMouseBrowsing) {
+		if (t.isTweening()) return; // Skip mouse clicks until running tweening ends.
 		if (x < ofGetWidth() / 2) {
 			if (button == 0)
 				browseDirection = BROWSE_PREVIOUS;

@@ -430,6 +430,11 @@ public:
 	//	outPoint.set(1.0f);
 	//}
 
+	bool isTweening() {
+		bool b = tweenOutPoint.isRunning() || tweenInPoint.isRunning();
+		return b;
+	}
+
 	/// @brief Set custom callback for when writeOut tween completes
 	void setOnCompleteWriteOut(std::function<void()> callback) {
 		tweenOutPoint.onUserCompleteCallback(callback);
