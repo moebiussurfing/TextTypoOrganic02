@@ -1116,7 +1116,8 @@ void OrganicText::draw() {
 		ofFill();
 		ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
 		mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
-		ofDrawCircle(mousePos, radiusMouse.get() * MOUSE_RADIUS_INTERACT_MAX);
+		float r =ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+		ofDrawCircle(mousePos, r);
 		ofPopStyle();
 	}
 
