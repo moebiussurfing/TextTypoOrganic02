@@ -17,7 +17,7 @@ void ofApp::setup() {
 #if 0
 	resetWindowCustom();
 #else
-	// move window to left monitor
+	// Move window to left monitor
 	int h_ = 28;
 	ofSetWindowShape(1920, 1080 - h_);
 	ofSetWindowPosition(-1920, h_);
@@ -182,7 +182,8 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 void ofApp::mousePressed(int x, int y, int button) {
 	ofLogNotice("ofApp") << "mousePressed(): " << x << "," << y << " " << button;
 
-	// Get browse direction from mouse click x position (left/reight half = previous/next)
+	// Get browse direction from mouse click x position
+	// (left/reight half = previous/next)
 	if (button == 0 && bMouseBrowsing) {
 		if (x < ofGetWidth() / 2) {
 			browseDirection = BROWSE_PREVIOUS;
