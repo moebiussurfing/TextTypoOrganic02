@@ -84,7 +84,7 @@ constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 
 constexpr int DEBUG_ALPHA_MAX = 120;
-constexpr int DEBUG_ALPHA_MIN_OFFSET = 40;
+constexpr int DEBUG_ALPHA_MIN_OFFSET = 0;
 constexpr float DEBUG_SPEED = 2.0f;
 
 // Outline Constants
@@ -121,68 +121,68 @@ enum AnimMode {
 };
 
 class OrganicText {
-public:
+	public:
 	OrganicText();
 	~OrganicText();
-
+	
 	//--
-
+	
 	//TODO: WIP
 	// Tween controls for drawing ranges and writing animation
-public:
+	public:
 	ofParameterGroup paramsTweens { "Tweens" };
 	ofParameter<float> inPoint { "In", 0, 0, 1 };
 	ofParameter<float> outPoint { "Out", 1, 0, 1 };
-private:
+	private:
 	ofEventListener e_inPoint, e_outPoint;
 	// Two extra params for more drawing variations to experiment
 	// ofParameter<float> centerPoint{"Center",0.5,0,1};
 	// ofParameter<float> widthPoint{"Width",0.15,0,1};
 	// ofEventListener e_centerPoint,e_widthPoint;
-
-private:
+	
+	private:
 	ofxTweenLiteHelper<float> tweenInPoint;
 	ofxTweenLiteHelper<float> tweenOutPoint;
-
+	
 	//--
-
-public:
+	
+	public:
 	//TODO: WIP: mouse interaction over shapes points
 	ofParameter<float> radiusMouse { "radiusMouse", 0.1, 0, 1 };
 	mutable glm::vec2 mousePos;
-
+	
 	//--
-
-public:
+	
+	public:
 	// Must set before setup()
 	void setTargetFPS(float fps);
-
+	
 	void setup();
 	void setup(float fps);
-
-private:
+	
+	private:
 	void setupParams();
 	void setupCallbacks();
 	void setupTweens();
 	void setupGui();
 	void setupScene();
 	void startup();
-
-public:
+	
+	public:
 	void draw();
 	void drawGui();
-
+	
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
-
-private:
+	
+	private:
 	void update();
 	void update(ofEventArgs & args);
-
-public:
+	
+	public:
 	ofParameterGroup parameters; // For gui usage
 	// Will include preset settings only when not using an external preset manager
-
+	
 	ofParameterGroup paramsFont;
 	ofParameterGroup paramsPreset;
 	ofParameterGroup paramsShape;
@@ -192,10 +192,10 @@ public:
 	ofParameterGroup paramsAnim;
 	ofParameterGroup paramsConnections;
 	ofParameterGroup paramsTrails;
-
+	
 	ofParameterGroup paramsSessionSettings; // For session status, not preset
 	ofParameterGroup paramsInternal; // Some internal settings
-
+	
 	// Basic parameters
 	ofParameter<bool> bHelp;
 	ofParameter<bool> bDebug;
@@ -206,19 +206,19 @@ public:
 	ofParameter<float> zoomGlobal;
 	ofParameter<bool> bAutoZoomGlobal;
 	ofParameter<std::string> sText;
-
+	
 	// Font parameters
 	ofParameter<std::string> fontPath;
 	ofParameter<float> fontSize;
 	ofParameter<float> letterSpacing;
 	ofParameter<void> vResetFont;
-
+	
 	// Density parameters
 	ofParameter<void> vResetDensity;
 	ofParameter<void> vRandomDensity;
 	ofParameter<float> densitySpacing;
 	ofParameter<float> densityAmount;
-
+	
 	// Shape parameters
 	ofParameter<void> vResetShape;
 	ofParameter<void> vRandomShape;
@@ -229,7 +229,7 @@ public:
 	ofParameter<float> shapeSizeMin;
 	ofParameter<float> shapeRatio;
 	ofParameter<float> shapeRotation;
-
+	
 	// Color parameters
 	ofParameter<void> vResetColor;
 	ofParameter<void> vRandomColor;
@@ -238,7 +238,7 @@ public:
 	ofParameter<float> colorSpeed;
 	ofParameter<float> colorMixFactor;
 	ofParameter<bool> bColorByDistance;
-
+	
 	// Colors parameters
 	ofParameter<void> vResetGlobalColors;
 	ofParameter<void> vRandomGlobalColors;
@@ -248,7 +248,7 @@ public:
 	ofParameter<ofColor> colorOutline;
 	ofParameter<ofColor> colorConnection;
 	ofParameter<ofColor> colorTrails;
-
+	
 	// Animation parameters
 	ofParameter<void> vResetAnimation;
 	ofParameter<void> vRandomAnimation;
@@ -260,7 +260,7 @@ public:
 	ofParameter<float> animIntensity;
 	ofParameter<float> animSpiral;
 	ofParameter<float> animPulseIntensity;
-
+	
 	// Connection parameters
 	ofParameter<void> vResetConnection;
 	ofParameter<void> vRandomConnection;
@@ -270,28 +270,28 @@ public:
 	ofParameter<float> connectAlpha;
 	ofParameter<bool> bConnectNearOnly;
 	ofParameter<float> connectQuality;
-
+	
 	// Trail parameters
 	ofParameter<bool> bDrawTrails;
 	ofParameter<float> trailLength;
 	ofParameter<float> trailLineWidth;
 	ofParameter<float> trailFade;
-
+	
 	// Global controls
 	ofParameter<void> vResetPreset;
 	ofParameter<void> vResetAll;
 	ofParameter<void> vRandomAll;
-
+	
 	// Settings
 	ofParameter<bool> bAutosave;
 	ofParameter<void> vLoadSettigs;
 	ofParameter<void> vSaveSettigs;
-
+	
 	// Internal
 	ofParameter<bool> bGui;
 	ofParameter<bool> bKeys;
-
-private:
+	
+	private:
 	// Event listeners
 	ofEventListener e_FontPath, e_vFontSize, e_letterSpacing, e_vResetFont;
 	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
@@ -301,37 +301,37 @@ private:
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 	ofEventListener e_trailLength;
-
+	
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
 	void drawShapes();
-
+	
 	void drawConnections() const;
-
+	
 	void initTrails();
 	void updateTrails();
 	void drawTrails();
-
+	
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
-
+	
 	// Font management
 	void loadFont();
 	void refreshFont();
 	bool bFlagRefreshFont = false; // Avoids multiple calls in a single frame
 	void flagRefreshFont();
-
-public:
+	
+	public:
 	void saveSettings();
 	void loadSettings();
-
-private:
+	
+	private:
 	void updateShapeTypeName(int &);
 	void updateColorModeName(int &);
 	void updateAnimationModeName(int &);
-
-public:
+	
+	public:
 	// Reset functions
 	void resetDensityParams();
 	void resetShapeParams();
@@ -343,7 +343,7 @@ public:
 	void resetAll();
 	void resetPreset();
 	void randomAll();
-
+	
 	// Randomize functions
 	void randomizeDensityParams();
 	void randomizeShapeParams();
@@ -351,8 +351,8 @@ public:
 	void randomizeGlobalColorParams();
 	void randomizeAnimationParams();
 	void randomizeConnectionParams();
-
-private:
+	
+	private:
 	// Data
 	vector<vec2> pointsString;
 	vector<vector<vec2>> pointTrails;
@@ -360,55 +360,56 @@ private:
 	std::string FONT_DEFAULT;
 	float t;
 	vec2 textCenter;
-
+	
 	void refreshPointsString();
-
+	
 	//--
-
+	
 	// Fps
 	float frameTime;
 	float fps;
 	float targetFPS = 120.0f;
 	bool bDebugLowFPS = false;
-
+	
 	// Settings
 	std::string pathSettings = "OrganicText.json";
-
+	
 	// Cached connection count for debug display
 	mutable int cachedConnectionCount = 0;
-
-public:
+	
+	public:
 	ofxPanel gui;
-
+	
 	// Collapse groups for preset settings (if included when not using external preset manager)
 	void refreshGuiPanel(ofxPanel & ui);
 	void refreshGuiGroup(ofxGuiGroup & g);
 	void refreshGuiSession();
-
-private:
+	
+	private:
 	std::string sHelp;
-
+	
 	void drawHelp() const;
-
+	
 	void drawDebug() const;
 	ofColor colorDebug;
-
+	ofColor colorDebugBlink;
+	
 	void windowResized(ofResizeEventArgs & resize); // Auto call when window resized
 	void refreshWindowResized();
-
+	
 	// Bench measure time elapsed on draw() in microseconds
 	uint64_t timeDrawBenchmark = 0;
-
+	
 	//--
-
+	
 	// Writing Tweening
 	// outPoint: limites the end (to the right) of the text that is being drawn.
 	// inPoint: limites the starting (from left) of the text that is being drawn.
 	// To draw the full text complete (from left to right):
 	// outPoint = 1
 	// inPoint = 0
-
-public:
+	
+	public:
 	void writeIn() {
 		ofLogNotice("OrganicText") << "writeIn()";
 		// Animate inPoint from 0 to 1
@@ -429,12 +430,12 @@ public:
 	//	inPoint.set(0.0f);
 	//	outPoint.set(1.0f);
 	//}
-
+	
 	bool isTweening() {
 		bool b = tweenOutPoint.isRunning() || tweenInPoint.isRunning();
 		return b;
 	}
-
+	
 	/// @brief Set custom callback for when writeOut tween completes
 	void setOnCompleteWriteOut(std::function<void()> callback) {
 		tweenOutPoint.onUserCompleteCallback(callback);

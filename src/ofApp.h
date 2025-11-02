@@ -2,6 +2,8 @@
 
 	TODO
 
+	- move resets/randoms to another file class to clean up
+
 	- smooth transients ?
 		- smooth points only ?
 		- debug: draw smooth points & shapes 
