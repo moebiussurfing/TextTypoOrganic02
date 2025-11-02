@@ -106,7 +106,7 @@ void ofApp::draw() {
 	//ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
 	//ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
 	//ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR);//center too black
-	ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR);//+++
+	ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
 	//ofClear(30);
 	//ofClear(20);
 
@@ -186,11 +186,17 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 	// Get browse direction from mouse click x position
 	// (left/reight half = previous/next)
-	if (button == 0 && bMouseBrowsing) {
+	if (bMouseBrowsing) {
 		if (x < ofGetWidth() / 2) {
-			browseDirection = BROWSE_PREVIOUS;
+			if (button == 0)
+				browseDirection = BROWSE_PREVIOUS;
+			else
+				browseDirection = BROWSE_NEXT;
 		} else {
-			browseDirection = BROWSE_NEXT;
+			if (button == 2)
+				browseDirection = BROWSE_PREVIOUS;
+			else
+				browseDirection = BROWSE_NEXT;
 		}
 		nextScene();
 		return;
