@@ -1174,6 +1174,10 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		std::string perfStatus = (fps >= (targetFPS * 0.9f)) ? "GOOD" : ((fps <= (targetFPS * 0.5f)) ? "OK" : "POOR");
 		ofColor perfColor = (fps >= (targetFPS * 0.9f)) ? ofColor(100, 255, 100) : ((fps >= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
 		
+		// Map spacing (0-1 normalized)
+		float baseSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
+		float finalSpacing = baseSpacing / densityAmount.get();
+
 		std::vector<std::string> lines;
 		lines.push_back("Organic");
 		lines.push_back("Text");
@@ -1191,7 +1195,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		lines.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 		lines.push_back("");
 		lines.push_back("CONFIG");
-		lines.push_back("Density  " + ofToString(densityAmount.get(), 2));
+		lines.push_back("Density  " + ofToString(finalSpacing, 2));
 		lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "ON" : "OFF"));
 		lines.push_back("Shape    " + shapeTypeName.get());
 		lines.push_back("Color    " + colorModeName.get());
