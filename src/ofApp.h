@@ -21,6 +21,9 @@
 	- ofxSurfingPresetsLiteOfxGui
 		copy presets (button) to next or other
 			but copy to mem + move without load + save
+
+	- separate write tweenign methods to new class
+		static pointers? Forward declaration?
  
  */
 

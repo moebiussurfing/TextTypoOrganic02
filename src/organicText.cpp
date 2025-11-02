@@ -1165,13 +1165,14 @@ void OrganicText::drawHelp() const {
 	ofColor perfColor = (fps >= (targetFPS * 0.9f)) ? ofColor(100, 255, 100) : ((fps >= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
 
 	std::vector<std::string> lines;
-	lines.push_back("ORGANIC");
-	lines.push_back("TEXT");
+	lines.push_back("Organic");
+	lines.push_back("Text");
 	lines.push_back("");
 	lines.push_back("PERFORMANCE");
 	lines.push_back("FPS      " + ofToString(fps, 0) + " (" + ofToString(targetFPS, 0) + ") " + perfStatus);
 	lines.push_back("Frame t  " + ofToString(frameTime, 0) + " ms");
-	lines.push_back("Draw()   " + ofToString(timeDrawBenchmark / 1000) + "ms "+ ofToString(timeDrawBenchmark % 1000) + "mics");
+	lines.push_back("Draw()   " + ofToString(timeDrawBenchmark / 1000) + "ms");
+	lines.push_back("         " + ofToString(timeDrawBenchmark % 1000) + "mics");
 	lines.push_back("");
 	lines.push_back("GEOMETRY");
 	lines.push_back("Points   " + ofToString(totalPoints));
