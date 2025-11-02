@@ -86,7 +86,7 @@ void ofApp::update() {
 	// Window title
 	std::string s = "";
 	std::string s1 = "";
-	std::string s2 = "";
+	static std::string s2 = "";
 	if (t.bDebug) {
 		s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 		if (p.isChangedIndex()) {
@@ -106,9 +106,9 @@ void ofApp::draw() {
 	//ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
 	//ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
 	//ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR);//center too black
-	ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
+	//ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
 	//ofClear(30);
-	//ofClear(20);
+	ofClear(20);
 
 	// Organic Text
 	t.draw();

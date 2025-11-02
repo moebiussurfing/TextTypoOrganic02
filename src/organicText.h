@@ -409,12 +409,6 @@ private:
 
 
 public:
-	void writeFull() {
-		ofLogNotice("OrganicText") << "writeFull()";
-		// Full range visible left to right
-		inPoint.set(0.0f);
-		outPoint.set(1.0f);
-	}
 	void writeIn() {
 		ofLogNotice("OrganicText") << "writeIn()";
 		// Animate inPoint from 0 to 1
@@ -429,6 +423,12 @@ public:
 		outPoint.set(0.0f);
 		tweenOutPoint.start();
 	}
+	//void writeFull() {
+	//	ofLogNotice("OrganicText") << "writeFull()";
+	//	// Full range visible left to right
+	//	inPoint.set(0.0f);
+	//	outPoint.set(1.0f);
+	//}
 
 	/// @brief Set custom callback for when writeOut tween completes
 	void setOnCompleteWriteOut(std::function<void()> callback) {
