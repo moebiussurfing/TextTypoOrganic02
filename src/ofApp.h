@@ -7,18 +7,15 @@
 		- debug: draw smooth points & shapes 
 	- mouse interact/dist ?
 			radius distort. debug affected points
-	- player next presets timed
-		browse presets ?
-	- fix switch windoResise glitch. call update
 
+	- player next presets timed
+	- fix switch windoResise glitch. call update
 	- fix tweak ranges
-		check not normalized 0-1 all params ?
-			anim speed, mix
+		check not normalized 0-1 all params ?. anim speed, mix
 	- zoom lines ratio ?
-		related to fullscreen/screen size?
-		ofCamera ?
-		fbo overscaled?
-	- Deploy: add define remove preset addon
+		related to fullscreen/screen size? ofCamera ? fbo overscaled?
+
+	- Deployment: add define remove preset addon
 		hardcode json files to one .h file. replace workflow
 
 	- ofxSurfingPresetsLiteOfxGui
@@ -30,6 +27,8 @@
 #pragma once
 
 #include "ofMain.h"
+
+//#define OFWORKS_DEMO_APP_DEPLOY // uncomment for the deployment release version
 
 //---
 

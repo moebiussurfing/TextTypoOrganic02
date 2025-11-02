@@ -2,8 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+#ifdef OFWORKS_DEMO_APP_DEPLOY
 	ofSetLogLevel(OF_LOG_SILENT);
 	ofSetLogLevel("SurfingPresetsLite", OF_LOG_SILENT);
+#endif
 
 	ofLogNotice("ofApp") << "setup()";
 
@@ -60,7 +62,7 @@ void ofApp::setupTweensCallbacks() {
 
 	// writeIn tween completed
 	// Empty space: not drawing nothing on complete
-	//  In=1, Out=1
+	// In=1, Out=1
 	t.setOnCompleteWriteIn([this]() {
 		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
 		if (browseDirection == BROWSE_NEXT)
@@ -104,9 +106,9 @@ void ofApp::draw() {
 	//ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
 	//ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
 	//ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR);//center too black
-	//ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR);//+++
+	ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR);//+++
 	//ofClear(30);
-	ofClear(20);
+	//ofClear(20);
 
 	// Organic Text
 	t.draw();
