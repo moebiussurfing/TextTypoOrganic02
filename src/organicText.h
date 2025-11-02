@@ -407,7 +407,6 @@ private:
 	// outPoint = 1
 	// inPoint = 0
 
-
 public:
 	void writeIn() {
 		ofLogNotice("OrganicText") << "writeIn()";
