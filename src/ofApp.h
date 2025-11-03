@@ -13,7 +13,9 @@
 	- player next presets timed
 	- fix switch windoResise glitch. call update
 	- fix tweak ranges
+		- tweak shape size param range
 		check not normalized 0-1 all params ?. anim speed, mix
+	- color modes mix/speed. adjust. add spread param
 	- zoom lines ratio ?
 		related to fullscreen/screen size? ofCamera ? fbo overscaled?
 
