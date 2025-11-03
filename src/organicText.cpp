@@ -1195,7 +1195,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		lines.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 		lines.push_back("");
 		lines.push_back("CONFIG");
-		lines.push_back("Density  " + ofToString(finalSpacing, 2));
+		lines.push_back("FSpacing " + ofToString(finalSpacing, 2));
 		lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "ON" : "OFF"));
 		lines.push_back("Shape    " + shapeTypeName.get());
 		lines.push_back("Color    " + colorModeName.get());
