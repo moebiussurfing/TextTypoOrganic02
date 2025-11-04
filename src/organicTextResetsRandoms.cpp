@@ -79,10 +79,10 @@ void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
 
 void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetGlobalColorParams()";
-	ot->color1.set(ofColor(120, 180, 255));
-	ot->color2.set(ofColor(180, 140, 255));
-	ot->color3.set(ofColor(140, 200, 240));
-	ot->colorConnection.set(ofColor(150, 180, 255, 80));
+	ot->color1.set(ofColor(120, 180, 255, 240));
+	ot->color2.set(ofColor(180, 140, 255, 240));
+	ot->color3.set(ofColor(140, 200, 240, 240));
+	ot->colorConnection.set(ofColor(150, 180, 255, 200));
 	//ot->colorOutline.set(ofColor(60, 60, 60));
 }
 
@@ -139,12 +139,12 @@ void organicTextResetsRandoms::randomizeColorModes(OrganicText * ot) {
 
 void organicTextResetsRandoms::randomizeGlobalColorParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "randomizeGlobalColorParams()";
-	ot->color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	ot->color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	ot->color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	//ot->colorOutline.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	ot->colorConnection.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	ot->colorTrails.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+	ot->color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(225, 255)));
+	ot->color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255, ofRandom(225, 255))));
+	ot->color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(225, 255)));
+	//ot->colorOutline.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(225, 255)));
+	ot->colorConnection.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(225, 255)));
+	ot->colorTrails.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(225, 255)));
 }
 
 void organicTextResetsRandoms::randomizeAnimationParams(OrganicText * ot) {

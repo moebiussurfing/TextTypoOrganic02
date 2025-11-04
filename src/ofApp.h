@@ -59,10 +59,10 @@ public:
 	void mousePressed(int x, int y, int button);
 
 	// Organic Text
-	OrganicText t;
+	OrganicText ot;
 
 	// Presets Manager
-	SurfingPresetsLiteOfxGui p;
+	SurfingPresetsLiteOfxGui pm;
 
 	// Reset app window custom shape
 	ofParameter<void> vResetWindow { "Reset Window" };

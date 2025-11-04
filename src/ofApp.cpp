@@ -21,8 +21,8 @@ void ofApp::setup() {
 #else
 	// Move window to my FHD left monitor
 	int h_ = 40;
-	ofSetWindowShape(1920, 1080 - h_);
 	ofSetWindowPosition(-1920, h_);
+	ofSetWindowShape(1280, 720);
 #endif
 
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
@@ -30,23 +30,23 @@ void ofApp::setup() {
 	//--
 
 	// Organic Text
-	t.setup(fps);
-	t.gui.setPosition(ofGetWidth() - t.gui.getWidth() - 5, 5);
+	ot.setup(fps);
+	ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);
 
 	//--
 
 	// Presets Manager
-	p.setup(t.paramsPreset);
-	p.gui.add(t.bGui);
+	pm.setup(ot.paramsPreset);
+	pm.gui.add(ot.bGui);
 
 	paramsScene.setName("Scene");
 	paramsScene.add(bMouseBrowsing);
 	paramsScene.add(bTweeningMode);
-	p.gui.add(paramsScene);
+	pm.gui.add(paramsScene);
 
-	p.gui.add(vResetWindow);
+	pm.gui.add(vResetWindow);
 
-	t.refreshGuiPanel(p.guiParams);
+	ot.refreshGuiPanel(pm.guiParams);
 
 	//--
 
@@ -63,17 +63,17 @@ void ofApp::setupTweensCallbacks() {
 	// writeIn tween completed
 	// Empty space: not drawing nothing on complete
 	// In=1, Out=1
-	t.setOnCompleteWriteIn([this]() {
+	ot.setOnCompleteWriteIn([this]() {
 		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
 		if (browseDirection == BROWSE_NEXT)
-			p.doLoadNext(); // Load next preset
+			pm.doLoadNext(); // Load next preset
 		else
-			p.doLoadPrevious(); // Load previous preset
-		t.writeOut(); // Animate draw tween
+			pm.doLoadPrevious(); // Load previous preset
+		ot.writeOut(); // Animate draw tween
 	});
 
 	// writeOut tween completed
-	t.setOnCompleteWriteOut([this]() {
+	ot.setOnCompleteWriteOut([this]() {
 		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
 	});
 }
@@ -87,10 +87,10 @@ void ofApp::update() {
 	std::string s = "";
 	std::string s1 = "";
 	static std::string s2 = "";
-	if (t.bDebug) {
+	if (ot.bDebug) {
 		s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
-		if (p.isChangedIndex()) {
-			s2 = "PRESET " + ofToString(p.getPresetIndex());
+		if (pm.isChangedIndex()) {
+			s2 = "PRESET " + ofToString(pm.getPresetIndex());
 		}
 		s = "\t\t" + s1 + "\t\t" + s2;
 	}
@@ -111,11 +111,11 @@ void ofApp::draw() {
 	ofClear(20);
 
 	// Organic Text
-	t.draw();
+	ot.draw();
 
 	// Presets Manager
-	p.drawGui();
-	if (p.bGui) t.drawGui();
+	pm.drawGui();
+	if (pm.bGui) ot.drawGui();
 }
 
 //--------------------------------------------------------------
@@ -123,13 +123,13 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	const auto k = eventArgs.key;
 	ofLogNotice("ofApp") << "keyPressed(): " << char(k);
 
-	t.keyPressed(eventArgs);
+	ot.keyPressed(eventArgs);
 
 	//--
 
 	// Debug mode
 	if (k == 'd') {
-		if (!t.bKeys) t.bDebug = !t.bDebug;
+		if (!ot.bKeys) ot.bDebug = !ot.bDebug;
 		return;
 	}
 
@@ -138,12 +138,12 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	// User workflow: window and edit/advanced mode
 	if (k == 'w') {
 		resetWindowCustom();
-		if (p.bGui) p.bGui = false;
+		if (pm.bGui) pm.bGui = false;
 		return;
 	}
 	if (k == OF_KEY_SPACE) {
 		bWindowFullScreen = !bWindowFullScreen;
-		if (p.bGui) p.bGui = false;
+		if (pm.bGui) pm.bGui = false;
 		if (bWindowFullScreen) {
 			resetWindowFullScreen();
 		} else {
@@ -153,7 +153,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 	if (k == 'e') {
 		resetWindowFullScreen();
-		if (!p.bGui) p.bGui = true;
+		if (!pm.bGui) pm.bGui = true;
 		return;
 	}
 }
@@ -187,7 +187,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 	// Get browse direction from mouse click x position
 	// (left/reight half = previous/next)
 	if (bMouseBrowsing) {
-		if (t.isTweening()) return; // Skip mouse clicks until running tweening ends.
+		if (ot.isTweening()) return; // Skip mouse clicks until running tweening ends.
 		if (x < ofGetWidth() / 2) {
 			if (button == 0)
 				browseDirection = BROWSE_PREVIOUS;
@@ -207,7 +207,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 //--------------------------------------------------------------
 void ofApp::exit() {
 	ofLogNotice("ofApp") << "exit()";
-	t.exit();
+	ot.exit();
 }
 
 //--
@@ -216,12 +216,12 @@ void ofApp::exit() {
 void ofApp::nextScene() {
 	ofLogNotice("ofApp") << "nextScene()";
 	if (bTweeningMode)
-		t.writeIn();
+		ot.writeIn();
 	else {
 		if (browseDirection == BROWSE_NEXT) {
-			p.doLoadNext();
+			pm.doLoadNext();
 		} else {
-			p.doLoadPrevious();
+			pm.doLoadPrevious();
 		}
 	}
 }
