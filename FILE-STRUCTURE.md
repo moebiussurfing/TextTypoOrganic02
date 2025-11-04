@@ -4,6 +4,10 @@
 TextTypoOrganic02/
 ├── docs/
 │   ├── AI-Assistant/
+│   │   ├── Status/
+│   │   │   ├── CURRENT-TASKS.md
+│   │   │   ├── KNOWN-BUGS.md
+│   │   │   └── TODO.md
 │   │   ├── AGENTS.md
 │   │   ├── CURRENT-STATE.md
 │   │   ├── PROJECT-CONTEXT.md
@@ -15,10 +19,6 @@ TextTypoOrganic02/
 │   │   └── Learning/
 │   │       ├── CPP-CONCEPTS.md
 │   │       └── SHADER-CONVERSION-STRATEGY.md
-│   ├── Status/
-│   │   ├── CURRENT-TASKS.md
-│   │   ├── KNOWN-BUGS.md
-│   │   └── TODO.md
 │   ├── User/
 │   │   └── QUICK-START.md
 │   └── CHANGELOG.md
@@ -27,11 +27,29 @@ TextTypoOrganic02/
 │   ├── ofApp.cpp
 │   ├── ofApp.h
 │   ├── organicText.cpp
-│   └── organicText.h
+│   ├── organicText.h
+│   ├── organicTextResetsRandoms.cpp
+│   ├── organicTextResetsRandoms.h
+│   └── surfingSmooth.h
 ├── AI-AGENTS-GUIDE.md
 ├── Capture-v0.1.PNG
 ├── FILE-STRUCTURE.md
 ├── README.md
 ├── addons.make
-├── generate-FILE-STRUCTURE.py
+└── generate-FILE-STRUCTURE.py
 ```
+
+---
+
+## Addons Detected (from addons.make)
+
+- `ofxGui`
+- `ofxSurfingHelpersLite`
+- `ofxSurfingPresetsLite`
+- `ofxTweenLite`
+
+### OpenFrameworks Paths
+
+- OF addons path (relative to project root): `../../addons`
+- OF root path (relative to project root): `../../../`
+
