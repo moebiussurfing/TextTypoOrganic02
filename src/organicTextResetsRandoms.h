@@ -5,7 +5,7 @@
 // Forward declaration
 class OrganicText;
 
-class organicTextResestRandoms {
+class organicTextResetsRandoms {
 
 public:
 	// Reset functions

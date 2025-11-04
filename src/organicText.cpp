@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "organicTextResestRandoms.h"
+#include "organicTextResetsRandoms.h"
 
 //--------------------------------------------------------------
 OrganicText::OrganicText() {
@@ -66,7 +66,7 @@ void OrganicText::startup() {
 	//refreshFont();
 
 	// Set defaults settings on these methods instead of into setupParams() init params!
-	organicTextResestRandoms::resetAll(this);
+	organicTextResetsRandoms::resetAll(this);
 
 	// Load saved settings
 	loadSettings();
@@ -368,7 +368,7 @@ void OrganicText::setupCallbacks() {
 	e_FontPath = fontPath.newListener([this](std::string & s) { loadFont(); });
 	e_vFontSize = fontSize.newListener([this](float & f) { loadFont(); });
 	e_letterSpacing = letterSpacing.newListener([this](float & f) { flagRefreshFont(); });
-	e_vResetFont = vResetFont.newListener([this](void) { organicTextResestRandoms::resetFonts(this); });
+	e_vResetFont = vResetFont.newListener([this](void) { organicTextResetsRandoms::resetFonts(this); });
 
 	// Density listeners
 	e_DensitySpacing = densitySpacing.newListener([this](float & v) { refreshPointsString(); });
@@ -398,23 +398,23 @@ void OrganicText::setupCallbacks() {
 	//--
 
 	// Reset listeners
-	e_vResetDensity = vResetDensity.newListener([this](void) { organicTextResestRandoms::resetDensityParams(this); });
-	e_vResetShape = vResetShape.newListener([this](void) { organicTextResestRandoms::resetShapeParams(this); });
-	e_vResetColor = vResetColor.newListener([this](void) { organicTextResestRandoms::resetColorModes(this); });
-	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { organicTextResestRandoms::resetGlobalColorParams(this); });
-	e_vResetAnimation = vResetAnimation.newListener([this](void) { organicTextResestRandoms::resetAnimationParams(this); });
-	e_vResetConnection = vResetConnection.newListener([this](void) { organicTextResestRandoms::resetConnectionParams(this); });
-	e_vRandomAll = vRandomAll.newListener([this](void) { organicTextResestRandoms::randomAll(this); });
-	e_vResetAll = vResetAll.newListener([this](void) { organicTextResestRandoms::resetAll(this); });
-	e_vResetPreset = vResetPreset.newListener([this](void) { organicTextResestRandoms::resetPreset(this); });
+	e_vResetDensity = vResetDensity.newListener([this](void) { organicTextResetsRandoms::resetDensityParams(this); });
+	e_vResetShape = vResetShape.newListener([this](void) { organicTextResetsRandoms::resetShapeParams(this); });
+	e_vResetColor = vResetColor.newListener([this](void) { organicTextResetsRandoms::resetColorModes(this); });
+	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { organicTextResetsRandoms::resetGlobalColorParams(this); });
+	e_vResetAnimation = vResetAnimation.newListener([this](void) { organicTextResetsRandoms::resetAnimationParams(this); });
+	e_vResetConnection = vResetConnection.newListener([this](void) { organicTextResetsRandoms::resetConnectionParams(this); });
+	e_vRandomAll = vRandomAll.newListener([this](void) { organicTextResetsRandoms::randomAll(this); });
+	e_vResetAll = vResetAll.newListener([this](void) { organicTextResetsRandoms::resetAll(this); });
+	e_vResetPreset = vResetPreset.newListener([this](void) { organicTextResetsRandoms::resetPreset(this); });
 
 	// Random listeners
-	e_vRandomDensity = vRandomDensity.newListener([this](void) { organicTextResestRandoms::randomizeDensityParams(this); });
-	e_vRandomShape = vRandomShape.newListener([this](void) { organicTextResestRandoms::randomizeShapeParams(this); });
-	e_vRandomColor = vRandomColor.newListener([this](void) { organicTextResestRandoms::randomizeColorModes(this); });
-	e_vRandomGlobalColor = vRandomGlobalColors.newListener([this](void) { organicTextResestRandoms::randomizeGlobalColorParams(this); });
-	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { organicTextResestRandoms::randomizeAnimationParams(this); });
-	e_vRandomConnection = vRandomConnection.newListener([this](void) { organicTextResestRandoms::randomizeConnectionParams(this); });
+	e_vRandomDensity = vRandomDensity.newListener([this](void) { organicTextResetsRandoms::randomizeDensityParams(this); });
+	e_vRandomShape = vRandomShape.newListener([this](void) { organicTextResetsRandoms::randomizeShapeParams(this); });
+	e_vRandomColor = vRandomColor.newListener([this](void) { organicTextResetsRandoms::randomizeColorModes(this); });
+	e_vRandomGlobalColor = vRandomGlobalColors.newListener([this](void) { organicTextResetsRandoms::randomizeGlobalColorParams(this); });
+	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { organicTextResetsRandoms::randomizeAnimationParams(this); });
+	e_vRandomConnection = vRandomConnection.newListener([this](void) { organicTextResetsRandoms::randomizeConnectionParams(this); });
 }
 
 //--------------------------------------------------------------
@@ -1343,7 +1343,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 
 	else if (key == OF_KEY_BACKSPACE) {
-		organicTextResestRandoms::resetAll(this);
+		organicTextResetsRandoms::resetAll(this);
 	}
 
 	else if (key == 'c' || key == 'C') {

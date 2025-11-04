@@ -1,4 +1,4 @@
-#include "organicTextResestRandoms.h"
+#include "organicTextResetsRandoms.h"
 #include "organicText.h"
 
 //--
@@ -8,8 +8,8 @@
 //--------------------------------------------------------------
 
 //--------------------------------------------------------------
-void organicTextResestRandoms::resetPreset(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetPreset()";
+void organicTextResetsRandoms::resetPreset(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetPreset()";
 	resetDensityParams(ot);
 	resetShapeParams(ot);
 	resetColorModes(ot);
@@ -19,8 +19,8 @@ void organicTextResestRandoms::resetPreset(OrganicText * ot) {
 }
 
 //--------------------------------------------------------------
-void organicTextResestRandoms::resetAll(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetAll()";
+void organicTextResetsRandoms::resetAll(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetAll()";
 
 	// preset
 	resetPreset(ot);
@@ -35,8 +35,8 @@ void organicTextResestRandoms::resetAll(OrganicText * ot) {
 }
 
 //--------------------------------------------------------------
-void organicTextResestRandoms::randomAll(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomAll()";
+void organicTextResetsRandoms::randomAll(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomAll()";
 	randomizeDensityParams(ot);
 	randomizeShapeParams(ot);
 	randomizeColorModes(ot);
@@ -46,20 +46,20 @@ void organicTextResestRandoms::randomAll(OrganicText * ot) {
 }
 
 //--------------------------------------------------------------
-void organicTextResestRandoms::resetFonts(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetFonts()";
+void organicTextResetsRandoms::resetFonts(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetFonts()";
 	//ot->fontPath.set("NotoSansMono-Regular.ttf");
 	ot->fontSize.set(150);
 	ot->letterSpacing.set(0);
 }
 
-void organicTextResestRandoms::resetDensityParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetDensityParams()";
+void organicTextResetsRandoms::resetDensityParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetDensityParams()";
 	ot->densitySpacing.set(0.2f);
 }
 
-void organicTextResestRandoms::resetShapeParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetShapeParams()";
+void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetShapeParams()";
 	ot->bDrawShapes.set(true);
 	ot->bDrawFill.set(true);
 	ot->shapeSize.set(0.1f);
@@ -69,16 +69,16 @@ void organicTextResestRandoms::resetShapeParams(OrganicText * ot) {
 	ot->shapeRotation.set(0.0f);
 }
 
-void organicTextResestRandoms::resetColorModes(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetColorModes()";
+void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetColorModes()";
 	ot->colorMode.set(3);
 	ot->colorSpeed.set(0.5f);
 	ot->colorMixFactor.set(0.4f);
 	ot->bColorByDistance.set(false);
 }
 
-void organicTextResestRandoms::resetGlobalColorParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetGlobalColorParams()";
+void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetGlobalColorParams()";
 	ot->color1.set(ofColor(120, 180, 255));
 	ot->color2.set(ofColor(180, 140, 255));
 	ot->color3.set(ofColor(140, 200, 240));
@@ -86,8 +86,8 @@ void organicTextResestRandoms::resetGlobalColorParams(OrganicText * ot) {
 	//ot->colorOutline.set(ofColor(60, 60, 60));
 }
 
-void organicTextResestRandoms::resetAnimationParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetAnimationParams()";
+void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetAnimationParams()";
 	ot->animationMode.set(0);
 	ot->animSpeed.set(0.8f);
 	ot->animPower.set(0.05f);
@@ -97,8 +97,8 @@ void organicTextResestRandoms::resetAnimationParams(OrganicText * ot) {
 	ot->animPulseIntensity.set(0.2f);
 }
 
-void organicTextResestRandoms::resetConnectionParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "resetConnectionParams()";
+void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetConnectionParams()";
 	ot->bDrawConnections.set(false);
 	ot->connectDistance.set(30.0f);
 	ot->connectLineWidth.set(1.5f);
@@ -115,13 +115,13 @@ void organicTextResestRandoms::resetConnectionParams(OrganicText * ot) {
 // RANDOMIZE FUNCTIONS
 //--------------------------------------------------------------
 
-void organicTextResestRandoms::randomizeDensityParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomizeDensityParams()";
+void organicTextResetsRandoms::randomizeDensityParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeDensityParams()";
 	ot->densitySpacing.set(ofRandom(ot->densitySpacing.getMin(), ot->densitySpacing.getMax()));
 }
 
-void organicTextResestRandoms::randomizeShapeParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomizeShapeParams()";
+void organicTextResetsRandoms::randomizeShapeParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeShapeParams()";
 	ot->shapeSize.set(ofRandom(ot->shapeSize.getMin(), ot->shapeSize.getMax()));
 	ot->shapeSizeMin.set(ofRandom(ot->shapeSizeMin.getMin(), ot->shapeSizeMin.getMax()));
 	ot->shapeType.set(static_cast<int>(ofRandom(0, 6)));
@@ -129,16 +129,16 @@ void organicTextResestRandoms::randomizeShapeParams(OrganicText * ot) {
 	ot->shapeRotation.set(ofRandom(ot->shapeRotation.getMin(), ot->shapeRotation.getMax()));
 }
 
-void organicTextResestRandoms::randomizeColorModes(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomizeColorModes()";
+void organicTextResetsRandoms::randomizeColorModes(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeColorModes()";
 	ot->colorMode.set(static_cast<int>(ofRandom(0, 5)));
 	ot->colorSpeed.set(ofRandom(ot->colorSpeed.getMin(), ot->colorSpeed.getMax()));
 	ot->colorMixFactor.set(ofRandom(ot->colorMixFactor.getMin(), ot->colorMixFactor.getMax()));
 	ot->bColorByDistance.set(ofRandom(1.0f) > 0.5f);
 }
 
-void organicTextResestRandoms::randomizeGlobalColorParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomizeGlobalColorParams()";
+void organicTextResetsRandoms::randomizeGlobalColorParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeGlobalColorParams()";
 	ot->color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	ot->color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	ot->color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
@@ -147,8 +147,8 @@ void organicTextResestRandoms::randomizeGlobalColorParams(OrganicText * ot) {
 	ot->colorTrails.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 }
 
-void organicTextResestRandoms::randomizeAnimationParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomizeAnimationParams()";
+void organicTextResetsRandoms::randomizeAnimationParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeAnimationParams()";
 	if (!ot->bEnableAnimation) ot->bEnableAnimation = true;
 	ot->animationMode.set(static_cast<int>(ofRandom(0, 5)));
 	ot->animSpeed.set(ofRandom(ot->animSpeed.getMin(), ot->animSpeed.getMax()));
@@ -159,8 +159,8 @@ void organicTextResestRandoms::randomizeAnimationParams(OrganicText * ot) {
 	ot->animPulseIntensity.set(ofRandom(ot->animPulseIntensity.getMin(), ot->animPulseIntensity.getMax()));
 }
 
-void organicTextResestRandoms::randomizeConnectionParams(OrganicText * ot) {
-	ofLogNotice("organicTextResestRandoms") << "randomizeConnectionParams()";
+void organicTextResetsRandoms::randomizeConnectionParams(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeConnectionParams()";
 	ot->connectDistance.set(ofRandom(ot->connectDistance.getMin(), ot->connectDistance.getMax()));
 	ot->connectAlpha.set(ofRandom(ot->connectAlpha.getMin(), ot->connectAlpha.getMax()));
 	ot->connectQuality.set(ofRandom(ot->connectQuality.getMin(), ot->connectQuality.getMax()));
