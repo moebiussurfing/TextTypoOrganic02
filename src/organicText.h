@@ -35,10 +35,8 @@ constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
 constexpr float ZOOM_GLOBAL_MAX = 1.1f;
 
 // Density Constants
-constexpr float DENSITY_SPACING_MIN = 1.0f;
-constexpr float DENSITY_SPACING_MAX = 25.0f;
-constexpr float DENSITY_MIN_SPACING_MIN = 0.5f;
-constexpr float DENSITY_MIN_SPACING_MAX = 15.0f;
+constexpr float DENSITY_SPACING_MIN = 1.5f;
+constexpr float DENSITY_SPACING_MAX = 50.0f;
 
 // Animation Displacement Constants
 constexpr float ANIM_NOISE_MAX = 35.0f;
@@ -219,7 +217,7 @@ public:
 	ofParameter<void> vResetDensity;
 	ofParameter<void> vRandomDensity;
 	ofParameter<float> densitySpacing;
-	ofParameter<float> densityAmount;
+	//ofParameter<float> densityAmount;
 
 	// Shape parameters
 	ofParameter<void> vResetShape;
@@ -296,7 +294,7 @@ public:
 private:
 	// Event listeners
 	ofEventListener e_FontPath, e_vFontSize, e_letterSpacing, e_vResetFont;
-	ofEventListener e_DensitySpacing, e_DensityAmount, e_sText;
+	ofEventListener e_DensitySpacing, e_sText;
 	ofEventListener e_vResetDensity, e_vResetShape, e_vResetColor;
 	ofEventListener e_vResetGlobalColor, e_vResetAnimation, e_vResetConnection, e_vResetAll, e_vResetPreset;
 	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor, e_vRandomAll;

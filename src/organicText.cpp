@@ -154,8 +154,7 @@ void OrganicText::setupParams() {
 	// Density group
 	vResetDensity.set("Reset");
 	vRandomDensity.set("Random");
-	densitySpacing.set("Spacing", 0.2, 0.05, 1);
-	densityAmount.set("Amount", 0.5f, 0.0f, 1.f);
+	densitySpacing.set("Spacing", 0.2f, 0.05f, 1.f);
 
 	// Shape group
 	vResetShape.set("Reset");
@@ -240,7 +239,6 @@ void OrganicText::setupParams() {
 
 	paramsDensity.setName("Density");
 	paramsDensity.add(densitySpacing);
-	paramsDensity.add(densityAmount);
 	paramsDensity.add(vRandomDensity);
 	paramsDensity.add(vResetDensity);
 
@@ -374,7 +372,6 @@ void OrganicText::setupCallbacks() {
 
 	// Density listeners
 	e_DensitySpacing = densitySpacing.newListener([this](float & v) { refreshPointsString(); });
-	e_DensityAmount = densityAmount.newListener([this](float & v) { refreshPointsString(); });
 	e_sText = sText.newListener([this](std::string & s) { refreshPointsString(); });
 
 	// Settings listeners
@@ -606,8 +603,7 @@ void OrganicText::refreshPointsString() {
 	ofLogNotice("OrganicText") << "refreshPointsString()";
 
 	// Map spacing (0-1 normalized)
-	float baseSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
-	float finalSpacing = baseSpacing / densityAmount.get();
+	float finalSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
 
 	pointsString = sampleStringPoints(sText, finalSpacing);
 
@@ -1176,8 +1172,7 @@ void OrganicText::drawHelp() const {
 	ofColor perfColor = (fps >= (targetFPS * 0.9f)) ? ofColor(100, 255, 100) : ((fps >= (targetFPS * 0.5f) ? ofColor(255, 255, 100) : ofColor(255, 100, 100)));
 
 	// Map spacing (0-1 normalized)
-	float baseSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
-	float finalSpacing = baseSpacing / densityAmount.get();
+	float finalSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
 
 	std::vector<std::string> lines;
 	lines.push_back("Organic");
@@ -1196,7 +1191,7 @@ void OrganicText::drawHelp() const {
 	lines.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 	lines.push_back("");
 	lines.push_back("CONFIG");
-	lines.push_back("Density  " + ofToString(finalSpacing, 2));
+	lines.push_back("FSpacing " + ofToString(finalSpacing, 2));
 	lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "ON" : "OFF"));
 	lines.push_back("Shape    " + shapeTypeName.get());
 	lines.push_back("Color    " + colorModeName.get());
@@ -1378,9 +1373,9 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 
 	else if (key == '+' || key == '=') {
-		densityAmount.set(ofClamp(densityAmount.get() + 0.05f, densityAmount.getMin(), densityAmount.getMax()));
+		densitySpacing.set(ofClamp(densitySpacing.get() + 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
 	} else if (key == '-') {
-		densityAmount.set(ofClamp(densityAmount.get() - 0.05f, densityAmount.getMin(), densityAmount.getMax()));
+		densitySpacing.set(ofClamp(densitySpacing.get() - 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
 	}
 
 	else if (key == OF_KEY_UP) {

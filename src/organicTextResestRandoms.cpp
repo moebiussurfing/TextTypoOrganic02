@@ -52,8 +52,7 @@ void organicTextResestRandoms::resetFonts(OrganicText * ot) {
 
 void organicTextResestRandoms::resetDensityParams(OrganicText * ot) {
 	ofLogNotice("organicTextResestRandoms") << "resetDensityParams()";
-	ot->densitySpacing.set(0.25f);
-	ot->densityAmount.set(0.5f);
+	ot->densitySpacing.set(0.2f);
 }
 
 void organicTextResestRandoms::resetShapeParams(OrganicText * ot) {
@@ -116,7 +115,6 @@ void organicTextResestRandoms::resetConnectionParams(OrganicText * ot) {
 void organicTextResestRandoms::randomizeDensityParams(OrganicText * ot) {
 	ofLogNotice("organicTextResestRandoms") << "randomizeDensityParams()";
 	ot->densitySpacing.set(ofRandom(ot->densitySpacing.getMin(), ot->densitySpacing.getMax()));
-	ot->densityAmount.set(ofRandom(ot->densityAmount.getMin(), ot->densityAmount.getMax()));
 }
 
 void organicTextResestRandoms::randomizeShapeParams(OrganicText * ot) {
