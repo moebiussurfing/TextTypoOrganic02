@@ -334,9 +334,9 @@ void OrganicText::setupParams() {
 	parameters.setName("OrganicText");
 	parameters.add(sText);
 	parameters.add(paramsFont);
+	parameters.add(bAutoZoomGlobal);
 	parameters.add(zoomGlobal);
 	parameters.add(radiusMouse);
-	parameters.add(bAutoZoomGlobal);
 	parameters.add(bDrawOutline);
 	parameters.add(colorOutline);
 	parameters.add(bDebug);
@@ -1157,8 +1157,8 @@ void OrganicText::drawHelp() const {
 	float finalSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
 
 	std::vector<std::string> lines;
-	lines.push_back("Organic");
-	lines.push_back("Text");
+	lines.push_back("ORGANIC");
+	lines.push_back("TEXT");
 	lines.push_back("");
 	lines.push_back("PERFORMANCE");
 	lines.push_back("FPS      " + ofToString(fps, 0) + " (" + ofToString(targetFPS, 0) + ") " + perfStatus);

@@ -22,11 +22,14 @@ void organicTextResestRandoms::resetPreset(OrganicText * ot) {
 void organicTextResestRandoms::resetAll(OrganicText * ot) {
 	ofLogNotice("organicTextResestRandoms") << "resetAll()";
 
+	// preset
 	resetPreset(ot);
 	resetFonts(ot);
 
+	// session
 	ot->zoomGlobal.set(0.f);
 	ot->bAutoZoomGlobal = true;
+	ot->colorOutline.set(ofColor(60, 60, 60));
 
 	ot->t = 0.0f;
 }
@@ -80,7 +83,7 @@ void organicTextResestRandoms::resetGlobalColorParams(OrganicText * ot) {
 	ot->color2.set(ofColor(180, 140, 255));
 	ot->color3.set(ofColor(140, 200, 240));
 	ot->colorConnection.set(ofColor(150, 180, 255, 80));
-	ot->colorOutline.set(ofColor(60, 60, 60));
+	//ot->colorOutline.set(ofColor(60, 60, 60));
 }
 
 void organicTextResestRandoms::resetAnimationParams(OrganicText * ot) {
@@ -139,7 +142,7 @@ void organicTextResestRandoms::randomizeGlobalColorParams(OrganicText * ot) {
 	ot->color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	ot->color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	ot->color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	ot->colorOutline.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
+	//ot->colorOutline.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	ot->colorConnection.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 	ot->colorTrails.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
 }
