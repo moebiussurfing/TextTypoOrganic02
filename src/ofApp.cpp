@@ -19,8 +19,8 @@ void ofApp::setup() {
 #if 0
 	resetWindowCustom();
 #else
-	// Move window to left monitor
-	int h_ = 28;
+	// Move window to my FHD left monitor
+	int h_ = 40;
 	ofSetWindowShape(1920, 1080 - h_);
 	ofSetWindowPosition(-1920, h_);
 #endif
