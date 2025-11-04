@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+
 #include "ofxTweenLiteHelper.h"
 
 //----------------------------------------------------------------------------
@@ -26,7 +27,7 @@ using namespace glm;
 // DRAWING & ANIMATION CONSTANTS
 // ============================================================================
 
-//TODO: when not using glm lib...
+//TODO: fix for ofWorks..when not using glm lib...
 #ifndef TWO_PI
 constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
 #endif
@@ -332,35 +333,17 @@ private:
 	void updateColorModeName(int &);
 	void updateAnimationModeName(int &);
 
-public:
-	// Reset functions
-	void resetDensityParams();
-	void resetShapeParams();
-	void resetColorModes();
-	void resetGlobalColorParams();
-	void resetAnimationParams();
-	void resetConnectionParams();
-	void resetFonts();
-	void resetAll();
-	void resetPreset();
-	void randomAll();
-
-	// Randomize functions
-	void randomizeDensityParams();
-	void randomizeShapeParams();
-	void randomizeColorModes();
-	void randomizeGlobalColorParams();
-	void randomizeAnimationParams();
-	void randomizeConnectionParams();
-
 private:
 	// Data
 	vector<vec2> pointsString;
 	vector<vector<vec2>> pointTrails;
 	ofTrueTypeFont font;
 	std::string FONT_DEFAULT;
-	float t;
 	vec2 textCenter;
+public:
+	float t;
+
+private:
 
 	void refreshPointsString();
 

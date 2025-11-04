@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include "organicTextResestRandoms.h"
+
 //--------------------------------------------------------------
 OrganicText::OrganicText() {
 	ofLogNotice("OrganicText") << "OrganicText()";
@@ -64,7 +66,7 @@ void OrganicText::startup() {
 	//refreshFont();
 
 	// Set defaults settings on these methods instead of into setupParams() init params!
-	resetAll();
+	organicTextResestRandoms::resetAll(this);
 
 	// Load saved settings
 	loadSettings();
@@ -368,7 +370,7 @@ void OrganicText::setupCallbacks() {
 	e_FontPath = fontPath.newListener([this](std::string & s) { loadFont(); });
 	e_vFontSize = fontSize.newListener([this](float & f) { loadFont(); });
 	e_letterSpacing = letterSpacing.newListener([this](float & f) { flagRefreshFont(); });
-	e_vResetFont = vResetFont.newListener([this](void) { resetFonts(); });
+	e_vResetFont = vResetFont.newListener([this](void) { organicTextResestRandoms::resetFonts(this); });
 
 	// Density listeners
 	e_DensitySpacing = densitySpacing.newListener([this](float & v) { refreshPointsString(); });
@@ -399,23 +401,23 @@ void OrganicText::setupCallbacks() {
 	//--
 
 	// Reset listeners
-	e_vResetDensity = vResetDensity.newListener([this](void) { resetDensityParams(); });
-	e_vResetShape = vResetShape.newListener([this](void) { resetShapeParams(); });
-	e_vResetColor = vResetColor.newListener([this](void) { resetColorModes(); });
-	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { resetGlobalColorParams(); });
-	e_vResetAnimation = vResetAnimation.newListener([this](void) { resetAnimationParams(); });
-	e_vResetConnection = vResetConnection.newListener([this](void) { resetConnectionParams(); });
-	e_vRandomAll = vRandomAll.newListener([this](void) { randomAll(); });
-	e_vResetAll = vResetAll.newListener([this](void) { resetAll(); });
-	e_vResetPreset = vResetPreset.newListener([this](void) { resetPreset(); });
+	e_vResetDensity = vResetDensity.newListener([this](void) { organicTextResestRandoms::resetDensityParams(this); });
+	e_vResetShape = vResetShape.newListener([this](void) { organicTextResestRandoms::resetShapeParams(this); });
+	e_vResetColor = vResetColor.newListener([this](void) { organicTextResestRandoms::resetColorModes(this); });
+	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { organicTextResestRandoms::resetGlobalColorParams(this); });
+	e_vResetAnimation = vResetAnimation.newListener([this](void) { organicTextResestRandoms::resetAnimationParams(this); });
+	e_vResetConnection = vResetConnection.newListener([this](void) { organicTextResestRandoms::resetConnectionParams(this); });
+	e_vRandomAll = vRandomAll.newListener([this](void) { organicTextResestRandoms::randomAll(this); });
+	e_vResetAll = vResetAll.newListener([this](void) { organicTextResestRandoms::resetAll(this); });
+	e_vResetPreset = vResetPreset.newListener([this](void) { organicTextResestRandoms::resetPreset(this); });
 
 	// Random listeners
-	e_vRandomDensity = vRandomDensity.newListener([this](void) { randomizeDensityParams(); });
-	e_vRandomShape = vRandomShape.newListener([this](void) { randomizeShapeParams(); });
-	e_vRandomColor = vRandomColor.newListener([this](void) { randomizeColorModes(); });
-	e_vRandomGlobalColor = vRandomGlobalColors.newListener([this](void) { randomizeGlobalColorParams(); });
-	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { randomizeAnimationParams(); });
-	e_vRandomConnection = vRandomConnection.newListener([this](void) { randomizeConnectionParams(); });
+	e_vRandomDensity = vRandomDensity.newListener([this](void) { organicTextResestRandoms::randomizeDensityParams(this); });
+	e_vRandomShape = vRandomShape.newListener([this](void) { organicTextResestRandoms::randomizeShapeParams(this); });
+	e_vRandomColor = vRandomColor.newListener([this](void) { organicTextResestRandoms::randomizeColorModes(this); });
+	e_vRandomGlobalColor = vRandomGlobalColors.newListener([this](void) { organicTextResestRandoms::randomizeGlobalColorParams(this); });
+	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { organicTextResestRandoms::randomizeAnimationParams(this); });
+	e_vRandomConnection = vRandomConnection.newListener([this](void) { organicTextResestRandoms::randomizeConnectionParams(this); });
 }
 
 //--------------------------------------------------------------
@@ -1349,176 +1351,6 @@ void OrganicText::exit() {
 //--
 
 //--------------------------------------------------------------
-// RESET FUNCTIONS
-//--------------------------------------------------------------
-
-//--------------------------------------------------------------
-void OrganicText::resetPreset() {
-	ofLogNotice("OrganicText") << "resetPreset()";
-	resetDensityParams();
-	resetShapeParams();
-	resetColorModes();
-	resetGlobalColorParams();
-	resetAnimationParams();
-	resetConnectionParams();
-}
-
-//--------------------------------------------------------------
-void OrganicText::resetAll() {
-	ofLogNotice("OrganicText") << "resetAll()";
-
-	resetPreset();
-	resetFonts();
-
-	zoomGlobal.set(0.f);
-	bAutoZoomGlobal = true;
-
-	t = 0.0f;
-}
-
-//--------------------------------------------------------------
-void OrganicText::randomAll() {
-	ofLogNotice("OrganicText") << "randomAll()";
-	randomizeDensityParams();
-	randomizeShapeParams();
-	randomizeColorModes();
-	randomizeGlobalColorParams();
-	randomizeAnimationParams();
-	randomizeConnectionParams();
-}
-
-//--------------------------------------------------------------
-void OrganicText::resetFonts() {
-	ofLogNotice("OrganicText") << "resetFonts()";
-	//fontPath.set("NotoSansMono-Regular.ttf");
-	fontSize.set(150);
-	letterSpacing.set(0);
-}
-
-void OrganicText::resetDensityParams() {
-	ofLogNotice("OrganicText") << "resetDensityParams()";
-	densitySpacing.set(0.25f);
-	densityAmount.set(0.5f);
-}
-
-void OrganicText::resetShapeParams() {
-	ofLogNotice("OrganicText") << "resetShapeParams()";
-	bDrawShapes.set(true);
-	bDrawFill.set(true);
-	shapeSize.set(0.1f);
-	shapeSizeMin.set(0.f);
-	shapeType.set(0);
-	shapeRatio.set(.5f);
-	shapeRotation.set(0.0f);
-}
-
-void OrganicText::resetColorModes() {
-	ofLogNotice("OrganicText") << "resetColorModes()";
-	colorMode.set(3);
-	colorSpeed.set(0.5f);
-	colorMixFactor.set(0.4f);
-	bColorByDistance.set(false);
-}
-
-void OrganicText::resetGlobalColorParams() {
-	ofLogNotice("OrganicText") << "resetGlobalColorParams()";
-	color1.set(ofColor(120, 180, 255));
-	color2.set(ofColor(180, 140, 255));
-	color3.set(ofColor(140, 200, 240));
-	colorConnection.set(ofColor(150, 180, 255, 80));
-	colorOutline.set(ofColor(60, 60, 60));
-}
-
-void OrganicText::resetAnimationParams() {
-	ofLogNotice("OrganicText") << "resetAnimationParams()";
-	animationMode.set(0);
-	animSpeed.set(0.8f);
-	animPower.set(0.05f);
-	animWaveFreq.set(0.3f);
-	animIntensity.set(0.2f);
-	animSpiral.set(0.2f);
-	animPulseIntensity.set(0.2f);
-}
-
-void OrganicText::resetConnectionParams() {
-	ofLogNotice("OrganicText") << "resetConnectionParams()";
-	bDrawConnections.set(false);
-	connectDistance.set(30.0f);
-	connectLineWidth.set(1.5f);
-	connectAlpha.set(0.5f);
-	connectQuality.set(0.5f);
-	bConnectNearOnly.set(true);
-	bDrawTrails.set(false);
-	trailLineWidth.set(1.5f);
-	trailLength.set(0.5);
-	trailFade.set(0.5f);
-}
-
-//--------------------------------------------------------------
-// RANDOMIZE FUNCTIONS
-//--------------------------------------------------------------
-
-void OrganicText::randomizeDensityParams() {
-	ofLogNotice("OrganicText") << "randomizeDensityParams()";
-	densitySpacing.set(ofRandom(densitySpacing.getMin(), densitySpacing.getMax()));
-	densityAmount.set(ofRandom(densityAmount.getMin(), densityAmount.getMax()));
-}
-
-void OrganicText::randomizeShapeParams() {
-	ofLogNotice("OrganicText") << "randomizeShapeParams()";
-	shapeSize.set(ofRandom(shapeSize.getMin(), shapeSize.getMax()));
-	shapeSizeMin.set(ofRandom(shapeSizeMin.getMin(), shapeSizeMin.getMax()));
-	shapeType.set(static_cast<int>(ofRandom(0, 6)));
-	shapeRatio.set(ofRandom(shapeRatio.getMin(), shapeRatio.getMax()));
-	shapeRotation.set(ofRandom(shapeRotation.getMin(), shapeRotation.getMax()));
-}
-
-void OrganicText::randomizeColorModes() {
-	ofLogNotice("OrganicText") << "randomizeColorModes()";
-	colorMode.set(static_cast<int>(ofRandom(0, 5)));
-	colorSpeed.set(ofRandom(colorSpeed.getMin(), colorSpeed.getMax()));
-	colorMixFactor.set(ofRandom(colorMixFactor.getMin(), colorMixFactor.getMax()));
-	bColorByDistance.set(ofRandom(1.0f) > 0.5f);
-}
-
-void OrganicText::randomizeGlobalColorParams() {
-	ofLogNotice("OrganicText") << "randomizeGlobalColorParams()";
-	color1.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	color2.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	color3.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	colorOutline.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	colorConnection.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-	colorTrails.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-}
-
-void OrganicText::randomizeAnimationParams() {
-	ofLogNotice("OrganicText") << "randomizeAnimationParams()";
-	if (!bEnableAnimation) bEnableAnimation = true;
-	animationMode.set(static_cast<int>(ofRandom(0, 5)));
-	animSpeed.set(ofRandom(animSpeed.getMin(), animSpeed.getMax()));
-	animPower.set(ofRandom(animPower.getMin(), animPower.getMax()));
-	animWaveFreq.set(ofRandom(animWaveFreq.getMin(), animWaveFreq.getMax()));
-	animIntensity.set(ofRandom(animIntensity.getMin(), animIntensity.getMax()));
-	animSpiral.set(ofRandom(animSpiral.getMin(), animSpiral.getMax()));
-	animPulseIntensity.set(ofRandom(animPulseIntensity.getMin(), animPulseIntensity.getMax()));
-}
-
-void OrganicText::randomizeConnectionParams() {
-	ofLogNotice("OrganicText") << "randomizeConnectionParams()";
-	connectDistance.set(ofRandom(connectDistance.getMin(), connectDistance.getMax()));
-	connectAlpha.set(ofRandom(connectAlpha.getMin(), connectAlpha.getMax()));
-	connectQuality.set(ofRandom(connectQuality.getMin(), connectQuality.getMax()));
-	bDrawConnections.set(ofRandom(1.0f) > 0.3f);
-	bConnectNearOnly.set(ofRandom(1.0f) > 0.5f);
-	bDrawTrails.set(ofRandom(1.0f) > 0.3f);
-	trailLength.set(ofRandom(trailLength.getMin(), trailLength.getMax()));
-	trailLineWidth.set(ofRandom(trailLineWidth.getMin(), trailLineWidth.getMax()));
-	trailFade.set(ofRandom(trailFade.getMin(), trailFade.getMax()));
-}
-
-//--
-
-//--------------------------------------------------------------
 void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (!bKeys) return;
 
@@ -1534,7 +1366,7 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 
 	else if (key == OF_KEY_BACKSPACE) {
-		resetAll();
+		organicTextResestRandoms::resetAll(this);
 	}
 
 	else if (key == 'c' || key == 'C') {
