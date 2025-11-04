@@ -267,7 +267,6 @@ void OrganicText::setupParams() {
 	paramsColors.add(color1);
 	paramsColors.add(color2);
 	paramsColors.add(color3);
-	paramsColors.add(colorOutline);
 	paramsColors.add(colorConnection);
 	paramsColors.add(colorTrails);
 	paramsColors.add(vRandomGlobalColors);
@@ -339,6 +338,7 @@ void OrganicText::setupParams() {
 	parameters.add(radiusMouse);
 	parameters.add(bAutoZoomGlobal);
 	parameters.add(bDrawOutline);
+	parameters.add(colorOutline);
 	parameters.add(bDebug);
 	parameters.add(bHelp);
 	parameters.add(bKeys);
@@ -987,22 +987,6 @@ void OrganicText::drawDebug() const {
 		ofDrawCircle(point, 1.f);
 	}
 
-	//--
-
-	// // Bounding box
-	// if (!pointsString.empty()) {
-	// 	vec2 minP = pointsString[0];
-	// 	vec2 maxP = pointsString[0];
-	// 	for (const auto & point : pointsString) {
-	// 		minP = glm::min(minP, point);
-	// 		maxP = glm::max(maxP, point);
-	// 	}
-
-	// 	ofNoFill();
-	// 	ofSetLineWidth(.5f);
-	// 	ofDrawRectangle(minP.x, minP.y, maxP.x - minP.x, maxP.y - minP.y);
-	// }
-
 	ofPopStyle();
 }
 
@@ -1087,20 +1071,18 @@ void OrganicText::draw() {
 		//--
 
 		// Layer 4: Outline
-		if (bDrawOutline) {
-			if (!bDebug) {
-				ofPushStyle();
-				ofNoFill();
-				ofSetColor(colorOutline.get());
-				ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
-				font.drawStringAsShapes(sText, 0, 0);
-				ofPopStyle();
-			}
-		} else if (bDebug) {
+		if (bDebug) {
 			ofPushStyle();
 			ofNoFill();
-			ofSetColor(colorDebug, DEBUG_ALPHA_MAX);
+			ofSetColor(colorDebugBlink);
 			ofSetLineWidth(1.f);
+			font.drawStringAsShapes(sText, 0, 0);
+			ofPopStyle();
+		} else if (bDrawOutline) {
+			ofPushStyle();
+			ofNoFill();
+			ofSetColor(colorOutline.get());
+			ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
 			font.drawStringAsShapes(sText, 0, 0);
 			ofPopStyle();
 		}

@@ -23,9 +23,12 @@
 			slider target index. button To and From
 			but copy to mem + move without load + save
 		set kit path dialog
+		add 9-0 key coommands
 
 	- separate write tweenign methods to new class
 		static pointers? Forward declaration?
+
+	- make parent class ofApp -> OrganicTextType
  
  */
 
