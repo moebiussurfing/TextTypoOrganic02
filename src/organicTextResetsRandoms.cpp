@@ -10,8 +10,8 @@
 //--------------------------------------------------------------
 void organicTextResetsRandoms::resetPreset(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetPreset()";
-	resetDensityParams(ot);
 	resetShapeParams(ot);
+	resetDensityParams(ot);
 	resetColorModes(ot);
 	resetGlobalColorParams(ot);
 	resetAnimationParams(ot);
@@ -55,14 +55,14 @@ void organicTextResetsRandoms::resetFonts(OrganicText * ot) {
 
 void organicTextResetsRandoms::resetDensityParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetDensityParams()";
-	ot->densitySpacing.set(0.2f);
+	ot->densitySpacing.set(0.3f);
 }
 
 void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetShapeParams()";
 	ot->bDrawShapes.set(true);
 	ot->bDrawFill.set(true);
-	ot->shapeSize.set(0.1f);
+	ot->shapeSize.set(0.25f);
 	ot->shapeSizeMin.set(0.f);
 	ot->shapeType.set(0);
 	ot->shapeRatio.set(.5f);
@@ -75,15 +75,18 @@ void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
 	ot->colorSpeed.set(0.5f);
 	ot->colorMixFactor.set(0.4f);
 	ot->bColorByDistance.set(false);
+	ot->colorInner.set(0.4f);
+	ot->colorDistMiddle.set(0.7f);
+	ot->colorAlphaRange.set(0.7f);
 }
 
 void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetGlobalColorParams()";
-	ot->color1.set(ofColor(120, 180, 255, 240));
-	ot->color2.set(ofColor(180, 140, 255, 240));
-	ot->color3.set(ofColor(140, 200, 240, 240));
-	ot->colorConnection.set(ofColor(150, 180, 255, 200));
-	//ot->colorOutline.set(ofColor(60, 60, 60));
+	ot->color1.set(ofColor(ofColor::red, 240));
+	ot->color2.set(ofColor(ofColor::green, 240));
+	ot->color3.set(ofColor(ofColor::blue, 240));
+	ot->colorConnection.set(ofColor(ofColor::orange, 200));
+	ot->colorTrails.set(ofColor(ofColor::white, 200));
 }
 
 void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
@@ -135,6 +138,9 @@ void organicTextResetsRandoms::randomizeColorModes(OrganicText * ot) {
 	ot->colorSpeed.set(ofRandom(ot->colorSpeed.getMin(), ot->colorSpeed.getMax()));
 	ot->colorMixFactor.set(ofRandom(ot->colorMixFactor.getMin(), ot->colorMixFactor.getMax()));
 	ot->bColorByDistance.set(ofRandom(1.0f) > 0.5f);
+	ot->colorInner.set(ofRandom(ot->colorInner.getMin(), ot->colorInner.getMax()));
+	ot->colorDistMiddle.set(ofRandom(ot->colorDistMiddle.getMin(), ot->colorDistMiddle.getMax()));
+	ot->colorAlphaRange.set(ofRandom(ot->colorAlphaRange.getMin(), ot->colorAlphaRange.getMax()));
 }
 
 void organicTextResetsRandoms::randomizeGlobalColorParams(OrganicText * ot) {

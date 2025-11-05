@@ -22,7 +22,7 @@ void ofApp::setup() {
 	// Move window to my FHD left monitor
 	int h_ = 40;
 	ofSetWindowPosition(-1920, h_);
-	ofSetWindowShape(1280, 720);
+	ofSetWindowShape(1600, 1600 *(9.f / 16.f));
 #endif
 
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });

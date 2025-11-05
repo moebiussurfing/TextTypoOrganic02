@@ -178,6 +178,9 @@ void OrganicText::setupParams() {
 	colorSpeed.set("Speed", 1.0, 0.1, 5.0);
 	colorMixFactor.set("Mix", 0.5, 0.0, 1.0);
 	bColorByDistance.set("By Dist", false);
+	colorInner.set("Inner", 0.4, 0.0, 1.0);
+	colorDistMiddle.set("Dist Middle", 0.7, 0.0, 1.0);
+	colorAlphaRange.set("Alpha Range", 0.7, 0.0, 1.0);
 
 	// Colors group
 	vResetGlobalColors.set("Reset");
@@ -260,6 +263,9 @@ void OrganicText::setupParams() {
 	paramsColorModes.add(colorSpeed);
 	paramsColorModes.add(colorMixFactor);
 	paramsColorModes.add(bColorByDistance);
+	paramsColorModes.add(colorInner);
+	paramsColorModes.add(colorDistMiddle);
+	paramsColorModes.add(colorAlphaRange);
 	paramsColorModes.add(vRandomColor);
 	paramsColorModes.add(vResetColor);
 
@@ -720,10 +726,12 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		ofColor c2 = color2.get();
 		ofColor c3 = color3.get();
 
-		if (indexFactor < 0.5f) {
-			color = c1.lerp(c2, indexFactor * 2.0f);
+		// Use dynamic transition points
+		float innerPoint = colorInner.get();
+		if (indexFactor < innerPoint) {
+			color = c1.lerp(c2, indexFactor / innerPoint);
 		} else {
-			color = c2.lerp(c3, (indexFactor - 0.5f) * 2.0f);
+			color = c2.lerp(c3, (indexFactor - innerPoint) / (1.0f - innerPoint));
 		}
 
 		color = color.lerp(c3, timeFactor * colorMixFactor.get() * 0.4f);
@@ -738,10 +746,14 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		ofColor c2 = color2.get();
 		ofColor c3 = color3.get();
 
-		if (distFactor < COLOR_DISTANCE_INNER) {
-			color = c1.lerp(c2, distFactor / COLOR_DISTANCE_INNER);
-		} else if (distFactor < COLOR_DISTANCE_MIDDLE) {
-			float localT = (distFactor - COLOR_DISTANCE_INNER) / (COLOR_DISTANCE_MIDDLE - COLOR_DISTANCE_INNER);
+		// Use dynamic transition points
+		float innerPoint = colorInner.get();
+		float middlePoint = colorDistMiddle.get();
+
+		if (distFactor < innerPoint) {
+			color = c1.lerp(c2, distFactor / innerPoint);
+		} else if (distFactor < middlePoint) {
+			float localT = (distFactor - innerPoint) / (middlePoint - innerPoint);
 			color = c2.lerp(c3, localT);
 		} else {
 			color = c3;
@@ -752,7 +764,9 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 
 	if (bColorByDistance) {
 		float distance = glm::distance(position, textCenter);
-		float alpha = ofMap(distance, 0, COLOR_DISTANCE_MAX, COLOR_ALPHA_CENTER, COLOR_ALPHA_EDGE, true);
+		// Map alpha range dynamically: 255 (center) to edge based on colorAlphaRange
+		float alphaEdge = ofMap(colorAlphaRange.get(), 0, 1, 255, 0, true);
+		float alpha = ofMap(distance, 0, COLOR_DISTANCE_MAX, 255, alphaEdge, true);
 		color.a = alpha;
 	}
 

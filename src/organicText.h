@@ -217,7 +217,6 @@ public:
 	ofParameter<void> vResetDensity;
 	ofParameter<void> vRandomDensity;
 	ofParameter<float> densitySpacing;
-	//ofParameter<float> densityAmount;
 
 	// Shape parameters
 	ofParameter<void> vResetShape;
@@ -238,6 +237,9 @@ public:
 	ofParameter<float> colorSpeed;
 	ofParameter<float> colorMixFactor;
 	ofParameter<bool> bColorByDistance;
+	ofParameter<float> colorInner;
+	ofParameter<float> colorDistMiddle;
+	ofParameter<float> colorAlphaRange;
 
 	// Colors parameters
 	ofParameter<void> vResetGlobalColors;
