@@ -735,6 +735,13 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		}
 
 		color = color.lerp(c3, timeFactor * colorMixFactor.get() * 0.4f);
+
+		// Apply alpha fade based on index position (left to right)
+		if (colorAlphaRange.get() > 0.01f) {
+			float alphaMin = ofMap(colorAlphaRange.get(), 0, 1, 255, 50, true);
+			float alpha = ofMap(indexFactor, 0, 1, 255, alphaMin, true);
+			color.a = alpha;
+		}
 		break;
 	}
 
@@ -757,6 +764,14 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 			color = c2.lerp(c3, localT);
 		} else {
 			color = c3;
+		}
+
+		// Apply alpha fade based on distance from center
+		if (colorAlphaRange.get() > 0.01f) {
+			float alphaCenter = 255.0f;
+			float alphaEdge = ofMap(colorAlphaRange.get(), 0, 1, 255, 50, true);
+			float alpha = ofMap(distance, 0, COLOR_DISTANCE_MAX, alphaCenter, alphaEdge, true);
+			color.a = alpha;
 		}
 		break;
 	}
