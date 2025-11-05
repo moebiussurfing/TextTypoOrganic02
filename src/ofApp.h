@@ -2,8 +2,6 @@
 
 	TODO
 
-	- move resets/randoms to another file class to clean up
-
 	- smooth transients ?
 		- smooth points only ?
 		- debug: draw smooth points & shapes 
@@ -24,10 +22,15 @@
 
 	- ofxSurfingPresetsLiteOfxGui
 		copy presets (button) to next or other
+			slider target index. button To and From
 			but copy to mem + move without load + save
+		set kit path dialog
+		add 9-0 key coommands
 
 	- separate write tweenign methods to new class
 		static pointers? Forward declaration?
+
+	- make parent class ofApp -> OrganicTextType
  
  */
 
@@ -58,10 +61,10 @@ public:
 	void mousePressed(int x, int y, int button);
 
 	// Organic Text
-	OrganicText t;
+	OrganicText ot;
 
 	// Presets Manager
-	SurfingPresetsLiteOfxGui p;
+	SurfingPresetsLiteOfxGui pm;
 
 	// Reset app window custom shape
 	ofParameter<void> vResetWindow { "Reset Window" };

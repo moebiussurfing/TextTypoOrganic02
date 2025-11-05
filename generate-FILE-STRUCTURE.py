@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# file: generate-FILE-STRUCTURE.py
+
 """
 File Structure Generator Script
 -------------------------------
@@ -33,6 +35,8 @@ Key Features:
 - Always reads `.gitignore` from the **project root** (where this script resides),
   not from the target directory. This ensures consistent exclusion rules across the project.
 - **NEW**: Supports forced inclusions that override ALL exclusion rules.
+- **IMPROVED**: Forced inclusions now support both files AND directories (use trailing / for dirs).
+- **IMPROVED**: Forced directories include ALL their contents recursively.
 - Excludes directories and files based on:
 a) A hardcoded list of common build/cache/IDE folders and files.
 b) File extensions (e.g., .dll, .exe, .log).
@@ -51,8 +55,11 @@ Hardcoded exclusions include:
 - Binary/compiled file extensions (.dll, .exe, .so, etc.)
 
 Forced inclusions override all exclusions:
-- Files listed in FORCED_INCLUSIONS will ALWAYS appear in the output,
+- Files/directories listed in FORCED_INCLUSIONS will ALWAYS appear in the output,
 even if they match .gitignore patterns, hardcoded exclusions, or extension filters.
+- Use trailing '/' for directories (e.g., 'ofGen/')
+- Files without trailing '/' (e.g., 'addons.make')
+- When a directory is forced, ALL its contents are included recursively.
 
 Note on .gitignore handling:
 - The script assumes `.gitignore` is located in the same directory as this script (project root).
@@ -74,13 +81,17 @@ import argparse
 # Configuration & Constants
 # ----------------------------
 
-# NEW: Forced inclusions - these files will ALWAYS be included,
+# NEW: Forced inclusions - these files/directories will ALWAYS be included,
 # regardless of .gitignore, hardcoded exclusions, or extension filters.
 # Match is case-insensitive and based on basename only.
+# Use trailing '/' for directories: 'ofGen/' will match the directory 'ofGen'
+# Without trailing '/': 'addons.make' will match the file 'addons.make'
+# When a directory is forced, ALL its contents are included recursively.
 FORCED_INCLUSIONS = [
 	'addons.make',
 	'Capture.PNG',
 	'Capture-v0.1.PNG',
+	'ofGen/'
 ]
 
 # Hardcoded list of file/directory names to exclude (case-insensitive).
@@ -157,6 +168,7 @@ COLORS = {
 	'root': '\033[36m',     # Cyan for root name
 	'connector': '\033[33m', # Yellow for tree connectors (├──, └──)
 	'forced': '\033[32m',   # Green for forced inclusions
+	'addon': '\033[95m',    # Magenta for addon names
 	'reset': '\033[0m',     # Reset to default
 }
 
@@ -213,18 +225,67 @@ str: Lowercase version of the name.
 	"""
 	return name.lower()
 
-def is_forced_inclusion(basename: str, forced_inclusions: Set[str]) -> bool:
+def is_forced_inclusion(basename: str, is_directory: bool, forced_inclusions: Set[str]) -> bool:
 	"""
 Check if a file/directory is in the forced inclusions list.
+Supports both files and directories:
+- Directories: match 'dirname/' in forced_inclusions with basename 'dirname'
+- Files: match exact basename
 
 Args:
 basename (str): Name of the file/directory.
-forced_inclusions (Set[str]): Set of normalized forced inclusion names.
+is_directory (bool): True if this is a directory.
+forced_inclusions (Set[str]): Set of normalized forced inclusion patterns.
 
 Returns:
 bool: True if this item should be forcibly included.
 	"""
-	return normalize_name(basename) in forced_inclusions
+	normalized = normalize_name(basename)
+	
+	if is_directory:
+		# Check if 'dirname/' is in forced inclusions
+		dir_pattern = normalized + '/'
+		if dir_pattern in forced_inclusions:
+			return True
+		# Also check without trailing slash for backwards compatibility
+		if normalized in forced_inclusions:
+			return True
+	else:
+		# For files, exact match only (no trailing slash)
+		if normalized in forced_inclusions:
+			return True
+	
+	return False
+
+def is_inside_forced_directory(relative_path: str, forced_inclusions: Set[str]) -> bool:
+	"""
+Check if a path is inside a forced inclusion directory.
+This ensures that when we force a directory, ALL its contents are included.
+
+Args:
+relative_path (str): Path relative to project root (e.g., 'ofGen/src/main.cpp')
+forced_inclusions (Set[str]): Set of normalized forced inclusion patterns.
+
+Returns:
+bool: True if the path is inside a forced directory.
+	"""
+	# Normalize the path for comparison
+	normalized_path = relative_path.lower()
+	path_parts = normalized_path.split('/')
+	
+	# Check each parent directory in the path
+	# For 'ofGen/src/main.cpp', check: 'ofGen', 'ofGen/src'
+	for i in range(1, len(path_parts)):
+		parent_path = '/'.join(path_parts[:i])
+		
+		# Check if this parent is a forced directory (with trailing slash)
+		if (parent_path + '/') in forced_inclusions:
+			return True
+		# Also check without trailing slash for backwards compatibility
+		if parent_path in forced_inclusions:
+			return True
+	
+	return False
 
 def parse_gitignore(gitignore_path: Path) -> List[str]:
 	"""
@@ -307,14 +368,15 @@ def should_exclude(
 		hardcoded_names: Set[str],
 		hardcoded_globs: List[str],
 		gitignore_patterns: List[str],
-		excluded_extensions: Set[str],
-		forced_inclusions: Set[str]
+		excluded_extensions: Set[str]
 ) -> bool:
 	"""
 Determine whether a file or directory should be excluded from the tree.
 
+NOTE: This function should ONLY be called for non-forced items.
+Forced inclusions are handled in build_tree_entries() before calling this function.
+
 Checks in order:
-0. FORCED INCLUSIONS (if matched, return False immediately - never exclude)
 1. File extension (if it's a file)
 2. Hardcoded name exclusions (e.g., 'node_modules', '.git')
 3. Hardcoded glob exclusions (e.g., 'dll/*')
@@ -328,16 +390,10 @@ hardcoded_names (Set[str]): Set of normalized names to exclude
 hardcoded_globs (List[str]): List of glob patterns to exclude
 gitignore_patterns (List[str]): Patterns from .gitignore
 excluded_extensions (Set[str]): Set of file extensions to exclude (without dot)
-forced_inclusions (Set[str]): Set of normalized names to ALWAYS include
 
 Returns:
 bool: True if the item should be excluded, False otherwise.
 	"""
-	# Check 0: FORCED INCLUSIONS (highest priority - overrides everything)
-	if is_forced_inclusion(basename, forced_inclusions):
-		logger.debug(f"FORCED INCLUSION (overrides all exclusions): {relative_path}")
-		return False
-
 	# Check 1: File extension (only for files)
 	if not is_directory:
 		# Extract extension: split by '.' and take last part; handle hidden files like .gitignore
@@ -411,7 +467,7 @@ hardcoded_names (Set[str]): Hardcoded names to exclude.
 hardcoded_globs (List[str]): Hardcoded glob patterns to exclude.
 gitignore_patterns (List[str]): Patterns from .gitignore.
 excluded_extensions (Set[str]): File extensions to exclude.
-forced_inclusions (Set[str]): Names to ALWAYS include.
+forced_inclusions (Set[str]): Patterns to ALWAYS include.
 
 Returns:
 List[tuple]: List of (line_string, is_dir, is_forced) for tree rendering.
@@ -452,36 +508,51 @@ List[tuple]: List of (line_string, is_dir, is_forced) for tree rendering.
 			continue
 
 	all_items = dirs + files
-	total_items = len(all_items)
-
-	for idx, name in enumerate(all_items):
-		full_path = current_path / name
-		is_dir = name in dirs
-
-		# Compute path relative to PROJECT ROOT (not target dir!)
+	
+	# First pass: filter out excluded items (but keep forced items)
+	filtered_items = []
+	for item_name in all_items:
+		item_path = current_path / item_name
+		is_item_dir = item_name in dirs
+		
+		# Compute relative path
 		try:
-			rel_path_obj = full_path.relative_to(project_root)
+			rel_path_obj = item_path.relative_to(project_root)
 			relative_path_str = str(rel_path_obj).replace(os.sep, '/')
 		except ValueError:
-			# Should not happen if called correctly, but be safe
-			logger.error(f"Path {full_path} is not under project root {project_root}")
 			continue
+			
+		# Check if forced
+		is_forced_direct = is_forced_inclusion(item_name, is_item_dir, forced_inclusions)
+		is_forced_parent = is_inside_forced_directory(relative_path_str, forced_inclusions)
+		is_item_forced = is_forced_direct or is_forced_parent
+		
+		# If not forced, check if should be excluded
+		if not is_item_forced:
+			if should_exclude(
+				relative_path_str,
+				item_name,
+				is_item_dir,
+				hardcoded_names,
+				hardcoded_globs,
+				gitignore_patterns,
+				excluded_extensions
+			):
+				logger.debug(f"  ✗ EXCLUDED: {relative_path_str}")
+				continue
+		
+		filtered_items.append((item_name, is_item_dir, relative_path_str, is_item_forced))
+	
+	total_items = len(filtered_items)
 
-		# Check if this item is a forced inclusion
-		is_forced = is_forced_inclusion(name, forced_inclusions)
+	for idx, (name, is_dir, relative_path_str, is_forced) in enumerate(filtered_items):
+		full_path = current_path / name
 
-		# Check if this item should be excluded (forced inclusions bypass this)
-		if should_exclude(
-			relative_path_str,
-			name,
-			is_dir,
-			hardcoded_names,
-			hardcoded_globs,
-			gitignore_patterns,
-			excluded_extensions,
-			forced_inclusions
-		):
-			continue
+		# DEBUG: Log what we're including
+		if is_forced:
+			logger.debug(f"  ✓ INCLUDING (forced): {relative_path_str}")
+		else:
+			logger.debug(f"  ✓ INCLUDING: {relative_path_str}")
 
 		# Determine tree connector
 		is_last = (idx == total_items - 1)
@@ -626,6 +697,38 @@ Steps:
 				f.write(line + "\n")
 			f.write("```\n")
 		logger.info(f"✅ Successfully wrote file structure to {output_path}")
+		
+		# --- NEW FEATURE ---
+		# If an 'addons.make' file exists in the project root, append its content.
+		addons_make_path = script_dir / "addons.make"
+		if addons_make_path.exists():
+			try:
+				with open(addons_make_path, "r", encoding="utf-8") as f:
+					addons = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+				if addons:
+					logger.info(f"Detected {COLORS['addon']}{len(addons)}{COLORS['reset']} addons in addons.make:")
+					for addon in addons:
+						logger.info(f"  {COLORS['addon']}•{COLORS['reset']} {COLORS['addon']}{addon}{COLORS['reset']}")
+					# Append to FILE-STRUCTURE.md
+					with open(output_path, "a", encoding="utf-8") as f:
+						f.write("\n---\n\n")
+						f.write("## Used Addons (from addons.make)\n\n")
+						
+						for addon in addons:
+							f.write(f"- `{addon}`\n")
+		
+						f.write("\n")
+						f.write("### OpenFrameworks Paths\n\n")
+						f.write("- OF root path (relative to project root): `../../../`\n\n")
+						f.write("- OF addons path (relative to project root): `../../addons/`\n")
+					logger.info(f"✅ Added addons.make section to {output_path}")
+				else:
+					logger.info("addons.make is empty (no addons listed).")
+			except Exception as e:
+				logger.error(f"❌ Failed to read addons.make: {e}")
+		else:
+			logger.debug("No addons.make found at project root.")
+
 	except Exception as e:
 		logger.error(f"❌ Failed to write {output_path}: {e}")
 		sys.exit(1)
