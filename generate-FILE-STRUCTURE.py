@@ -712,15 +712,15 @@ Steps:
 					# Append to FILE-STRUCTURE.md
 					with open(output_path, "a", encoding="utf-8") as f:
 						f.write("\n---\n\n")
-						f.write("## Addons Detected (from addons.make)\n\n")
+						f.write("## Used Addons (from addons.make)\n\n")
 						
 						for addon in addons:
 							f.write(f"- `{addon}`\n")
 		
 						f.write("\n")
 						f.write("### OpenFrameworks Paths\n\n")
-						f.write("- OF addons path (relative to project root): `../../addons`\n")
 						f.write("- OF root path (relative to project root): `../../../`\n\n")
+						f.write("- OF addons path (relative to project root): `../../addons/`\n")
 					logger.info(f"✅ Added addons.make section to {output_path}")
 				else:
 					logger.info("addons.make is empty (no addons listed).")
