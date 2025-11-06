@@ -101,7 +101,6 @@ void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
 	ot->animOriginX.set(0.5f);
 }
 
-
 void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetConnectionParams()";
 	ot->bDrawConnections.set(true);
@@ -114,6 +113,19 @@ void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
 	ot->trailLineWidth.set(1.5f);
 	ot->trailLength.set(0.5);
 	ot->trailFade.set(0.5f);
+}
+
+void organicTextResetsRandoms::resetMouseTweaks(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetMouseTweaks()";
+	ot->bMouseControlOrigin.set(false);
+	ot->radiusMouse.set(0.3f);
+	ot->bMouseHighlightPoints.set(false);
+	ot->colorMouseHighlight.set(ofColor(0, 150, 255));
+	ot->mouseInfluenceStrength.set(0.7f);
+	ot->bMouseDisplacePoints.set(false);
+	ot->mouseDisplacePower.set(0.6f);
+	ot->bMouseScaleShapes.set(false);
+	ot->mouseScalePower.set(0.5f);
 }
 
 //--------------------------------------------------------------

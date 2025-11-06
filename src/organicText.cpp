@@ -245,6 +245,7 @@ void OrganicText::setupParams() {
 	vResetAll.set("Reset All");
 	vResetPreset.set("Reset Preset");
 	vRandomAll.set("Random All");
+	vResetMouseTweaks.set("Reset Mouse Tweaks");
 
 	//--
 
@@ -333,6 +334,7 @@ void OrganicText::setupParams() {
 	paramsMouseTweaks.add(mouseDisplacePower);
 	paramsMouseTweaks.add(bMouseScaleShapes);
 	paramsMouseTweaks.add(mouseScalePower);
+	paramsMouseTweaks.add(vResetMouseTweaks);
 
 	paramsSessionSettings.setName("Session Settings");
 	paramsSessionSettings.add(vLoadSettigs);
@@ -449,6 +451,7 @@ void OrganicText::setupCallbacks() {
 	e_vRandomGlobalColor = vRandomGlobalColors.newListener([this](void) { organicTextResetsRandoms::randomizeGlobalColorParams(this); });
 	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { organicTextResetsRandoms::randomizeAnimationParams(this); });
 	e_vRandomConnection = vRandomConnection.newListener([this](void) { organicTextResetsRandoms::randomizeConnectionParams(this); });
+	e_vResetMouseTweaks = vResetMouseTweaks.newListener([this](void) { organicTextResetsRandoms::resetMouseTweaks(this); });
 }
 
 //--------------------------------------------------------------
@@ -714,6 +717,13 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	switch ((AnimMode)animationMode.get()) {
 	case ANIM_NOISE: {
 		float maxDisp = ofMap(animPower.get(), 0, 1, 0, ANIM_NOISE_MAX * fontScale, true);
+
+		// If mouse control is active, reduce noise displacement near mouse position
+		if (bMouseControlOrigin.get()) {
+			float mouseInfluence = getMouseInfluence(pointsString[index]);
+			maxDisp *= (1.0f - mouseInfluence * 0.9f); // Reduce up to 90% near mouse
+		}
+
 		offset = vec2(
 					 ofSignedNoise(phase, 0.0f),
 					 ofSignedNoise(phase, 233.0f))
@@ -724,6 +734,13 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_WAVE: {
 		float freq = ofMap(animWaveFreq.get(), 0, 1, ANIM_WAVE_FREQ_MIN, ANIM_WAVE_FREQ_MAX, true);
 		float amp = ofMap(animIntensity.get(), 0, 1, 0, ANIM_WAVE_MAX * fontScale, true);
+
+		// If mouse control is active, reduce wave amplitude near mouse position
+		if (bMouseControlOrigin.get()) {
+			float mouseInfluence = getMouseInfluence(pointsString[index]);
+			amp *= (1.0f - mouseInfluence * 0.8f); // Reduce up to 80% near mouse
+		}
+
 		// Use distance from custom origin instead of absolute x position
 		float distFromOrigin = pointsString[index].x - customOriginX;
 		float wave = sin(distFromOrigin * freq + t * TWO_PI) * amp;
@@ -792,8 +809,8 @@ float OrganicText::getMouseInfluence(vec2 position) const {
 	float influence = ofMap(distToMouse, 0, radiusPixels, 1.0f, 0.0f, true);
 
 	// Apply power curve for more intensity
-	// Power of 2 gives more weight to closer points
-	float power = 2.0f;
+	// Power of 1.5 gives strong weight to closer points while maintaining gradient
+	float power = 1.5f;
 	influence = std::pow(influence, power);
 
 	// Scale by user strength
@@ -982,9 +999,15 @@ void OrganicText::initTrails() {
 //--------------------------------------------------------------
 void OrganicText::updateTrails() {
 	for (size_t i = 0; i < pointsString.size() && i < pointTrails.size(); i++) {
-		float phase = t + 0.123f * static_cast<float>(i);
-		vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
-		vec2 currentPos = pointsString[i] + offset;
+		// Use cached animated position if available, otherwise calculate
+		vec2 currentPos;
+		if (i < pointsAnimatedCache.size() && pointsAnimatedCache.size() == pointsString.size()) {
+			currentPos = pointsAnimatedCache[i];
+		} else {
+			float phase = t + 0.123f * static_cast<float>(i);
+			vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
+			currentPos = pointsString[i] + offset;
+		}
 
 		for (int j = static_cast<int>(pointTrails[i].size()) - 1; j > 0; j--) {
 			pointTrails[i][j] = pointTrails[i][j - 1];
@@ -1014,9 +1037,15 @@ void OrganicText::drawConnections() const {
 
 	// Collect all connection segments into a single mesh
 	for (size_t i = pointsString.size() * inPoint.get(); i < pointsString.size() && i < pointsString.size() * outPoint.get(); i += skipFactor) {
-		float phase1 = t + 0.123f * static_cast<float>(i);
-		vec2 offset1 = getAnimatedOffset(static_cast<int>(i), phase1);
-		vec2 pos1 = pointsString[i] + offset1;
+		// Use cached animated position if available, otherwise calculate
+		vec2 pos1;
+		if (i < pointsAnimatedCache.size() && pointsAnimatedCache.size() == pointsString.size()) {
+			pos1 = pointsAnimatedCache[i];
+		} else {
+			float phase1 = t + 0.123f * static_cast<float>(i);
+			vec2 offset1 = getAnimatedOffset(static_cast<int>(i), phase1);
+			pos1 = pointsString[i] + offset1;
+		}
 
 		int connectionsDrawn = 0;
 		int searchLimit = bConnectNearOnly ? ofClamp(CONNECTIONS_SEARCH_NEAR, 1, static_cast<int>(pointsString.size()) - static_cast<int>(i)) : ofClamp(CONNECTIONS_SEARCH_FAR, 1, static_cast<int>(pointsString.size()) - static_cast<int>(i));
@@ -1025,9 +1054,15 @@ void OrganicText::drawConnections() const {
 			size_t j = i + offset;
 			if (j >= pointsString.size()) break;
 
-			float phase2 = t + 0.123f * static_cast<float>(j);
-			vec2 offset2 = getAnimatedOffset(static_cast<int>(j), phase2);
-			vec2 pos2 = pointsString[j] + offset2;
+			// Use cached animated position if available, otherwise calculate
+			vec2 pos2;
+			if (j < pointsAnimatedCache.size() && pointsAnimatedCache.size() == pointsString.size()) {
+				pos2 = pointsAnimatedCache[j];
+			} else {
+				float phase2 = t + 0.123f * static_cast<float>(j);
+				vec2 offset2 = getAnimatedOffset(static_cast<int>(j), phase2);
+				pos2 = pointsString[j] + offset2;
+			}
 
 			float dist = glm::distance(pos1, pos2);
 
@@ -1150,6 +1185,11 @@ void OrganicText::drawDebug() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawShapes() {
+	// Resize cache if needed
+	if (pointsAnimatedCache.size() != pointsString.size()) {
+		pointsAnimatedCache.resize(pointsString.size());
+	}
+
 	for (size_t i = pointsString.size() * inPoint.get(); i < pointsString.size() && i < pointsString.size() * outPoint.get(); i++) {
 		ofPushStyle();
 
@@ -1169,6 +1209,9 @@ void OrganicText::drawShapes() {
 			finalPos += direction * displacement;
 		}
 
+		// Cache the final animated position for reuse in connections and trails
+		pointsAnimatedCache[i] = finalPos;
+
 		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 
 		ofSetColor(color);
@@ -1186,7 +1229,7 @@ void OrganicText::drawShapes() {
 
 		// Apply mouse scale effect
 		if (bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
-			float scaleMultiplier = 1.0f + (mouseInfluence * mouseScalePower.get() * 2.0f);
+			float scaleMultiplier = 1.0f + (mouseInfluence * mouseScalePower.get() * MAX_SCALE_POWER);
 			pointSize *= scaleMultiplier;
 		}
 

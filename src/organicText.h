@@ -92,6 +92,7 @@ constexpr float OUTLINE_WIDTH_BASE = 0.5f;
 
 constexpr float MOUSE_RADIUS_INTERACT_MAX = 100.0f;
 constexpr float MOUSE_RADIUS_INTERACT_MIN = 10.0f;
+constexpr float MAX_SCALE_POWER = 3.0f;
 
 // ============================================================================
 
@@ -296,6 +297,7 @@ public:
 	ofParameter<void> vResetPreset;
 	ofParameter<void> vResetAll;
 	ofParameter<void> vRandomAll;
+	ofParameter<void> vResetMouseTweaks;
 
 	// Settings
 	ofParameter<bool> bAutosave;
@@ -316,6 +318,7 @@ private:
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 	ofEventListener e_trailLength;
+	ofEventListener e_vResetMouseTweaks;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
@@ -353,6 +356,7 @@ private:
 	// Data
 	vector<vec2> pointsString;
 	vector<vector<vec2>> pointTrails;
+	mutable vector<vec2> pointsAnimatedCache; // Cache animated positions for reuse
 	ofTrueTypeFont font;
 	std::string FONT_DEFAULT;
 	vec2 textCenter;
