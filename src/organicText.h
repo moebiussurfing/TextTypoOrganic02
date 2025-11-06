@@ -157,6 +157,10 @@ public:
 	ofParameter<bool> bMouseHighlightPoints;
 	ofParameter<ofColor> colorMouseHighlight;
 	ofParameter<float> mouseInfluenceStrength;
+	ofParameter<bool> bMouseDisplacePoints;
+	ofParameter<float> mouseDisplacePower;
+	ofParameter<bool> bMouseScaleShapes;
+	ofParameter<float> mouseScalePower;
 
 	//--
 
@@ -326,6 +330,9 @@ private:
 
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
+
+	/// @brief Calculate mouse influence factor for a given position (0-1)
+	float getMouseInfluence(vec2 position) const;
 
 	// Font management
 	void loadFont();

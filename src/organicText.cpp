@@ -231,6 +231,10 @@ void OrganicText::setupParams() {
 	bMouseHighlightPoints.set("Highlight Points", false);
 	colorMouseHighlight.set("Highlight Color", ofColor(0, 150, 255));
 	mouseInfluenceStrength.set("Influence", 0.5, 0.0, 1.0);
+	bMouseDisplacePoints.set("Displace Points", false);
+	mouseDisplacePower.set("Displace Power", 0.5, 0.0, 1.0);
+	bMouseScaleShapes.set("Scale Shapes", false);
+	mouseScalePower.set("Scale Power", 0.5, 0.0, 1.0);
 
 	// Settings group
 	bAutosave.set("Autosave", false);
@@ -322,9 +326,13 @@ void OrganicText::setupParams() {
 	paramsMouseTweaks.setName("Mouse Tweaks");
 	paramsMouseTweaks.add(bMouseControlOrigin);
 	paramsMouseTweaks.add(radiusMouse);
-	paramsMouseTweaks.add(colorMouseHighlight);
 	paramsMouseTweaks.add(bMouseHighlightPoints);
+	paramsMouseTweaks.add(colorMouseHighlight);
 	paramsMouseTweaks.add(mouseInfluenceStrength);
+	paramsMouseTweaks.add(bMouseDisplacePoints);
+	paramsMouseTweaks.add(mouseDisplacePower);
+	paramsMouseTweaks.add(bMouseScaleShapes);
+	paramsMouseTweaks.add(mouseScalePower);
 
 	paramsSessionSettings.setName("Session Settings");
 	paramsSessionSettings.add(vLoadSettigs);
@@ -772,6 +780,29 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 }
 
 //--------------------------------------------------------------
+float OrganicText::getMouseInfluence(vec2 position) const {
+	float radiusPixels = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+	float distToMouse = glm::distance(position, mouseLocalPos);
+
+	if (distToMouse >= radiusPixels) {
+		return 0.0f; // Outside radius
+	}
+
+	// Calculate normalized influence (1.0 at center, 0.0 at edge)
+	float influence = ofMap(distToMouse, 0, radiusPixels, 1.0f, 0.0f, true);
+
+	// Apply power curve for more intensity
+	// Power of 2 gives more weight to closer points
+	float power = 2.0f;
+	influence = std::pow(influence, power);
+
+	// Scale by user strength
+	influence *= mouseInfluenceStrength.get();
+
+	return influence;
+}
+
+//--------------------------------------------------------------
 ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const {
 	ofColor color = ofColor(ofColor::white, 255);
 
@@ -859,14 +890,9 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 
 	// Mouse highlight: override color for points within mouse radius
 	if (bMouseHighlightPoints.get()) {
-		float radiusPixels = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
-		float distToMouse = glm::distance(position, mouseLocalPos);
-
-		if (distToMouse < radiusPixels) {
-			// Blend between current color and highlight color based on distance
-			float blend = ofMap(distToMouse, 0, radiusPixels, 1.0f, 0.0f, true);
-			blend *= mouseInfluenceStrength.get();
-			color = color.lerp(colorMouseHighlight.get(), blend);
+		float influence = getMouseInfluence(position);
+		if (influence > 0.0f) {
+			color = color.lerp(colorMouseHighlight.get(), influence);
 		}
 	}
 
@@ -1131,6 +1157,18 @@ void OrganicText::drawShapes() {
 		vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
 		vec2 finalPos = pointsString[i] + offset;
 
+		// Calculate mouse influence for this point
+		float mouseInfluence = getMouseInfluence(finalPos);
+
+		// Apply mouse displacement effect
+		if (bMouseDisplacePoints.get() && mouseInfluence > 0.0f) {
+			// Calculate direction from mouse to point (repel)
+			vec2 direction = glm::normalize(finalPos - mouseLocalPos);
+			float maxDisplacement = 50.0f; // Maximum displacement in pixels
+			float displacement = mouseInfluence * mouseDisplacePower.get() * maxDisplacement;
+			finalPos += direction * displacement;
+		}
+
 		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 
 		ofSetColor(color);
@@ -1145,6 +1183,12 @@ void OrganicText::drawShapes() {
 
 		float sizeNoise = ofNoise(phase * SHAPE_SIZE_NOISE_SCALE, static_cast<float>(i) * SHAPE_SIZE_INDEX_SCALE);
 		float pointSize = ofLerp(minSize, maxSize, sizeNoise);
+
+		// Apply mouse scale effect
+		if (bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
+			float scaleMultiplier = 1.0f + (mouseInfluence * mouseScalePower.get() * 2.0f);
+			pointSize *= scaleMultiplier;
+		}
 
 		float rotation = ofMap(shapeRotation.get(), 0, 1, 0, 360, true);
 
