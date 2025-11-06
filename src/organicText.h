@@ -154,6 +154,7 @@ public:
 	mutable glm::vec2 mousePos;
 
 	// Mouse tweaks parameters
+	ofParameter<bool> bMouseTweaks;
 	ofParameter<bool> bMouseControlOrigin;
 	ofParameter<bool> bMouseHighlightPoints;
 	ofParameter<ofColor> colorMouseHighlight;

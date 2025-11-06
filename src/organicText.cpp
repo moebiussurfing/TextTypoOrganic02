@@ -127,6 +127,16 @@ void OrganicText::setupTweens() {
 	// Add tween parameters to paramsTweens group
 	paramsTweens.add(tweenInPoint.getParameters());
 	paramsTweens.add(tweenOutPoint.getParameters());
+
+	// // Center/Width control In/Out
+	// e_centerPoint = centerPoint.newListener([this](float & v) {
+	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
+	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
+	// });
+	// e_widthPoint = widthPoint.newListener([this](float & v) {
+	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
+	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
+	// });
 }
 
 //--
@@ -227,14 +237,15 @@ void OrganicText::setupParams() {
 	trailFade.set("Fade", 0.5f, 0, 1.f);
 
 	// Mouse Tweaks
+	bMouseTweaks.set("Mouse Tweaks", true);
 	bMouseControlOrigin.set("x Origin", false);
 	bMouseHighlightPoints.set("Highlight", false);
 	colorMouseHighlight.set("Color", ofColor(0, 150, 255));
 	mouseInfluenceStrength.set("Influence", 0.5, 0.0, 1.0);
 	bMouseDisplacePoints.set("Displace", false);
-	mouseDisplacePower.set("Displace Power", 0.5, 0.0, 1.0);
+	mouseDisplacePower.set("D Power", 0.5, 0.0, 1.0);
 	bMouseScaleShapes.set("Scale", false);
-	mouseScalePower.set("Scale Power", 0.5, 0.0, 1.0);
+	mouseScalePower.set("S Power", 0.5, 0.0, 1.0);
 
 	// Settings group
 	bAutosave.set("Autosave", false);
@@ -326,6 +337,7 @@ void OrganicText::setupParams() {
 	paramsTrails.add(vRandomConnection);
 
 	paramsMouseTweaks.setName("Mouse Tweaks");
+	paramsMouseTweaks.add(bMouseTweaks);
 	paramsMouseTweaks.add(bMouseControlOrigin);
 	paramsMouseTweaks.add(radiusMouse);
 	paramsMouseTweaks.add(bMouseHighlightPoints);
@@ -345,6 +357,9 @@ void OrganicText::setupParams() {
 
 	paramsInternal.setName("Internal");
 	paramsInternal.add(bGui);
+	paramsInternal.add(vRandomAll); // not useful
+	paramsInternal.add(vResetAll);
+	paramsInternal.add(vResetPreset);
 
 	//--
 
@@ -373,7 +388,6 @@ void OrganicText::setupParams() {
 	parameters.add(paramsFont);
 	parameters.add(bAutoZoomGlobal);
 	parameters.add(zoomGlobal);
-	parameters.add(radiusMouse);
 	parameters.add(bDrawOutline);
 	parameters.add(colorOutline);
 	parameters.add(bDebug);
@@ -387,10 +401,6 @@ void OrganicText::setupParams() {
 	// as will be handled by presets manager externally
 	parameters.add(paramsPreset);
 #endif
-
-	parameters.add(vRandomAll); // not useful
-	parameters.add(vResetAll);
-	parameters.add(vResetPreset);
 
 	//--
 
@@ -422,16 +432,6 @@ void OrganicText::setupCallbacks() {
 	animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
-
-	// // Center/Width control In/Out
-	// e_centerPoint = centerPoint.newListener([this](float & v) {
-	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
-	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
-	// });
-	// e_widthPoint = widthPoint.newListener([this](float & v) {
-	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
-	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
-	// });
 
 	//--
 
@@ -485,7 +485,7 @@ void OrganicText::refreshGuiSession() {
 
 	// Tweens
 	auto & gt = gui.getGroup(paramsTweens.getName());
-	//gt.minimize();
+	gt.minimize();
 	tweenInPoint.refreshGui(gt);
 	tweenOutPoint.refreshGui(gt);
 	auto & gt1 = gt.getGroup(tweenInPoint.params_.getName());

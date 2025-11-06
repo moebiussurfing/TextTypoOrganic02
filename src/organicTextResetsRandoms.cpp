@@ -118,14 +118,15 @@ void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
 
 void organicTextResetsRandoms::resetMouseTweaks(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetMouseTweaks()";
-	ot->bMouseControlOrigin.set(false);
-	ot->radiusMouse.set(0.6f);
-	ot->bMouseHighlightPoints.set(false);
+	ot->bMouseTweaks.set(true);
+	ot->bMouseControlOrigin.set(true);
+	ot->radiusMouse.set(0.7f);
+	ot->bMouseHighlightPoints.set(true);
 	ot->colorMouseHighlight.set(ofColor(255, 255, 255, 200));
 	ot->mouseInfluenceStrength.set(0.75f);
-	ot->bMouseDisplacePoints.set(false);
+	ot->bMouseDisplacePoints.set(true);
 	ot->mouseDisplacePower.set(0.75f); // 0.5 = neutral (no displacement)
-	ot->bMouseScaleShapes.set(false);
+	ot->bMouseScaleShapes.set(true);
 	ot->mouseScalePower.set(0.75f);
 }
 
@@ -196,13 +197,13 @@ void organicTextResetsRandoms::randomizeConnectionParams(OrganicText * ot) {
 
 void organicTextResetsRandoms::randomizeMouseTweaks(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "randomizeMouseTweaks()";
-	ot->bMouseControlOrigin.set(ofRandom() > 0.5f);
-	ot->radiusMouse.set(ofRandom(ot->radiusMouse.getMin(), ot->radiusMouse.getMax()));
-	ot->bMouseHighlightPoints.set(ofRandom() > 0.5f);
+	// ot->bMouseControlOrigin.set(ofRandom() > 0.5f);
+	// ot->radiusMouse.set(ofRandom(ot->radiusMouse.getMin(), ot->radiusMouse.getMax()));
+	// ot->bMouseHighlightPoints.set(ofRandom() > 0.5f);
 	ot->colorMouseHighlight.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(128, 255)));
 	ot->mouseInfluenceStrength.set(ofRandom(ot->mouseInfluenceStrength.getMin(), ot->mouseInfluenceStrength.getMax()));
-	ot->bMouseDisplacePoints.set(ofRandom() > 0.5f);
+	// ot->bMouseDisplacePoints.set(ofRandom() > 0.5f);
 	ot->mouseDisplacePower.set(ofRandom(ot->mouseDisplacePower.getMin(), ot->mouseDisplacePower.getMax()));
-	ot->bMouseScaleShapes.set(ofRandom() > 0.5f);
+	// ot->bMouseScaleShapes.set(ofRandom() > 0.5f);
 	ot->mouseScalePower.set(ofRandom(ot->mouseScalePower.getMin(), ot->mouseScalePower.getMax()));
 }
