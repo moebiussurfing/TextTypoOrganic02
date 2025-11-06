@@ -11,7 +11,8 @@ void ofApp::setup() {
 
 	float fps = 60.f;
 	ofSetFrameRate(fps);
-
+	
+	bBgGradient.set("Background Gradient", false);
 	bMouseBrowsing.set("Mouse Browsing", true);
 	bTweeningMode.set("Mode Tweening", true);
 
@@ -40,7 +41,7 @@ void ofApp::setup() {
 	pm.gui.add(ot.bGui);
 
 	paramsScene.setName("Scene");
-	paramsScene.add(bMouseBrowsing);
+	paramsScene.add(bBgGradient);
 	paramsScene.add(bTweeningMode);
 	pm.gui.add(paramsScene);
 
@@ -101,14 +102,19 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	// Background
-	//ofxDrawBgGradient();//70,10∫
-	//ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
-	//ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
-	//ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
-	ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR);//center too black
-	// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
-	//ofClear(30);
-	// ofClear(20);
+	if (bBgGradient){
+		// ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
+		ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR);//center too black
+		// ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
+		// ofxDrawBgGradient();//70,10∫
+		// ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
+		// ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
+		// ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
+		// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
+	} else {
+		ofClear(20);
+		// ofClear(20);
+	}
 
 	// Organic Text
 	ot.draw();
@@ -158,6 +164,8 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 }
 
+//--
+
 //--------------------------------------------------------------
 void ofApp::resetWindowCustom() { // Set window size and centered
 	ofLogNotice("ofApp") << "resetWindowCustom()";
@@ -179,6 +187,8 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 	ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
 	ofSetWindowPosition(0, 0);
 }
+
+//--
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {

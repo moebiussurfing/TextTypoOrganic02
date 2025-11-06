@@ -364,6 +364,7 @@ void OrganicText::setupParams() {
 	//--
 
 	// Preset
+	// Group all relevant params for presets management
 	paramsPreset.setName("OrganicText");
 	paramsPreset.add(bDrawShapes);
 	paramsPreset.add(bDrawFill);
@@ -379,6 +380,7 @@ void OrganicText::setupParams() {
 	paramsPreset.add(paramsTrails);
 	paramsPreset.add(vRandomAll);
 	paramsPreset.add(vResetPreset);
+	paramsPreset.add(paramsMouseTweaks);
 
 	//--
 
@@ -405,7 +407,7 @@ void OrganicText::setupParams() {
 	//--
 
 	parameters.add(paramsTweens);
-	parameters.add(paramsMouseTweaks);
+	// parameters.add(paramsMouseTweaks);
 }
 
 //--------------------------------------------------------------
@@ -1521,7 +1523,7 @@ void OrganicText::refreshGuiPanel(ofxPanel & ui) {
 	ui.getGroup(paramsColors.getName()).minimizeAll();
 	ui.getGroup(paramsAnim.getName()).minimizeAll();
 	ui.getGroup(paramsConnections.getName()).minimizeAll();
-	ui.getGroup(paramsTweens.getName()).minimizeAll();
+	// ui.getGroup(paramsTweens.getName()).minimizeAll();
 	ui.getGroup(paramsMouseTweaks.getName()).minimizeAll();
 	ui.minimizeAll();
 }
@@ -1536,7 +1538,7 @@ void OrganicText::refreshGuiGroup(ofxGuiGroup & g) {
 	g.getGroup(paramsColors.getName()).minimizeAll();
 	g.getGroup(paramsAnim.getName()).minimizeAll();
 	g.getGroup(paramsConnections.getName()).minimizeAll();
-	g.getGroup(paramsTweens.getName()).minimizeAll();
+	// g.getGroup(paramsTweens.getName()).minimizeAll();
 	g.getGroup(paramsMouseTweaks.getName()).minimizeAll();
 	g.minimizeAll();
 }

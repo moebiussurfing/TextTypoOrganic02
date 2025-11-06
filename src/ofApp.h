@@ -79,6 +79,7 @@ public:
 	//--
 
 	// Interaction
+	ofParameter<bool> bBgGradient;
 	ofParameter<bool> bMouseBrowsing;
 	ofParameter<bool> bTweeningMode;
 	enum browseDirection_ {
