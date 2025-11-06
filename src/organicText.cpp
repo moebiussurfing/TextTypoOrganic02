@@ -389,8 +389,8 @@ void OrganicText::setupParams() {
 #endif
 
 	parameters.add(vRandomAll); // not useful
-	parameters.add(vResetPreset);
 	parameters.add(vResetAll);
+	parameters.add(vResetPreset);
 
 	//--
 

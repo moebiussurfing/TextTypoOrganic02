@@ -121,7 +121,7 @@ void organicTextResetsRandoms::resetMouseTweaks(OrganicText * ot) {
 	ot->bMouseControlOrigin.set(false);
 	ot->radiusMouse.set(0.6f);
 	ot->bMouseHighlightPoints.set(false);
-	ot->colorMouseHighlight.set(ofColor(0, 150, 255));
+	ot->colorMouseHighlight.set(ofColor(255, 255, 255, 200));
 	ot->mouseInfluenceStrength.set(0.75f);
 	ot->bMouseDisplacePoints.set(false);
 	ot->mouseDisplacePower.set(0.75f); // 0.5 = neutral (no displacement)
