@@ -93,7 +93,7 @@ void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetAnimationParams()";
 	ot->animationMode.set(0);
 	ot->animSpeed.set(0.2f);
-	ot->animPower.set(0.05f);
+	ot->animPower.set(0.5f);
 	ot->animWaveFreq.set(0.5f);
 	ot->animIntensity.set(0.5f);
 	ot->animSpiral.set(0.7f);
