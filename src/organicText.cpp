@@ -1190,12 +1190,19 @@ void OrganicText::drawShapes() {
 		// Calculate mouse influence for this point
 		float mouseInfluence = getMouseInfluence(finalPos);
 
-		// Apply mouse displacement effect
+		// Apply mouse displacement effect (bidirectional)
+		// < 0.5 = attract, 0.5 = neutral, > 0.5 = repel
 		if (bMouseDisplacePoints.get() && mouseInfluence > 0.0f) {
-			// Calculate direction from mouse to point (repel)
+			// Calculate direction from mouse to point
 			vec2 direction = glm::normalize(finalPos - mouseLocalPos);
+			
+			// Map mouseDisplacePower: 0.5 = no effect, < 0.5 = attract, > 0.5 = repel
+			float powerCentered = (mouseDisplacePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
+			
 			float maxDisplacement = 50.0f; // Maximum displacement in pixels
-			float displacement = mouseInfluence * mouseDisplacePower.get() * maxDisplacement;
+			float displacement = mouseInfluence * powerCentered * maxDisplacement;
+			
+			// If powerCentered is negative (attract), direction is inverted
 			finalPos += direction * displacement;
 		}
 
