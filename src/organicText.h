@@ -42,13 +42,14 @@ constexpr float DENSITY_SPACING_MAX = 50.0f;
 constexpr float ANIM_NOISE_MAX = 35.0f;
 constexpr float ANIM_WAVE_MAX = 60.0f;
 constexpr float ANIM_SPIRAL_MAX = 45.0f;
-constexpr float ANIM_PULSE_MAX = 20.0f;
+constexpr float ANIM_PULSE_MAX = 40.0f;
 
 // Animation Frequency Constants
 constexpr float ANIM_WAVE_FREQ_MIN = 0.001f;
 constexpr float ANIM_WAVE_FREQ_MAX = 0.04f;
 constexpr float ANIM_SPIRAL_TIGHT_MIN = 0.002f;
 constexpr float ANIM_SPIRAL_TIGHT_MAX = 0.025f;
+constexpr float ANIM_SPEED_MAX = 8.f;
 
 // Time System
 constexpr float BASE_TIME_STEP = 0.008f;
@@ -262,6 +263,7 @@ public:
 	ofParameter<float> animIntensity;
 	ofParameter<float> animSpiral;
 	ofParameter<float> animPulseIntensity;
+	ofParameter<float> animOriginX;
 
 	// Connection parameters
 	ofParameter<void> vResetConnection;
@@ -340,6 +342,7 @@ private:
 	ofTrueTypeFont font;
 	std::string FONT_DEFAULT;
 	vec2 textCenter;
+	float textWidth;
 public:
 	float t;
 

@@ -71,7 +71,7 @@ void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
 
 void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetColorModes()";
-	ot->colorMode.set(3);
+	ot->colorMode.set(0);
 	ot->colorSpeed.set(0.5f);
 	ot->colorMixFactor.set(0.4f);
 	ot->bColorByDistance.set(false);
@@ -92,23 +92,25 @@ void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
 void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetAnimationParams()";
 	ot->animationMode.set(0);
-	ot->animSpeed.set(0.8f);
+	ot->animSpeed.set(0.2f);
 	ot->animPower.set(0.05f);
-	ot->animWaveFreq.set(0.3f);
-	ot->animIntensity.set(0.2f);
-	ot->animSpiral.set(0.2f);
-	ot->animPulseIntensity.set(0.2f);
+	ot->animWaveFreq.set(0.5f);
+	ot->animIntensity.set(0.5f);
+	ot->animSpiral.set(0.7f);
+	ot->animPulseIntensity.set(0.7f);
+	ot->animOriginX.set(0.5f);
 }
+
 
 void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetConnectionParams()";
-	ot->bDrawConnections.set(false);
+	ot->bDrawConnections.set(true);
 	ot->connectDistance.set(30.0f);
 	ot->connectLineWidth.set(1.5f);
 	ot->connectAlpha.set(0.5f);
 	ot->connectQuality.set(0.5f);
 	ot->bConnectNearOnly.set(true);
-	ot->bDrawTrails.set(false);
+	ot->bDrawTrails.set(true);
 	ot->trailLineWidth.set(1.5f);
 	ot->trailLength.set(0.5);
 	ot->trailFade.set(0.5f);

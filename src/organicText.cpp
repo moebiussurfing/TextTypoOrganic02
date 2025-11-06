@@ -83,6 +83,7 @@ void OrganicText::setupScene() {
 	// Initialize
 	t = 0.0;
 	textCenter = vec2(0, 0);
+	textWidth = 0.0f;
 
 	// Initialize mode names
 	int dummy = 0;
@@ -198,12 +199,13 @@ void OrganicText::setupParams() {
 	animationMode.set("Mode", 0, 0, 4);
 	animationModeName.set("Name", "Noise");
 	animationModeName.setSerializable(false);
-	animSpeed.set("Speed", 1.0, 0.1, 3.0);
+	animSpeed.set("Speed", 0.2f, 0.0f, 1.0f);
 	animPower.set("Power", 0.1, 0.0, 1.0);
 	animWaveFreq.set("Wave Freq", 0.3, 0.0, 1.0);
 	animIntensity.set("Intensity", 0.2, 0.0, 1.0);
 	animSpiral.set("Spiral", 0.2, 0.0, 1.0);
 	animPulseIntensity.set("Pulse", 0.2, 0.0, 1.0);
+	animOriginX.set("Origin X", 0.5, 0.0, 1.0);
 
 	// Connection group
 	vResetConnection.set("Reset");
@@ -288,6 +290,7 @@ void OrganicText::setupParams() {
 	paramsAnim.add(animIntensity);
 	paramsAnim.add(animSpiral);
 	paramsAnim.add(animPulseIntensity);
+	paramsAnim.add(animOriginX);
 	paramsAnim.add(vRandomAnimation);
 	paramsAnim.add(vResetAnimation);
 
@@ -543,7 +546,7 @@ void OrganicText::update() {
 	if (bEnableAnimation.get()) {
 		float dt = ofGetLastFrameTime();
 		float normalizedDt = dt / (1.0f / targetFPS);
-		t += BASE_TIME_STEP * animSpeed.get() * normalizedDt;
+		t += BASE_TIME_STEP * animSpeed.get() * ANIM_SPEED_MAX * normalizedDt;
 	}
 
 	fps = ofGetFrameRate();
@@ -616,7 +619,7 @@ void OrganicText::refreshPointsString() {
 	// Initialize trails
 	initTrails();
 
-	// Calculate center
+	// Calculate center and width
 	if (pointsString.size() > 0) {
 		vec2 sum(0, 0);
 		for (const auto & p : pointsString) {
@@ -624,6 +627,9 @@ void OrganicText::refreshPointsString() {
 		}
 		textCenter = sum / static_cast<float>(pointsString.size());
 	}
+
+	// Store text width for animOriginX calculations
+	textWidth = font.stringWidth(sText);
 }
 
 //--------------------------------------------------------------
@@ -635,6 +641,10 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	}
 
 	float fontScale = fontSize.get() / 150.0f;
+
+	// Calculate custom animation origin based on animOriginX (0=left, 0.5=center, 1=right)
+	float customOriginX = textWidth * animOriginX.get();
+	vec2 customOrigin = vec2(customOriginX, textCenter.y);
 
 	switch ((AnimMode)animationMode.get()) {
 	case ANIM_NOISE: {
@@ -649,7 +659,9 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_WAVE: {
 		float freq = ofMap(animWaveFreq.get(), 0, 1, ANIM_WAVE_FREQ_MIN, ANIM_WAVE_FREQ_MAX, true);
 		float amp = ofMap(animIntensity.get(), 0, 1, 0, ANIM_WAVE_MAX * fontScale, true);
-		float wave = sin(pointsString[index].x * freq + t * TWO_PI) * amp;
+		// Use distance from custom origin instead of absolute x position
+		float distFromOrigin = pointsString[index].x - customOriginX;
+		float wave = sin(distFromOrigin * freq + t * TWO_PI) * amp;
 		offset = vec2(0, wave);
 		break;
 	}
@@ -657,8 +669,9 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_SPIRAL: {
 		if (pointsString.size() < 2) break;
 
-		float angle = atan2(pointsString[index].y - textCenter.y, pointsString[index].x - textCenter.x);
-		float distance = glm::distance(pointsString[index], textCenter);
+		// Use custom origin for spiral center
+		float angle = atan2(pointsString[index].y - customOrigin.y, pointsString[index].x - customOrigin.x);
+		float distance = glm::distance(pointsString[index], customOrigin);
 		float tightness = ofMap(animSpiral.get(), 0, 1, ANIM_SPIRAL_TIGHT_MIN, ANIM_SPIRAL_TIGHT_MAX, true);
 		float maxDisp = ofMap(animPower.get(), 0, 1, 0, ANIM_SPIRAL_MAX * fontScale, true);
 
@@ -672,12 +685,13 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_PULSE: {
 		if (pointsString.size() < 2) break;
 
-		float distance = glm::distance(pointsString[index], textCenter);
+		// Use custom origin for pulse center
+		float distance = glm::distance(pointsString[index], customOrigin);
 		float maxPulse = ofMap(animPulseIntensity.get(), 0, 1, 0, ANIM_PULSE_MAX * fontScale, true);
 		float pulsePhase = sin(t * TWO_PI * 0.5f) * maxPulse;
 
 		if (distance > 0.5f) {
-			vec2 direction = normalize(pointsString[index] - textCenter);
+			vec2 direction = normalize(pointsString[index] - customOrigin);
 			offset = direction * pulsePhase;
 		}
 		break;
@@ -686,11 +700,12 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_ORBIT: {
 		if (pointsString.size() < 2) break;
 
-		float angle = atan2(pointsString[index].y - textCenter.y, pointsString[index].x - textCenter.x);
+		// Use custom origin as pivot point for orbit
+		float angle = atan2(pointsString[index].y - customOrigin.y, pointsString[index].x - customOrigin.x);
 		angle += t * TWO_PI * 0.3f;
 
-		float distance = glm::distance(pointsString[index], textCenter);
-		vec2 newPos = textCenter + vec2(cos(angle), sin(angle)) * distance;
+		float distance = glm::distance(pointsString[index], customOrigin);
+		vec2 newPos = customOrigin + vec2(cos(angle), sin(angle)) * distance;
 		offset = newPos - pointsString[index];
 		break;
 	}
