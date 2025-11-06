@@ -28,5 +28,5 @@ public:
 	static void randomizeAnimationParams(OrganicText * ot);
 	static void randomizeConnectionParams(OrganicText * ot);
 	static void randomizeMouseTweaks(OrganicText * ot);
-	static void randomAll(OrganicText * ot);
+	static void randomPreset(OrganicText * ot);
 };

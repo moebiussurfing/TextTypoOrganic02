@@ -297,7 +297,7 @@ public:
 	// Global controls
 	ofParameter<void> vResetPreset;
 	ofParameter<void> vResetAll;
-	ofParameter<void> vRandomAll;
+	ofParameter<void> vRandomPreset;
 	ofParameter<void> vResetMouseTweaks;
 	ofParameter<void> vRandomMouseTweaks;
 
@@ -316,7 +316,7 @@ private:
 	ofEventListener e_DensitySpacing, e_sText;
 	ofEventListener e_vResetDensity, e_vResetShape, e_vResetColor;
 	ofEventListener e_vResetGlobalColor, e_vResetAnimation, e_vResetConnection, e_vResetAll, e_vResetPreset;
-	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor, e_vRandomAll;
+	ofEventListener e_vRandomDensity, e_vRandomShape, e_vRandomColor, e_vRandomGlobalColor, e_vRandomPreset;
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 	ofEventListener e_trailLength;

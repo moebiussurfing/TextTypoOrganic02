@@ -35,8 +35,8 @@ void organicTextResetsRandoms::resetAll(OrganicText * ot) {
 }
 
 //--------------------------------------------------------------
-void organicTextResetsRandoms::randomAll(OrganicText * ot) {
-	ofLogNotice("organicTextResetsRandoms") << "randomAll()";
+void organicTextResetsRandoms::randomPreset(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomPreset()";
 	randomizeDensityParams(ot);
 	randomizeShapeParams(ot);
 	randomizeColorModes(ot);

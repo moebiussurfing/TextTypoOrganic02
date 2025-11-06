@@ -255,7 +255,7 @@ void OrganicText::setupParams() {
 	// Global reset
 	vResetAll.set("Reset All");
 	vResetPreset.set("Reset Preset");
-	vRandomAll.set("Random All");
+	vRandomPreset.set("Random Preset");
 	vResetMouseTweaks.set("Reset");
 	vRandomMouseTweaks.set("Random");
 
@@ -357,9 +357,9 @@ void OrganicText::setupParams() {
 
 	paramsInternal.setName("Internal");
 	paramsInternal.add(bGui);
-	paramsInternal.add(vRandomAll); // not useful
-	paramsInternal.add(vResetAll);
+	paramsInternal.add(vRandomPreset);
 	paramsInternal.add(vResetPreset);
+	paramsInternal.add(vResetAll);
 
 	//--
 
@@ -378,9 +378,9 @@ void OrganicText::setupParams() {
 	paramsPreset.add(paramsAnim);
 	paramsPreset.add(paramsConnections);
 	paramsPreset.add(paramsTrails);
-	paramsPreset.add(vRandomAll);
-	paramsPreset.add(vResetPreset);
 	paramsPreset.add(paramsMouseTweaks);
+	paramsPreset.add(vRandomPreset);
+	paramsPreset.add(vResetPreset);
 
 	//--
 
@@ -444,9 +444,9 @@ void OrganicText::setupCallbacks() {
 	e_vResetGlobalColor = vResetGlobalColors.newListener([this](void) { organicTextResetsRandoms::resetGlobalColorParams(this); });
 	e_vResetAnimation = vResetAnimation.newListener([this](void) { organicTextResetsRandoms::resetAnimationParams(this); });
 	e_vResetConnection = vResetConnection.newListener([this](void) { organicTextResetsRandoms::resetConnectionParams(this); });
-	e_vRandomAll = vRandomAll.newListener([this](void) { organicTextResetsRandoms::randomAll(this); });
-	e_vResetAll = vResetAll.newListener([this](void) { organicTextResetsRandoms::resetAll(this); });
+	e_vRandomPreset = vRandomPreset.newListener([this](void) { organicTextResetsRandoms::randomPreset(this); });
 	e_vResetPreset = vResetPreset.newListener([this](void) { organicTextResetsRandoms::resetPreset(this); });
+	e_vResetAll = vResetAll.newListener([this](void) { organicTextResetsRandoms::resetAll(this); });
 
 	// Random listeners
 	e_vRandomDensity = vRandomDensity.newListener([this](void) { organicTextResetsRandoms::randomizeDensityParams(this); });
@@ -495,9 +495,9 @@ void OrganicText::refreshGuiSession() {
 	gt1.minimize();
 	gt2.minimize();
 
-	// Mouse Tweaks
-	auto & gm = gui.getGroup(paramsMouseTweaks.getName());
-	gm.minimize();
+	// // Mouse Tweaks
+	// auto & gm = gui.getGroup(paramsMouseTweaks.getName());
+	// gm.minimize();
 }
 
 //--------------------------------------------------------------
@@ -589,7 +589,7 @@ void OrganicText::update() {
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
-	bDebugLowFPS = (fps < (targetFPS * 0.5f));
+	bDebugLowFPS = (fps < (targetFPS * 0.75f));
 
 	//TODO: improve this flag and avoid re calling system
 	if (bFlagRefreshFont) {
@@ -642,8 +642,11 @@ void OrganicText::update() {
 
 //--
 
+// @brief Samples points along the outlines of the given string at intervals of ds.		
 //--------------------------------------------------------------
 vector<vec2> OrganicText::sampleStringPoints(const std::string & s, float ds) {
+	ofLogNotice("OrganicText") << "sampleStringPoints() s:"<< s << ", ds:" << ds;
+	
 	vector<vec2> points;
 	if (s.empty()) return points;
 
@@ -713,7 +716,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	// Override with mouse position if mouse control is active
 	// Now works across entire canvas, deforming the constellation
 	// exclude ANIM_WAVE because no good results seen with it
-	if (bMouseControlOrigin.get()&&(AnimMode)animationMode.get()!=ANIM_WAVE) {
+	if (bMouseTweaks.get() && bMouseControlOrigin.get()&&(AnimMode)animationMode.get()!=ANIM_WAVE) {
 		customOriginX = mouseLocalPos.x;
 		customOriginY = mouseLocalPos.y;
 	}
@@ -725,7 +728,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		float maxDisp = ofMap(animPower.get(), 0, 1, 0, ANIM_NOISE_MAX * fontScale, true);
 
 		// If mouse control is active, reduce noise displacement near mouse position
-		if (bMouseControlOrigin.get()) {
+		if (bMouseTweaks.get() && bMouseControlOrigin.get()) {
 			float mouseInfluence = getMouseInfluence(pointsString[index]);
 			maxDisp *= (1.0f - mouseInfluence * 2.f); // Reduce up to % near mouse
 		}
@@ -740,12 +743,6 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	case ANIM_WAVE: {
 		float freq = ofMap(animWaveFreq.get(), 0, 1, ANIM_WAVE_FREQ_MIN, ANIM_WAVE_FREQ_MAX, true);
 		float amp = ofMap(animIntensity.get(), 0, 1, 0, ANIM_WAVE_MAX * fontScale, true);
-
-		// // If mouse control is active, reduce wave amplitude near mouse position
-		// if (bMouseControlOrigin.get()) {
-		// 	float mouseInfluence = getMouseInfluence(pointsString[index]);
-		// 	amp *= (1.0f - mouseInfluence * 0.8f); // Reduce up to 80% near mouse
-		// }
 
 		// Use distance from custom origin instead of absolute x position
 		float distFromOrigin = pointsString[index].x - customOriginX;
@@ -912,7 +909,7 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 	}
 
 	// Mouse highlight: override color for points within mouse radius
-	if (bMouseHighlightPoints.get()) {
+	if (bMouseTweaks.get() && bMouseHighlightPoints.get()) {
 		float influence = getMouseInfluence(position);
 		if (influence > 0.0f) {
 			color = color.lerp(colorMouseHighlight.get(), influence);
@@ -1197,7 +1194,7 @@ void OrganicText::drawShapes() {
 
 		// Apply mouse displacement effect (bidirectional)
 		// < 0.5 = attract, 0.5 = neutral, > 0.5 = repel
-		if (bMouseDisplacePoints.get() && mouseInfluence > 0.0f) {
+		if (bMouseTweaks.get() && bMouseDisplacePoints.get() && mouseInfluence > 0.0f) {
 			// Calculate direction from mouse to point
 			vec2 direction = glm::normalize(finalPos - mouseLocalPos);
 			
@@ -1231,7 +1228,7 @@ void OrganicText::drawShapes() {
 
 		// Apply mouse scale effect (bidirectional)
 		// < 0.5 = shrink, 0.5 = neutral, > 0.5 = grow
-		if (bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
+		if (bMouseTweaks.get() && bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
 			// Map mouseScalePower: 0.5 = no effect, < 0.5 = shrink, > 0.5 = grow
 			float powerCentered = (mouseScalePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
 			
@@ -1411,13 +1408,16 @@ void OrganicText::drawHelp() const {
 		lines.push_back("< >      Zoom");
 		lines.push_back("+/-      Density");
 		lines.push_back("UP/DOWN  Speed");
+		lines.push_back("");
+		lines.push_back("A        Anim Modes");
+		lines.push_back("C        Color Modes");
+		lines.push_back("");
 		lines.push_back("S        Shapes");
 		lines.push_back("F        Shapes Fill");
 		lines.push_back("C        Connections");
 		lines.push_back("T        Trails");
-		lines.push_back("A        Animate");
-		lines.push_back("a        Anim Modes");
-		lines.push_back("C        Color Modes");
+		lines.push_back("a        Animate");
+		lines.push_back("");
 		lines.push_back("BACKSP   Reset all");
 	}
 
@@ -1523,7 +1523,6 @@ void OrganicText::refreshGuiPanel(ofxPanel & ui) {
 	ui.getGroup(paramsColors.getName()).minimizeAll();
 	ui.getGroup(paramsAnim.getName()).minimizeAll();
 	ui.getGroup(paramsConnections.getName()).minimizeAll();
-	// ui.getGroup(paramsTweens.getName()).minimizeAll();
 	ui.getGroup(paramsMouseTweaks.getName()).minimizeAll();
 	ui.minimizeAll();
 }
@@ -1538,7 +1537,6 @@ void OrganicText::refreshGuiGroup(ofxGuiGroup & g) {
 	g.getGroup(paramsColors.getName()).minimizeAll();
 	g.getGroup(paramsAnim.getName()).minimizeAll();
 	g.getGroup(paramsConnections.getName()).minimizeAll();
-	// g.getGroup(paramsTweens.getName()).minimizeAll();
 	g.getGroup(paramsMouseTweaks.getName()).minimizeAll();
 	g.minimizeAll();
 }
@@ -1570,44 +1568,53 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'h') {
 		bHelp.set(!bHelp.get());
 	}
-
-	else if (key == OF_KEY_BACKSPACE) {
-		organicTextResetsRandoms::resetAll(this);
-	}
-
-	else if (key == 'c' || key == 'C') {
-		colorMode.set((colorMode.get() + 1) % 5);
-	} else if (key == 'A') {
-		bEnableAnimation.set(!bEnableAnimation.get());
-	} else if (key == 'a') {
-		animationMode.set((animationMode.get() + 1) % 5);
-	}
-
-	else if (key == '+' || key == '=') {
-		densitySpacing.set(ofClamp(densitySpacing.get() + 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
-	} else if (key == '-') {
-		densitySpacing.set(ofClamp(densitySpacing.get() - 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
-	}
-
-	else if (key == OF_KEY_UP) {
-		animSpeed.set(ofClamp(animSpeed.get() + 0.01f, animSpeed.getMin(), animSpeed.getMax()));
-	} else if (key == OF_KEY_DOWN) {
-		animSpeed.set(ofClamp(animSpeed.get() - 0.01f, animSpeed.getMin(), animSpeed.getMax()));
-	}
-
+	
 	else if (key == OF_KEY_LEFT) {
 		zoomGlobal.set(ofClamp(zoomGlobal.get() - 0.01f, 0.0f, 1.0f));
 	} else if (key == OF_KEY_RIGHT) {
 		zoomGlobal.set(ofClamp(zoomGlobal.get() + 0.01f, 0.0f, 1.0f));
 	}
-
-	else if (key == 's' || key == 'S') {
+	
+	else if (key == OF_KEY_UP) {
+		animSpeed.set(ofClamp(animSpeed.get() + 0.01f, animSpeed.getMin(), animSpeed.getMax()));
+	} else if (key == OF_KEY_DOWN) {
+		animSpeed.set(ofClamp(animSpeed.get() - 0.01f, animSpeed.getMin(), animSpeed.getMax()));
+	}
+	
+	else if (key == 'C') {
+		colorMode.set((colorMode.get() + 1) % 5);
+	} 
+	else if (key == 'A') {
+		animationMode.set((animationMode.get() + 1) % 5);
+	}
+	
+	else if (key == '+' || key == '=') {
+		densitySpacing.set(ofClamp(densitySpacing.get() + 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
+	} else if (key == '-') {
+		densitySpacing.set(ofClamp(densitySpacing.get() - 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
+	}
+	
+	else if (key == 'S') {
 		bDrawShapes.set(!bDrawShapes.get());
-	} else if (key == 'f' || key == 'F') {
+	} 
+	
+	else if (key == 'F') {
 		bDrawFill.set(!bDrawFill.get());
-	} else if (key == 'c' || key == 'C') {
+	} 
+	
+	else if (key == 'C') {
 		bDrawConnections.set(!bDrawConnections.get());
-	} else if (key == 't' || key == 'T') {
+	} 
+	
+	else if (key == 'T') {
 		bDrawTrails.set(!bDrawTrails.get());
+	}
+	
+	else if (key == 'a') {
+		bEnableAnimation.set(!bEnableAnimation.get());
+	} 
+	
+	else if (key == OF_KEY_BACKSPACE) {
+		organicTextResetsRandoms::resetAll(this);
 	}
 }

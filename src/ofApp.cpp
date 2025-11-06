@@ -2,21 +2,19 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-#ifdef OFWORKS_DEMO_APP_DEPLOY
+	// Deploy
+	
+	#ifdef OFWORKS_DEMO_APP_DEPLOY
 	ofSetLogLevel(OF_LOG_SILENT);
 	ofSetLogLevel("SurfingPresetsLite", OF_LOG_SILENT);
-#endif
-
+	#endif
+	
 	ofLogNotice("ofApp") << "setup()";
 
-	float fps = 60.f;
-	ofSetFrameRate(fps);
-	
-	bBgGradient.set("Background Gradient", false);
-	bMouseBrowsing.set("Mouse Browsing", true);
-	bTweeningMode.set("Mode Tweening", true);
+	//--
 
 	// Window
+
 #if 0
 	resetWindowCustom();
 #else
@@ -26,17 +24,29 @@ void ofApp::setup() {
 	ofSetWindowShape(1600, 1600 *(9.f / 16.f));
 #endif
 
+	float fps = 60.f;
+	ofSetFrameRate(fps);
+
+	//--
+	
+	// Parameters
+
+	bBgGradient.set("Background Gradient", false);
+	bMouseBrowsing.set("Mouse Browsing", true);
+	bTweeningMode.set("Mode Tweening", true);
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
 
 	//--
 
 	// Organic Text
+
 	ot.setup(fps);
 	ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);
 
 	//--
 
 	// Presets Manager
+
 	pm.setup(ot.paramsPreset);
 	pm.gui.add(ot.bGui);
 
@@ -113,7 +123,6 @@ void ofApp::draw() {
 		// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
 	} else {
 		ofClear(20);
-		// ofClear(20);
 	}
 
 	// Organic Text
