@@ -84,6 +84,9 @@ void OrganicText::setupScene() {
 	t = 0.0;
 	textCenter = vec2(0, 0);
 	textWidth = 0.0f;
+	textHeight = 0.0f;
+	mouseLocalPos = vec2(0, 0);
+	bMouseInBounds = false;
 
 	// Initialize mode names
 	int dummy = 0;
@@ -223,6 +226,12 @@ void OrganicText::setupParams() {
 	trailLineWidth.set("Line Width", 1.0f, 0.1f, TRAILS_LINE_WIDTH_MAX);
 	trailFade.set("Fade", 0.5f, 0, 1.f);
 
+	// Mouse Tweaks
+	bMouseControlOrigin.set("Control Origin", false);
+	bMouseHighlightPoints.set("Highlight Points", false);
+	colorMouseHighlight.set("Highlight Color", ofColor(0, 150, 255));
+	mouseInfluenceStrength.set("Influence", 0.5, 0.0, 1.0);
+
 	// Settings group
 	bAutosave.set("Autosave", false);
 	vSaveSettigs.set("Save");
@@ -310,6 +319,13 @@ void OrganicText::setupParams() {
 	paramsTrails.add(vResetConnection);
 	paramsTrails.add(vRandomConnection);
 
+	paramsMouseTweaks.setName("Mouse Tweaks");
+	paramsMouseTweaks.add(bMouseControlOrigin);
+	paramsMouseTweaks.add(radiusMouse);
+	paramsMouseTweaks.add(colorMouseHighlight);
+	paramsMouseTweaks.add(bMouseHighlightPoints);
+	paramsMouseTweaks.add(mouseInfluenceStrength);
+
 	paramsSessionSettings.setName("Session Settings");
 	paramsSessionSettings.add(vLoadSettigs);
 	paramsSessionSettings.add(vSaveSettigs);
@@ -367,6 +383,7 @@ void OrganicText::setupParams() {
 	//--
 
 	parameters.add(paramsTweens);
+	parameters.add(paramsMouseTweaks);
 }
 
 //--------------------------------------------------------------
@@ -461,6 +478,10 @@ void OrganicText::refreshGuiSession() {
 	auto & gt2 = gt.getGroup(tweenOutPoint.params_.getName());
 	gt1.minimize();
 	gt2.minimize();
+
+	// Mouse Tweaks
+	auto & gm = gui.getGroup(paramsMouseTweaks.getName());
+	gm.minimize();
 }
 
 //--------------------------------------------------------------
@@ -560,6 +581,32 @@ void OrganicText::update() {
 		bFlagRefreshFont = false;
 	}
 
+	//--
+
+	// Mouse coordinate transformation
+	// Convert window coordinates to local text coordinates
+	mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
+
+	// Apply inverse transformations (same as in draw())
+	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
+	float centerX = ofGetWidth() * 0.5f;
+	float centerY = ofGetHeight() * 0.5f;
+
+	// Step 1: Translate from window to center
+	vec2 translated = mousePos - vec2(centerX, centerY);
+
+	// Step 2: Inverse scale (divide by zoom)
+	vec2 scaled = translated / zoomFactor;
+
+	// Step 3: Translate to text origin (inverse of text centering)
+	float textOffsetX = -textWidth * 0.5f;
+	float textOffsetY = textHeight * 0.5f;
+	mouseLocalPos = scaled - vec2(textOffsetX, textOffsetY);
+
+	// Check if mouse is within text bounds
+	bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= textWidth &&
+					  mouseLocalPos.y >= -textHeight && mouseLocalPos.y <= 0);
+
 	if (bDebug) {
 		// Smooth alpha blinking using sine wave
 		float t = ofGetElapsedTimef(); // Elapsed time in seconds
@@ -628,8 +675,9 @@ void OrganicText::refreshPointsString() {
 		textCenter = sum / static_cast<float>(pointsString.size());
 	}
 
-	// Store text width for animOriginX calculations
+	// Store text width and height for mouse coordinate transformations
 	textWidth = font.stringWidth(sText);
+	textHeight = font.stringHeight(sText);
 }
 
 //--------------------------------------------------------------
@@ -644,7 +692,16 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 	// Calculate custom animation origin based on animOriginX (0=left, 0.5=center, 1=right)
 	float customOriginX = textWidth * animOriginX.get();
-	vec2 customOrigin = vec2(customOriginX, textCenter.y);
+	float customOriginY = textCenter.y;
+
+	// Override with mouse position if mouse control is active
+	// Now works across entire canvas, deforming the constellation
+	if (bMouseControlOrigin.get()) {
+		customOriginX = mouseLocalPos.x;
+		customOriginY = mouseLocalPos.y;
+	}
+
+	vec2 customOrigin = vec2(customOriginX, customOriginY);
 
 	switch ((AnimMode)animationMode.get()) {
 	case ANIM_NOISE: {
@@ -798,6 +855,19 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 		float alphaEdge = ofMap(colorAlphaRange.get(), 0, 1, 255, 0, true);
 		float alpha = ofMap(distance, 0, COLOR_DISTANCE_MAX, 255, alphaEdge, true);
 		color.a = alpha;
+	}
+
+	// Mouse highlight: override color for points within mouse radius
+	if (bMouseHighlightPoints.get()) {
+		float radiusPixels = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+		float distToMouse = glm::distance(position, mouseLocalPos);
+
+		if (distToMouse < radiusPixels) {
+			// Blend between current color and highlight color based on distance
+			float blend = ofMap(distToMouse, 0, radiusPixels, 1.0f, 0.0f, true);
+			blend *= mouseInfluenceStrength.get();
+			color = color.lerp(colorMouseHighlight.get(), blend);
+		}
 	}
 
 	return color;
@@ -1025,6 +1095,22 @@ void OrganicText::drawDebug() const {
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
 
+	// Mouse local position debug
+	if (bMouseInBounds) {
+		ofSetColor(ofColor(0, 255, 0)); // Green if in bounds
+		ofDrawCircle(mouseLocalPos, 5.f);
+		ofDrawLine(mouseLocalPos - vec2(10, 0), mouseLocalPos + vec2(10, 0));
+		ofDrawLine(mouseLocalPos - vec2(0, 10), mouseLocalPos + vec2(0, 10));
+	} else {
+		ofSetColor(ofColor(255, 0, 0, 100)); // Red if out of bounds
+		ofDrawCircle(mouseLocalPos, 3.f);
+	}
+
+	// Text bounding box
+	ofSetColor(colorDebugBlink);
+	ofNoFill();
+	ofDrawRectangle(0, -textHeight, textWidth, textHeight);
+
 	// All sample points
 	ofFill();
 	for (const auto & point : pointsString) {
@@ -1147,8 +1233,14 @@ void OrganicText::draw() {
 		ofPushStyle();
 		ofFill();
 		ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
-		mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
 		float r = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+		ofDrawCircle(mousePos, r);
+
+		// Draw mouse 
+		ofSetColor(ofColor(0, 255, 0, 150)); // Green
+		
+		ofNoFill();
+		ofSetLineWidth(2);
 		ofDrawCircle(mousePos, r);
 		ofPopStyle();
 	}

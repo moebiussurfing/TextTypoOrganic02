@@ -152,6 +152,12 @@ public:
 	ofParameter<float> radiusMouse { "radiusMouse", 0.1, 0, 1 };
 	mutable glm::vec2 mousePos;
 
+	// Mouse tweaks parameters
+	ofParameter<bool> bMouseControlOrigin;
+	ofParameter<bool> bMouseHighlightPoints;
+	ofParameter<ofColor> colorMouseHighlight;
+	ofParameter<float> mouseInfluenceStrength;
+
 	//--
 
 public:
@@ -193,6 +199,7 @@ public:
 	ofParameterGroup paramsAnim;
 	ofParameterGroup paramsConnections;
 	ofParameterGroup paramsTrails;
+	ofParameterGroup paramsMouseTweaks;
 
 	ofParameterGroup paramsSessionSettings; // For session status, not preset
 	ofParameterGroup paramsInternal; // Some internal settings
@@ -343,6 +350,9 @@ private:
 	std::string FONT_DEFAULT;
 	vec2 textCenter;
 	float textWidth;
+	float textHeight;
+	mutable vec2 mouseLocalPos;
+	mutable bool bMouseInBounds;
 public:
 	float t;
 
