@@ -104,7 +104,7 @@ void OrganicText::setupTweens() {
 	ofLogNotice("OrganicText") << "setupTweensCallbacks()";
 
 	// Tween drawing controls - will be populated in setupTweens()
-	paramsTweens.setName("Write Tweens");
+	paramsTweens.setName("Tweens Drawing");
 	paramsTweens.add(inPoint);
 	paramsTweens.add(outPoint);
 
@@ -227,13 +227,13 @@ void OrganicText::setupParams() {
 	trailFade.set("Fade", 0.5f, 0, 1.f);
 
 	// Mouse Tweaks
-	bMouseControlOrigin.set("Control Origin", false);
-	bMouseHighlightPoints.set("Highlight Points", false);
-	colorMouseHighlight.set("Highlight Color", ofColor(0, 150, 255));
+	bMouseControlOrigin.set("x Origin", false);
+	bMouseHighlightPoints.set("Highlight", false);
+	colorMouseHighlight.set("Color", ofColor(0, 150, 255));
 	mouseInfluenceStrength.set("Influence", 0.5, 0.0, 1.0);
-	bMouseDisplacePoints.set("Displace Points", false);
+	bMouseDisplacePoints.set("Displace", false);
 	mouseDisplacePower.set("Displace Power", 0.5, 0.0, 1.0);
-	bMouseScaleShapes.set("Scale Shapes", false);
+	bMouseScaleShapes.set("Scale", false);
 	mouseScalePower.set("Scale Power", 0.5, 0.0, 1.0);
 
 	// Settings group
@@ -245,7 +245,8 @@ void OrganicText::setupParams() {
 	vResetAll.set("Reset All");
 	vResetPreset.set("Reset Preset");
 	vRandomAll.set("Random All");
-	vResetMouseTweaks.set("Reset Mouse Tweaks");
+	vResetMouseTweaks.set("Reset");
+	vRandomMouseTweaks.set("Random");
 
 	//--
 
@@ -335,6 +336,7 @@ void OrganicText::setupParams() {
 	paramsMouseTweaks.add(bMouseScaleShapes);
 	paramsMouseTweaks.add(mouseScalePower);
 	paramsMouseTweaks.add(vResetMouseTweaks);
+	paramsMouseTweaks.add(vRandomMouseTweaks);
 
 	paramsSessionSettings.setName("Session Settings");
 	paramsSessionSettings.add(vLoadSettigs);
@@ -452,6 +454,7 @@ void OrganicText::setupCallbacks() {
 	e_vRandomAnimation = vRandomAnimation.newListener([this](void) { organicTextResetsRandoms::randomizeAnimationParams(this); });
 	e_vRandomConnection = vRandomConnection.newListener([this](void) { organicTextResetsRandoms::randomizeConnectionParams(this); });
 	e_vResetMouseTweaks = vResetMouseTweaks.newListener([this](void) { organicTextResetsRandoms::resetMouseTweaks(this); });
+	e_vRandomMouseTweaks = vRandomMouseTweaks.newListener([this](void) { organicTextResetsRandoms::randomizeMouseTweaks(this); });
 }
 
 //--------------------------------------------------------------
@@ -1224,9 +1227,16 @@ void OrganicText::drawShapes() {
 		float sizeNoise = ofNoise(phase * SHAPE_SIZE_NOISE_SCALE, static_cast<float>(i) * SHAPE_SIZE_INDEX_SCALE);
 		float pointSize = ofLerp(minSize, maxSize, sizeNoise);
 
-		// Apply mouse scale effect
+		// Apply mouse scale effect (bidirectional)
+		// < 0.5 = shrink, 0.5 = neutral, > 0.5 = grow
 		if (bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
-			float scaleMultiplier = 1.0f + (mouseInfluence * mouseScalePower.get() * MAX_SCALE_POWER);
+			// Map mouseScalePower: 0.5 = no effect, < 0.5 = shrink, > 0.5 = grow
+			float powerCentered = (mouseScalePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
+			
+			// Calculate scale multiplier
+			// Positive: grows up to MAX_SCALE_POWER times
+			// Negative: shrinks down to near 0
+			float scaleMultiplier = 1.0f + (mouseInfluence * powerCentered * MAX_SCALE_POWER);
 			pointSize *= scaleMultiplier;
 		}
 
@@ -1319,6 +1329,7 @@ void OrganicText::draw() {
 		ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
 		float r = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
 		ofDrawCircle(mousePos, r);
+		ofPopStyle();
 	}
 
 	// Debug bench measuring drawing performance

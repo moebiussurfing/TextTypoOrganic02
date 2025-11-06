@@ -298,6 +298,7 @@ public:
 	ofParameter<void> vResetAll;
 	ofParameter<void> vRandomAll;
 	ofParameter<void> vResetMouseTweaks;
+	ofParameter<void> vRandomMouseTweaks;
 
 	// Settings
 	ofParameter<bool> bAutosave;
@@ -318,7 +319,7 @@ private:
 	ofEventListener e_vRandomAnimation, e_vRandomConnection;
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 	ofEventListener e_trailLength;
-	ofEventListener e_vResetMouseTweaks;
+	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);

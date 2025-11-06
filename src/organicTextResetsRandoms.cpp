@@ -91,8 +91,8 @@ void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
 
 void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetAnimationParams()";
-	ot->animationMode.set(0);
-	ot->radiusMouse.set(1.f);
+	// ot->animationMode.set(0);
+	// ot->radiusMouse.set(1.f);
 	ot->animSpeed.set(0.2f);
 	ot->animPower.set(0.5f);
 	ot->animWaveFreq.set(0.2f);
@@ -119,14 +119,14 @@ void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
 void organicTextResetsRandoms::resetMouseTweaks(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetMouseTweaks()";
 	ot->bMouseControlOrigin.set(false);
-	ot->radiusMouse.set(0.3f);
+	ot->radiusMouse.set(0.6f);
 	ot->bMouseHighlightPoints.set(false);
 	ot->colorMouseHighlight.set(ofColor(0, 150, 255));
-	ot->mouseInfluenceStrength.set(0.7f);
+	ot->mouseInfluenceStrength.set(0.75f);
 	ot->bMouseDisplacePoints.set(false);
-	ot->mouseDisplacePower.set(0.5f); // 0.5 = neutral (no displacement)
+	ot->mouseDisplacePower.set(0.75f); // 0.5 = neutral (no displacement)
 	ot->bMouseScaleShapes.set(false);
-	ot->mouseScalePower.set(0.5f);
+	ot->mouseScalePower.set(0.75f);
 }
 
 //--------------------------------------------------------------
@@ -192,4 +192,17 @@ void organicTextResetsRandoms::randomizeConnectionParams(OrganicText * ot) {
 	ot->trailLength.set(ofRandom(ot->trailLength.getMin(), ot->trailLength.getMax()));
 	ot->trailLineWidth.set(ofRandom(ot->trailLineWidth.getMin(), ot->trailLineWidth.getMax()));
 	ot->trailFade.set(ofRandom(ot->trailFade.getMin(), ot->trailFade.getMax()));
+}
+
+void organicTextResetsRandoms::randomizeMouseTweaks(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "randomizeMouseTweaks()";
+	ot->bMouseControlOrigin.set(ofRandom() > 0.5f);
+	ot->radiusMouse.set(ofRandom(ot->radiusMouse.getMin(), ot->radiusMouse.getMax()));
+	ot->bMouseHighlightPoints.set(ofRandom() > 0.5f);
+	ot->colorMouseHighlight.set(ofColor(ofRandom(255), ofRandom(255), ofRandom(255), ofRandom(128, 255)));
+	ot->mouseInfluenceStrength.set(ofRandom(ot->mouseInfluenceStrength.getMin(), ot->mouseInfluenceStrength.getMax()));
+	ot->bMouseDisplacePoints.set(ofRandom() > 0.5f);
+	ot->mouseDisplacePower.set(ofRandom(ot->mouseDisplacePower.getMin(), ot->mouseDisplacePower.getMax()));
+	ot->bMouseScaleShapes.set(ofRandom() > 0.5f);
+	ot->mouseScalePower.set(ofRandom(ot->mouseScalePower.getMin(), ot->mouseScalePower.getMax()));
 }

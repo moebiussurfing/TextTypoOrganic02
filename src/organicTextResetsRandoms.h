@@ -16,11 +16,10 @@ public:
 	static void resetAnimationParams(OrganicText * ot);
 	static void resetConnectionParams(OrganicText * ot);
 	static void resetFonts(OrganicText * ot);
-	static void resetAll(OrganicText * ot);
 	static void resetPreset(OrganicText * ot);
 	static void resetMouseTweaks(OrganicText * ot);
-	static void randomAll(OrganicText * ot);
-
+	static void resetAll(OrganicText * ot);
+	
 	// Randomize functions
 	static void randomizeDensityParams(OrganicText * ot);
 	static void randomizeShapeParams(OrganicText * ot);
@@ -28,4 +27,6 @@ public:
 	static void randomizeGlobalColorParams(OrganicText * ot);
 	static void randomizeAnimationParams(OrganicText * ot);
 	static void randomizeConnectionParams(OrganicText * ot);
+	static void randomizeMouseTweaks(OrganicText * ot);
+	static void randomAll(OrganicText * ot);
 };
