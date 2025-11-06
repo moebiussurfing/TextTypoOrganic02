@@ -1095,16 +1095,16 @@ void OrganicText::drawDebug() const {
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
 
-	// Mouse local position debug
-	if (bMouseInBounds) {
-		ofSetColor(ofColor(0, 255, 0)); // Green if in bounds
-		ofDrawCircle(mouseLocalPos, 5.f);
-		ofDrawLine(mouseLocalPos - vec2(10, 0), mouseLocalPos + vec2(10, 0));
-		ofDrawLine(mouseLocalPos - vec2(0, 10), mouseLocalPos + vec2(0, 10));
-	} else {
-		ofSetColor(ofColor(255, 0, 0, 100)); // Red if out of bounds
-		ofDrawCircle(mouseLocalPos, 3.f);
-	}
+	// // Mouse local position debug
+	// if (bMouseInBounds) {
+	// 	ofSetColor(ofColor(0, 255, 0)); // Green if in bounds
+	// 	ofDrawCircle(mouseLocalPos, 5.f);
+	// 	ofDrawLine(mouseLocalPos - vec2(10, 0), mouseLocalPos + vec2(10, 0));
+	// 	ofDrawLine(mouseLocalPos - vec2(0, 10), mouseLocalPos + vec2(0, 10));
+	// } else {
+	// 	ofSetColor(ofColor(255, 0, 0, 100)); // Red if out of bounds
+	// 	ofDrawCircle(mouseLocalPos, 3.f);
+	// }
 
 	// Text bounding box
 	ofSetColor(colorDebugBlink);
