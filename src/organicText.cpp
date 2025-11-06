@@ -1521,6 +1521,8 @@ void OrganicText::refreshGuiPanel(ofxPanel & ui) {
 	ui.getGroup(paramsColors.getName()).minimizeAll();
 	ui.getGroup(paramsAnim.getName()).minimizeAll();
 	ui.getGroup(paramsConnections.getName()).minimizeAll();
+	ui.getGroup(paramsTweens.getName()).minimizeAll();
+	ui.getGroup(paramsMouseTweaks.getName()).minimizeAll();
 	ui.minimizeAll();
 }
 
@@ -1534,6 +1536,8 @@ void OrganicText::refreshGuiGroup(ofxGuiGroup & g) {
 	g.getGroup(paramsColors.getName()).minimizeAll();
 	g.getGroup(paramsAnim.getName()).minimizeAll();
 	g.getGroup(paramsConnections.getName()).minimizeAll();
+	g.getGroup(paramsTweens.getName()).minimizeAll();
+	g.getGroup(paramsMouseTweaks.getName()).minimizeAll();
 	g.minimizeAll();
 }
 
