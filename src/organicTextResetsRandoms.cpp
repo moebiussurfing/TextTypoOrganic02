@@ -71,10 +71,10 @@ void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
 
 void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetColorModes()";
-	ot->colorMode.set(0);
+	// ot->colorMode.set(0);
 	ot->colorSpeed.set(0.5f);
 	ot->colorMixFactor.set(0.4f);
-	ot->bColorByDistance.set(false);
+	ot->bColorByDistance.set(ofRandom()<0.5f?true:false);
 	ot->colorInner.set(0.4f);
 	ot->colorDistMiddle.set(0.7f);
 	ot->colorAlphaRange.set(0.7f);
@@ -92,12 +92,13 @@ void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
 void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetAnimationParams()";
 	ot->animationMode.set(0);
+	ot->radiusMouse.set(1.f);
 	ot->animSpeed.set(0.2f);
 	ot->animPower.set(0.5f);
-	ot->animWaveFreq.set(0.5f);
+	ot->animWaveFreq.set(0.2f);
 	ot->animIntensity.set(0.5f);
 	ot->animSpiral.set(0.7f);
-	ot->animPulseIntensity.set(0.7f);
+	ot->animPulseIntensity.set(1.f);
 	ot->animOriginX.set(0.5f);
 }
 
@@ -170,13 +171,14 @@ void organicTextResetsRandoms::randomizeGlobalColorParams(OrganicText * ot) {
 void organicTextResetsRandoms::randomizeAnimationParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "randomizeAnimationParams()";
 	if (!ot->bEnableAnimation) ot->bEnableAnimation = true;
-	ot->animationMode.set(static_cast<int>(ofRandom(0, 5)));
+	// ot->animationMode.set(static_cast<int>(ofRandom(0, 5)));
 	ot->animSpeed.set(ofRandom(ot->animSpeed.getMin(), ot->animSpeed.getMax()));
 	ot->animPower.set(ofRandom(ot->animPower.getMin(), ot->animPower.getMax()));
 	ot->animWaveFreq.set(ofRandom(ot->animWaveFreq.getMin(), ot->animWaveFreq.getMax()));
 	ot->animIntensity.set(ofRandom(ot->animIntensity.getMin(), ot->animIntensity.getMax()));
 	ot->animSpiral.set(ofRandom(ot->animSpiral.getMin(), ot->animSpiral.getMax()));
 	ot->animPulseIntensity.set(ofRandom(ot->animPulseIntensity.getMin(), ot->animPulseIntensity.getMax()));
+	ot->animOriginX.set(ofRandom(ot->animOriginX.getMin(), ot->animOriginX.getMax()));
 }
 
 void organicTextResetsRandoms::randomizeConnectionParams(OrganicText * ot) {

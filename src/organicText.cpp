@@ -707,7 +707,8 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 	// Override with mouse position if mouse control is active
 	// Now works across entire canvas, deforming the constellation
-	if (bMouseControlOrigin.get()) {
+	// exclude ANIM_WAVE because no good results seen with it
+	if (bMouseControlOrigin.get()&&(AnimMode)animationMode.get()!=ANIM_WAVE) {
 		customOriginX = mouseLocalPos.x;
 		customOriginY = mouseLocalPos.y;
 	}
@@ -721,7 +722,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		// If mouse control is active, reduce noise displacement near mouse position
 		if (bMouseControlOrigin.get()) {
 			float mouseInfluence = getMouseInfluence(pointsString[index]);
-			maxDisp *= (1.0f - mouseInfluence * 0.9f); // Reduce up to 90% near mouse
+			maxDisp *= (1.0f - mouseInfluence * 2.f); // Reduce up to % near mouse
 		}
 
 		offset = vec2(
@@ -735,11 +736,11 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		float freq = ofMap(animWaveFreq.get(), 0, 1, ANIM_WAVE_FREQ_MIN, ANIM_WAVE_FREQ_MAX, true);
 		float amp = ofMap(animIntensity.get(), 0, 1, 0, ANIM_WAVE_MAX * fontScale, true);
 
-		// If mouse control is active, reduce wave amplitude near mouse position
-		if (bMouseControlOrigin.get()) {
-			float mouseInfluence = getMouseInfluence(pointsString[index]);
-			amp *= (1.0f - mouseInfluence * 0.8f); // Reduce up to 80% near mouse
-		}
+		// // If mouse control is active, reduce wave amplitude near mouse position
+		// if (bMouseControlOrigin.get()) {
+		// 	float mouseInfluence = getMouseInfluence(pointsString[index]);
+		// 	amp *= (1.0f - mouseInfluence * 0.8f); // Reduce up to 80% near mouse
+		// }
 
 		// Use distance from custom origin instead of absolute x position
 		float distFromOrigin = pointsString[index].x - customOriginX;
@@ -808,13 +809,13 @@ float OrganicText::getMouseInfluence(vec2 position) const {
 	// Calculate normalized influence (1.0 at center, 0.0 at edge)
 	float influence = ofMap(distToMouse, 0, radiusPixels, 1.0f, 0.0f, true);
 
-	// Apply power curve for more intensity
-	// Power of 1.5 gives strong weight to closer points while maintaining gradient
-	float power = 1.5f;
-	influence = std::pow(influence, power);
-
-	// Scale by user strength
+	// Apply mouseInfluenceStrength BEFORE power curve to maintain control range
 	influence *= mouseInfluenceStrength.get();
+
+	// Apply power curve for gradient shape
+	// Power of 0.7 creates a softer, wider gradient
+	float power = 0.7f;
+	influence = std::pow(influence, power);
 
 	return influence;
 }
@@ -1156,17 +1157,6 @@ void OrganicText::drawDebug() const {
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
 
-	// // Mouse local position debug
-	// if (bMouseInBounds) {
-	// 	ofSetColor(ofColor(0, 255, 0)); // Green if in bounds
-	// 	ofDrawCircle(mouseLocalPos, 5.f);
-	// 	ofDrawLine(mouseLocalPos - vec2(10, 0), mouseLocalPos + vec2(10, 0));
-	// 	ofDrawLine(mouseLocalPos - vec2(0, 10), mouseLocalPos + vec2(0, 10));
-	// } else {
-	// 	ofSetColor(ofColor(255, 0, 0, 100)); // Red if out of bounds
-	// 	ofDrawCircle(mouseLocalPos, 3.f);
-	// }
-
 	// Text bounding box
 	ofSetColor(colorDebugBlink);
 	ofNoFill();
@@ -1322,14 +1312,6 @@ void OrganicText::draw() {
 		ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
 		float r = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
 		ofDrawCircle(mousePos, r);
-
-		// Draw mouse 
-		ofSetColor(ofColor(0, 255, 0, 150)); // Green
-		
-		ofNoFill();
-		ofSetLineWidth(2);
-		ofDrawCircle(mousePos, r);
-		ofPopStyle();
 	}
 
 	// Debug bench measuring drawing performance

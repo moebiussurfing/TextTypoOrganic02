@@ -101,7 +101,7 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	// Background
-	//ofxDrawBgGradient();//70,10
+	//ofxDrawBgGradient();//70,10∫
 	//ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
 	//ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
 	//ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
