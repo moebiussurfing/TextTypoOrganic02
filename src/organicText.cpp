@@ -1402,7 +1402,10 @@ void OrganicText::drawHelp() const {
 	lines.push_back("Anim     " + animationModeName.get());
 	if (bKeys) {
 		lines.push_back("");
+		lines.push_back("------------------------");
+		lines.push_back("");
 		lines.push_back("KEYS");
+		lines.push_back("");
 		lines.push_back("D        Debug");
 		lines.push_back("H        Help");
 		lines.push_back("< >      Zoom");
