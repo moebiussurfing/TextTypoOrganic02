@@ -313,6 +313,7 @@ private:
 
 	//--
 
+	//TODO: Create separated tween/scene class file
 	// Writing Tweening
 	// outPoint: limites the end (to the right) of the text that is being drawn.
 	// inPoint: limites the starting (from left) of the text that is being drawn.
@@ -335,12 +336,12 @@ public:
 		outPoint.set(0.0f);
 		tweenOutPoint.start();
 	}
-	//void writeFull() {
-	//	ofLogNotice("OrganicText") << "writeFull()";
-	//	// Full range visible left to right
-	//	inPoint.set(0.0f);
-	//	outPoint.set(1.0f);
-	//}
+	void writeFull() {
+		ofLogNotice("OrganicText") << "writeFull()";
+		// Full range visible left to right
+		inPoint.set(0.0f);
+		outPoint.set(1.0f);
+	}
 
 	bool isTweening() {
 		bool b = tweenOutPoint.isRunning() || tweenInPoint.isRunning();

@@ -128,6 +128,7 @@ void OrganicText::setupTweens() {
 	paramsTweens.add(tweenInPoint.getParameters());
 	paramsTweens.add(tweenOutPoint.getParameters());
 
+	//TODO: Center/Width control In/Out for special fx drawing
 	// // Center/Width control In/Out
 	// e_centerPoint = centerPoint.newListener([this](float & v) {
 	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
@@ -137,6 +138,9 @@ void OrganicText::setupTweens() {
 	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
 	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
 	// });
+
+	// Fix in out draw range that is save to settings too..
+	writeFull();
 }
 
 //--
