@@ -2,48 +2,29 @@
 
 	TODO
 
-	- smooth transients ?
-		- smooth points only ?
-		- debug: draw smooth points & shapes 
-	- mouse interact/dist ?
-			radius distort. debug affected points
-
+	- Improve draw glitchs. calculate pointsAnimatedCache on update instead of draw,
+		that is sensible to draw order, tween drawing etc
 	- player next presets timed
 	- fix switch windoResise glitch. call update
-	- fix tweak ranges
-		- tweak shape size param range
-		check not normalized 0-1 all params ?. anim speed, mix
 	- color modes mix/speed. adjust. add spread param
-	- zoom lines ratio ?
-		related to fullscreen/screen size? ofCamera ? fbo overscaled?
-
+	- zoom lines ratio ? related to fullscreen/screen size? ofCamera ? fbo overscaled?
 	- Deployment: add define remove preset addon
 		hardcode json files to one .h file. replace workflow
-
+	- separate write tweening methods to new class files
+		static pointers? Forward declaration?
+	- make parent class ofApp -> OrganicTextType
 	- ofxSurfingPresetsLiteOfxGui
 		copy presets (button) to next or other
 			slider target index. button To and From
 			but copy to mem + move without load + save
 		set kit path dialog
 		add 9-0 key coommands
-
-	- separate write tweenign methods to new class
-		static pointers? Forward declaration?
-
-	- make parent class ofApp -> OrganicTextType
  
  */
 
 #pragma once
 
 #include "ofMain.h"
-
-//#define OFWORKS_DEMO_APP_DEPLOY // uncomment for the deployment release version
-
-//---
-
-// Window title
-const std::string SURFING_APP_TITLE = "DEMO - ofWorks";
 
 //---
 

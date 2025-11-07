@@ -419,6 +419,10 @@ void OrganicText::setupParams() {
 void OrganicText::setupCallbacks() {
 	ofLogNotice("OrganicText") << "setupCallbacks()";
 
+	// Settings listeners
+	e_vLoadSettigs = vLoadSettigs.newListener([this](void) { loadSettings(); });
+	e_vSaveSettigs = vSaveSettigs.newListener([this](void) { saveSettings(); });
+
 	// Font listeners
 	e_FontPath = fontPath.newListener([this](std::string & s) { loadFont(); });
 	e_vFontSize = fontSize.newListener([this](float & f) { loadFont(); });
@@ -428,10 +432,6 @@ void OrganicText::setupCallbacks() {
 	// Density listeners
 	e_DensitySpacing = densitySpacing.newListener([this](float & v) { refreshPointsString(); });
 	e_sText = sText.newListener([this](std::string & s) { refreshPointsString(); });
-
-	// Settings listeners
-	e_vLoadSettigs = vLoadSettigs.newListener([this](void) { loadSettings(); });
-	e_vSaveSettigs = vSaveSettigs.newListener([this](void) { saveSettings(); });
 
 	// Mode name listeners
 	shapeType.addListener(this, &OrganicText::updateShapeTypeName);
@@ -474,7 +474,7 @@ void OrganicText::setupGui() {
 	refreshGuiPanel(gui);
 #endif
 
-	// collapse folders
+	// Collapse gui folders
 	refreshGuiSession();
 }
 
@@ -499,10 +499,6 @@ void OrganicText::refreshGuiSession() {
 	auto & gt2 = gt.getGroup(tweenOutPoint.params_.getName());
 	gt1.minimize();
 	gt2.minimize();
-
-	// // Mouse Tweaks
-	// auto & gm = gui.getGroup(paramsMouseTweaks.getName());
-	// gm.minimize();
 }
 
 //--------------------------------------------------------------
@@ -527,6 +523,8 @@ void OrganicText::refreshWindowResized() {
 		zoomGlobal = ofMap(ofGetWidth(), 1200, ww, 0.f, 1.0f, false);
 	}
 }
+
+//--
 
 //--------------------------------------------------------------
 void OrganicText::flagRefreshFont() {
@@ -1105,7 +1103,9 @@ void OrganicText::drawConnections() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawTrails() {
-	if(this->isTweening()) return; //skip drawing trails while tweening in/out
+#ifdef FIX_ORGANIC_TEXT_TWEEN_TRAILS_PROBLEMS
+	if(this->isTweening()) return; // Skip drawing trails while tweening in/out
+#endif
 
 	ofPushStyle();
 	ofSetLineWidth(trailLineWidth);
@@ -1477,6 +1477,8 @@ void OrganicText::drawHelp() const {
 	ofPopMatrix();
 }
 
+//--
+
 //--------------------------------------------------------------
 void OrganicText::saveSettings() {
 	ofLogNotice("OrganicText") << "saveSettings()";
@@ -1550,17 +1552,6 @@ void OrganicText::refreshGuiGroup(ofxGuiGroup & g) {
 	g.minimizeAll();
 }
 
-//--------------------------------------------------------------
-void OrganicText::exit() {
-	ofLogNotice("OrganicText") << "exit()";
-
-	// Save tween settings
-	tweenInPoint.exit();
-	tweenOutPoint.exit();
-
-	if (bAutosave) saveSettings();
-}
-
 //--
 
 //--------------------------------------------------------------
@@ -1626,4 +1617,17 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	else if (key == OF_KEY_BACKSPACE) {
 		organicTextResetsRandoms::resetAll(this);
 	}
+}
+
+//--
+
+//--------------------------------------------------------------
+void OrganicText::exit() {
+	ofLogNotice("OrganicText") << "exit()";
+
+	// Save tween settings
+	tweenInPoint.exit();
+	tweenOutPoint.exit();
+
+	if (bAutosave) saveSettings();
 }

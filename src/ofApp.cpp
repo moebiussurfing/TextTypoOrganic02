@@ -83,7 +83,7 @@ void ofApp::update() {
 		}
 		s = "\t\t" + s1 + "\t\t" + s2;
 	}
-	string wt = ofToString(SURFING_APP_TITLE) + s;
+	string wt = ofToString(OFWORKS_DEMO_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
 }
 
