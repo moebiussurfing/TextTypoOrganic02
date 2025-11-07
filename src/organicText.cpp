@@ -439,6 +439,8 @@ void OrganicText::setupCallbacks() {
 	animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
+	
+	e_bAutoZoomGlobal = bAutoZoomGlobal.newListener([this](bool & v) { refreshWindowResized(); });
 
 	//--
 

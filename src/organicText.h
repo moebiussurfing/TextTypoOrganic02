@@ -198,8 +198,9 @@ private:
 	ofEventListener e_vLoadSettigs, e_vSaveSettigs;
 	ofEventListener e_trailLength;
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
+	ofEventListener e_bAutoZoomGlobal;
 
-	// Functions
+// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
 	void drawShapes();
