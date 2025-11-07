@@ -1,5 +1,10 @@
 #pragma once
 
+//TODO: Comment to use internal params handling (instead of using an external preset manager)
+#define SURFING_USE_EXTERNAL_PRESET_MANAGER
+
+//--
+
 #include "ofMain.h"
 
 #include "ofxTweenLiteHelper.h"
@@ -17,17 +22,15 @@ constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 
 //----------------------------------------------------------------------------
 
-//TODO: Comment to use internal preset params handling (instead of using an external preset manager)
-#define SURFING_USE_EXTERNAL_PRESET_MANAGER
-
 #include "ofxGui.h"
+
 using namespace glm;
 
 // ============================================================================
 // DRAWING & ANIMATION CONSTANTS
 // ============================================================================
 
-//TODO: fix for ofWorks..when not using glm lib...
+//TODO: fix for ofWorks... when not using glm lib... ?
 #ifndef TWO_PI
 constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
 #endif
@@ -121,6 +124,8 @@ enum AnimMode {
 	ANIM_ORBIT = 4
 };
 
+//----
+
 class OrganicText {
 public:
 	OrganicText();
@@ -128,33 +133,13 @@ public:
 
 	//--
 
-	//TODO: WIP
-	// Tween controls for drawing ranges and writing animation
-public:
-	ofParameterGroup paramsTweens { "Tweens" };
-	ofParameter<float> inPoint { "In", 0, 0, 1 };
-	ofParameter<float> outPoint { "Out", 1, 0, 1 };
-
-private:
-	ofEventListener e_inPoint, e_outPoint;
-	// Two extra params for more drawing variations to experiment
-	// ofParameter<float> centerPoint{"Center",0.5,0,1};
-	// ofParameter<float> widthPoint{"Width",0.15,0,1};
-	// ofEventListener e_centerPoint,e_widthPoint;
-
-private:
-	ofxTweenLiteHelper<float> tweenInPoint;
-	ofxTweenLiteHelper<float> tweenOutPoint;
-
-	//--
-
 public:
 	//TODO: WIP: mouse interaction over shapes points
 	ofParameter<float> radiusMouse { "radiusMouse", 0.1, 0, 1 };
 	mutable glm::vec2 mousePos;
+	ofParameter<bool> bMouseTweaks;
 
 	// Mouse tweaks parameters
-	ofParameter<bool> bMouseTweaks;
 	ofParameter<bool> bMouseControlOrigin;
 	ofParameter<bool> bMouseHighlightPoints;
 	ofParameter<ofColor> colorMouseHighlight;
@@ -355,22 +340,24 @@ private:
 	void updateAnimationModeName(int &);
 
 private:
+	std::string ORGANIC_TEXT_FONT_DEFAULT;
+	ofTrueTypeFont font;
+	vec2 textCenter;
+	float textWidth;
+	float textHeight;
+
 	// Data
 	vector<vec2> pointsString;
 	vector<vector<vec2>> pointTrails;
 	mutable vector<vec2> pointsAnimatedCache; // Cache animated positions for reuse
-	ofTrueTypeFont font;
-	std::string FONT_DEFAULT;
-	vec2 textCenter;
-	float textWidth;
-	float textHeight;
+	
 	mutable vec2 mouseLocalPos;
 	mutable bool bMouseInBounds;
+
 public:
-	float t;
+	float t; // Time accumulator
 
 private:
-
 	void refreshPointsString();
 
 	//--
@@ -409,6 +396,27 @@ private:
 
 	// Bench measure time elapsed on draw() in microseconds
 	uint64_t timeDrawBenchmark = 0;
+
+	//----
+
+	//TODO: WIP
+	// Tween controls for drawing ranges and writing animation
+public:
+	ofParameterGroup paramsTweens { "Tweens" };
+	ofParameter<float> inPoint { "In", 0, 0, 1 };
+	ofParameter<float> outPoint { "Out", 1, 0, 1 };
+
+private:
+	ofEventListener e_inPoint, e_outPoint;
+	//TODO:
+	// Two extra params for more drawing variations to experiment
+	// ofParameter<float> centerPoint{"Center",0.5,0,1};
+	// ofParameter<float> widthPoint{"Width",0.15,0,1};
+	// ofEventListener e_centerPoint,e_widthPoint;
+
+private:
+	ofxTweenLiteHelper<float> tweenInPoint;
+	ofxTweenLiteHelper<float> tweenOutPoint;
 
 	//--
 

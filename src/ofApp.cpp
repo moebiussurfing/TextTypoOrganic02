@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	// Deploy
-	
+
 	#ifdef OFWORKS_DEMO_APP_DEPLOY
 	ofSetLogLevel(OF_LOG_SILENT);
 	ofSetLogLevel("SurfingPresetsLite", OF_LOG_SILENT);
@@ -21,8 +21,11 @@ void ofApp::setup() {
 	// Move window to my FHD left monitor
 	int h_ = 40;
 	ofSetWindowPosition(-1920, h_);
-	ofSetWindowShape(1600, 1600 *(9.f / 16.f));
-#endif
+	int w_ = 1800;
+	ofSetWindowShape(w_, w_ * (9.f / 16.f));
+	#endif
+	
+	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
 
 	float fps = 60.f;
 	ofSetFrameRate(fps);
@@ -34,7 +37,6 @@ void ofApp::setup() {
 	bBgGradient.set("Background Gradient", false);
 	bMouseBrowsing.set("Mouse Browsing", true);
 	bTweeningMode.set("Mode Tweening", true);
-	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
 
 	//--
 
@@ -53,8 +55,8 @@ void ofApp::setup() {
 	paramsScene.setName("Scene");
 	paramsScene.add(bBgGradient);
 	paramsScene.add(bTweeningMode);
+	
 	pm.gui.add(paramsScene);
-
 	pm.gui.add(vResetWindow);
 
 	ot.refreshGuiPanel(pm.guiParams);
@@ -65,32 +67,8 @@ void ofApp::setup() {
 }
 
 //--------------------------------------------------------------
-void ofApp::setupTweensCallbacks() {
-	ofLogNotice("ofApp") << "setupTweensCallbacks()";
-
-	// Setup tween callbacks to be called when completed
-	// Custom workflow for combine with/as preset transitions
-
-	// writeIn tween completed
-	// Empty space: not drawing nothing on complete
-	// In=1, Out=1
-	ot.setOnCompleteWriteIn([this]() {
-		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
-		if (browseDirection == BROWSE_NEXT)
-			pm.doLoadNext(); // Load next preset
-		else
-			pm.doLoadPrevious(); // Load previous preset
-		ot.writeOut(); // Animate draw tween
-	});
-
-	// writeOut tween completed
-	ot.setOnCompleteWriteOut([this]() {
-		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
-	});
-}
-
-//--------------------------------------------------------------
 void ofApp::update() {
+	// Performance
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
 
@@ -113,14 +91,9 @@ void ofApp::update() {
 void ofApp::draw() {
 	// Background
 	if (bBgGradient){
-		// ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
-		ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR);//center too black
-		// ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
-		// ofxDrawBgGradient();//70,10∫
-		// ofxDrawBgGradient(70, 10, OF_GRADIENT_CIRCULAR);
-		// ofxDrawBgGradient(10, 70, OF_GRADIENT_CIRCULAR);
-		// ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR);//++
-		// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); //+++
+		ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR); // center too black
+		// ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR); // +
+		// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); // +
 	} else {
 		ofClear(20);
 	}
@@ -150,7 +123,8 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	//--
 
-	// User workflow: window and edit/advanced mode
+	// User workflow: window shape and edit/advanced mode
+
 	if (k == 'w') {
 		resetWindowCustom();
 		if (pm.bGui) pm.bGui = false;
@@ -169,6 +143,30 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (k == 'e') {
 		resetWindowFullScreen();
 		if (!pm.bGui) pm.bGui = true;
+		return;
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button) {
+	ofLogNotice("ofApp") << "mousePressed(): " << x << "," << y << " " << button;
+
+	// Get browse direction from mouse click x position
+	// (left/reight half = previous/next)
+	if (bMouseBrowsing) {
+		if (ot.isTweening()) return; // Skip mouse clicks until running tweening ends.
+		if (x < ofGetWidth() / 2) {
+			if (button == 0)
+				browseDirection = BROWSE_PREVIOUS;
+			else
+				browseDirection = BROWSE_NEXT;
+		} else {
+			if (button == 2)
+				browseDirection = BROWSE_PREVIOUS;
+			else
+				browseDirection = BROWSE_NEXT;
+		}
+		nextScene();
 		return;
 	}
 }
@@ -200,36 +198,37 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 //--
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button) {
-	ofLogNotice("ofApp") << "mousePressed(): " << x << "," << y << " " << button;
-
-	// Get browse direction from mouse click x position
-	// (left/reight half = previous/next)
-	if (bMouseBrowsing) {
-		if (ot.isTweening()) return; // Skip mouse clicks until running tweening ends.
-		if (x < ofGetWidth() / 2) {
-			if (button == 0)
-				browseDirection = BROWSE_PREVIOUS;
-			else
-				browseDirection = BROWSE_NEXT;
-		} else {
-			if (button == 2)
-				browseDirection = BROWSE_PREVIOUS;
-			else
-				browseDirection = BROWSE_NEXT;
-		}
-		nextScene();
-		return;
-	}
-}
-
-//--------------------------------------------------------------
 void ofApp::exit() {
 	ofLogNotice("ofApp") << "exit()";
 	ot.exit();
 }
 
-//--
+//----
+
+//--------------------------------------------------------------
+void ofApp::setupTweensCallbacks() {
+	ofLogNotice("ofApp") << "setupTweensCallbacks()";
+
+	// Setup tween callbacks to be called when completed
+	// Custom workflow for combine with/as preset transitions
+
+	// writeIn tween completed
+	// Empty space: not drawing nothing on complete
+	// In=1, Out=1
+	ot.setOnCompleteWriteIn([this]() {
+		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
+		if (browseDirection == BROWSE_NEXT)
+			pm.doLoadNext(); // Load next preset
+		else
+			pm.doLoadPrevious(); // Load previous preset
+		ot.writeOut(); // Animate draw tween
+	});
+
+	// writeOut tween completed
+	ot.setOnCompleteWriteOut([this]() {
+		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
+	});
+}
 
 //--------------------------------------------------------------
 void ofApp::nextScene() {

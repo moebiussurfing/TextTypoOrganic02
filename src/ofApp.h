@@ -73,22 +73,24 @@ public:
 	void resetWindowFullScreen();
 	bool bWindowFullScreen = false;
 
+	// Performance
 	float fps;
 	float frameTime;
 
 	//--
 
 	// Interaction
+	
+	ofParameterGroup paramsScene;
 	ofParameter<bool> bBgGradient;
 	ofParameter<bool> bMouseBrowsing;
 	ofParameter<bool> bTweeningMode;
+
 	enum browseDirection_ {
 		BROWSE_NEXT = 0,
 		BROWSE_PREVIOUS
 	};
 	browseDirection_ browseDirection = BROWSE_NEXT;
-
-	ofParameterGroup paramsScene;
 
 	// Scene drawing management
 	void setupTweensCallbacks();

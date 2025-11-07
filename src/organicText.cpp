@@ -41,12 +41,12 @@ void OrganicText::setup() {
 	ofLogNotice("OrganicText") << "setup()";
 
 	// Default font
-	//FONT_DEFAULT = "NotoSansMono-Regular.ttf";
+	//ORGANIC_TEXT_FONT_DEFAULT = "NotoSansMono-Regular.ttf";
 
 	// Bundled OF fonts
-	FONT_DEFAULT = OF_TTF_SANS;
-	//FONT_DEFAULT = OF_TTF_SERIF;
-	//FONT_DEFAULT = OF_TTF_MONO;
+	ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SANS;
+	//ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SERIF;
+	//ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_MONO;
 
 	setupScene();
 	setupParams();
@@ -158,12 +158,15 @@ void OrganicText::setupParams() {
 	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
 	bAutoZoomGlobal.set("Auto Zoom", true);
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
+	bMouseTweaks.set("Mouse Tweaks", true);
 
 	// Font parameters
-	fontPath.set("Font Path", FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
+	fontPath.set("Font Path", ORGANIC_TEXT_FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
 	fontSize.set("Size", 150, 50, 500);
 	letterSpacing.set("Spacing", 0, -1, 1);
 	vResetFont.set("Reset");
+
+	//--
 
 	// Density group
 	vResetDensity.set("Reset");
@@ -237,7 +240,6 @@ void OrganicText::setupParams() {
 	trailFade.set("Fade", 0.5f, 0, 1.f);
 
 	// Mouse Tweaks
-	bMouseTweaks.set("Mouse Tweaks", true);
 	bMouseControlOrigin.set("x Origin", false);
 	bMouseHighlightPoints.set("Highlight", false);
 	colorMouseHighlight.set("Color", ofColor(0, 150, 255));
@@ -246,6 +248,8 @@ void OrganicText::setupParams() {
 	mouseDisplacePower.set("D Power", 0.5, 0.0, 1.0);
 	bMouseScaleShapes.set("Scale", false);
 	mouseScalePower.set("S Power", 0.5, 0.0, 1.0);
+
+	//--
 
 	// Settings group
 	bAutosave.set("Autosave", false);
@@ -261,18 +265,15 @@ void OrganicText::setupParams() {
 
 	//--
 
-	// Organize groups
+	// Fonts groups
 	paramsFont.setName("Font");
 	paramsFont.add(fontPath);
 	paramsFont.add(fontSize);
 	paramsFont.add(letterSpacing);
 	paramsFont.add(vResetFont);
 
-	paramsDensity.setName("Density");
-	paramsDensity.add(densitySpacing);
-	paramsDensity.add(vRandomDensity);
-	paramsDensity.add(vResetDensity);
-
+	//--
+	
 	paramsShape.setName("Shape");
 	paramsShape.add(bDrawFill);
 	paramsShape.add(bShapeBack);
@@ -285,6 +286,20 @@ void OrganicText::setupParams() {
 	paramsShape.add(vRandomShape);
 	paramsShape.add(vResetShape);
 
+	paramsDensity.setName("Density");
+	paramsDensity.add(densitySpacing);
+	paramsDensity.add(vRandomDensity);
+	paramsDensity.add(vResetDensity);
+
+	paramsColors.setName("Colors");
+	paramsColors.add(color1);
+	paramsColors.add(color2);
+	paramsColors.add(color3);
+	paramsColors.add(colorConnection);
+	paramsColors.add(colorTrails);
+	paramsColors.add(vRandomGlobalColors);
+	paramsColors.add(vResetGlobalColors);
+
 	paramsColorModes.setName("Color Modes");
 	paramsColorModes.add(colorMode);
 	paramsColorModes.add(colorModeName);
@@ -296,15 +311,6 @@ void OrganicText::setupParams() {
 	paramsColorModes.add(colorAlphaRange);
 	paramsColorModes.add(vRandomColor);
 	paramsColorModes.add(vResetColor);
-
-	paramsColors.setName("Colors");
-	paramsColors.add(color1);
-	paramsColors.add(color2);
-	paramsColors.add(color3);
-	paramsColors.add(colorConnection);
-	paramsColors.add(colorTrails);
-	paramsColors.add(vRandomGlobalColors);
-	paramsColors.add(vResetGlobalColors);
 
 	paramsAnim.setName("Animation");
 	paramsAnim.add(bEnableAnimation);
@@ -337,7 +343,6 @@ void OrganicText::setupParams() {
 	paramsTrails.add(vRandomConnection);
 
 	paramsMouseTweaks.setName("Mouse Tweaks");
-	paramsMouseTweaks.add(bMouseTweaks);
 	paramsMouseTweaks.add(bMouseControlOrigin);
 	paramsMouseTweaks.add(radiusMouse);
 	paramsMouseTweaks.add(bMouseHighlightPoints);
@@ -350,20 +355,9 @@ void OrganicText::setupParams() {
 	paramsMouseTweaks.add(vResetMouseTweaks);
 	paramsMouseTweaks.add(vRandomMouseTweaks);
 
-	paramsSessionSettings.setName("Session Settings");
-	paramsSessionSettings.add(vLoadSettigs);
-	paramsSessionSettings.add(vSaveSettigs);
-	paramsSessionSettings.add(bAutosave);
-
-	paramsInternal.setName("Internal");
-	paramsInternal.add(bGui);
-	paramsInternal.add(vRandomPreset);
-	paramsInternal.add(vResetPreset);
-	paramsInternal.add(vResetAll);
-
 	//--
 
-	// Preset
+	// Presets parameters
 	// Group all relevant params for presets management
 	paramsPreset.setName("OrganicText");
 	paramsPreset.add(bDrawShapes);
@@ -384,7 +378,21 @@ void OrganicText::setupParams() {
 
 	//--
 
-	// gui
+	// Session settings
+	paramsSessionSettings.setName("Session Settings");
+	paramsSessionSettings.add(vLoadSettigs);
+	paramsSessionSettings.add(vSaveSettigs);
+	paramsSessionSettings.add(bAutosave);
+
+	paramsInternal.setName("Internal");
+	paramsInternal.add(bGui);
+	paramsInternal.add(vRandomPreset);
+	paramsInternal.add(vResetPreset);
+	paramsInternal.add(vResetAll);
+
+	//--
+
+	// Gui parameters
 	parameters.setName("OrganicText");
 	parameters.add(sText);
 	parameters.add(paramsFont);
@@ -397,17 +405,14 @@ void OrganicText::setupParams() {
 	parameters.add(bKeys);
 	parameters.add(paramsSessionSettings);
 	parameters.add(paramsInternal);
+	parameters.add(paramsTweens);
+	parameters.add(bMouseTweaks);
 
 #ifndef SURFING_USE_EXTERNAL_PRESET_MANAGER
 	// exclude these settings from settings
 	// as will be handled by presets manager externally
 	parameters.add(paramsPreset);
 #endif
-
-	//--
-
-	parameters.add(paramsTweens);
-	// parameters.add(paramsMouseTweaks);
 }
 
 //--------------------------------------------------------------
@@ -541,7 +546,7 @@ void OrganicText::loadFont() {
 	} else {
 		ofLogError("OrganicText") << "Failed to load font: " << fontPath.get();
 
-		//fontPath.set(FONT_DEFAULT);
+		//fontPath.set(ORGANIC_TEXT_FONT_DEFAULT);
 		success = font.load(fontPath.get(), fontSize.get(), false, false, true);
 		if (success) {
 			ofLogNotice("OrganicText") << "Forced font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";
@@ -733,10 +738,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 			maxDisp *= (1.0f - mouseInfluence * 2.f); // Reduce up to % near mouse
 		}
 
-		offset = vec2(
-					 ofSignedNoise(phase, 0.0f),
-					 ofSignedNoise(phase, 233.0f))
-			* maxDisp;
+		offset = vec2(ofSignedNoise(phase, 0.0f), ofSignedNoise(phase, 233.0f)) * maxDisp;
 		break;
 	}
 
@@ -1103,6 +1105,8 @@ void OrganicText::drawConnections() const {
 
 //--------------------------------------------------------------
 void OrganicText::drawTrails() {
+	if(this->isTweening()) return; //skip drawing trails while tweening in/out
+
 	ofPushStyle();
 	ofSetLineWidth(trailLineWidth);
 	float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
@@ -1382,44 +1386,46 @@ void OrganicText::drawHelp() const {
 	lines.push_back("ORGANIC");
 	lines.push_back("TEXT");
 	lines.push_back("");
-	lines.push_back("PERFORMANCE");
+	lines.push_back("--PERFORMANCE--");
 	lines.push_back("FPS      " + ofToString(fps, 0) + " (" + ofToString(targetFPS, 0) + ") " + perfStatus);
 	lines.push_back("Frame t  " + ofToString(frameTime, 0) + " ms");
 	lines.push_back("Draw()   " + ofToString(timeDrawBenchmark / 1000) + " ms");
 	lines.push_back("         " + ofToString(timeDrawBenchmark % 1000) + " mics");
 	lines.push_back("");
-	lines.push_back("GEOMETRY");
+	lines.push_back("--GEOMETRY--");
 	lines.push_back("Points   " + ofToString(totalPoints));
 	lines.push_back("Shapes   " + ofToString(bDrawShapes.get() ? totalPoints : 0));
 	lines.push_back("Connects " + ofToString(bDrawConnections.get() ? activeConnections : 0));
 	lines.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
 	lines.push_back("");
-	lines.push_back("CONFIG");
+	lines.push_back("--CONFIG--");
 	lines.push_back("FSpacing " + ofToString(finalSpacing, 2));
-	lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "ON" : "OFF"));
+	lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "On" : "Off"));
+	lines.push_back("   Mode  " + animationModeName.get());
 	lines.push_back("Shape    " + shapeTypeName.get());
 	lines.push_back("Color    " + colorModeName.get());
-	lines.push_back("Anim     " + animationModeName.get());
 	if (bKeys) {
 		lines.push_back("");
 		lines.push_back("------------------------");
 		lines.push_back("");
-		lines.push_back("KEYS");
+		lines.push_back("--KEYS--");
 		lines.push_back("");
 		lines.push_back("D        Debug");
 		lines.push_back("H        Help");
 		lines.push_back("< >      Zoom");
-		lines.push_back("+/-      Density");
-		lines.push_back("UP/DOWN  Speed");
+		lines.push_back("- +      Density");
+		lines.push_back("Up Down  Speed");
 		lines.push_back("");
-		lines.push_back("A        Anim Modes");
-		lines.push_back("C        Color Modes");
+		lines.push_back("MODES");
+		lines.push_back("A        Animation");
+		lines.push_back("a          " + std::string(!bEnableAnimation.get() ? "On" : "Off"));
+		lines.push_back("C        Color");
 		lines.push_back("");
+		lines.push_back("DRAW");
 		lines.push_back("S        Shapes");
-		lines.push_back("F        Shapes Fill");
+		lines.push_back("F          Fill");
 		lines.push_back("C        Connections");
 		lines.push_back("T        Trails");
-		lines.push_back("a        Animate");
 		lines.push_back("");
 		lines.push_back("BACKSP   Reset all");
 	}
