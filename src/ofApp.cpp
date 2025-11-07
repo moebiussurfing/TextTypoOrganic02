@@ -55,6 +55,7 @@ void ofApp::setup() {
 	paramsScene.setName("Scene");
 	paramsScene.add(bBgGradient);
 	paramsScene.add(bTweeningMode);
+	paramsScene.add(bMouseBrowsing);
 	
 	pm.gui.add(paramsScene);
 	pm.gui.add(vResetWindow);

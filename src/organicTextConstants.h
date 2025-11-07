@@ -40,7 +40,7 @@ constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
 // DRAWING & ANIMATION CONSTANTS
 //----------------------------------------------------------------------------
 
-constexpr float ZOOM_GLOBAL_MAX = 4.f;
+constexpr float ZOOM_GLOBAL_MAX = 1.1f; // QHD 2K calibrated
 
 // Density Constants
 constexpr float DENSITY_SPACING_MIN = 1.5f;
