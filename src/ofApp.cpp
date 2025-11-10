@@ -65,6 +65,8 @@ void ofApp::setup() {
 	//--
 
 	setupTweensCallbacks();
+
+	// organicTextPreset05::applyPreset05(ot);
 }
 
 //--------------------------------------------------------------
