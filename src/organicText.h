@@ -1,6 +1,6 @@
 #pragma once
 
-//TODO: Comment to use internal params handling (instead of using an external preset manager)
+//TODO: WIP: Comment to use internal params handling (instead of using an external preset manager)
 #define SURFING_USE_EXTERNAL_PRESET_MANAGER
 
 //--
@@ -27,7 +27,7 @@ public:
 
 public:
 	//TODO: WIP: mouse interaction over shapes points
-	ofParameter<float> radiusMouse { "radiusMouse", 0.1, 0, 1 };
+	ofParameter<float> radiusMouse { "radiusMouse", 0.1f, 0, 1 };
 	mutable glm::vec2 mousePos;
 	ofParameter<bool> bMouseTweaks;
 
@@ -313,8 +313,8 @@ private:
 
 	//--
 
-	//TODO: Create separated tween/scene class file
 	// Writing Tweening
+	//TODO: Create separated tween/scene class file
 	// outPoint: limites the end (to the right) of the text that is being drawn.
 	// inPoint: limites the starting (from left) of the text that is being drawn.
 	// To draw the full text complete (from left to right):

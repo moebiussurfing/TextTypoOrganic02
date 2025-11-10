@@ -7,7 +7,7 @@
 // Separated for better code organization and maintainability
 // ============================================================================
 
-// #define FIX_ORGANIC_TEXT_TWEEN_TRAILS_PROBLEMS // problems when tweeing between presets..
+#define FIX_ORGANIC_TEXT_TWEEN_TRAILS_PROBLEMS // Draw weird glitches/problems when tweeing between presets..
 
 //----------------------------------------------------------------------------
 // OFAPP CONSTANTS
@@ -27,14 +27,14 @@ constexpr int OFWORKS_DEMO_APP_HEIGHT = 550;
 // Default text
 constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 
-//----------------------------------------------------------------------------
-// MATH CONSTANTS
-//----------------------------------------------------------------------------
-
-//TODO: fix for ofWorks... when not using glm lib... ?
-#ifndef TWO_PI
-constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
-#endif
+////----------------------------------------------------------------------------
+//// MATH CONSTANTS
+////----------------------------------------------------------------------------
+//
+////TODO: fix for ofWorks... when not using ofVec lib... ?
+//#ifndef TWO_PI
+//constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
+//#endif
 
 //----------------------------------------------------------------------------
 // DRAWING & ANIMATION CONSTANTS

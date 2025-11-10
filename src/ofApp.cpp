@@ -2,36 +2,41 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	// Deploy
 
-	#ifdef OFWORKS_DEMO_APP_DEPLOY
+	// Deployment app version
+#ifdef OFWORKS_DEMO_APP_DEPLOY
 	ofSetLogLevel(OF_LOG_SILENT);
 	ofSetLogLevel("SurfingPresetsLite", OF_LOG_SILENT);
-	#endif
-	
+#endif
+
 	ofLogNotice("ofApp") << "setup()";
 
 	//--
 
 	// Window
 
-#if 0
-	resetWindowCustom();
-#else
-	// Move window to my FHD left monitor
-	int h_ = 40;
-	ofSetWindowPosition(-1920, h_);
-	int w_ = 1800;
-	ofSetWindowShape(w_, w_ * (9.f / 16.f));
-	#endif
-	
+	//#if 0
+	//	resetWindowCustom();
+	//#else
+	//	// Move window to my FHD left monitor
+	//	int h_ = 40;
+	//	ofSetWindowPosition(-1920, h_);
+	//	int w_ = 1800;
+	//	ofSetWindowShape(w_, w_ * (9.f / 16.f));
+	//#endif
 	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
+
+	centerWindow();
+
+	//--
+
+	// Frame rate
 
 	float fps = 60.f;
 	ofSetFrameRate(fps);
 
 	//--
-	
+
 	// Parameters
 
 	bBgGradient.set("Background Gradient", false);
@@ -56,8 +61,8 @@ void ofApp::setup() {
 	paramsScene.add(bBgGradient);
 	paramsScene.add(bTweeningMode);
 	paramsScene.add(bMouseBrowsing);
-	
 	pm.gui.add(paramsScene);
+
 	pm.gui.add(vResetWindow);
 
 	ot.refreshGuiPanel(pm.guiParams);
@@ -65,8 +70,6 @@ void ofApp::setup() {
 	//--
 
 	setupTweensCallbacks();
-
-	// organicTextPreset05::applyPreset05(ot);
 }
 
 //--------------------------------------------------------------
@@ -79,12 +82,15 @@ void ofApp::update() {
 	std::string s = "";
 	std::string s1 = "";
 	static std::string s2 = "";
+	std::string s3 = "";
+	// Debug info
 	if (ot.bDebug) {
 		s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 		if (pm.isChangedIndex()) {
 			s2 = "PRESET " + ofToString(pm.getPresetIndex());
 		}
-		s = "\t\t" + s1 + "\t\t" + s2;
+		s3 = ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight());
+		s = "     " + s1 + "     " + s3 + "     " + s2;
 	}
 	string wt = ofToString(OFWORKS_DEMO_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
@@ -93,12 +99,10 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	// Background
-	if (bBgGradient){
-		ofxDrawBgGradient(0, 40, OF_GRADIENT_CIRCULAR); // center too black
-		// ofxDrawBgGradient(40, 10, OF_GRADIENT_CIRCULAR); // +
-		// ofxDrawBgGradient(40, 0, OF_GRADIENT_CIRCULAR); // +
+	if (bBgGradient) {
+		ofxDrawBgGradient();
 	} else {
-		ofClear(20);
+		ofClear(20, 255);
 	}
 
 	// Organic Text
@@ -128,12 +132,12 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	// User workflow: window shape and edit/advanced mode
 
-	if (k == 'w') {
+	if (k == 'w') { // Custom window shape
 		resetWindowCustom();
 		if (pm.bGui) pm.bGui = false;
 		return;
 	}
-	if (k == OF_KEY_SPACE) {
+	if (k == OF_KEY_SPACE) { // Toggle full screen
 		bWindowFullScreen = !bWindowFullScreen;
 		if (pm.bGui) pm.bGui = false;
 		if (bWindowFullScreen) {
@@ -143,9 +147,13 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		}
 		return;
 	}
-	if (k == 'e') {
+	if (k == 'e') { // Full screen
 		resetWindowFullScreen();
 		if (!pm.bGui) pm.bGui = true;
+		return;
+	}
+	if (k == 'c') { // Center window
+		centerWindow();
 		return;
 	}
 }
@@ -177,17 +185,27 @@ void ofApp::mousePressed(int x, int y, int button) {
 //--
 
 //--------------------------------------------------------------
+void ofApp::centerWindow() {
+	ofLogNotice("ofApp") << "centerWindow()";
+
+	int w = ofGetWindowWidth();
+	int h = ofGetWindowHeight();
+	ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
+}
+
+//--------------------------------------------------------------
 void ofApp::resetWindowCustom() { // Set window size and centered
 	ofLogNotice("ofApp") << "resetWindowCustom()";
 
-	const int w = OFWORKS_DEMO_APP_WIDTH; // from organicText.h
+	// From organicText.h
+	const int w = OFWORKS_DEMO_APP_WIDTH;
 	const int h = OFWORKS_DEMO_APP_HEIGHT;
 
 	// BUG: For Windows: 2 steps: do twice to fix bug multi monitor un centered well
-	for (int i = 0; i < 2; i++) {
-		ofSetWindowShape(w, h);
-		ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
-	}
+	//	for (int i = 0; i < 2; i++) {
+	ofSetWindowShape(w, h);
+	ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
+	//	}
 }
 
 //--------------------------------------------------------------
@@ -203,6 +221,7 @@ void ofApp::resetWindowFullScreen() { // Set window full screen
 //--------------------------------------------------------------
 void ofApp::exit() {
 	ofLogNotice("ofApp") << "exit()";
+
 	ot.exit();
 }
 
@@ -236,6 +255,7 @@ void ofApp::setupTweensCallbacks() {
 //--------------------------------------------------------------
 void ofApp::nextScene() {
 	ofLogNotice("ofApp") << "nextScene()";
+
 	if (bTweeningMode)
 		ot.writeIn();
 	else {

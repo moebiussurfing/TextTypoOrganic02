@@ -102,15 +102,15 @@ void OrganicText::setupScene() {
 //--------------------------------------------------------------
 void OrganicText::setupTweens() {
 	ofLogNotice("OrganicText") << "setupTweensCallbacks()";
-
+	
+	// Disable internal JSON settings handling to avoid conflicts
+	tweenInPoint.setDisableInternalJsonSettings(true);
+	tweenOutPoint.setDisableInternalJsonSettings(true);
+	
 	// Tween drawing controls - will be populated in setupTweens()
 	paramsTweens.setName("Tweens Drawing");
 	paramsTweens.add(inPoint);
 	paramsTweens.add(outPoint);
-
-	// Two extra params for more drawing variations to experiment
-	// paramsTweens.add(centerPoint);
-	// paramsTweens.add(widthPoint);
 
 	tweenInPoint.setup(inPoint);
 	// Internal callback (always runs for system state)
@@ -123,12 +123,19 @@ void OrganicText::setupTweens() {
 	tweenOutPoint.onCompleteCallback([this]() {
 		ofLogNotice("OrganicText") << "tweenOutPoint completed";
 	});
+	
+	// Set default ease modes
+	tweenInPoint.setEase(OF_EASE_CUBIC_INOUT);
+	tweenOutPoint.setEase(OF_EASE_CUBIC_INOUT);
 
 	// Add tween parameters to paramsTweens group
 	paramsTweens.add(tweenInPoint.getParameters());
 	paramsTweens.add(tweenOutPoint.getParameters());
 
-	//TODO: Center/Width control In/Out for special fx drawing
+	//TODO: Center/Width control In/Out for special fx gradual left-to-right drawing
+	// //Two extra params for more drawing variations to experiment
+	// paramsTweens.add(centerPoint);
+	// paramsTweens.add(widthPoint);
 	// // Center/Width control In/Out
 	// e_centerPoint = centerPoint.newListener([this](float & v) {
 	// 	inPoint = ofClamp(centerPoint - widthPoint, 0.0f, 1.0f);
@@ -139,7 +146,7 @@ void OrganicText::setupTweens() {
 	// 	outPoint = ofClamp(centerPoint + widthPoint, 0.0f, 1.0f);
 	// });
 
-	// Fix in out draw range that is save to settings too..
+	// Fix start resseted in out draw range that could be saved unfinished (in settings)
 	writeFull();
 }
 
