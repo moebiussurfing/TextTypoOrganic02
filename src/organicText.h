@@ -7,8 +7,8 @@
 
 #include "ofMain.h"
 
-#include "ofxTweenLiteHelper.h"
-#include "organicTextConstants.h"
+#include "ofxTweenLiteHelper.h" // Tweener
+#include "organicTextConstants.h" // Constants
 
 //----------------------------------------------------------------------------
 
@@ -22,24 +22,6 @@ class OrganicText {
 public:
 	OrganicText();
 	~OrganicText();
-
-	//--
-
-public:
-	//TODO: WIP: mouse interaction over shapes points
-	ofParameter<float> radiusMouse { "radiusMouse", 0.1f, 0, 1 };
-	mutable glm::vec2 mousePos;
-	ofParameter<bool> bMouseTweaks;
-
-	// Mouse tweaks parameters
-	ofParameter<bool> bMouseControlOrigin;
-	ofParameter<bool> bMouseHighlightPoints;
-	ofParameter<ofColor> colorMouseHighlight;
-	ofParameter<float> mouseInfluenceStrength;
-	ofParameter<bool> bMouseDisplacePoints;
-	ofParameter<float> mouseDisplacePower;
-	ofParameter<bool> bMouseScaleShapes;
-	ofParameter<float> mouseScalePower;
 
 	//--
 
@@ -171,6 +153,20 @@ public:
 	ofParameter<float> trailLineWidth;
 	ofParameter<float> trailFade;
 
+	// Mouse tweaks parameters
+	ofParameter<bool> bMouseTweaks;
+	ofParameter<float> radiusMouse { "radiusMouse", 0.1f, 0, 1 };
+	ofParameter<bool> bMouseControlOrigin;
+	ofParameter<bool> bMouseHighlightPoints;
+	ofParameter<ofColor> colorMouseHighlight;
+	ofParameter<float> mouseInfluenceStrength;
+	ofParameter<bool> bMouseDisplacePoints;
+	ofParameter<float> mouseDisplacePower;
+	ofParameter<bool> bMouseScaleShapes;
+	ofParameter<float> mouseScalePower;
+
+	//--
+
 	// Global controls
 	ofParameter<void> vResetPreset;
 	ofParameter<void> vResetAll;
@@ -200,7 +196,7 @@ private:
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 	ofEventListener e_bAutoZoomGlobal;
 
-// Functions
+	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
 	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
 	void drawShapes();
@@ -214,8 +210,9 @@ private:
 	ofColor getPointColor(int index, vec2 position, float phase) const;
 	vec2 getAnimatedOffset(int index, float phase) const;
 
-	/// @brief Calculate mouse influence factor for a given position (0-1)
+	//Calculate mouse influence factor for a given position (0-1)
 	float getMouseInfluence(vec2 position) const;
+	mutable glm::vec2 mousePos;
 
 	// Font management
 	void loadFont();

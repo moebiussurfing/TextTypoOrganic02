@@ -125,34 +125,33 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::drawHelpDist() {
 	// Help Dist info
-	std::string u = "    "; // Union spacing
 	std::string s = "";
 	s += "ORGANIC";
 	s += "\n";
 	s += "TEXT";
 	s += "\n";
 	s += "\n";
-	s += "H         " + u + "Help";
+	s += "H              Help";
 	s += "\n";
 	s += "\n";
-	s += "SPACE     " + u + "Next";
+	s += "SPACE          Next";
 	s += "\n";
 	s += "\n";
-	s += "MouseClick" + u + "Previous/Next";
+	s += "MOUSE CLICK    Previous/Next";
 	s += "\n";
-	s += "   Left/Right Half Screen";
+	s += "   Left/Right  Half Screen";
 	s += "\n";
-	s += "   Left/Right Mouse Button";
-	s += "\n";
-	s += "\n";
-	s += "ENTER     " + u + "Advanced";
+	s += "   Left/Right  Mouse Button";
 	s += "\n";
 	s += "\n";
-	s += "WINDOW    ";
+	s += "ENTER          Advanced";
 	s += "\n";
-	s += "F         " + u + "Full Screen";
 	s += "\n";
-	s += "C         " + u + "Center";
+	s += "WINDOW     ";
+	s += "\n";
+	s += "F              Full Screen";
+	s += "\n";
+	s += "C              Center";
 	s += "\n";
 	ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_BOTTOM_CENTER);
 }

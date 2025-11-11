@@ -13,6 +13,7 @@
 			slider target index. button To and From
 			but copy to mem + move without load + save
 			set kit path dialog
+	- fix ratio and mouse tweaks for cross shape
  
 	- player next presets timed
 	- fix switch windoResise glitch. call update

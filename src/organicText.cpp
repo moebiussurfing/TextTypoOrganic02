@@ -1,9 +1,7 @@
 #include "organicText.h"
 
-#include <algorithm>
-#include <cmath>
-
 #include "organicTextResetsRandoms.h"
+//#include "ofxSurfingOfxGui.h" // ofxGui theme styling
 
 //--------------------------------------------------------------
 OrganicText::OrganicText() {
@@ -11,6 +9,8 @@ OrganicText::OrganicText() {
 
 	ofAddListener(ofEvents().update, this, &OrganicText::update);
 	ofAddListener(ofEvents().windowResized, this, &OrganicText::windowResized);
+
+	//ofxSurfing::setOfxGuiTheme(true); // ofxGui theme styling
 }
 
 //--------------------------------------------------------------
@@ -1177,10 +1177,11 @@ void OrganicText::drawDebug() const {
 	ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 	ofDrawCircle(textCenter, crossSize * 0.7);
 
-	// Text bounding box
 	ofSetColor(colorDebugBlink);
-	ofNoFill();
-	ofDrawRectangle(0, -textHeight, textWidth, textHeight);
+
+	//// Text bounding box
+	//ofNoFill();
+	//ofDrawRectangle(0, -textHeight, textWidth, textHeight);
 
 	// All sample points
 	ofFill();
@@ -1396,58 +1397,58 @@ void OrganicText::drawHelp() const {
 	// Map spacing (0-1 normalized)
 	float finalSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
 
-	std::vector<std::string> lines;
-	lines.push_back("ORGANIC");
-	lines.push_back("TEXT");
-	lines.push_back("");
-	lines.push_back("--PERFORMANCE--");
-	lines.push_back("FPS      " + ofToString(fps, 0) + " (" + ofToString(targetFPS, 0) + ") " + perfStatus);
-	lines.push_back("Frame t  " + ofToString(frameTime, 0) + " ms");
-	lines.push_back("Draw()   " + ofToString(timeDrawBenchmark / 1000) + " ms");
-	lines.push_back("         " + ofToString(timeDrawBenchmark % 1000) + " mics");
-	lines.push_back("");
-	lines.push_back("--GEOMETRY--");
-	lines.push_back("Points   " + ofToString(totalPoints));
-	lines.push_back("Shapes   " + ofToString(bDrawShapes.get() ? totalPoints : 0));
-	lines.push_back("Connects " + ofToString(bDrawConnections.get() ? activeConnections : 0));
-	lines.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
-	lines.push_back("");
-	lines.push_back("--CONFIG--");
-	lines.push_back("FSpacing " + ofToString(finalSpacing, 2));
-	lines.push_back("Animate  " + std::string(bEnableAnimation.get() ? "On" : "Off"));
-	lines.push_back("   Mode  " + animationModeName.get());
-	lines.push_back("Shape    " + shapeTypeName.get());
-	lines.push_back("Color    " + colorModeName.get());
+	std::vector<std::string> s;
+	s.push_back("ORGANIC");
+	s.push_back("TEXT");
+	s.push_back("");
+	s.push_back("PERFORMANCE");
+	s.push_back("FPS      " + ofToString(fps, 0) + " (" + ofToString(targetFPS, 0) + ") " + perfStatus);
+	s.push_back("Frame t  " + ofToString(frameTime, 0) + " ms");
+	s.push_back("Draw()   " + ofToString(timeDrawBenchmark / 1000) + " ms");
+	s.push_back("         " + ofToString(timeDrawBenchmark % 1000) + " mics");
+	s.push_back("");
+	s.push_back("GEOMETRY");
+	s.push_back("Points   " + ofToString(totalPoints));
+	s.push_back("Shapes   " + ofToString(bDrawShapes.get() ? totalPoints : 0));
+	s.push_back("Connects " + ofToString(bDrawConnections.get() ? activeConnections : 0));
+	s.push_back("Trails   " + ofToString(bDrawTrails.get() ? totalTrailPoints : 0));
+	s.push_back("");
+	s.push_back("CONFIG");
+	s.push_back("FSpacing " + ofToString(finalSpacing, 2));
+	s.push_back("Animate  " + std::string(bEnableAnimation.get() ? "On" : "Off"));
+	s.push_back("   Mode  " + animationModeName.get());
+	s.push_back("Shape    " + shapeTypeName.get());
+	s.push_back("Color    " + colorModeName.get());
 	if (bKeys) {
-		lines.push_back("");
-		lines.push_back("------------------------");
-		lines.push_back("");
-		lines.push_back("--KEYS--");
-		lines.push_back("");
-		lines.push_back("D        Debug");
-		lines.push_back("H        Help");
-		lines.push_back("< >      Zoom");
-		lines.push_back("- +      Density");
-		lines.push_back("Up Down  Speed");
-		lines.push_back("");
-		lines.push_back("MODES");
-		lines.push_back("A        Animation");
-		lines.push_back("a          " + std::string(!bEnableAnimation.get() ? "On" : "Off"));
-		lines.push_back("C        Color");
-		lines.push_back("");
-		lines.push_back("DRAW");
-		lines.push_back("S        Shapes");
-		lines.push_back("F          Fill");
-		lines.push_back("C        Connections");
-		lines.push_back("T        Trails");
-		lines.push_back("");
-		lines.push_back("BACKSP   Reset all");
+		s.push_back("");
+		s.push_back("------------------------");
+		s.push_back("");
+		s.push_back("KEYS");
+		s.push_back("");
+		s.push_back("D        Debug");
+		s.push_back("H        Help");
+		s.push_back("< >      Zoom");
+		s.push_back("- +      Density");
+		s.push_back("Up Down  Speed");
+		s.push_back("");
+		s.push_back("MODES");
+		s.push_back("A        Animation");
+		s.push_back("a          " + std::string(!bEnableAnimation.get() ? "On" : "Off"));
+		s.push_back("C        Color");
+		s.push_back("");
+		s.push_back("DRAW");
+		s.push_back("S        Shapes");
+		s.push_back("F          Fill");
+		s.push_back("C        Connections");
+		s.push_back("T        Trails");
+		s.push_back("");
+		s.push_back("BACKSP   Reset all");
 	}
 
 	float boxWidth = 218;
 	float lineHeight = 16;
 	float padding = 10;
-	float boxHeight = lines.size() * lineHeight + padding * 2;
+	float boxHeight = s.size() * lineHeight + padding * 2;
 
 	float boxX;
 	float boxY;
@@ -1468,13 +1469,13 @@ void OrganicText::drawHelp() const {
 	ofDrawRectRounded(boxX, boxY, boxWidth, boxHeight, 4);
 
 	// Text
-	for (size_t i = 0; i < lines.size(); i++) {
+	for (size_t i = 0; i < s.size(); i++) {
 		float textX = boxX + padding;
 		float textY = boxY + padding + (i + 1) * lineHeight - 2;
 
-		if (lines[i].find("FPS") != std::string::npos) {
+		if (s[i].find("FPS") != std::string::npos) {
 			ofSetColor(perfColor);
-		} else if (lines[i].find("Points") != std::string::npos || lines[i].find("Connects") != std::string::npos) {
+		} else if (s[i].find("Points") != std::string::npos || s[i].find("Connects") != std::string::npos) {
 			if (totalPoints > 1500 || activeConnections > 5000) {
 				ofSetColor(255, 150, 0);
 			} else {
@@ -1484,7 +1485,7 @@ void OrganicText::drawHelp() const {
 			ofSetColor(255); //white
 		}
 
-		ofDrawBitmapString(lines[i], textX, textY);
+		ofDrawBitmapString(s[i], textX, textY);
 	}
 
 	ofPopStyle();
