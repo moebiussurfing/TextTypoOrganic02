@@ -232,9 +232,9 @@ private:
 private:
 	std::string ORGANIC_TEXT_FONT_DEFAULT;
 	ofTrueTypeFont font;
-	vec2 textCenter;
-	float textWidth;
-	float textHeight;
+	vec2 textCenter {};
+	float textWidth=0;
+	float textHeight=0;
 
 	// Data
 	vector<vec2> pointsString;
@@ -242,10 +242,10 @@ private:
 	mutable vector<vec2> pointsAnimatedCache; // Cache animated positions for reuse
 	
 	mutable vec2 mouseLocalPos;
-	mutable bool bMouseInBounds;
+	mutable bool bMouseInBounds=false;
 
 public:
-	float t; // Time accumulator
+	float t=0; // Time accumulator
 
 private:
 	void refreshPointsString();
@@ -253,8 +253,8 @@ private:
 	//--
 
 	// Fps
-	float frameTime;
-	float fps;
+	float frameTime=0;
+	float fps=0;
 	float targetFPS = 120.0f;
 	bool bDebugLowFPS = false;
 
