@@ -50,13 +50,9 @@ public:
 	SurfingPresetsLiteOfxGui pm;
 
 	// Reset app window custom shape
-	ofParameter<void> vResetWindow { "Reset Window" };
-	ofEventListener e_vResetWindow;
-	void resetWindowCustom();
-	void resetWindowFullScreen();
-	bool bWindowFullScreen = false;
 	void centerWindow();
-
+	void fullScreenWindow();
+	
 	// Performance
 	float fps;
 	float frameTime;
@@ -66,7 +62,7 @@ public:
 	// Scene parameters
 	ofParameterGroup paramsScene;
 	ofParameter<bool> bBgGradient;
-	
+
 	// Interaction
 	ofParameter<bool> bTweeningMode;
 	ofParameter<bool> bMouseBrowsing;
@@ -87,4 +83,12 @@ public:
 	inline void ofxDrawBgGradient(ofColor c1 = ofColor { 10 }, ofColor c2 = ofColor { 40 }, ofGradientMode g = OF_GRADIENT_CIRCULAR) {
 		ofBackgroundGradient(c1, c2, g);
 	};
+
+	//--
+
+	// Distribution Mode
+	ofParameter<bool> bDistMode; // False: Advanced Mode. True: Distribution (User) Mode
+	ofParameter<bool> bHelpDist;
+	ofEventListener e_bDistMode;
+	void drawHelpDist();
 };

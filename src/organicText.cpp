@@ -7,7 +7,7 @@
 
 //--------------------------------------------------------------
 OrganicText::OrganicText() {
-	ofLogNotice("OrganicText") << "OrganicText()";
+	ofLogVerbose("OrganicText") << "OrganicText()";
 
 	ofAddListener(ofEvents().update, this, &OrganicText::update);
 	ofAddListener(ofEvents().windowResized, this, &OrganicText::windowResized);
@@ -15,7 +15,7 @@ OrganicText::OrganicText() {
 
 //--------------------------------------------------------------
 OrganicText::~OrganicText() {
-	ofLogNotice("OrganicText") << "~OrganicText()";
+	ofLogVerbose("OrganicText") << "~OrganicText()";
 
 	ofRemoveListener(ofEvents().update, this, &OrganicText::update);
 	ofRemoveListener(ofEvents().windowResized, this, &OrganicText::windowResized);
@@ -451,8 +451,9 @@ void OrganicText::setupCallbacks() {
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
 	
-	e_bAutoZoomGlobal = bAutoZoomGlobal.newListener([this](bool & v) { refreshWindowResized(); });
-
+	
+	
+	
 	//--
 
 	// Reset listeners

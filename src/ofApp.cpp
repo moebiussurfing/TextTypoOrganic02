@@ -15,17 +15,6 @@ void ofApp::setup() {
 
 	// Window
 
-	//#if 0
-	//	resetWindowCustom();
-	//#else
-	//	// Move window to my FHD left monitor
-	//	int h_ = 40;
-	//	ofSetWindowPosition(-1920, h_);
-	//	int w_ = 1800;
-	//	ofSetWindowShape(w_, w_ * (9.f / 16.f));
-	//#endif
-	e_vResetWindow = vResetWindow.newListener([this](void) { resetWindowCustom(); });
-
 	centerWindow();
 
 	//--
@@ -63,13 +52,28 @@ void ofApp::setup() {
 	paramsScene.add(bMouseBrowsing);
 	pm.gui.add(paramsScene);
 
-	pm.gui.add(vResetWindow);
-
 	ot.refreshGuiPanel(pm.guiParams);
 
 	//--
 
 	setupTweensCallbacks();
+
+	//--
+
+	// Dist Mode
+
+	bHelpDist.set("Help Dist", true);
+
+	// False: Advanced Mode. True: Distribution (User) Mode
+	bDistMode.set("Dist mode", true);
+	e_bDistMode = bDistMode.newListener([this](bool & v) {
+		ofLogNotice("ofApp") << "bDistMode: " << v;
+		// Workflow ui
+		if (bDistMode.get()) {
+			ot.bKeys = false;
+		} else {
+		}
+	});
 }
 
 //--------------------------------------------------------------
@@ -108,9 +112,49 @@ void ofApp::draw() {
 	// Organic Text
 	ot.draw();
 
-	// Presets Manager
-	pm.drawGui();
-	if (pm.bGui) ot.drawGui();
+	if (!bDistMode.get()) {
+		// Presets Manager
+		pm.drawGui();
+		if (pm.bGui) ot.drawGui();
+	} else {
+		// Draw Help Dist
+		if (bHelpDist) drawHelpDist();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::drawHelpDist() {
+	// Help Dist info
+	std::string u = "    "; // Union spacing
+	std::string s = "";
+	s += "ORGANIC";
+	s += "\n";
+	s += "TEXT";
+	s += "\n";
+	s += "\n";
+	s += "H         " + u + "Help";
+	s += "\n";
+	s += "\n";
+	s += "SPACE     " + u + "Next";
+	s += "\n";
+	s += "\n";
+	s += "MouseClick" + u + "Previous/Next";
+	s += "\n";
+	s += "   Left/Right Half Screen";
+	s += "\n";
+	s += "   Left/Right Mouse Button";
+	s += "\n";
+	s += "\n";
+	s += "ENTER     " + u + "Advanced";
+	s += "\n";
+	s += "\n";
+	s += "WINDOW    ";
+	s += "\n";
+	s += "F         " + u + "Full Screen";
+	s += "\n";
+	s += "C         " + u + "Center";
+	s += "\n";
+	ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_BOTTOM_CENTER);
 }
 
 //--------------------------------------------------------------
@@ -118,50 +162,51 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	const auto k = eventArgs.key;
 	ofLogNotice("ofApp") << "keyPressed(): " << char(k);
 
-	ot.keyPressed(eventArgs);
-
 	//--
 
-	// Debug mode
-	if (k == 'd') {
-		if (!ot.bKeys) ot.bDebug = !ot.bDebug;
+	// Full screen window
+	if (k == 'f' || k == 'F') {
+		fullScreenWindow();
 		return;
 	}
-
-	//--
-
-	// User workflow: window shape and edit/advanced mode
-
-	if (k == 'w') { // Custom window shape
-		resetWindowCustom();
-		if (pm.bGui) pm.bGui = false;
-		return;
-	}
-	if (k == 't') { // Toggle full screen
-		bWindowFullScreen = !bWindowFullScreen;
-		if (pm.bGui) pm.bGui = false;
-		if (bWindowFullScreen) {
-			resetWindowFullScreen();
-		} else {
-			resetWindowCustom();
-		}
-		return;
-	}
-	if (k == 'e') { // Full screen
-		resetWindowFullScreen();
-		if (!pm.bGui) pm.bGui = true;
-		return;
-	}
-	if (k == 'c') { // Center window
+	// Center window
+	if (k == 'c' || k == 'C') {
 		centerWindow();
 		return;
 	}
 
 	//--
 
-	if (k == OF_KEY_SPACE) { // Next preset
+	// Dist Mode
+	if (k == OF_KEY_RETURN) {
+		bDistMode.set(!bDistMode.get());
+		return;
+	}
+
+	// Next preset
+	if (k == OF_KEY_SPACE) {
 		nextScene();
 		return;
+	}
+
+	if (bDistMode.get()) {
+		// Help Dist
+		if (k == 'h' || k == 'H') {
+			bHelpDist.set(!bHelpDist.get());
+			return;
+		}
+	}
+
+	else {
+		ot.keyPressed(eventArgs);
+
+		//--
+
+		// Debug mode
+		if (k == 'd' || k == 'D') {
+			if (!ot.bKeys) ot.bDebug = !ot.bDebug;
+			return;
+		}
 	}
 }
 
@@ -201,35 +246,11 @@ void ofApp::centerWindow() {
 }
 
 //--------------------------------------------------------------
-void ofApp::resetWindowCustom() { // Set window size and centered
-	ofLogNotice("ofApp") << "resetWindowCustom()";
-
-	// From organicText.h
-	const int w = OFWORKS_DEMO_APP_WIDTH;
-	const int h = OFWORKS_DEMO_APP_HEIGHT;
-
-	// BUG: For Windows: 2 steps: do twice to fix bug multi monitor un centered well
-	//	for (int i = 0; i < 2; i++) {
-	ofSetWindowShape(w, h);
-	ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
-	//	}
-}
-
-//--------------------------------------------------------------
-void ofApp::resetWindowFullScreen() { // Set window full screen
+void ofApp::fullScreenWindow() { // Set window full screen
 	ofLogNotice("ofApp") << "resetWindowFullScreen()";
 
 	ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
 	ofSetWindowPosition(0, 0);
-}
-
-//--
-
-//--------------------------------------------------------------
-void ofApp::exit() {
-	ofLogNotice("ofApp") << "exit()";
-
-	ot.exit();
 }
 
 //----
@@ -243,7 +264,7 @@ void ofApp::setupTweensCallbacks() {
 
 	// writeIn tween completed
 	// Empty space: not drawing nothing on complete
-	// In=1, Out=1
+	// In = 1, Out = 1
 	ot.setOnCompleteWriteIn([this]() {
 		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
 		if (browseDirection == BROWSE_NEXT)
@@ -273,4 +294,13 @@ void ofApp::nextScene(browseDirection_ bd) {
 			pm.doLoadPrevious();
 		}
 	}
+}
+
+//--
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+	ofLogNotice("ofApp") << "exit()";
+
+	ot.exit();
 }
