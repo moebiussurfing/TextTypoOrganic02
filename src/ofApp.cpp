@@ -137,7 +137,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		if (pm.bGui) pm.bGui = false;
 		return;
 	}
-	if (k == OF_KEY_SPACE) { // Toggle full screen
+	if (k == 't') { // Toggle full screen
 		bWindowFullScreen = !bWindowFullScreen;
 		if (pm.bGui) pm.bGui = false;
 		if (bWindowFullScreen) {
@@ -154,6 +154,13 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 	if (k == 'c') { // Center window
 		centerWindow();
+		return;
+	}
+
+	//--
+
+	if (k == OF_KEY_SPACE) { // Next preset
+		nextScene();
 		return;
 	}
 }
@@ -177,7 +184,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 			else
 				browseDirection = BROWSE_NEXT;
 		}
-		nextScene();
+		nextScene(browseDirection);
 		return;
 	}
 }
@@ -253,9 +260,10 @@ void ofApp::setupTweensCallbacks() {
 }
 
 //--------------------------------------------------------------
-void ofApp::nextScene() {
-	ofLogNotice("ofApp") << "nextScene()";
+void ofApp::nextScene(browseDirection_ bd) {
+	ofLogNotice("ofApp") << "nextScene() browseDirection:" << bd;
 
+	browseDirection = bd;
 	if (bTweeningMode)
 		ot.writeIn();
 	else {

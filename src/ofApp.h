@@ -1,13 +1,18 @@
 /*
 	TODO
 
-	- Improve draw glitchs. calculate pointsAnimatedCache on update instead of draw,
+	- deployment define
+	- fix update anims when not drawing shapes!
+	- Improve draw glitchs.
+		calculate pointsAnimatedCache on update() instead of draw(),
 		that is sensible to draw order, tween drawing etc
-	 - ofxSurfingPresetsLiteOfxGui
-	 copy presets (button) to next or other
-	 slider target index. button To and From
-	 but copy to mem + move without load + save
-	 set kit path dialog
+	- ofxSurfingPresetsLite
+		fix empty/first startup
+		fix path_kit single place store and persistence
+		copy presets (button) to next or other
+			slider target index. button To and From
+			but copy to mem + move without load + save
+			set kit path dialog
  
 	- player next presets timed
 	- fix switch windoResise glitch. call update
@@ -65,6 +70,7 @@ public:
 	// Interaction
 	ofParameter<bool> bTweeningMode;
 	ofParameter<bool> bMouseBrowsing;
+	// Direction enum/flag
 	enum browseDirection_ {
 		BROWSE_NEXT = 0,
 		BROWSE_PREVIOUS
@@ -73,7 +79,7 @@ public:
 
 	// Scene drawing management
 	void setupTweensCallbacks();
-	void nextScene();
+	void nextScene(browseDirection_ bd = BROWSE_NEXT);
 
 	//--
 
