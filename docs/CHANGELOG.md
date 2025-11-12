@@ -1,17 +1,11 @@
 # CHANGELOG.md
 
-## v0.3 - Current Development Phase [ ]
-
-- Hardcode presets JSON pre generated settings
-- Mouse interaction
-- Smooth drawing and browsing
-- Help app for Deployment version
-
----
-
 ## Major Milestones
 
-## Key Achievements
+### v0.3
+- [x] **Mouse interaction**
+- [x] **Smooth tweened** in/out drawing and browsing presets
+- [x] Help app for **Deployment version**
 - [x] **Presets Management** can be disabled for Deployment
 - [x] **Advanced Animation System** with 5 modes (Noise, Wave, Spiral, Pulse, Orbit)
 - [x] **Flexible Color System** with global colors and mixing modes
@@ -21,9 +15,7 @@
 - [x] **Settings Persistence** with auto-save/load functionality
 - [x] **Debug Visualization** for technical insights
 
-### v0.2 - Current Implementation [x]
-
-**Major Features Added:**
+### v0.2 **Major Features Added:**
 - Enhanced preset system (Using ofxSurfingPresetsLite)
 - GUI parameter refinement
 - Animation modes refinement
@@ -31,9 +23,7 @@
 - Zoom functionality
 - Debug mode
 
-### v0.1 - Initial Implementation [x]
-
-**Foundation:**
+### v0.1 - Initial Implementation **Foundation:**
 - Basic text-to-points sampling
 - Shape rendering system
 - Initial GUI setup

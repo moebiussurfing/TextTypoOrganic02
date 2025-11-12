@@ -20,7 +20,7 @@ TextTypoOrganic02/
 │   │       ├── CPP-CONCEPTS.md
 │   │       └── SHADER-CONVERSION-STRATEGY.md
 │   ├── User/
-│   │   └── QUICK-START.md
+│   │   └── Quick-Start.md
 │   └── CHANGELOG.md
 ├── src/
 │   ├── main.cpp
@@ -28,9 +28,9 @@ TextTypoOrganic02/
 │   ├── ofApp.h
 │   ├── organicText.cpp
 │   ├── organicText.h
+│   ├── organicTextConstants.h
 │   ├── organicTextResetsRandoms.cpp
-│   ├── organicTextResetsRandoms.h
-│   └── surfingSmooth.h
+│   └── organicTextResetsRandoms.h
 ├── AI-AGENTS-GUIDE.md
 ├── Capture-v0.1.PNG
 ├── FILE-STRUCTURE.md
@@ -41,7 +41,7 @@ TextTypoOrganic02/
 
 ---
 
-## Addons Detected (from addons.make)
+## Used Addons (from addons.make)
 
 - `ofxGui`
 - `ofxSurfingHelpersLite`
@@ -50,6 +50,6 @@ TextTypoOrganic02/
 
 ### OpenFrameworks Paths
 
-- OF addons path (relative to project root): `../../addons`
 - OF root path (relative to project root): `../../../`
 
+- OF addons path (relative to project root): `../../addons/`

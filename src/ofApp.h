@@ -16,6 +16,7 @@
 			slider target index. button To and From
 			but copy to mem + move without load + save
 			set kit path dialog
+			
 	IDEAS
 	- finish implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
 	- player next presets timed

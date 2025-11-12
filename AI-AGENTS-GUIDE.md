@@ -21,27 +21,20 @@
 
 - [**FILE-STRUCTURE**](FILE-STRUCTURE.md) - Project file map.
 - [**docs/AI-Assistant/PROJECT-CONTEXT.md**](docs/AI-Assistant/PROJECT-CONTEXT.md) - Full project overview. Read on first session or when lost.
+- [**docs/CHANGELOG.md**](docs/CHANGELOG.md) - Project history, major milestones and current project status.
 
 2. **CHECK**:
 
 - [**docs/AI-Assistant/AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices for assistants.
 - [**docs/AI-Assistant/RULES.md**](docs/AI-Assistant/RULES.md) - Automated execution rules and constraints for AI assistants.
 
-3. **REVIEW**:
-
-- [**docs/AI-Assistant/CURRENT-STATE.md**](docs/AI-Assistant/CURRENT-STATE.md) - Current priorities. Read at every session start.
-
 ## **BEFORE CODING**
 
-1. **REVIEW**:
-
-- **[docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md)** - A list of recent, completed and next planned tasks.
-
-2. **CHECK**:
+1. **CHECK**:
 
 - **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point.
 
-3. **PLAN & EXECUTE**:
+2. **PLAN & EXECUTE**:
 
 	⭐ **`START CODING: After reading TODO.md, begin implementation!`**
 	- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** The following tasks must be completed immediately. The AI Code Agent will initiate the session by reading and familiarizing itself with the project context. Subsequently, the AI Agent is required to initiate the execution of the instructions now! Go!
@@ -63,7 +56,3 @@
    - Ask developer to check if persistent problems are resolved.
    - Confirm successfully implemented features.
    - Perform deep review and summarize current project state.
-
-4. **PLAN NEXT**:
-
-   - Ask developer if update [docs/AI-Assistant/Status/CURRENT-TASKS.md](docs/AI-Assistant/Status/CURRENT-TASKS.md) doc with next priorities proposed.

@@ -7,25 +7,11 @@
 - **Current Status**: PRODUCTION READY - All core features implemented
 
 ## PROJECT STRUCTURE
-- The used openFrameworks root folder for my system is located into: `D:\OF\of_v0.12.1_vs_64_release`. We're going to call this folder named as `openframeworks\` too, to keep things simple, but it'll depend on the platform and version you use.
+- See `FILE-STRUCTURE.md` for detailed file organization and addons.
+- The used openFrameworks root folder for my system is located into: `D:\OF\of_v0.12.1_release`. We're going to call this folder named as `openframeworks\` too, to keep things simple, but it'll depend on the platform and version you use.
 - Current project is located into: `openframeworks\apps\myApps\TextTypoOrganic02`
 - For an OF (openFrameworks) project placed into: `openframeworks\apps\myApps\myProject\`.
 - Addons (ofxAddons) are located into: `openframeworks\addons\`.
-
-```
-TextTypoOrganic02/
-├── src/
-│   ├── main.cpp			# main app
-│   ├── ofApp.cpp			# main app
-│   ├── ofApp.h				# main app
-│   ├── organicText.cpp 	# our main class
-│   └── organicText.h		# our main class
-├── addons.make -> named addons (ofxAddons) dependencies
-	# OF Project Generator will include:
-	\ofxGui 					# UI lib
-	\ofxSurfingPresetsLite 	# presets manager
-	\ofxSurfingHelpersLite 	# required helpers
-```
 
 ## CORE CLASSES & RESPONSIBILITIES
 
@@ -46,21 +32,20 @@ TextTypoOrganic02/
 
 ## KEY PARAMETERS
 
-### VISUAL SCENE  (all ofParameter<T>)
+### VISUAL SCENE
 ```cpp
 // Density - how many points
-pointDensity, contourSampling, pointsSpacing
+pointDensity, contourSampling, pointsSpacing...
 
 // Shapes  
-shapeType, shapeRadius, shapeRotation
+shapeType, shapeRadius, shapeRotation...
 
 // Animation
-animationMode, animationSpeed, noiseSize
+animationMode, animationSpeed, noiseSize...
 
 // Colors
-colorMode, globalColor1/2/3 (ofColor), colorMixFactor
+colorMode, globalColor1/2/3 (ofColor), colorMixFactor...
 
 // Effects
-connectionDistance, trailLength, sceneZoom
+connectionDistance, trailLength, sceneZoom...
 ```
-
