@@ -18,11 +18,15 @@
 //---
 
 // Window title
-const std::string OFWORKS_DEMO_APP_TITLE = "DEMO - ofWorks";
+const std::string OFWORKS_DEMO_APP_TITLE = "organicText DEMO @ ofWorks";
 
 // Window size
-constexpr int OFWORKS_DEMO_APP_WIDTH = 1200;
-constexpr int OFWORKS_DEMO_APP_HEIGHT = 550;
+// Demo for ofWorks installing window
+//constexpr int OFWORKS_DEMO_APP_WIDTH = 1200;
+//constexpr int OFWORKS_DEMO_APP_HEIGHT = 550;
+// Custom size
+constexpr int OFWORKS_DEMO_APP_WIDTH = 1600;
+constexpr int OFWORKS_DEMO_APP_HEIGHT = 1600 * 0.458f;
 
 // Default text
 constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";

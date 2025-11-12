@@ -49,6 +49,7 @@ void ofApp::setup() {
 		}
 	});
 
+	// NOTE: window handlig requires some fixes/workarounds to work well in multi-monitors setup 
 	// Window Full Screen / default size
 	bFullScreen.set("Full Screen", false);
 	e_bFullScreen = bFullScreen.newListener([this](bool & v) {
