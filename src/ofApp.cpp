@@ -157,20 +157,20 @@ void ofApp::drawHelpDist() {
 		s += "MOUSE CLICK    Prev/Next";
 		s += "\n";
 		if (ofGetMouseX() < ofGetWidth() / 2)
-			s += " *Left/Right   Half Screen";
+			s += "*Left/Right    Half Screen";
 		else
-			s += "  Left/Right*  Half Screen";
+			s += " Left/Right*   Half Screen";
 		s += "\n";
-		s += "  Left/Right   Mouse Button";
+		s += " Left/Right    Mouse Button";
 		s += "\n\n";
 	}
 	s += "ENTER          Advanced";
 	s += "\n\n";
 	s += "WINDOW";
 	s += "\n";
-	s += "F              " + ofToString(bFullScreen ? "Reset" : "Full Screen");
+	s += " F             " + ofToString(bFullScreen ? "Reset" : "Full Screen");
 	s += "\n";
-	s += "C              Center";
+	s += " C             Center";
 	s += "\n";
 	ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_BOTTOM_CENTER);
 }
