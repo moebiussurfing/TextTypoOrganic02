@@ -13,25 +13,25 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 
 ## ✨ For Users
 
-**New to TextTypoOrganic02?** → Start with [docs\User\QUICK-START.md](docs\User\QUICK-START.md) for an app usage introduction
+**New to TextTypoOrganic02?** → Start with [docs/User/QUICK-START.md](docs/User/QUICK-START.md) for an app usage introduction
 
 ## 🤖 For AI Assistants & Coding Agents
 
-**Are you an AI Assistant Agent?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)** (Explore also the [docs\AI-Assistant](docs\AI-Assistant) folder.)
+**Are you an AI Assistant Agent?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)** (Explore also the [docs/AI-Assistant](docs/AI-Assistant) folder.)
 
 ## 👨‍💻 For Developers
 
 - **[docs\Developer](docs\Developer)** - Folder with developer notes, ideas, future roadmap and C++ concepts
 
 ### Future
-- **[docs\Developer\Future\FUTURE-FEATURES.md](docs\Developer\Future\FUTURE-FEATURES.md)** - A long-term roadmap and ideas for evaluating the implementation or rejection of these ideas.
-- **[docs\Developer\Future\FUTURE-ROADMAP.md](docs\Developer\Future\FUTURE-ROADMAP.md)** - Possible strategies and priorities for implementing these future ideas
+- **[docs/Developer/Future/FUTURE-FEATURES.md](docs/Developer/Future/FUTURE-FEATURES.md)** - A long-term roadmap and ideas for evaluating the implementation or rejection of these ideas.
+- **[docs/Developer/Future/FUTURE-ROADMAP.md](docs/Developer/Future/FUTURE-ROADMAP.md)** - Possible strategies and priorities for implementing these future ideas
 
 ## 📋 Project Management
 
 ### Changelog
 
-- **[docs\CHANGELOG.md](docs\CHANGELOG.md)** - Project history, major milestones and current ptoject status
+- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - Project history, major milestones and current ptoject status
 
 ### File Structure
 
