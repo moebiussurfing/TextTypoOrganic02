@@ -42,7 +42,7 @@ void ofApp::setup() {
 	bDistMode.set("Dist mode", true);
 	e_bDistMode = bDistMode.newListener([this](bool & v) {
 		ofLogNotice("ofApp") << "bDistMode: " << v;
-		// Workflow ui
+		// Workflow ui to avoid key commands collisions
 		if (bDistMode.get()) {
 			ot.bKeys = false;
 		} else {
