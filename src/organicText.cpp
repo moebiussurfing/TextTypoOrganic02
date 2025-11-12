@@ -451,9 +451,6 @@ void OrganicText::setupCallbacks() {
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
 	
-	
-	
-	
 	//--
 
 	// Reset listeners

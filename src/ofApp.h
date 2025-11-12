@@ -53,6 +53,7 @@ public:
 	// Reset app window custom shape
 	void centerWindow();
 	void fullScreenWindow();
+	void resetWindow();
 	
 	// Performance
 	float fps;
@@ -92,4 +93,6 @@ public:
 	ofParameter<bool> bHelpDist;
 	ofEventListener e_bDistMode;
 	void drawHelpDist();
+	ofParameter<bool> bFullScreen;
+	ofEventListener e_bFullScreen;
 };

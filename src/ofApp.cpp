@@ -34,32 +34,6 @@ void ofApp::setup() {
 
 	//--
 
-	// Organic Text
-
-	ot.setup(fps);
-	ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);
-
-	//--
-
-	// Presets Manager
-
-	pm.setup(ot.paramsPreset);
-	pm.gui.add(ot.bGui);
-
-	paramsScene.setName("Scene");
-	paramsScene.add(bBgGradient);
-	paramsScene.add(bTweeningMode);
-	paramsScene.add(bMouseBrowsing);
-	pm.gui.add(paramsScene);
-
-	ot.refreshGuiPanel(pm.guiParams);
-
-	//--
-
-	setupTweensCallbacks();
-
-	//--
-
 	// Dist Mode
 
 	bHelpDist.set("Help Dist", true);
@@ -74,6 +48,45 @@ void ofApp::setup() {
 		} else {
 		}
 	});
+
+	// Window Full Screen / default size
+	bFullScreen.set("Full Screen", false);
+	e_bFullScreen = bFullScreen.newListener([this](bool & v) {
+		ofLogNotice("ofApp") << "bFullScreen: " << v;
+		if (bFullScreen.get()) {
+			fullScreenWindow();
+		} else {
+			resetWindow();
+		}
+	});
+
+	//--
+
+	// Organic Text
+
+	ot.setup(fps);
+	ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);
+
+	//--
+
+	// Presets Manager
+
+	pm.setup(ot.paramsPreset);
+	pm.gui.add(ot.bGui);
+
+	paramsScene.setName("Scene");
+	paramsScene.add(bBgGradient);
+	paramsScene.add(bFullScreen);
+	paramsScene.add(bTweeningMode);
+	paramsScene.add(bMouseBrowsing);
+
+	pm.gui.add(paramsScene);
+
+	ot.refreshGuiPanel(pm.guiParams);
+
+	//--
+
+	setupTweensCallbacks();
 }
 
 //--------------------------------------------------------------
@@ -129,27 +142,29 @@ void ofApp::drawHelpDist() {
 	s += "ORGANIC";
 	s += "\n";
 	s += "TEXT";
-	s += "\n";
-	s += "\n";
+	s += "\n\n";
 	s += "H              Help";
+	s += "\n\n";
+	s += "PRESET         " + ofToString(pm.getPresetIndex()) + "/" + ofToString(pm.getPresetIndexLast());
 	s += "\n";
-	s += "\n";
+	s += "               " + pm.getPresetFileName();
+	s += "\n\n";
 	s += "SPACE          Next";
+	s += "\n\n";
+	s += "MOUSE CLICK    Prev/Next";
 	s += "\n";
+	if(ofGetMouseX() < ofGetWidth() / 2)
+		s += " *Left/Right   Half Screen";
+	else
+		s += "  Left/Right*  Half Screen";
 	s += "\n";
-	s += "MOUSE CLICK    Previous/Next";
-	s += "\n";
-	s += "   Left/Right  Half Screen";
-	s += "\n";
-	s += "   Left/Right  Mouse Button";
-	s += "\n";
-	s += "\n";
+	s += "  Left/Right   Mouse Button";
+	s += "\n\n";
 	s += "ENTER          Advanced";
+	s += "\n\n";
+	s += "WINDOW";
 	s += "\n";
-	s += "\n";
-	s += "WINDOW     ";
-	s += "\n";
-	s += "F              Full Screen";
+	s += "F              " + ofToString(bFullScreen ? "Reset" : "Full Screen");
 	s += "\n";
 	s += "C              Center";
 	s += "\n";
@@ -165,7 +180,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	// Full screen window
 	if (k == 'f' || k == 'F') {
-		fullScreenWindow();
+		bFullScreen.set(!bFullScreen.get());
 		return;
 	}
 	// Center window
@@ -235,6 +250,8 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 //--
 
+// Window management
+
 //--------------------------------------------------------------
 void ofApp::centerWindow() {
 	ofLogNotice("ofApp") << "centerWindow()";
@@ -252,7 +269,20 @@ void ofApp::fullScreenWindow() { // Set window full screen
 	ofSetWindowPosition(0, 0);
 }
 
+//--------------------------------------------------------------
+void ofApp::resetWindow() { // Set window reset
+	ofLogNotice("ofApp") << "resetWindow()";
+
+	int w = OFWORKS_DEMO_APP_WIDTH;
+	int h = OFWORKS_DEMO_APP_HEIGHT;
+
+	ofSetWindowShape(w, h);
+	ofSetWindowPosition(ofGetScreenWidth() / 2 - w / 2, ofGetScreenHeight() / 2 - h / 2);
+}
+
 //----
+
+// Scenes tweener
 
 //--------------------------------------------------------------
 void ofApp::setupTweensCallbacks() {
