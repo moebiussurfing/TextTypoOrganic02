@@ -1,11 +1,14 @@
 /*
-	TODO
+	BUGS
+	- window handlig requires some fixes/workarounds
+		to work well in multi-monitors (and WIN32)  setup 
 
-	- deployment define
+	TODO
 	- fix update anims when not drawing shapes!
-	- Improve draw glitchs.
+	- improve draw glitchs.
 		calculate pointsAnimatedCache on update() instead of draw(),
 		that is sensible to draw order, tween drawing etc
+	- fix ratio and mouse tweaks for cross shape
 	- ofxSurfingPresetsLite
 		fix empty/first startup
 		fix path_kit single place store and persistence
@@ -13,16 +16,12 @@
 			slider target index. button To and From
 			but copy to mem + move without load + save
 			set kit path dialog
-	- fix ratio and mouse tweaks for cross shape
- 
+	IDEAS
+	- implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
 	- player next presets timed
-	- fix switch windoResise glitch. call update
 	- zoom lines ratio ? related to fullscreen/screen size?
-	- Deployment: add define remove preset addon
-		hardcode json files to one .h file. replace workflow
 	- separate write tweening methods to new class files
-		static pointers? Forward declaration?
-	- make parent class ofApp -> OrganicTextType
+	- make parent class ofApp -> OrganicTextScene
  */
 
 #pragma once

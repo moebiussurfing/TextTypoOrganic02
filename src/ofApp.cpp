@@ -49,7 +49,6 @@ void ofApp::setup() {
 		}
 	});
 
-	// NOTE: window handlig requires some fixes/workarounds to work well in multi-monitors setup 
 	// Window Full Screen / default size
 	bFullScreen.set("Full Screen", false);
 	e_bFullScreen = bFullScreen.newListener([this](bool & v) {
@@ -146,20 +145,24 @@ void ofApp::drawHelpDist() {
 	s += "\n\n";
 	s += "H              Help";
 	s += "\n\n";
-	s += "PRESET         " + ofToString(pm.getPresetIndex()) + "/" + ofToString(pm.getPresetIndexLast());
+	s += "KIT            " + ofToString(pm.getKitName());
+	s += "\n\n";
+	s += "PRESET         " + ofToString(pm.getPresetIndex()) + " / " + ofToString(pm.getPresetIndexLast());
 	s += "\n";
 	s += "               " + pm.getPresetFileName();
 	s += "\n\n";
 	s += "SPACE          Next";
 	s += "\n\n";
-	s += "MOUSE CLICK    Prev/Next";
-	s += "\n";
-	if(ofGetMouseX() < ofGetWidth() / 2)
-		s += " *Left/Right   Half Screen";
-	else
-		s += "  Left/Right*  Half Screen";
-	s += "\n";
-	s += "  Left/Right   Mouse Button";
+	if (bMouseBrowsing) {
+		s += "MOUSE CLICK    Prev/Next";
+		s += "\n";
+		if (ofGetMouseX() < ofGetWidth() / 2)
+			s += " *Left/Right   Half Screen";
+		else
+			s += "  Left/Right*  Half Screen";
+		s += "\n";
+		s += "  Left/Right   Mouse Button";
+	}
 	s += "\n\n";
 	s += "ENTER          Advanced";
 	s += "\n\n";
