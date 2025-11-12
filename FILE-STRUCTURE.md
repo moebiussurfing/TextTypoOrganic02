@@ -5,7 +5,6 @@ TextTypoOrganic02/
 ├── docs/
 │   ├── AI-Assistant/
 │   │   ├── Status/
-│   │   │   ├── CURRENT-TASKS.md
 │   │   │   ├── KNOWN-BUGS.md
 │   │   │   └── TODO.md
 │   │   ├── AGENTS.md
@@ -20,7 +19,7 @@ TextTypoOrganic02/
 │   │       ├── CPP-CONCEPTS.md
 │   │       └── SHADER-CONVERSION-STRATEGY.md
 │   ├── User/
-│   │   └── Quick-Start.md
+│   │   └── QUICK-START.md
 │   └── CHANGELOG.md
 ├── src/
 │   ├── main.cpp
