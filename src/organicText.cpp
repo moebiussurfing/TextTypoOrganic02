@@ -102,11 +102,11 @@ void OrganicText::setupScene() {
 //--------------------------------------------------------------
 void OrganicText::setupTweens() {
 	ofLogNotice("OrganicText") << "setupTweensCallbacks()";
-	
+
 	// Disable internal JSON settings handling to avoid conflicts
 	tweenInPoint.setDisableInternalJsonSettings(true);
 	tweenOutPoint.setDisableInternalJsonSettings(true);
-	
+
 	// Tween drawing controls - will be populated in setupTweens()
 	paramsTweens.setName("Tweens Drawing");
 	paramsTweens.add(inPoint);
@@ -123,7 +123,7 @@ void OrganicText::setupTweens() {
 	tweenOutPoint.onCompleteCallback([this]() {
 		ofLogNotice("OrganicText") << "tweenOutPoint completed";
 	});
-	
+
 	// Set default ease modes
 	tweenInPoint.setEase(OF_EASE_CUBIC_INOUT);
 	tweenOutPoint.setEase(OF_EASE_CUBIC_INOUT);
@@ -284,7 +284,7 @@ void OrganicText::setupParams() {
 	paramsFont.add(vResetFont);
 
 	//--
-	
+
 	paramsShape.setName("Shape");
 	paramsShape.add(bDrawFill);
 	paramsShape.add(bShapeBack);
@@ -450,7 +450,7 @@ void OrganicText::setupCallbacks() {
 	animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 
 	e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
-	
+
 	//--
 
 	// Reset listeners
@@ -634,8 +634,7 @@ void OrganicText::update() {
 	mouseLocalPos = scaled - vec2(textOffsetX, textOffsetY);
 
 	// Check if mouse is within text bounds
-	bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= textWidth &&
-					  mouseLocalPos.y >= -textHeight && mouseLocalPos.y <= 0);
+	bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= textWidth && mouseLocalPos.y >= -textHeight && mouseLocalPos.y <= 0);
 
 	if (bDebug) {
 		// Smooth alpha blinking using sine wave
@@ -656,11 +655,11 @@ void OrganicText::update() {
 
 //--
 
-// @brief Samples points along the outlines of the given string at intervals of ds.		
+// @brief Samples points along the outlines of the given string at intervals of ds.
 //--------------------------------------------------------------
 vector<vec2> OrganicText::sampleStringPoints(const std::string & s, float ds) {
-	ofLogNotice("OrganicText") << "sampleStringPoints() s:"<< s << ", ds:" << ds;
-	
+	ofLogNotice("OrganicText") << "sampleStringPoints() s:" << s << ", ds:" << ds;
+
 	vector<vec2> points;
 	if (s.empty()) return points;
 
@@ -730,7 +729,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 	// Override with mouse position if mouse control is active
 	// Now works across entire canvas, deforming the constellation
 	// exclude ANIM_WAVE because no good results seen with it
-	if (bMouseTweaks.get() && bMouseControlOrigin.get()&&(AnimMode)animationMode.get()!=ANIM_WAVE) {
+	if (bMouseTweaks.get() && bMouseControlOrigin.get() && (AnimMode)animationMode.get() != ANIM_WAVE) {
 		customOriginX = mouseLocalPos.x;
 		customOriginY = mouseLocalPos.y;
 	}
@@ -1115,7 +1114,7 @@ void OrganicText::drawConnections() const {
 //--------------------------------------------------------------
 void OrganicText::drawTrails() {
 #ifdef FIX_ORGANIC_TEXT_TWEEN_TRAILS_PROBLEMS
-	if(this->isTweening()) return; // Skip drawing trails while tweening in/out
+	if (this->isTweening()) return; // Skip drawing trails while tweening in/out
 #endif
 
 	ofPushStyle();
@@ -1213,13 +1212,13 @@ void OrganicText::drawShapes() {
 		if (bMouseTweaks.get() && bMouseDisplacePoints.get() && mouseInfluence > 0.0f) {
 			// Calculate direction from mouse to point
 			vec2 direction = glm::normalize(finalPos - mouseLocalPos);
-			
+
 			// Map mouseDisplacePower: 0.5 = no effect, < 0.5 = attract, > 0.5 = repel
 			float powerCentered = (mouseDisplacePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
-			
+
 			float maxDisplacement = 50.0f; // Maximum displacement in pixels
 			float displacement = mouseInfluence * powerCentered * maxDisplacement;
-			
+
 			// If powerCentered is negative (attract), direction is inverted
 			finalPos += direction * displacement;
 		}
@@ -1247,7 +1246,7 @@ void OrganicText::drawShapes() {
 		if (bMouseTweaks.get() && bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
 			// Map mouseScalePower: 0.5 = no effect, < 0.5 = shrink, > 0.5 = grow
 			float powerCentered = (mouseScalePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
-			
+
 			// Calculate scale multiplier
 			// Positive: grows up to MAX_SCALE_POWER times
 			// Negative: shrinks down to near 0
@@ -1580,52 +1579,51 @@ void OrganicText::keyPressed(ofKeyEventArgs & eventArgs) {
 	} else if (key == 'h') {
 		bHelp.set(!bHelp.get());
 	}
-	
+
 	else if (key == OF_KEY_LEFT) {
 		zoomGlobal.set(ofClamp(zoomGlobal.get() - 0.01f, 0.0f, 1.0f));
 	} else if (key == OF_KEY_RIGHT) {
 		zoomGlobal.set(ofClamp(zoomGlobal.get() + 0.01f, 0.0f, 1.0f));
 	}
-	
+
 	else if (key == OF_KEY_UP) {
 		animSpeed.set(ofClamp(animSpeed.get() + 0.01f, animSpeed.getMin(), animSpeed.getMax()));
 	} else if (key == OF_KEY_DOWN) {
 		animSpeed.set(ofClamp(animSpeed.get() - 0.01f, animSpeed.getMin(), animSpeed.getMax()));
 	}
-	
+
 	else if (key == 'C') {
 		colorMode.set((colorMode.get() + 1) % 5);
-	} 
-	else if (key == 'A') {
+	} else if (key == 'A') {
 		animationMode.set((animationMode.get() + 1) % 5);
 	}
-	
+
 	else if (key == '+' || key == '=') {
 		densitySpacing.set(ofClamp(densitySpacing.get() + 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
 	} else if (key == '-') {
 		densitySpacing.set(ofClamp(densitySpacing.get() - 0.05f, densitySpacing.getMin(), densitySpacing.getMax()));
 	}
-	
+
 	else if (key == 'S') {
 		bDrawShapes.set(!bDrawShapes.get());
-	} 
-	
+	}
+
 	else if (key == 'F') {
 		bDrawFill.set(!bDrawFill.get());
-	} 
-	
+	}
+
 	else if (key == 'C') {
 		bDrawConnections.set(!bDrawConnections.get());
-	} 
-	
+	}
+
 	else if (key == 'T') {
 		bDrawTrails.set(!bDrawTrails.get());
 	}
-	
+
 	else if (key == 'a') {
 		bEnableAnimation.set(!bEnableAnimation.get());
-	} 
-	
+	}
+
 	else if (key == OF_KEY_BACKSPACE) {
 		organicTextResetsRandoms::resetAll(this);
 	}

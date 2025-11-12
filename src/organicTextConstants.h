@@ -18,7 +18,7 @@
 //---
 
 // Window title
-const std::string OFWORKS_DEMO_APP_TITLE = "organicText DEMO @ ofWorks";
+const std::string OFWORKS_DEMO_APP_TITLE = "organicText v0.1 DEMO @ ofWorks";
 
 // Window size
 // Demo for ofWorks installing window

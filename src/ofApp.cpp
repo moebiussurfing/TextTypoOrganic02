@@ -162,8 +162,8 @@ void ofApp::drawHelpDist() {
 			s += "  Left/Right*  Half Screen";
 		s += "\n";
 		s += "  Left/Right   Mouse Button";
+		s += "\n\n";
 	}
-	s += "\n\n";
 	s += "ENTER          Advanced";
 	s += "\n\n";
 	s += "WINDOW";

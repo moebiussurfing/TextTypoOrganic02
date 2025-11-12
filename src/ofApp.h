@@ -5,7 +5,7 @@
 
 	TODO
 	- fix update anims when not drawing shapes!
-	- improve draw glitchs.
+	- improve draw glitches.
 		calculate pointsAnimatedCache on update() instead of draw(),
 		that is sensible to draw order, tween drawing etc
 	- fix ratio and mouse tweaks for cross shape
@@ -17,9 +17,9 @@
 			but copy to mem + move without load + save
 			set kit path dialog
 	IDEAS
-	- implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
+	- finish implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
 	- player next presets timed
-	- zoom lines ratio ? related to fullscreen/screen size?
+	- zoom lines ratio ? related to fullscreen/screen size ?
 	- separate write tweening methods to new class files
 	- make parent class ofApp -> OrganicTextScene
  */
@@ -53,7 +53,7 @@ public:
 	void centerWindow();
 	void fullScreenWindow();
 	void resetWindow();
-	
+
 	// Performance
 	float fps;
 	float frameTime;
