@@ -9,7 +9,9 @@ class OrganicText;
  * @brief Hardcoded preset based on Kit-00/05.json
  * 
  * This class applies a specific set of parameter values
- * to create a consistent visual preset.
+ * to create a consistent visual preset 
+ * for the ofWorks DEMO: 
+ * https://github.com/dimitre/openFrameworks/tree/ofworks/examples/demos/organicText
  */
 class organicTextPreset {
 	
