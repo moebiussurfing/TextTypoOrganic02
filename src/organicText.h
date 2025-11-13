@@ -278,9 +278,12 @@ private:
 	void drawHelp() const;
 
 	void drawDebug() const;
+
+public:
 	ofColor colorDebug;
 	ofColor colorDebugBlink;
 
+private:
 	void windowResized(ofResizeEventArgs & resize); // Auto call when window resized
 	void refreshWindowResized();
 

@@ -126,7 +126,7 @@ void OrganicText::setupTweens() {
 
 	// Set default ease modes
 	tweenInPoint.setEase(OF_EASE_CUBIC_IN);
-	tweenOutPoint.setEase(OF_EASE_CUBIC_OUT);
+	tweenOutPoint.setEase(OF_EASE_CUBIC_IN);
 
 	// Add tween parameters to paramsTweens group
 	paramsTweens.add(tweenInPoint.getParameters());

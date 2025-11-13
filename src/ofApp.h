@@ -25,7 +25,9 @@
 	- make parent class ofApp -> OrganicTextScene
  */
 
-//#define USE_PARTICLE_MODIFIER
+// (WIP) demo particle modifier
+#define USE_PARTICLE_MODIFIER 
+#define NUM_PARTICLES 4
 
 #pragma once
 
