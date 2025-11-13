@@ -640,7 +640,7 @@ void OrganicText::update() {
 		// Smooth alpha blinking using sine wave
 		float t = ofGetElapsedTimef(); // Elapsed time in seconds
 		float speed = DEBUG_SPEED; // Blink speed (cycles per second)
-		float alpha = (sin(TWO_PI * speed * t) * 0.5f + 0.5f) * DEBUG_ALPHA_MAX + DEBUG_ALPHA_MIN_OFFSET;
+		float alpha = (sin(glm::two_pi<float>() * speed * t) * 0.5f + 0.5f) * DEBUG_ALPHA_MAX + DEBUG_ALPHA_MIN_OFFSET;
 		// sin oscillates -1..1 → remap to 0..1 → scale to 0..255
 
 		colorDebugBlink = ofColor(colorDebug.r, colorDebug.g, colorDebug.b, static_cast<int>(alpha));
@@ -756,7 +756,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 		// Use distance from custom origin instead of absolute x position
 		float distFromOrigin = pointsString[index].x - customOriginX;
-		float wave = sin(distFromOrigin * freq + t * TWO_PI) * amp;
+		float wave = sin(distFromOrigin * freq + t * glm::two_pi<float>()) * amp;
 		offset = vec2(0, wave);
 		break;
 	}
@@ -770,7 +770,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		float tightness = ofMap(animSpiral.get(), 0, 1, ANIM_SPIRAL_TIGHT_MIN, ANIM_SPIRAL_TIGHT_MAX, true);
 		float maxDisp = ofMap(animPower.get(), 0, 1, 0, ANIM_SPIRAL_MAX * fontScale, true);
 
-		float spiralPhase = distance * tightness + t * TWO_PI;
+		float spiralPhase = distance * tightness + t * glm::two_pi<float>();
 		float spiralOffset = sin(spiralPhase) * maxDisp;
 
 		offset = vec2(cos(angle) * spiralOffset, sin(angle) * spiralOffset);
@@ -783,7 +783,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		// Use custom origin for pulse center
 		float distance = glm::distance(pointsString[index], customOrigin);
 		float maxPulse = ofMap(animPulseIntensity.get(), 0, 1, 0, ANIM_PULSE_MAX * fontScale, true);
-		float pulsePhase = sin(t * TWO_PI * 0.5f) * maxPulse;
+		float pulsePhase = sin(t * glm::two_pi<float>() * 0.5f) * maxPulse;
 
 		if (distance > 0.5f) {
 			vec2 direction = normalize(pointsString[index] - customOrigin);
@@ -797,7 +797,7 @@ vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 
 		// Use custom origin as pivot point for orbit
 		float angle = atan2(pointsString[index].y - customOrigin.y, pointsString[index].x - customOrigin.x);
-		angle += t * TWO_PI * 0.3f;
+		angle += t * glm::two_pi<float>() * 0.3f;
 
 		float distance = glm::distance(pointsString[index], customOrigin);
 		vec2 newPos = customOrigin + vec2(cos(angle), sin(angle)) * distance;
@@ -853,7 +853,7 @@ ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const 
 
 	case COLOR_GLOBAL_MIX: {
 		float indexFactor = static_cast<float>(index) / ofClamp(static_cast<float>(pointsString.size()), 1.0f, 100000.0f);
-		float timeFactor = (sin(t * colorSpeed.get() * TWO_PI) + 1.0f) * 0.5f;
+		float timeFactor = (sin(t * colorSpeed.get() * glm::two_pi<float>()) + 1.0f) * 0.5f;
 
 		ofColor c1 = color1.get();
 		ofColor c2 = color2.get();
@@ -954,7 +954,7 @@ void OrganicText::drawShape(vec2 position, float size, ShapeType shape, float ro
 		ofPolyline star;
 		int points = 5;
 		for (int i = 0; i < points * 2; i++) {
-			float angle = (static_cast<float>(i) * TWO_PI) / (static_cast<float>(points) * 2.0f);
+			float angle = (static_cast<float>(i) * glm::two_pi<float>()) / (static_cast<float>(points) * 2.0f);
 			float radius = (i % 2 == 0) ? size : size * 0.4f;
 			star.addVertex(cos(angle) * radius, sin(angle) * radius);
 		}

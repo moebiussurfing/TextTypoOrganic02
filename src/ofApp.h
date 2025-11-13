@@ -25,6 +25,8 @@
 	- make parent class ofApp -> OrganicTextScene
  */
 
+//#define USE_PARTICLE_MODIFIER
+
 #pragma once
 
 #include "ofMain.h"
@@ -95,4 +97,16 @@ public:
 	void drawHelpDist();
 	ofParameter<bool> bFullScreen;
 	ofEventListener e_bFullScreen;
+	
+	//TODO: WIP
+#ifdef USE_PARTICLE_MODIFIER
+	struct RefractiveRect {
+	  ofRectangle bounds;
+	  glm::vec2 velocity;
+	  float angle;
+	  float angularVelocity;
+	};
+	vector<RefractiveRect> rectangles;
+	void drawRefractionRectangle(const ofRectangle& bounds, float angle);
+#endif
 };
