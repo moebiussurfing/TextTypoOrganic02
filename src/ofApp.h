@@ -28,12 +28,6 @@
 		bigger level class to integrate on bigger projects
  */
 
-// (WIP) demo particle modifier
-#define USE_PARTICLE_MODIFIER 
-#define PARTICLE_MODIFIER_NUM_PARTICLES 4
-#define PARTICLE_MODIFIER_MAX_SIZE 0.05f
-#pragma once
-
 #include "ofMain.h"
 
 //---
@@ -102,18 +96,4 @@ public:
 	void drawHelpDist();
 	ofParameter<bool> bFullScreen;
 	ofEventListener e_bFullScreen;
-
-	//--
-	
-	//TODO: WIP
-#ifdef USE_PARTICLE_MODIFIER
-	struct RefractiveRect {
-	  ofRectangle bounds;
-	  glm::vec2 velocity;
-	  float angle;
-	  float angularVelocity;
-	};
-	vector<RefractiveRect> rectangles;
-	void drawRefractionRectangle(const ofRectangle& bounds, float angle);
-#endif
 };

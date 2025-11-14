@@ -88,24 +88,6 @@ void ofApp::setup() {
 	//--
 
 	setupTweensCallbacks();
-
-	//--
-
-#ifdef USE_PARTICLE_MODIFIER
-	// Initialize moving rectangles with random positions/velocities (normalized 0-1)
-	for (int i = 0; i < int(PARTICLE_MODIFIER_NUM_PARTICLES); i++) {
-		RefractiveRect rect;
-		rect.bounds = ofRectangle(
-			ofRandom(0.1, 0.8),
-			ofRandom(0.1, 0.8),
-			ofRandom(0.1, 0.2),
-			ofRandom(0.08, 0.18));
-		rect.velocity = glm::vec2(ofRandom(-0.002, 0.002), ofRandom(-0.002, 0.002));
-		rect.angle = ofRandom(0, 360);
-		rect.angularVelocity = ofRandom(-1.5, 1.5);
-		rectangles.push_back(rect);
-	}
-#endif
 }
 
 //--------------------------------------------------------------
@@ -130,29 +112,6 @@ void ofApp::update() {
 	}
 	string wt = ofToString(OFWORKS_DEMO_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
-
-	//--
-
-#ifdef USE_PARTICLE_MODIFIER
-	for (int i = 0; i < rectangles.size(); i++) {
-		rectangles[i].bounds.x += rectangles[i].velocity.x;
-		rectangles[i].bounds.y += rectangles[i].velocity.y;
-		rectangles[i].angle += rectangles[i].angularVelocity;
-
-		if (rectangles[i].bounds.x < -rectangles[i].bounds.width) {
-			rectangles[i].bounds.x = 1.0f;
-		}
-		if (rectangles[i].bounds.x > 1.0f) {
-			rectangles[i].bounds.x = -rectangles[i].bounds.width;
-		}
-		if (rectangles[i].bounds.y < -rectangles[i].bounds.height) {
-			rectangles[i].bounds.y = 1.0f;
-		}
-		if (rectangles[i].bounds.y > 1.0f) {
-			rectangles[i].bounds.y = -rectangles[i].bounds.height;
-		}
-	}
-#endif
 }
 
 //--------------------------------------------------------------
@@ -175,16 +134,6 @@ void ofApp::draw() {
 		// Draw Help Dist
 		if (bHelpDist) drawHelpDist();
 	}
-
-	//--
-
-#ifdef USE_PARTICLE_MODIFIER
-	if (ot.bDebug) {
-		for (const auto & rect : rectangles) {
-			drawRefractionRectangle(rect.bounds, rect.angle);
-		}
-	}
-#endif
 }
 
 //--------------------------------------------------------------
@@ -385,25 +334,3 @@ void ofApp::exit() {
 
 	ot.exit();
 }
-
-//--
-
-#ifdef USE_PARTICLE_MODIFIER
-//--------------------------------------------------------------
-void ofApp::drawRefractionRectangle(const ofRectangle & bounds, float angle) {
-
-	ofPushMatrix();
-	ofScale(ofGetWidth(), ofGetHeight());
-	// particle center
-	ofTranslate(bounds.x + bounds.width / 2.0f, bounds.y + bounds.height / 2.0f);
-	ofRotateDeg(angle);
-	ofScale(bounds.width, bounds.height);
-	ofPushStyle();
-	ofFill();
-	ofSetColor(ot.colorDebug);
-	//ofDrawRectangle(bounds);
-	ofDrawCircle(0, 0, float(PARTICLE_MODIFIER_MAX_SIZE));
-	ofPopStyle();
-	ofPopMatrix();
-}
-#endif

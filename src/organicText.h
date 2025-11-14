@@ -9,7 +9,13 @@
 
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
-#include "ofxSurfingHelpersLite.h" // Draw widgets
+//#include "ofxSurfingHelpersLite.h" // Draw widgets
+
+// (WIP) demo particle modifier
+#define USE_PARTICLE_MODIFIER
+#define PARTICLE_MODIFIER_NUM_PARTICLES 1
+#define PARTICLE_MODIFIER_MAX_SIZE 0.05f
+#pragma once
 
 //----------------------------------------------------------------------------
 
@@ -155,6 +161,7 @@ public:
 	ofParameter<float> trailFade;
 
 	// Mouse tweaks parameters
+	ofParameter<bool> bParticlesTweaks;
 	ofParameter<bool> bMouseTweaks;
 	ofParameter<float> radiusMouse { "radiusMouse", 0.1f, 0, 1 };
 	ofParameter<bool> bMouseControlOrigin;
@@ -357,4 +364,19 @@ public:
 	void setOnCompleteWriteIn(std::function<void()> callback) {
 		tweenInPoint.onUserCompleteCallback(callback);
 	}
+
+	//--
+
+private:
+	//TODO: WIP
+#ifdef USE_PARTICLE_MODIFIER
+	struct ParticleTweaker {
+		ofRectangle bounds;
+		glm::vec2 velocity;
+		float angle;
+		float angularVelocity;
+	};
+	vector<ParticleTweaker> particleTweaker;
+	void drawParticleTweaker(const ofRectangle & bounds, float angle);
+#endif
 };

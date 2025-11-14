@@ -95,6 +95,24 @@ void OrganicText::setupScene() {
 	updateAnimationModeName(dummy);
 
 	colorDebug = ofColor::yellow;
+
+	//--
+
+#ifdef USE_PARTICLE_MODIFIER
+	// Initialize moving particleTweaker with random positions/velocities (normalized 0-1)
+	for (int i = 0; i < int(PARTICLE_MODIFIER_NUM_PARTICLES); i++) {
+		ParticleTweaker rect;
+		rect.bounds = ofRectangle(
+			ofRandom(0.1, 0.8),
+			ofRandom(0.1, 0.8),
+			ofRandom(0.1, 0.2),
+			ofRandom(0.08, 0.18));
+		rect.velocity = glm::vec2(ofRandom(-0.002, 0.002), ofRandom(-0.002, 0.002));
+		rect.angle = ofRandom(0, 360);
+		rect.angularVelocity = ofRandom(-1.5, 1.5);
+		particleTweaker.push_back(rect);
+	}
+#endif
 }
 
 //--
@@ -170,6 +188,7 @@ void OrganicText::setupParams() {
 	bAutoZoomGlobal.set("Auto Zoom", true);
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 	bMouseTweaks.set("Mouse Tweaks", true);
+	bParticlesTweaks.set("Particles Tweaks", false);
 
 	// Font parameters
 	fontPath.set("Font Path", ORGANIC_TEXT_FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
@@ -418,6 +437,7 @@ void OrganicText::setupParams() {
 	parameters.add(paramsInternal);
 	parameters.add(paramsTweens);
 	parameters.add(bMouseTweaks);
+	parameters.add(bParticlesTweaks);
 
 #ifndef SURFING_USE_EXTERNAL_PRESET_MANAGER
 	// exclude these settings from settings
@@ -615,7 +635,13 @@ void OrganicText::update() {
 
 	// Mouse coordinate transformation
 	// Convert window coordinates to local text coordinates
-	mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
+	if (!bParticlesTweaks)
+		mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
+	else {
+		// Use first rectangle as mouse pos for particles tweaks].
+		auto c = (particleTweaker[0].bounds.getCenter());
+		mousePos = glm::vec2(c.x * ofGetWidth(), c.y * ofGetHeight());
+	}
 
 	// Apply inverse transformations (same as in draw())
 	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
@@ -651,6 +677,29 @@ void OrganicText::update() {
 	// Update tweens
 	tweenInPoint.update();
 	tweenOutPoint.update();
+
+	//--
+
+#ifdef USE_PARTICLE_MODIFIER
+	for (int i = 0; i < particleTweaker.size(); i++) {
+		particleTweaker[i].bounds.x += particleTweaker[i].velocity.x;
+		particleTweaker[i].bounds.y += particleTweaker[i].velocity.y;
+		particleTweaker[i].angle += particleTweaker[i].angularVelocity;
+
+		if (particleTweaker[i].bounds.x < -particleTweaker[i].bounds.width) {
+			particleTweaker[i].bounds.x = 1.0f;
+		}
+		if (particleTweaker[i].bounds.x > 1.0f) {
+			particleTweaker[i].bounds.x = -particleTweaker[i].bounds.width;
+		}
+		if (particleTweaker[i].bounds.y < -particleTweaker[i].bounds.height) {
+			particleTweaker[i].bounds.y = 1.0f;
+		}
+		if (particleTweaker[i].bounds.y > 1.0f) {
+			particleTweaker[i].bounds.y = -particleTweaker[i].bounds.height;
+		}
+	}
+#endif
 }
 
 //--
@@ -1344,6 +1393,14 @@ void OrganicText::draw() {
 		float r = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
 		ofDrawCircle(mousePos, r);
 		ofPopStyle();
+
+		//--
+
+#ifdef USE_PARTICLE_MODIFIER
+		for (const auto & rect : particleTweaker) {
+			drawParticleTweaker(rect.bounds, rect.angle);
+		}
+#endif
 	}
 
 	// Debug bench measuring drawing performance
@@ -1367,7 +1424,7 @@ void OrganicText::drawGui() {
 		//ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_TOP_CENTER);
 		auto bf = ofBitmapFont();
 		//bf.getBoundingBox(s,0,0);
-		ofDrawBitmapStringHighlight(s, ofGetWidth() / 2 - bf.getBoundingBox(s,0,0).getWidth() / 2, bf.getBoundingBox(s,0,0).getHeight(), ofColor::yellow, ofColor::black);
+		ofDrawBitmapStringHighlight(s, ofGetWidth() / 2 - bf.getBoundingBox(s, 0, 0).getWidth() / 2, bf.getBoundingBox(s, 0, 0).getHeight(), ofColor::yellow, ofColor::black);
 	}
 
 	gui.draw();
@@ -1648,3 +1705,25 @@ void OrganicText::exit() {
 
 	if (bAutosave) saveSettings();
 }
+
+//--
+
+#ifdef USE_PARTICLE_MODIFIER
+//--------------------------------------------------------------
+void OrganicText::drawParticleTweaker(const ofRectangle & bounds, float angle) {
+
+	ofPushMatrix();
+	ofScale(ofGetWidth(), ofGetHeight());
+	// particle center
+	ofTranslate(bounds.x + bounds.width / 2.0f, bounds.y + bounds.height / 2.0f);
+	ofRotateDeg(angle);
+	ofScale(bounds.width, bounds.height);
+	ofPushStyle();
+	ofFill();
+	ofSetColor(colorDebug);
+	//ofDrawRectangle(bounds);
+	ofDrawCircle(0, 0, float(PARTICLE_MODIFIER_MAX_SIZE));
+	ofPopStyle();
+	ofPopMatrix();
+}
+#endif
