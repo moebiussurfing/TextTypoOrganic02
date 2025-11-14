@@ -9,6 +9,7 @@
 
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
+#include "ofxSurfingHelpersLite.h" // Draw widgets
 
 //----------------------------------------------------------------------------
 

@@ -1361,6 +1361,13 @@ void OrganicText::drawGui() {
 		ofSetColor(colorDebug);
 		ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
 		ofPopStyle();
+
+		// Low FPS warning
+		std::string s = "LOW FPS";
+		//ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_TOP_CENTER);
+		auto bf = ofBitmapFont();
+		//bf.getBoundingBox(s,0,0);
+		ofDrawBitmapStringHighlight(s, ofGetWidth() / 2 - bf.getBoundingBox(s,0,0).getWidth() / 2, bf.getBoundingBox(s,0,0).getHeight(), ofColor::yellow, ofColor::black);
 	}
 
 	gui.draw();
