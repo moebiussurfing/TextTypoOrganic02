@@ -28,6 +28,8 @@ TextTypoOrganic02/
 │   ├── organicText.cpp
 │   ├── organicText.h
 │   ├── organicTextConstants.h
+│   ├── organicTextPreset.cpp
+│   ├── organicTextPreset.h
 │   ├── organicTextResetsRandoms.cpp
 │   └── organicTextResetsRandoms.h
 ├── AI-AGENTS-GUIDE.md
