@@ -107,9 +107,11 @@ void OrganicText::setupScene() {
 			ofRandom(0.1, 0.8),
 			ofRandom(0.1, 0.2),
 			ofRandom(0.08, 0.18));
-		rect.velocity = glm::vec2(ofRandom(-0.002, 0.002), ofRandom(-0.002, 0.002));
+		//rect.velocity = glm::vec2(ofRandom(-0.002, 0.002), ofRandom(-0.002, 0.002));
+		rect.velocity = glm::vec2(-0.0015, 0.0015);
 		rect.angle = ofRandom(0, 360);
-		rect.angularVelocity = ofRandom(-1.5, 1.5);
+		rect.angularVelocity = ofRandom(angularVelocityMin, angularVelocityMax);
+		//rect.angularVelocity = 1000;//TODO
 		particleTweaker.push_back(rect);
 	}
 #endif
@@ -188,7 +190,7 @@ void OrganicText::setupParams() {
 	bAutoZoomGlobal.set("Auto Zoom", true);
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 	bMouseTweaks.set("Mouse Tweaks", true);
-	bParticlesTweaks.set("Particles Tweaks", false);
+	bParticlesTweaks.set("Particles Tweaks", true);//TODO
 
 	// Font parameters
 	fontPath.set("Font Path", ORGANIC_TEXT_FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF

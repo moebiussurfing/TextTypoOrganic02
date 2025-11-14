@@ -13,7 +13,7 @@
 // OFAPP CONSTANTS
 //----------------------------------------------------------------------------
 
-#define OFWORKS_DEMO_APP_DEPLOY // Uncomment for the deployment release version
+//#define OFWORKS_DEMO_APP_DEPLOY // Uncomment for the deployment release version
 
 //---
 

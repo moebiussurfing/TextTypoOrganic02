@@ -368,7 +368,12 @@ public:
 	//--
 
 private:
-	//TODO: WIP
+	/*
+	TODO: (WIP)
+	- add speed
+	- add multiple
+	- use rect width/height
+	*/
 #ifdef USE_PARTICLE_MODIFIER
 	struct ParticleTweaker {
 		ofRectangle bounds;
@@ -378,5 +383,10 @@ private:
 	};
 	vector<ParticleTweaker> particleTweaker;
 	void drawParticleTweaker(const ofRectangle & bounds, float angle);
+	float angularVelocityMin = -1.5;
+	float angularVelocityMax = 1.5;
+	//float angularVelocityMin = -10;
+	//float angularVelocityMax = 10;
+	//glm::vec2 velocity = glm::vec2(-0.002, 0.002);
 #endif
 };

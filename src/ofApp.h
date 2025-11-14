@@ -19,6 +19,17 @@
 				set kit path dialog
 			
 	IDEAS
+	- USE_PARTICLE_MODIFIER
+		- use another algo to more organic movements.
+			noise glm2 ?
+			mouse click to force pos ?
+		- allow multiple points + mousePos influence
+			create many. check which are near to text bbox.
+			focus in one, ignore others untils goes out
+		- replace for A to B tweening line ?
+			- click point A and point B then auto starts tweening between them
+			- random point A and point B the auto start tweening between them
+
 	- finish implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
 	- player next presets timed (check surfingPlayer addon)
 	- zoom lines ratio ? related to fullscreen/screen size ?
