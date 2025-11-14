@@ -10,25 +10,28 @@
 		that is sensible to draw order, tween drawing etc
 	- fix ratio and mouse tweaks for cross shape
 	- ofxSurfingPresetsLite
-		fix empty/first startup
-		fix path_kit single place store and persistence
+		fix empty/first startup ?
+		fix path_kit single place store and persistence ?
 		copy presets (button) to next or other
-			slider target index. button To and From
-			but copy to mem + move without load + save
-			set kit path dialog
+			- add autoload toggle ? simple solution!
+			- slider target index. button To and From
+				but copy to mem + move without load + save
+				set kit path dialog
 			
 	IDEAS
 	- finish implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
-	- player next presets timed
+	- player next presets timed (check surfingPlayer addon)
 	- zoom lines ratio ? related to fullscreen/screen size ?
 	- separate write tweening methods to new class files
-	- make parent class ofApp -> OrganicTextScene
+	- separate drawing engine to new class files
+	- make parent class ofApp -> OrganicTextScene:
+		bigger level class to integrate on bigger projects
  */
 
 // (WIP) demo particle modifier
 #define USE_PARTICLE_MODIFIER 
-#define NUM_PARTICLES 4
-
+#define PARTICLE_MODIFIER_NUM_PARTICLES 4
+#define PARTICLE_MODIFIER_MAX_SIZE 0.05f
 #pragma once
 
 #include "ofMain.h"
@@ -99,6 +102,8 @@ public:
 	void drawHelpDist();
 	ofParameter<bool> bFullScreen;
 	ofEventListener e_bFullScreen;
+
+	//--
 	
 	//TODO: WIP
 #ifdef USE_PARTICLE_MODIFIER
