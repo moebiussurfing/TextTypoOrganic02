@@ -31,15 +31,6 @@ constexpr int OFWORKS_DEMO_APP_HEIGHT = 1600 * 0.458f;
 // Default text
 constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 
-////----------------------------------------------------------------------------
-//// MATH CONSTANTS
-////----------------------------------------------------------------------------
-//
-////TODO: fix for ofWorks... when not using ofVec lib... ?
-//#ifndef TWO_PI
-//constexpr double TWO_PI = 6.283185307179586476925286766559; // 2 * π
-//#endif
-
 //----------------------------------------------------------------------------
 // DRAWING & ANIMATION CONSTANTS
 //----------------------------------------------------------------------------
