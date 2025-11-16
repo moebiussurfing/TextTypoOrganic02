@@ -17,7 +17,7 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 
 ## 🤖 For AI Assistants & Coding Agents
 
-**Are you an AI Assistant Agent ?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)**
+**Are you an AI Assistant Agent ?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)**  
 (Feel free to explore also the [docs/AI-Assistant](docs/AI-Assistant) folder.)
 
 ## 👨‍💻 For Developers
