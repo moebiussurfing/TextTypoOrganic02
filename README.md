@@ -24,6 +24,12 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 
 **[docs/Developer](docs/Developer)** → Folder with developer notes, ideas, future roadmap, evaluating ideas, strategies and priorities, and C++ concepts
 
+### Dependencies
+- [ofxSurfingPresetsLite](https://github.com/moebiussurfing/ofxSurfingPresetsLite)
+- [ofxSurfingHelpersLite](https://github.com/moebiussurfing/ofxSurfingHelpersLite)
+- [ofxTweenLite](https://github.com/moebiussurfing/ofxTweenLite)
+- **ofxGui** (OF Core)
+
 ## 📋 Project Management
 
 ### Changelog
@@ -40,11 +46,5 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 - **macOS Tahoe** (openFrameworks 0.12.1, Xcode / VS Code)
 - **iOS** (openFrameworks 0.12.1+, Xcode / iPad 10th) [_WIP: requires UI bigger scaling_]
 - **Emscripten** (openFrameworks 0.12.1+, macOS) [_Not working yet..._]
-
-### Dependencies
-- [ofxSurfingPresetsLite](https://github.com/moebiussurfing/ofxSurfingPresetsLite)
-- [ofxSurfingHelpersLite](https://github.com/moebiussurfing/ofxSurfingHelpersLite)
-- [ofxTweenLite](https://github.com/moebiussurfing/ofxTweenLite)
-- ofxGui (OF Core)
 
 *Built with openFrameworks C++ - Creative Coding Toolkit*
