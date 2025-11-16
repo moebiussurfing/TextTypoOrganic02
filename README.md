@@ -13,7 +13,7 @@ An enhanced **openFrameworks** (aka OF) desktop application that creates organic
 
 ## ✨ For Users
 
-**New to TextTypoOrganic02?** → Start with [docs/User/QUICK-START.md](docs/User/QUICK-START.md) for an app usage introduction
+**New to TextTypoOrganic02 ?** → Start with [docs/User/QUICK-START.md](docs/User/QUICK-START.md) for an app usage introduction
 
 ## 🤖 For AI Assistants & Coding Agents
 

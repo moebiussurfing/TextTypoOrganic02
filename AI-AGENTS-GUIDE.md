@@ -1,14 +1,14 @@
 # AI-AGENTS-GUIDE.md
 
 > [!NOTE]
-> Quick reference for AI coding assistants:
+> Quick reference for AI coding Assistants and Agents:
 > GitHub Copilot, Gemini, Claude, Cline, Cursor, Windsurf and other AI coding assistants in VS Code, Visual Studio 2026, Xcode or similar IDEs.
 
 ---
 
 ## 📚 AI-ASSISTANT FILES:
 
-- All the related .md notes files for the `AI AGENT` are placed on this folder:
+- All the related `.md` notes files for the `AI AGENT` are placed on this folder:
 [docs/AI-Assistant](docs/AI-Assistant/)
 
 ---
@@ -17,42 +17,42 @@
 
 ## **EVERY SESSION START**
 
-1. **READ**:
+### **READ & FAMILIARIZE**:
 
 - [**FILE-STRUCTURE**](FILE-STRUCTURE.md) - Project file map.
 - [**docs/AI-Assistant/PROJECT-CONTEXT.md**](docs/AI-Assistant/PROJECT-CONTEXT.md) - Full project overview. Read on first session or when lost.
 - [**docs/CHANGELOG.md**](docs/CHANGELOG.md) - Project history, major milestones and current project status.
+- **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point.
 
-2. **CHECK**:
+### **READ DEPTHLY & MEMORIZE**:
 
 - [**docs/AI-Assistant/AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices for assistants.
 - [**docs/AI-Assistant/RULES.md**](docs/AI-Assistant/RULES.md) - Automated execution rules and constraints for AI assistants.
 
-## **BEFORE CODING**
+## **START CODING: PLAN & EXECUTE**:
 
-1. **CHECK**:
+###	⭐ After reading the `TODO.md` created by the `developer`, begin with the implementation!
 
-- **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point.
-
-2. **PLAN & EXECUTE**:
-
-	⭐ **`START CODING: After reading TODO.md, begin implementation!`**
-	- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)** The following tasks must be completed immediately. The AI Code Agent will initiate the session by reading and familiarizing itself with the project context. Subsequently, the AI Agent is required to initiate the execution of the instructions now! Go!
+- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)**
+	- The `AI Code Agent` --_you_-- will be communite with --_me_--, the `developer`.
+	- Initiate the session by reading and familiarizing yourself with the project context in depth.
+	- The tasks listed in `TODO.md` must now be completed.
+	- The `AI Code Agent` is required to initiate the execution of all the instructions now! Go!
 
 ## **AFTER CODING**
 
 1. **DOCUMENT**:
 
    - Summarize what was accomplished this session.
-   - Ask developer and propose if update relevant status .md files.
+   - Ask `developer` and propose if update relevant status .md files.
 
 2. **TEST & VALIDATE**:
 
-   - Ask developer to compile the binary project.
+   - Ask `developer` to compile the binary project.
    - Request testing of new features/fixes.
 
 3. **REVIEW STATUS**:
 
-   - Ask developer to check if persistent problems are resolved.
+   - Ask `developer` to check if persistent problems are resolved.
    - Confirm successfully implemented features.
    - Perform deep review and summarize current project state.
