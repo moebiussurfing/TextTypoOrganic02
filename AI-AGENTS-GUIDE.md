@@ -19,21 +19,21 @@
 
 ### **READ & FAMILIARIZE**:
 
-- [**FILE-STRUCTURE**](FILE-STRUCTURE.md) - Project file map.
-- [**docs/AI-Assistant/PROJECT-CONTEXT.md**](docs/AI-Assistant/PROJECT-CONTEXT.md) - Full project overview. Read on first session or when lost.
-- [**docs/CHANGELOG.md**](docs/CHANGELOG.md) - Project history, major milestones and current project status.
-- **[docs\AI-Assistant\Status\KNOWN-BUGS.md](docs\AI-Assistant\Status\KNOWN-BUGS.md)** - Bugs and known issues that we will need to resolve at some point.
+- [**FILE-STRUCTURE**](FILE-STRUCTURE.md) → Project file map.
+- [**docs/AI-Assistant/PROJECT-CONTEXT.md**](docs/AI-Assistant/PROJECT-CONTEXT.md) → Full project overview. Read on first session or when lost.
+- [**docs/CHANGELOG.md**](docs/CHANGELOG.md) → Project history, major milestones and current project status.
+- **[docs/AI-Assistant/Status/KNOWN-BUGS.md](docs/AI-Assistant/Status/KNOWN-BUGS.md)** → Bugs and known issues that we will need to resolve at some point.
 
 ### **READ DEPTHLY & MEMORIZE**:
 
-- [**docs/AI-Assistant/AGENTS.md**](docs/AI-Assistant/AGENTS.md) - Full onboarding, workflows & best practices for assistants.
-- [**docs/AI-Assistant/RULES.md**](docs/AI-Assistant/RULES.md) - Automated execution rules and constraints for AI assistants.
+- [**docs/AI-Assistant/AGENTS.md**](docs/AI-Assistant/AGENTS.md) → Full onboarding, workflows & best practices for assistants.
+- [**docs/AI-Assistant/RULES.md**](docs/AI-Assistant/RULES.md) → Automated execution rules and constraints for AI assistants.
 
 ## **START CODING: PLAN & EXECUTE**:
 
 ###	⭐ After reading the `TODO.md` created by the `developer`, begin with the implementation!
 
-- **[docs\AI-Assistant\Status\TODO.md](docs\AI-Assistant\Status\TODO.md)**
+- **[docs/AI-Assistant/Status/TODO.md](docs/AI-Assistant/Status/TODO.md)**
 	- The `AI Code Agent` --_you_-- will be communite with --_me_--, the `developer`.
 	- Initiate the session by reading and familiarizing yourself with the project context in depth.
 	- The tasks listed in `TODO.md` must now be completed.
