@@ -190,7 +190,7 @@ void OrganicText::setupParams() {
 	bAutoZoomGlobal.set("Auto Zoom", true);
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 	bMouseTweaks.set("Mouse Tweaks", true);
-	bParticlesTweaks.set("Particles Tweaks", true);//TODO
+	bParticlesTweaks.set("Particles Tweaks", true); //TODO
 
 	// Font parameters
 	fontPath.set("Font Path", ORGANIC_TEXT_FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
