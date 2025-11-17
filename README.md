@@ -5,13 +5,13 @@
 >  
 > **AI-Assisted Development Project** - This project serves as a real-world test case for AI coding assistants (_GitHub Copilot, Cline, Gemini, etc..._) workflows and documentation patterns. Built upon an original sketch from [colormotor](https://github.com/colormotor).
 
+![](Capture-v0.3.PNG)
+
 An **openFrameworks** (aka OF) desktop application that creates organic, animated visualizations from text using customizable shapes, colors, animations, presets and mouse interactions.
 
 *Enhanced version based on original code from [PFAD/examples/week_5/organicTypographyWorked](https://github.com/colormotor/PFAD/tree/main/examples/week_5/organicTypographyWorked)*:
 
 ![](Capture-v0.1.PNG)
-
-![](Capture-v0.3.PNG)
 
 ## ✨ For Users
 
