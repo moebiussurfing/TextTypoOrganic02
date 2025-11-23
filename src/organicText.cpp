@@ -40,14 +40,6 @@ void OrganicText::setup(float fps) {
 void OrganicText::setup() {
 	ofLogNotice("OrganicText") << "setup()";
 
-	// Default font
-	//ORGANIC_TEXT_FONT_DEFAULT = "NotoSansMono-Regular.ttf";
-
-	// Bundled OF fonts
-	ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SANS;
-	//ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SERIF;
-	//ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_MONO;
-
 	setupScene();
 	setupParams();
 	setupTweens();
@@ -193,7 +185,7 @@ void OrganicText::setupParams() {
 	bParticlesTweaks.set("Particles Tweaks", true); //TODO
 
 	// Font parameters
-	fontPath.set("Font Path", ORGANIC_TEXT_FONT_DEFAULT); // File not required! Currently using OF bundled OF_TTF
+	fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
 	fontSize.set("Size", 150, 50, 500);
 	letterSpacing.set("Spacing", 0, -1, 1);
 	vResetFont.set("Reset");
@@ -577,7 +569,6 @@ void OrganicText::loadFont() {
 	} else {
 		ofLogError("OrganicText") << "Failed to load font: " << fontPath.get();
 
-		//fontPath.set(ORGANIC_TEXT_FONT_DEFAULT);
 		success = font.load(fontPath.get(), fontSize.get(), false, false, true);
 		if (success) {
 			ofLogNotice("OrganicText") << "Forced font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";

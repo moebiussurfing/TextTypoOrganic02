@@ -34,6 +34,19 @@ constexpr int OFWORKS_DEMO_APP_HEIGHT = 1600 * 0.458f;
 // Default text
 constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 
+// Default font
+#if 1
+constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = "JetBrainsMono-Bold.ttf";
+// constexpr const std::string ORGANIC_TEXT_FONT_DEFAULT = "NotoSansMono-Regular.ttf";
+#else
+// Bundled OF fonts
+// ttf file not required
+#include "ofMain.h"
+constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SANS;
+//constexpr const char * = OF_TTF_SERIF;
+//constexpr const char * = OF_TTF_MONO;
+#endif
+
 //----------------------------------------------------------------------------
 // DRAWING & ANIMATION CONSTANTS
 //----------------------------------------------------------------------------

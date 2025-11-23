@@ -238,7 +238,6 @@ private:
 	void updateAnimationModeName(int &);
 
 private:
-	std::string ORGANIC_TEXT_FONT_DEFAULT;
 	ofTrueTypeFont font;
 	vec2 textCenter {};
 	float textWidth = 0;
