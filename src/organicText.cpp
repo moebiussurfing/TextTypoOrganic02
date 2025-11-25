@@ -54,8 +54,9 @@ void OrganicText::setup() {
 void OrganicText::startup() {
 	ofLogNotice("OrganicText") << "startup()";
 
-	//// Load font
-	//refreshFont();
+	// // Load font
+	// loadFont();
+	// refreshFont();
 
 	// Set defaults settings on these methods instead of into setupParams() init params!
 	organicTextResetsRandoms::resetAll(this);
@@ -186,6 +187,7 @@ void OrganicText::setupParams() {
 
 	// Font parameters
 	fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
+	fontPath.setSerializable(false);
 	fontSize.set("Size", 150, 50, 500);
 	letterSpacing.set("Spacing", 0, -1, 1);
 	vResetFont.set("Reset");
