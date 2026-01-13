@@ -107,4 +107,6 @@ public:
 	void drawHelpDist();
 	ofParameter<bool> bFullScreen;
 	ofEventListener e_bFullScreen;
+
+	ofParameterGroup paramsOfApp;
 };

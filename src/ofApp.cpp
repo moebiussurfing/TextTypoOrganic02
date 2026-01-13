@@ -84,10 +84,21 @@ void ofApp::setup() {
 	pm.gui.add(paramsScene);
 
 	ot.refreshGuiPanel(pm.guiParams);
-
+	
 	//--
-
+	
 	setupTweensCallbacks();
+	
+	//--
+	
+	// App session settings
+	paramsOfApp.setName("ofApp");
+	// paramsOfApp.add(ot.);
+	paramsOfApp.add(bDistMode);
+	paramsOfApp.add(bFullScreen);
+	paramsOfApp.add(bMouseBrowsing);
+	paramsOfApp.add(bFullScreen);
+	ofxSurfing::loadGroup(paramsOfApp);
 }
 
 //--------------------------------------------------------------
@@ -333,4 +344,6 @@ void ofApp::exit() {
 	ofLogNotice("ofApp") << "exit()";
 
 	ot.exit();
+
+	ofxSurfing::saveGroup(paramsOfApp);
 }
