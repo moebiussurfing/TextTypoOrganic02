@@ -93,7 +93,6 @@ void ofApp::setup() {
 	
 	// App session settings
 	paramsOfApp.setName("ofApp");
-	// paramsOfApp.add(ot.);
 	paramsOfApp.add(bDistMode);
 	paramsOfApp.add(bFullScreen);
 	paramsOfApp.add(bMouseBrowsing);
