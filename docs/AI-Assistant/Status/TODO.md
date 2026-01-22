@@ -1,6 +1,7 @@
 #### file: TODO.md
 
 # DO NOW LIST:
+[ ] OJO. SE HA ROTO LA ACTUACION DE `PARTICLES TWEAKS`. ARREGLALO Y ADEMAS ANADE PARA QUE PUEDA HABER UN VECTOR DE VARIOS PUNTOS ANIMADOS, Y QUE CUALQUIERA DE ELLOS ACTUE DEFORMANDO EL SHAPE DE TEXT ORGANIC. PIENSA QUE LUEGO QUIERO QUE SE PUEDA ANADIR MAS PUNTOS FACILMENTE. SI ES POSIBLE PODRIAS APROVECHAR PARA CREAR UNA CLASE Y SUS ARCHIVOS .H/.CPP, Y TAMBIEN PUEDES MOVER ALLI LA ACTUACION DE `MOUSE TWEAKS`. 
 
 # DO NEXT LIST: (don't do now. could have semi finished job tasks)
 [ ] anade un ofParam `thickness` para el grosor de la linea outline, normalizado `float` de 0.f a 1.0f y una constnte de max 10 points de grosor en las constantes de `organicTextConstants.h`. anadelo a los `ofParameterGroup` junto a `draw outline bool`. debe aparecer en el preset tambien. ademas ahora quiero que `bool draw outline` tambien se incluya en el `preset`.
@@ -44,4 +45,4 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 - lo importante de estos dos modos es que usan los 3 colores globales (color1, color2, color3) y los mezclan segun la distancia al centro del texto y la posicion del punto en el texto.
 
 # IGNORE: PERSONAL MISC NOTES:
-- AHORA REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` (SI AUN NO LO HAS HECHO. IGNORA SI YA LO HAS LEIDO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST`, que haremos luego.
+- AHORA REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` (SI AUN NO LO HAS HECHO. IGNORA SI YA LO HAS LEIDO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST`, que haremos luego.)
