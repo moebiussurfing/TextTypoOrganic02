@@ -1,10 +1,9 @@
 #### file: TODO.md
 
 # DO NOW LIST:
-
+[ ] quiero hacer un archivo clase nuevo para centralizar donde se guardan los puntos tanto del outline como de las animaciones, tanto de los trails como de los puntos normales. vamos a llamar a esta clase `organicTextData`. y accederemos a ella para guardar y leer los puntos centralizadamente. via un smart pointer cpp.
 
 # DO NEXT LIST: (don't do now. could have semi finished job tasks)
-[ ] quiero hacer un archivo clase nuevo para centralizar donde se guardan los puntos tanto del outline como de las animaciones, tanto de los trails como de los puntos normales. vamos a llamar a esta clase `organicTextData`. y accederemos a ella para guardar y leer los puntos centralizadamente. via un smart pointer cpp.
 [ ] anade un ofParam `thickness` para el grosor de la linea outline, normalizado `float` de 0.f a 1.0f y una constnte de max 10 points de grosor en las constantes de `organicTextConstants.h`. anadelo a los `ofParameterGroup` junto a `draw outline bool`. debe aparecer en el preset tambien. ademas ahora quiero que `bool draw outline` tambien se incluya en el `preset`.
 [ ] el `timing` o tiempo, o velocidad de todas las animaciones, por frame debe ser independiente del `framerate`. es decir, si el framerate baja las animaciones deben seguir a la misma `velocidad`. para ello, en vez de usar `frameCount` o similar, usa `ofGetElapsedTimef()` o `deltaTime` para calcular los tiempos de las animaciones.
 
@@ -45,4 +44,4 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 - lo importante de estos dos modos es que usan los 3 colores globales (color1, color2, color3) y los mezclan segun la distancia al centro del texto y la posicion del punto en el texto.
 
 # IGNORE: NOTES:
-- REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST`, que haremos luego.
+- AHORA REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` (SI AUN NO LO HAS HECHO. IGNORA SI YA LO HAS LEIDO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST`, que haremos luego.
