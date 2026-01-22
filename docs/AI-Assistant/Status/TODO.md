@@ -1,12 +1,12 @@
 #### file: TODO.md
 
 # DO NOW LIST:
-[ ] anade un ofParam `thickness` para el grosor de la linea outline, normalizado `float` de 0.f a 1.0f y una constnte de max 10 points de grosor en las constantes de `organicTextConstants.h`. anadelo a los `ofParameterGroup` junto a `draw outline bool`. debe aparecer en el preset tambien. ademas ahora quiero que `bool draw outline` tambien se incluya en el `preset`.
 
-[ ] el `timing` o tiempo, o velocidad de todas las animaciones, por frame debe ser independiente del `framerate`. es decir, si el framerate baja las animaciones deben seguir a la misma `velocidad`. para ello, en vez de usar `frameCount` o similar, usa `ofGetElapsedTimef()` o `deltaTime` para calcular los tiempos de las animaciones.
 
-# DO NEXT LIST:
+# DO NEXT LIST: (don't do now. could have semi finished job tasks)
 [ ] quiero hacer un archivo clase nuevo para centralizar donde se guardan los puntos tanto del outline como de las animaciones, tanto de los trails como de los puntos normales. vamos a llamar a esta clase `organicTextData`. y accederemos a ella para guardar y leer los puntos centralizadamente. via un smart pointer cpp.
+[ ] anade un ofParam `thickness` para el grosor de la linea outline, normalizado `float` de 0.f a 1.0f y una constnte de max 10 points de grosor en las constantes de `organicTextConstants.h`. anadelo a los `ofParameterGroup` junto a `draw outline bool`. debe aparecer en el preset tambien. ademas ahora quiero que `bool draw outline` tambien se incluya en el `preset`.
+[ ] el `timing` o tiempo, o velocidad de todas las animaciones, por frame debe ser independiente del `framerate`. es decir, si el framerate baja las animaciones deben seguir a la misma `velocidad`. para ello, en vez de usar `frameCount` o similar, usa `ofGetElapsedTimef()` o `deltaTime` para calcular los tiempos de las animaciones.
 
 ----
 
