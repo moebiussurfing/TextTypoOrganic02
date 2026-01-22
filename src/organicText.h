@@ -203,6 +203,7 @@ private:
 	ofEventListener e_trailLength;
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 	ofEventListener e_bAutoZoomGlobal;
+	ofEventListener e_bMouseTweaks, e_bParticlesTweaks;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);

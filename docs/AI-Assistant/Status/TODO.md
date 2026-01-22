@@ -1,18 +1,23 @@
 #### file: TODO.md
 
 # DO NOW LIST:
-- En animation modes `pulse` y `wave` de organicText funcionan animando los puntos segun una funcion relativa a un punto horizontalmente centrado en el texto dibujado. me gustaria qeye pudiera modificarse el punto x desde la izquiera a la derecha, donde 0.5 sea el centro como hace ahora. tambien podemos usarlo para el modo `orbit` haciendo rotar desde otro x y no siempre desde el centro. anade otro ofparam 0-1 llamado animOriginX o similar.
+[ ] 
 
+----
 
 ## REMEMBER:
-- lee AI-AGENTS-GUIDE.md (AGENTS.md y RULES.md principalmente)
+- lee en profundidadAI-AGENTS-GUIDE.md (AGENTS.md y RULES.md principalmente, memorizalos. son los dos archivos para Agentes mas importantes)
 - hazme propuestas antes de implementar nada
 - ignora los TODO incrustados en el codigo!
-- revisa y modifica solo /src, principalmente src/organicText.h/cpp, y si es necesario ofapp.h/.cpp
-- no toques main.cpp
-- si necesitas (y te autorizo) ejecutar la app usa Debug ya que Release no esta bien configurado
+- revisa y modifica solo /src, principalmente src/organicText.h/cpp, y si es necesario ofApp.h/.cpp.
+- no toques main.cpp.
+- si necesitas (y te autorizo) ejecutar la app usa Debug ya que Release no esta bien configurado. Pero mejor ya me encargo yo de compilar y ejecutar.
+- no hagas los git commits, solo proponme hacerlo yo cuando cambios grandes o haya nuevas features funcionando.
+
+----
 
 # DONE: CHANGELOG:
+- En animation modes `pulse` y `wave` de organicText funcionan animando los puntos segun una funcion relativa a un punto horizontalmente centrado en el texto dibujado. me gustaria qeye pudiera modificarse el punto x desde la izquiera a la derecha, donde 0.5 sea el centro como hace ahora. tambien podemos usarlo para el modo `orbit` haciendo rotar desde otro x y no siempre desde el centro. anade otro ofparam 0-1 llamado animOriginX o similar.
 - he actualizado y mejorado ofxTweenLiteHelper. puedes ver el ejemplo de uso en ofxTweenLite/example4/src. revisa e implementa estas nuevas mejoras en organicText.h/.cpp y si necesitas toca cosas en ofapp
 
 # IGNORE: NOTES:
