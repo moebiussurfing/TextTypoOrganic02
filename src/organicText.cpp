@@ -7,6 +7,9 @@
 OrganicText::OrganicText() {
 	ofLogVerbose("OrganicText") << "OrganicText()";
 	
+	// Initialize data storage
+	data = std::make_unique<OrganicTextData>();
+	
 	ofAddListener(ofEvents().update, this, &OrganicText::update);
 	ofAddListener(ofEvents().windowResized, this, &OrganicText::windowResized);
 	
@@ -75,9 +78,6 @@ void OrganicText::setupScene() {
 	
 	// Initialize
 	t = 0.0;
-	textCenter = vec2(0, 0);
-	textWidth = 0.0f;
-	textHeight = 0.0f;
 	mouseLocalPos = vec2(0, 0);
 	bMouseInBounds = false;
 	
@@ -467,7 +467,10 @@ void OrganicText::setupScene() {
 		colorMode.addListener(this, &OrganicText::updateColorModeName);
 		animationMode.addListener(this, &OrganicText::updateAnimationModeName);
 		
-		e_trailLength = trailLength.newListener([this](float & v) { initTrails(); });
+		e_trailLength = trailLength.newListener([this](float & v) {
+			int tl = (int)ofMap(v, 0.f, 1.f, TRAILS_LENGTH_MIN, TRAILS_LENGTH_MAX, true);
+			data->initTrails(tl);
+		});
 		
 		//--
 		
@@ -670,12 +673,12 @@ void OrganicText::setupScene() {
 		vec2 scaled = translated / zoomFactor;
 		
 		// Step 3: Translate to text origin (inverse of text centering)
-		float textOffsetX = -textWidth * 0.5f;
-		float textOffsetY = textHeight * 0.5f;
+		float textOffsetX = -data->getTextWidth() * 0.5f;
+		float textOffsetY = data->getTextHeight() * 0.5f;
 		mouseLocalPos = scaled - vec2(textOffsetX, textOffsetY);
 		
 		// Check if mouse is within text bounds
-		bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= textWidth && mouseLocalPos.y >= -textHeight && mouseLocalPos.y <= 0);
+		bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= data->getTextWidth() && mouseLocalPos.y >= -data->getTextHeight() && mouseLocalPos.y <= 0);
 		
 		if (bDebug) {
 			// Smooth alpha blinking using sine wave
@@ -761,29 +764,35 @@ void OrganicText::setupScene() {
 		// Map spacing (0-1 normalized)
 		float finalSpacing = ofMap(densitySpacing.get(), 0, 1, DENSITY_SPACING_MIN, DENSITY_SPACING_MAX, true);
 		
-		pointsString = sampleStringPoints(sText, finalSpacing);
+		// Sample and set base points
+		std::vector<vec2> sampledPoints = sampleStringPoints(sText, finalSpacing);
+		data->setBasePoints(sampledPoints);
 		
 		// Initialize trails
-		initTrails();
+		int tl = (int)ofMap(trailLength.get(), 0.f, 1.f, TRAILS_LENGTH_MIN, TRAILS_LENGTH_MAX, true);
+		data->initTrails(tl);
 		
-		// Calculate center and width
-		if (pointsString.size() > 0) {
+		// Calculate center
+		const auto& points = data->getBasePoints();
+		if (points.size() > 0) {
 			vec2 sum(0, 0);
-			for (const auto & p : pointsString) {
+			for (const auto & p : points) {
 				sum += p;
 			}
-			textCenter = sum / static_cast<float>(pointsString.size());
+			vec2 center = sum / static_cast<float>(points.size());
+			
+			// Store text metrics
+			float width = font.stringWidth(sText);
+			float height = font.stringHeight(sText);
+			data->setTextMetrics(width, height, center);
 		}
-		
-		// Store text width and height for mouse coordinate transformations
-		textWidth = font.stringWidth(sText);
-		textHeight = font.stringHeight(sText);
 	}
 	
 	//--------------------------------------------------------------
 	vec2 OrganicText::getAnimatedOffset(int index, float phase) const {
 		vec2 offset(0, 0);
 		
+		const auto& pointsString = data->getBasePoints();
 		if (!bEnableAnimation.get() || pointsString.empty()) {
 			return offset;
 		}
@@ -791,8 +800,8 @@ void OrganicText::setupScene() {
 		float fontScale = fontSize.get() / 150.0f;
 		
 		// Calculate custom animation origin based on animOriginX (0=left, 0.5=center, 1=right)
-		float customOriginX = textWidth * animOriginX.get();
-		float customOriginY = textCenter.y;
+		float customOriginX = data->getTextWidth() * animOriginX.get();
+		float customOriginY = data->getTextCenter().y;
 		
 		// Override with mouse position if mouse control is active
 		// Now works across entire canvas, deforming the constellation
@@ -904,6 +913,7 @@ void OrganicText::setupScene() {
 	ofColor OrganicText::getPointColor(int index, vec2 position, float phase) const {
 		ofColor color = ofColor(ofColor::white, 255);
 		
+		const auto& pointsString = data->getBasePoints();
 		if (pointsString.empty()) return color;
 		
 		switch ((ColorMode)colorMode.get()) {
@@ -947,7 +957,7 @@ void OrganicText::setupScene() {
 			}
 			
 			case COLOR_DISTANCE: {
-				float distance = glm::distance(position, textCenter);
+				float distance = glm::distance(position, data->getTextCenter());
 				float distFactor = ofMap(distance, 0, COLOR_DISTANCE_MAX, 0, 1, true);
 				
 				ofColor c1 = color1.get();
@@ -979,7 +989,7 @@ void OrganicText::setupScene() {
 		}
 		
 		if (bColorByDistance) {
-			float distance = glm::distance(position, textCenter);
+			float distance = glm::distance(position, data->getTextCenter());
 			// Map alpha range dynamically: 255 (center) to edge based on colorAlphaRange
 			float alphaEdge = ofMap(colorAlphaRange.get(), 0, 1, 255, 0, true);
 			float alpha = ofMap(distance, 0, COLOR_DISTANCE_MAX, 255, alphaEdge, true);
@@ -1062,24 +1072,11 @@ void OrganicText::setupScene() {
 	}
 	
 	//--------------------------------------------------------------
-	void OrganicText::initTrails() {
-		ofLogNotice("OrganicText") << "initTrails()";
-		
-		pointTrails.clear();
-		pointTrails.resize(pointsString.size());
-		
-		int tl = (int)ofMap(trailLength.get(), 0.f, 1.f, TRAILS_LENGTH_MIN, TRAILS_LENGTH_MAX, true);
-		for (size_t i = 0; i < pointsString.size(); i++) {
-			pointTrails[i].resize(tl);
-			for (int j = 0; j < tl; j++) {
-				pointTrails[i][j] = pointsString[i];
-			}
-		}
-	}
-	
-	//--------------------------------------------------------------
 	void OrganicText::updateTrails() {
-		for (size_t i = 0; i < pointsString.size() && i < pointTrails.size(); i++) {
+		const auto& pointsString = data->getBasePoints();
+		const auto& pointsAnimatedCache = data->getAnimatedCache();
+		
+		for (std::size_t i = 0; i < pointsString.size(); i++) {
 			// Use cached animated position if available, otherwise calculate
 			vec2 currentPos;
 			if (i < pointsAnimatedCache.size() && pointsAnimatedCache.size() == pointsString.size()) {
@@ -1090,15 +1087,13 @@ void OrganicText::setupScene() {
 				currentPos = pointsString[i] + offset;
 			}
 			
-			for (int j = static_cast<int>(pointTrails[i].size()) - 1; j > 0; j--) {
-				pointTrails[i][j] = pointTrails[i][j - 1];
-			}
-			pointTrails[i][0] = currentPos;
+			data->updateTrailPoint(i, currentPos);
 		}
 	}
 	
 	//--------------------------------------------------------------
 	void OrganicText::drawConnections() const {
+		const auto& pointsString = data->getBasePoints();
 		if (!bDrawConnections.get() || pointsString.size() < 2) return;
 		
 		float maxDist = connectDistance.get();
@@ -1116,8 +1111,10 @@ void OrganicText::setupScene() {
 		ofMesh connectionMesh;
 		connectionMesh.setMode(OF_PRIMITIVE_LINES);
 		
+		const auto& pointsAnimatedCache = data->getAnimatedCache();
+		
 		// Collect all connection segments into a single mesh
-		for (size_t i = pointsString.size() * inPoint.get(); i < pointsString.size() && i < pointsString.size() * outPoint.get(); i += skipFactor) {
+		for (std::size_t i = pointsString.size() * inPoint.get(); i < pointsString.size() && i < pointsString.size() * outPoint.get(); i += skipFactor) {
 			// Use cached animated position if available, otherwise calculate
 			vec2 pos1;
 			if (i < pointsAnimatedCache.size() && pointsAnimatedCache.size() == pointsString.size()) {
@@ -1132,7 +1129,7 @@ void OrganicText::setupScene() {
 			int searchLimit = bConnectNearOnly ? ofClamp(CONNECTIONS_SEARCH_NEAR, 1, static_cast<int>(pointsString.size()) - static_cast<int>(i)) : ofClamp(CONNECTIONS_SEARCH_FAR, 1, static_cast<int>(pointsString.size()) - static_cast<int>(i));
 			
 			for (int offset = 1; offset < searchLimit && connectionsDrawn < maxConPerPoint; offset += skipFactor) {
-				size_t j = i + offset;
+				std::size_t j = i + offset;
 				if (j >= pointsString.size()) break;
 				
 				// Use cached animated position if available, otherwise calculate
@@ -1185,6 +1182,9 @@ void OrganicText::setupScene() {
 		if (this->isTweening()) return; // Skip drawing trails while tweening in/out
 		#endif
 		
+		const auto& pointsString = data->getBasePoints();
+		const auto& pointTrails = data->getTrails();
+		
 		ofPushStyle();
 		ofSetLineWidth(trailLineWidth);
 		float tf = ofMap(trailFade, 0.f, 1.f, TRAILS_FADE_MIN, TRAILS_FADE_MAX, true);
@@ -1194,11 +1194,11 @@ void OrganicText::setupScene() {
 		trailMesh.setMode(OF_PRIMITIVE_LINES);
 		
 		// Collect all trail segments into a single mesh
-		for (size_t i = pointsString.size() * inPoint.get(); i < pointTrails.size() && i < pointsString.size() * outPoint.get(); i++) {
+		for (std::size_t i = pointsString.size() * inPoint.get(); i < pointTrails.size() && i < pointsString.size() * outPoint.get(); i++) {
 			if (pointTrails[i].size() < 2) continue; // Skip if not enough points
 			
 			// Add line segments for this trail
-			for (size_t j = 1; j < pointTrails[i].size(); j++) {
+			for (std::size_t j = 1; j < pointTrails[i].size(); j++) {
 				float fadeAmount = pow(tf, static_cast<float>(j));
 				float alpha = fadeAmount * TRAILS_ALPHA_MAX;
 				
@@ -1237,6 +1237,7 @@ void OrganicText::setupScene() {
 		
 		// Text center crosshair
 		float crossSize = 7;
+		vec2 textCenter = data->getTextCenter();
 		ofDrawLine(textCenter - vec2(crossSize, 0), textCenter + vec2(crossSize, 0));
 		ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 		ofDrawCircle(textCenter, crossSize * 0.7);
@@ -1249,6 +1250,7 @@ void OrganicText::setupScene() {
 		
 		// All sample points
 		ofFill();
+		const auto& pointsString = data->getBasePoints();
 		for (const auto & point : pointsString) {
 			ofDrawCircle(point, 1.f);
 		}
@@ -1260,12 +1262,14 @@ void OrganicText::setupScene() {
 	
 	//--------------------------------------------------------------
 	void OrganicText::drawShapes() {
+		const auto& pointsString = data->getBasePoints();
+		
 		// Resize cache if needed
-		if (pointsAnimatedCache.size() != pointsString.size()) {
-			pointsAnimatedCache.resize(pointsString.size());
+		if (data->getAnimatedCache().size() != pointsString.size()) {
+			data->resizeCache(pointsString.size());
 		}
 		
-		for (size_t i = pointsString.size() * inPoint.get(); i < pointsString.size() && i < pointsString.size() * outPoint.get(); i++) {
+		for (std::size_t i = pointsString.size() * inPoint.get(); i < pointsString.size() && i < pointsString.size() * outPoint.get(); i++) {
 			ofPushStyle();
 			
 			float phase = t + 0.123f * static_cast<float>(i);
@@ -1292,7 +1296,7 @@ void OrganicText::setupScene() {
 			}
 			
 			// Cache the final animated position for reuse in connections and trails
-			pointsAnimatedCache[i] = finalPos;
+			data->setCachedAnimatedPoint(i, finalPos);
 			
 			ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
 			
@@ -1461,9 +1465,10 @@ void OrganicText::setupScene() {
 		ofPushMatrix();
 		ofPushStyle();
 		
-		int totalPoints = pointsString.size();
+		int totalPoints = data->getPointCount();
 		
 		int totalTrailPoints = 0;
+		const auto& pointTrails = data->getTrails();
 		for (const auto & trail : pointTrails) {
 			totalTrailPoints += trail.size();
 		}

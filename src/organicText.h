@@ -9,6 +9,7 @@
 
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
+#include "organicTextData.h" // Data storage
 //#include "ofxSurfingHelpersLite.h" // Draw widgets
 
 // (WIP) demo particle modifier
@@ -213,7 +214,6 @@ private:
 
 	void drawConnections() const;
 
-	void initTrails();
 	void updateTrails();
 	void drawTrails();
 
@@ -241,20 +241,16 @@ private:
 
 private:
 	ofTrueTypeFont font;
-	vec2 textCenter {};
-	float textWidth = 0;
-	float textHeight = 0;
-
-	// Data
-	vector<vec2> pointsString;
-	vector<vector<vec2>> pointTrails;
-	mutable vector<vec2> pointsAnimatedCache; // Cache animated positions for reuse
-
-	mutable vec2 mouseLocalPos;
-	mutable bool bMouseInBounds = false;
+	
+	// Centralized data storage
+	std::unique_ptr<OrganicTextData> data;
 
 public:
 	float t = 0; // Time accumulator
+
+private:
+	mutable vec2 mouseLocalPos;
+	mutable bool bMouseInBounds = false;
 
 private:
 	void refreshPointsString();

@@ -315,7 +315,7 @@ void ofApp::setupTweensCallbacks() {
 	});
 	
 	// writeOut tween completed
-	ot.setOnCompleteWriteOut([this]() {
+	ot.setOnCompleteWriteOut([]() {
 		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
 	});
 }
