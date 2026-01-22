@@ -74,6 +74,7 @@ public:
 	ofParameterGroup paramsConnections;
 	ofParameterGroup paramsTrails;
 	ofParameterGroup paramsMouseTweaks;
+	ofParameterGroup paramsParticleTweaks;
 
 	ofParameterGroup paramsSessionSettings; // For session status, not preset
 	ofParameterGroup paramsInternal; // Some internal settings
@@ -165,7 +166,6 @@ public:
 
 	// Mouse tweaks parameters
 	ofParameter<bool> bMouseTweaks;
-	ofParameter<bool> bMouseAsModifier;
 	ofParameter<float> radiusMouse { "radiusMouse", 0.1f, 0, 1 };
 	ofParameter<bool> bMouseControlOrigin;
 	ofParameter<bool> bMouseHighlightPoints;
@@ -177,10 +177,10 @@ public:
 	ofParameter<float> mouseScalePower;
 	
 	// Particle modifiers parameters
+	ofParameter<bool> bParticleModifier;
 	ofParameter<int> numParticleModifiers;
 	ofParameter<float> particleSpeed;
-	ofParameter<float> particleRadius;
-	ofParameter<float> particleInfluence;
+	ofParameter<float> particleSize;
 
 	//--
 
@@ -212,8 +212,8 @@ private:
 	ofEventListener e_trailLength;
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 	ofEventListener e_bAutoZoomGlobal;
-	ofEventListener e_bMouseTweaks, e_bMouseAsModifier;
-	ofEventListener e_numParticleModifiers;
+	ofEventListener e_bMouseTweaks;
+	ofEventListener e_bParticleModifier, e_numParticleModifiers;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
@@ -232,7 +232,8 @@ private:
 	float getMouseInfluence(vec2 position) const;
 	
 	//Calculate combined influence from all modifiers for a given position (0-1)
-	float getModifiersInfluence(vec2 position) const;
+	//Returns: influence strength (0-1) and closest modifier position
+	float getModifiersInfluence(vec2 position, vec2& outModifierPos) const;
 	mutable glm::vec2 mousePos;
 
 	// Font management
@@ -265,7 +266,6 @@ private:
 	
 	// Modifiers system
 	std::vector<std::unique_ptr<OrganicTextModifier>> modifiers;
-	OrganicTextModifier* mouseModifier; // Pointer to mouse modifier (if exists)
 	
 	void updateModifiers();
 	void drawModifiers() const;

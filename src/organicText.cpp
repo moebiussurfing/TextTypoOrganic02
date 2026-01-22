@@ -10,9 +10,6 @@ OrganicText::OrganicText() {
 	// Initialize data storage
 	data = std::make_unique<OrganicTextData>();
 	
-	// Initialize modifier pointer
-	mouseModifier = nullptr;
-	
 	ofAddListener(ofEvents().update, this, &OrganicText::update);
 	ofAddListener(ofEvents().windowResized, this, &OrganicText::windowResized);
 	
@@ -171,11 +168,10 @@ void OrganicText::setupScene() {
 		bAutoZoomGlobal.set("Auto Zoom", true);
 		sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 		bMouseTweaks.set("Mouse Tweaks", true);
-		bMouseAsModifier.set("Mouse as Modifier", true);
-		numParticleModifiers.set("Num Particles", 0, 0, 10);
+		bParticleModifier.set("Particle Modifier", false);
+		numParticleModifiers.set("Num Particles", 1, 0, 10);
 		particleSpeed.set("Speed", 0.5f, 0.0f, 1.0f);
-		particleRadius.set("Radius", 0.15f, 0.05f, 0.5f);
-		particleInfluence.set("Influence", 1.0f, 0.0f, 1.0f);
+		particleSize.set("Size", 0.05f, 0.01f, 0.15f);
 		
 		// Font parameters
 		fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
@@ -373,6 +369,11 @@ void OrganicText::setupScene() {
 		paramsMouseTweaks.add(vResetMouseTweaks);
 		paramsMouseTweaks.add(vRandomMouseTweaks);
 		
+		paramsParticleTweaks.setName("Particle Tweaks");
+		paramsParticleTweaks.add(numParticleModifiers);
+		paramsParticleTweaks.add(particleSpeed);
+		paramsParticleTweaks.add(particleSize);
+		
 		//--
 		
 		// Presets parameters
@@ -426,11 +427,8 @@ void OrganicText::setupScene() {
 		parameters.add(paramsInternal);
 		parameters.add(paramsTweens);
 		parameters.add(bMouseTweaks);
-		parameters.add(bMouseAsModifier);
-		parameters.add(numParticleModifiers);
-		parameters.add(particleSpeed);
-		parameters.add(particleRadius);
-		parameters.add(particleInfluence);
+		parameters.add(bParticleModifier);
+		parameters.add(paramsParticleTweaks);
 		
 		#ifndef SURFING_USE_EXTERNAL_PRESET_MANAGER
 		// exclude these settings from settings
@@ -496,32 +494,20 @@ void OrganicText::setupScene() {
 			ofLogNotice("OrganicText") << "bMouseTweaks: " << b;
 		});
 		
-		e_bMouseAsModifier = bMouseAsModifier.newListener([this](bool & b) {
-			ofLogNotice("OrganicText") << "bMouseAsModifier: " << b;
-			if (b && !mouseModifier) {
-				// Create mouse modifier
-				auto mod = std::make_unique<OrganicTextModifier>(OrganicTextModifier::MODIFIER_MOUSE);
-				mod->setRadius(radiusMouse.get());
-				mod->setInfluenceStrength(mouseInfluenceStrength.get());
-				mod->setColor(ofColor(255, 255, 0, 180));
-				mouseModifier = mod.get();
-				modifiers.push_back(std::move(mod));
-			} else if (!b && mouseModifier) {
-				// Remove mouse modifier
-				modifiers.erase(
-					std::remove_if(modifiers.begin(), modifiers.end(),
-						[this](const std::unique_ptr<OrganicTextModifier>& m) {
-							return m.get() == mouseModifier;
-						}),
-					modifiers.end()
-				);
-				mouseModifier = nullptr;
+		e_bParticleModifier = bParticleModifier.newListener([this](bool & b) {
+			ofLogNotice("OrganicText") << "bParticleModifier: " << b;
+			if (b) {
+				createParticleModifiers(numParticleModifiers.get());
+			} else {
+				clearParticleModifiers();
 			}
 		});
 		
 		e_numParticleModifiers = numParticleModifiers.newListener([this](int & n) {
 			ofLogNotice("OrganicText") << "numParticleModifiers: " << n;
-			createParticleModifiers(n);
+			if (bParticleModifier.get()) {
+				createParticleModifiers(n);
+			}
 		});
 	}
 
@@ -1259,20 +1245,39 @@ void OrganicText::setupScene() {
 			vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
 			vec2 finalPos = pointsString[i] + offset;
 			
-			// Calculate mouse influence for this point
-			float mouseInfluence = getMouseInfluence(finalPos);
+			// Calculate influence from traditional mouse and modifiers
+			float mouseInfluence = 0.0f;
+			float modifiersInfluence = 0.0f;
+			vec2 influenceSourcePos = mouseLocalPos;
 			
-			// Apply mouse displacement effect (bidirectional)
+			if (bMouseTweaks.get()) {
+				mouseInfluence = getMouseInfluence(finalPos);
+			}
+			
+			// Add influence from particle modifiers
+			vec2 closestModifierPos;
+			if (bParticleModifier.get() && !modifiers.empty()) {
+				modifiersInfluence = getModifiersInfluence(finalPos, closestModifierPos);
+			}
+			
+			// Use maximum influence from both systems
+			float totalInfluence = std::max(mouseInfluence, modifiersInfluence);
+			
+			// Determine which source position to use for displacement
+			if (modifiersInfluence > mouseInfluence) {
+				influenceSourcePos = closestModifierPos;
+			}
+			
+			// Apply displacement effect (bidirectional)
 			// < 0.5 = attract, 0.5 = neutral, > 0.5 = repel
-			if (bMouseTweaks.get() && bMouseDisplacePoints.get() && mouseInfluence > 0.0f) {
-				// Calculate direction from mouse to point
-				vec2 direction = glm::normalize(finalPos - mouseLocalPos);
+			if (bMouseDisplacePoints.get() && totalInfluence > 0.0f) {
+				vec2 direction = glm::normalize(finalPos - influenceSourcePos);
 				
 				// Map mouseDisplacePower: 0.5 = no effect, < 0.5 = attract, > 0.5 = repel
 				float powerCentered = (mouseDisplacePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
 				
 				float maxDisplacement = 50.0f; // Maximum displacement in pixels
-				float displacement = mouseInfluence * powerCentered * maxDisplacement;
+				float displacement = totalInfluence * powerCentered * maxDisplacement;
 				
 				// If powerCentered is negative (attract), direction is inverted
 				finalPos += direction * displacement;
@@ -1296,16 +1301,16 @@ void OrganicText::setupScene() {
 			float sizeNoise = ofNoise(phase * SHAPE_SIZE_NOISE_SCALE, static_cast<float>(i) * SHAPE_SIZE_INDEX_SCALE);
 			float pointSize = ofLerp(minSize, maxSize, sizeNoise);
 			
-			// Apply mouse scale effect (bidirectional)
+			// Apply scale effect (bidirectional)
 			// < 0.5 = shrink, 0.5 = neutral, > 0.5 = grow
-			if (bMouseTweaks.get() && bMouseScaleShapes.get() && mouseInfluence > 0.0f) {
+			if (bMouseScaleShapes.get() && totalInfluence > 0.0f) {
 				// Map mouseScalePower: 0.5 = no effect, < 0.5 = shrink, > 0.5 = grow
 				float powerCentered = (mouseScalePower.get() - 0.5f) * 2.0f; // Maps [0,1] to [-1,1]
 				
 				// Calculate scale multiplier
 				// Positive: grows up to MAX_SCALE_POWER times
 				// Negative: shrinks down to near 0
-				float scaleMultiplier = 1.0f + (mouseInfluence * powerCentered * MAX_SCALE_POWER);
+				float scaleMultiplier = 1.0f + (totalInfluence * powerCentered * MAX_SCALE_POWER);
 				pointSize *= scaleMultiplier;
 			}
 			
@@ -1720,20 +1725,13 @@ void OrganicText::setupScene() {
 		for (auto & mod : modifiers) {
 			if (mod->isActive()) {
 				mod->update(ofGetLastFrameTime(), targetFPS);
-				
-				// Update mouse modifier position
-				if (mod.get() == mouseModifier) {
-					float mouseNormX = static_cast<float>(ofGetMouseX()) / ofGetWidth();
-					float mouseNormY = static_cast<float>(ofGetMouseY()) / ofGetHeight();
-					mod->setPosition(vec2(mouseNormX, mouseNormY));
-				}
 			}
 		}
 	}
 	
 	//--------------------------------------------------------------
 	void OrganicText::drawModifiers() const {
-		if (!bDebug && !bMouseTweaks) return;
+		if (!bDebug && !bParticleModifier) return;
 		
 		for (const auto & mod : modifiers) {
 			if (mod->isActive()) {
@@ -1756,9 +1754,9 @@ void OrganicText::setupScene() {
 			// Random position
 			mod->setPosition(vec2(ofRandom(0.1f, 0.9f), ofRandom(0.1f, 0.9f)));
 			
-			// Set properties from parameters
-			mod->setRadius(particleRadius.get());
-			mod->setInfluenceStrength(particleInfluence.get());
+			// Set properties from parameters - using same params as mouse
+			mod->setRadius(radiusMouse.get());
+			mod->setInfluenceStrength(mouseInfluenceStrength.get());
 			
 			// Random velocity based on speed parameter
 			float speed = ofMap(particleSpeed.get(), 0.f, 1.f, 0.0005f, 0.003f);
@@ -1767,12 +1765,13 @@ void OrganicText::setupScene() {
 			// Random angular velocity
 			mod->setAngularVelocity(ofRandom(-1.5f, 1.5f));
 			
-			// Random bounds size
-			ofRectangle bounds(0, 0, ofRandom(0.03f, 0.08f), ofRandom(0.03f, 0.08f));
+			// Bounds size from parameter
+			float size = particleSize.get();
+			ofRectangle bounds(0, 0, size, size);
 			mod->setBounds(bounds);
 			
-			// Random color
-			mod->setColor(ofColor(ofRandom(100, 255), ofRandom(100, 255), ofRandom(100, 255), 180));
+			// White color with 50% alpha
+			mod->setColor(ofColor(255, 255, 255, 127));
 			
 			modifiers.push_back(std::move(mod));
 		}
@@ -1791,10 +1790,11 @@ void OrganicText::setupScene() {
 	}
 	
 	//--------------------------------------------------------------
-	float OrganicText::getModifiersInfluence(vec2 position) const {
+	float OrganicText::getModifiersInfluence(vec2 position, vec2& outModifierPos) const {
 		if (modifiers.empty()) return 0.0f;
 		
 		float maxInfluence = 0.0f;
+		outModifierPos = vec2(0, 0);
 		
 		for (const auto & mod : modifiers) {
 			if (!mod->isActive()) continue;
@@ -1818,7 +1818,10 @@ void OrganicText::setupScene() {
 			
 			if (dist < maxDist) {
 				float influence = (1.0f - (dist / maxDist)) * mod->getInfluenceStrength();
-				maxInfluence = std::max(maxInfluence, influence);
+				if (influence > maxInfluence) {
+					maxInfluence = influence;
+					outModifierPos = modPos;
+				}
 			}
 		}
 		

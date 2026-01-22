@@ -47,4 +47,4 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 ----
 
 # IGNORE: PERSONAL MISC NOTES: (TO BE COPIED TO THE AGENT)
-- AHORA REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` (SI AUN NO LO HAS HECHO. IGNORA SI YA LO HAS LEIDO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST`, que haremos luego.)
+- AHORA REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` (SI AUN NO LO HAS HECHO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST` - que haremos luego - y el resto del archivo debajo.)
