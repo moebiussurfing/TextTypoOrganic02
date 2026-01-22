@@ -10,6 +10,7 @@
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
 #include "organicTextData.h" // Data storage
+#include "organicTextModifier.h" // Text modifiers
 //#include "ofxSurfingHelpersLite.h" // Draw widgets
 
 // (WIP) demo particle modifier
@@ -163,8 +164,8 @@ public:
 	ofParameter<float> trailFade;
 
 	// Mouse tweaks parameters
-	ofParameter<bool> bParticlesTweaks;
 	ofParameter<bool> bMouseTweaks;
+	ofParameter<bool> bMouseAsModifier;
 	ofParameter<float> radiusMouse { "radiusMouse", 0.1f, 0, 1 };
 	ofParameter<bool> bMouseControlOrigin;
 	ofParameter<bool> bMouseHighlightPoints;
@@ -174,6 +175,12 @@ public:
 	ofParameter<float> mouseDisplacePower;
 	ofParameter<bool> bMouseScaleShapes;
 	ofParameter<float> mouseScalePower;
+	
+	// Particle modifiers parameters
+	ofParameter<int> numParticleModifiers;
+	ofParameter<float> particleSpeed;
+	ofParameter<float> particleRadius;
+	ofParameter<float> particleInfluence;
 
 	//--
 
@@ -205,7 +212,8 @@ private:
 	ofEventListener e_trailLength;
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 	ofEventListener e_bAutoZoomGlobal;
-	ofEventListener e_bMouseTweaks, e_bParticlesTweaks;
+	ofEventListener e_bMouseTweaks, e_bMouseAsModifier;
+	ofEventListener e_numParticleModifiers;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
@@ -222,6 +230,9 @@ private:
 
 	//Calculate mouse influence factor for a given position (0-1)
 	float getMouseInfluence(vec2 position) const;
+	
+	//Calculate combined influence from all modifiers for a given position (0-1)
+	float getModifiersInfluence(vec2 position) const;
 	mutable glm::vec2 mousePos;
 
 	// Font management
@@ -251,6 +262,15 @@ public:
 private:
 	mutable vec2 mouseLocalPos;
 	mutable bool bMouseInBounds = false;
+	
+	// Modifiers system
+	std::vector<std::unique_ptr<OrganicTextModifier>> modifiers;
+	OrganicTextModifier* mouseModifier; // Pointer to mouse modifier (if exists)
+	
+	void updateModifiers();
+	void drawModifiers() const;
+	void createParticleModifiers(int count);
+	void clearParticleModifiers();
 
 private:
 	void refreshPointsString();
@@ -363,27 +383,4 @@ public:
 	}
 
 	//--
-
-private:
-	/*
-	TODO: (WIP)
-	- add speed
-	- add multiple
-	- use rect width/height
-	*/
-#ifdef USE_PARTICLE_MODIFIER
-	struct ParticleTweaker {
-		ofRectangle bounds;
-		glm::vec2 velocity;
-		float angle;
-		float angularVelocity;
-	};
-	vector<ParticleTweaker> particleTweaker;
-	void drawParticleTweaker(const ofRectangle & bounds, float angle);
-	float angularVelocityMin = -1.5;
-	float angularVelocityMax = 1.5;
-	//float angularVelocityMin = -10;
-	//float angularVelocityMax = 10;
-	//glm::vec2 velocity = glm::vec2(-0.002, 0.002);
-#endif
 };

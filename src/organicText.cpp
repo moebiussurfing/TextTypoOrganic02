@@ -10,6 +10,9 @@ OrganicText::OrganicText() {
 	// Initialize data storage
 	data = std::make_unique<OrganicTextData>();
 	
+	// Initialize modifier pointer
+	mouseModifier = nullptr;
+	
 	ofAddListener(ofEvents().update, this, &OrganicText::update);
 	ofAddListener(ofEvents().windowResized, this, &OrganicText::windowResized);
 	
@@ -91,24 +94,8 @@ void OrganicText::setupScene() {
 	
 	//--
 	
-	#ifdef USE_PARTICLE_MODIFIER
-	// Initialize moving particleTweaker with random positions/velocities (normalized 0-1)
-	for (int i = 0; i < int(PARTICLE_MODIFIER_NUM_PARTICLES); i++) {
-		ParticleTweaker rect;
-		rect.bounds = ofRectangle(
-			ofRandom(0.1, 0.8),
-			ofRandom(0.1, 0.8),
-			ofRandom(0.1, 0.2),
-			ofRandom(0.08, 0.18));
-			//rect.velocity = glm::vec2(ofRandom(-0.002, 0.002), ofRandom(-0.002, 0.002));
-			rect.velocity = glm::vec2(-0.0015, 0.0015);
-			rect.angle = ofRandom(0, 360);
-			rect.angularVelocity = ofRandom(angularVelocityMin, angularVelocityMax);
-			//rect.angularVelocity = 1000;//TODO
-			particleTweaker.push_back(rect);
-		}
-		#endif
-	}
+	// Initialize modifiers will be done in startup()
+}
 	
 	//--
 	
@@ -184,7 +171,11 @@ void OrganicText::setupScene() {
 		bAutoZoomGlobal.set("Auto Zoom", true);
 		sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 		bMouseTweaks.set("Mouse Tweaks", true);
-		bParticlesTweaks.set("Particles Tweaks", false); //TODO
+		bMouseAsModifier.set("Mouse as Modifier", true);
+		numParticleModifiers.set("Num Particles", 0, 0, 10);
+		particleSpeed.set("Speed", 0.5f, 0.0f, 1.0f);
+		particleRadius.set("Radius", 0.15f, 0.05f, 0.5f);
+		particleInfluence.set("Influence", 1.0f, 0.0f, 1.0f);
 		
 		// Font parameters
 		fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
@@ -435,7 +426,11 @@ void OrganicText::setupScene() {
 		parameters.add(paramsInternal);
 		parameters.add(paramsTweens);
 		parameters.add(bMouseTweaks);
-		parameters.add(bParticlesTweaks);
+		parameters.add(bMouseAsModifier);
+		parameters.add(numParticleModifiers);
+		parameters.add(particleSpeed);
+		parameters.add(particleRadius);
+		parameters.add(particleInfluence);
 		
 		#ifndef SURFING_USE_EXTERNAL_PRESET_MANAGER
 		// exclude these settings from settings
@@ -497,20 +492,36 @@ void OrganicText::setupScene() {
 	
 		//--
 		
-		e_bMouseTweaks=bMouseTweaks.newListener([this](bool &b) {
+		e_bMouseTweaks = bMouseTweaks.newListener([this](bool & b) {
 			ofLogNotice("OrganicText") << "bMouseTweaks: " << b;
-			// if(bMouseTweaks.get()){
-			if(bMouseTweaks.get()){
-				bParticlesTweaks.set(false);
+		});
+		
+		e_bMouseAsModifier = bMouseAsModifier.newListener([this](bool & b) {
+			ofLogNotice("OrganicText") << "bMouseAsModifier: " << b;
+			if (b && !mouseModifier) {
+				// Create mouse modifier
+				auto mod = std::make_unique<OrganicTextModifier>(OrganicTextModifier::MODIFIER_MOUSE);
+				mod->setRadius(radiusMouse.get());
+				mod->setInfluenceStrength(mouseInfluenceStrength.get());
+				mod->setColor(ofColor(255, 255, 0, 180));
+				mouseModifier = mod.get();
+				modifiers.push_back(std::move(mod));
+			} else if (!b && mouseModifier) {
+				// Remove mouse modifier
+				modifiers.erase(
+					std::remove_if(modifiers.begin(), modifiers.end(),
+						[this](const std::unique_ptr<OrganicTextModifier>& m) {
+							return m.get() == mouseModifier;
+						}),
+					modifiers.end()
+				);
+				mouseModifier = nullptr;
 			}
 		});
 		
-		e_bParticlesTweaks=bParticlesTweaks.newListener([this](bool &b) {
-			ofLogNotice("OrganicText") << "bParticlesTweaks: " << b;
-			// if(bParticlesTweaks.get()){
-			if(b){
-				bMouseTweaks.set(false);
-			}
+		e_numParticleModifiers = numParticleModifiers.newListener([this](int & n) {
+			ofLogNotice("OrganicText") << "numParticleModifiers: " << n;
+			createParticleModifiers(n);
 		});
 	}
 
@@ -653,13 +664,7 @@ void OrganicText::setupScene() {
 		
 		// Mouse coordinate transformation
 		// Convert window coordinates to local text coordinates
-		if (!bParticlesTweaks)
 		mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
-		else {
-			// Use first rectangle as mouse pos for particles tweaks].
-			auto c = (particleTweaker[0].bounds.getCenter());
-			mousePos = glm::vec2(c.x * ofGetWidth(), c.y * ofGetHeight());
-		}
 		
 		// Apply inverse transformations (same as in draw())
 		float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
@@ -698,30 +703,8 @@ void OrganicText::setupScene() {
 		
 		//--
 		
-		#ifdef USE_PARTICLE_MODIFIER
-		// Apply delta time for frame-independent particle movement
-		float dt = ofGetLastFrameTime();
-		float normalizedDt = dt / (1.0f / targetFPS);
-		
-		for (int i = 0; i < particleTweaker.size(); i++) {
-			particleTweaker[i].bounds.x += particleTweaker[i].velocity.x * normalizedDt;
-			particleTweaker[i].bounds.y += particleTweaker[i].velocity.y * normalizedDt;
-			particleTweaker[i].angle += particleTweaker[i].angularVelocity * normalizedDt;
-			
-			if (particleTweaker[i].bounds.x < -particleTweaker[i].bounds.width) {
-				particleTweaker[i].bounds.x = 1.0f;
-			}
-			if (particleTweaker[i].bounds.x > 1.0f) {
-				particleTweaker[i].bounds.x = -particleTweaker[i].bounds.width;
-			}
-			if (particleTweaker[i].bounds.y < -particleTweaker[i].bounds.height) {
-				particleTweaker[i].bounds.y = 1.0f;
-			}
-			if (particleTweaker[i].bounds.y > 1.0f) {
-				particleTweaker[i].bounds.y = -particleTweaker[i].bounds.height;
-			}
-		}
-		#endif
+		// Update modifiers
+		updateModifiers();
 	}
 	
 	//--
@@ -1420,11 +1403,8 @@ void OrganicText::setupScene() {
 			
 			//--
 			
-			#ifdef USE_PARTICLE_MODIFIER
-			for (const auto & rect : particleTweaker) {
-				drawParticleTweaker(rect.bounds, rect.angle);
-			}
-			#endif
+			// Draw modifiers (particles and/or mouse)
+			drawModifiers();
 		}
 		
 		// Debug bench measuring drawing performance
@@ -1733,23 +1713,115 @@ void OrganicText::setupScene() {
 	
 	//--
 	
-	#ifdef USE_PARTICLE_MODIFIER
+	// Modifiers Management
+	
 	//--------------------------------------------------------------
-	void OrganicText::drawParticleTweaker(const ofRectangle & bounds, float angle) {
-		
-		ofPushMatrix();
-		ofScale(ofGetWidth(), ofGetHeight());
-		// particle center
-		ofTranslate(bounds.x + bounds.width / 2.0f, bounds.y + bounds.height / 2.0f);
-		ofRotateDeg(angle);
-		ofScale(bounds.width, bounds.height);
-		ofPushStyle();
-		ofFill();
-		ofSetColor(colorDebug);
-		//ofDrawRectangle(bounds);
-		ofDrawCircle(0, 0, float(PARTICLE_MODIFIER_MAX_SIZE));
-		ofPopStyle();
-		ofPopMatrix();
+	void OrganicText::updateModifiers() {
+		for (auto & mod : modifiers) {
+			if (mod->isActive()) {
+				mod->update(ofGetLastFrameTime(), targetFPS);
+				
+				// Update mouse modifier position
+				if (mod.get() == mouseModifier) {
+					float mouseNormX = static_cast<float>(ofGetMouseX()) / ofGetWidth();
+					float mouseNormY = static_cast<float>(ofGetMouseY()) / ofGetHeight();
+					mod->setPosition(vec2(mouseNormX, mouseNormY));
+				}
+			}
+		}
 	}
-	#endif
+	
+	//--------------------------------------------------------------
+	void OrganicText::drawModifiers() const {
+		if (!bDebug && !bMouseTweaks) return;
+		
+		for (const auto & mod : modifiers) {
+			if (mod->isActive()) {
+				mod->draw(ofGetWidth(), ofGetHeight());
+			}
+		}
+	}
+	
+	//--------------------------------------------------------------
+	void OrganicText::createParticleModifiers(int count) {
+		ofLogNotice("OrganicText") << "createParticleModifiers() count:" << count;
+		
+		// Clear existing particle modifiers (keep mouse if exists)
+		clearParticleModifiers();
+		
+		// Create new particle modifiers
+		for (int i = 0; i < count; i++) {
+			auto mod = std::make_unique<OrganicTextModifier>(OrganicTextModifier::MODIFIER_PARTICLE);
+			
+			// Random position
+			mod->setPosition(vec2(ofRandom(0.1f, 0.9f), ofRandom(0.1f, 0.9f)));
+			
+			// Set properties from parameters
+			mod->setRadius(particleRadius.get());
+			mod->setInfluenceStrength(particleInfluence.get());
+			
+			// Random velocity based on speed parameter
+			float speed = ofMap(particleSpeed.get(), 0.f, 1.f, 0.0005f, 0.003f);
+			mod->setVelocity(vec2(ofRandom(-speed, speed), ofRandom(-speed, speed)));
+			
+			// Random angular velocity
+			mod->setAngularVelocity(ofRandom(-1.5f, 1.5f));
+			
+			// Random bounds size
+			ofRectangle bounds(0, 0, ofRandom(0.03f, 0.08f), ofRandom(0.03f, 0.08f));
+			mod->setBounds(bounds);
+			
+			// Random color
+			mod->setColor(ofColor(ofRandom(100, 255), ofRandom(100, 255), ofRandom(100, 255), 180));
+			
+			modifiers.push_back(std::move(mod));
+		}
+	}
+	
+	//--------------------------------------------------------------
+	void OrganicText::clearParticleModifiers() {
+		// Remove all particle modifiers, keep mouse modifier
+		modifiers.erase(
+			std::remove_if(modifiers.begin(), modifiers.end(),
+				[](const std::unique_ptr<OrganicTextModifier>& m) {
+					return m->getType() == OrganicTextModifier::MODIFIER_PARTICLE;
+				}),
+			modifiers.end()
+		);
+	}
+	
+	//--------------------------------------------------------------
+	float OrganicText::getModifiersInfluence(vec2 position) const {
+		if (modifiers.empty()) return 0.0f;
+		
+		float maxInfluence = 0.0f;
+		
+		for (const auto & mod : modifiers) {
+			if (!mod->isActive()) continue;
+			
+			// Get modifier position in screen coordinates
+			vec2 modPos = mod->getScreenPosition(ofGetWidth(), ofGetHeight());
+			
+			// Convert text position to screen coordinates
+			// Apply zoom transformation
+			float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
+			float centerX = ofGetWidth() * 0.5f;
+			float centerY = ofGetHeight() * 0.5f;
+			
+			vec2 screenPos = (position * zoomFactor) + vec2(centerX, centerY);
+			screenPos.x += -data->getTextWidth() * zoomFactor * 0.5f;
+			screenPos.y += data->getTextHeight() * zoomFactor * 0.5f;
+			
+			// Calculate distance
+			float dist = glm::distance(screenPos, modPos);
+			float maxDist = mod->getRadius() * std::min(ofGetWidth(), ofGetHeight());
+			
+			if (dist < maxDist) {
+				float influence = (1.0f - (dist / maxDist)) * mod->getInfluenceStrength();
+				maxInfluence = std::max(maxInfluence, influence);
+			}
+		}
+		
+		return ofClamp(maxInfluence, 0.0f, 1.0f);
+	}
 	
