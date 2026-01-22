@@ -41,3 +41,6 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 - crea estos ofParams junto a ofParameter<float> colorMixFactor; deben ser normalizados entre 0 y 1. y puedes mantener o definir unas constantes min max hardcodeadas en organicText.h.
 - intenta entender el algoritmo y como funcionan estas variables en la funcion getPointColor() para ver si tiene sentido exponerlas o no: asi podemos empezar creando las 3 variables en ofparams mas importantes.
 - lo importante de estos dos modos es que usan los 3 colores globales (color1, color2, color3) y los mezclan segun la distancia al centro del texto y la posicion del punto en el texto.
+
+# IGNORE: NOTES:
+- REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`.
