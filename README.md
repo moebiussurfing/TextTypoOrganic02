@@ -13,16 +13,16 @@ An **openFrameworks** (aka OF) desktop application that creates organic, animate
 
 ![](Capture-v0.1.PNG)
 
-## ✨ For Users
+## For Users
 
 **New to TextTypoOrganic02 ?** → Start with [docs/User/QUICK-START.md](docs/User/QUICK-START.md) for an app usage introduction
 
-## 🤖 For AI Assistants & Coding Agents
+## For AI Assistants & Coding Agents
 
 **Are you an AI Assistant Agent ?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)**  
-(Feel free to explore also the [docs/AI-Assistant](docs/AI-Assistant) folder.)
+(Feel free to explore also the [docs/](docs/) folder.)
 
-## 👨‍💻 For Developers
+## For Developers
 
 **[docs/Developer](docs/Developer)** → Folder with developer notes, ideas, future roadmap, evaluating ideas, strategies and priorities, and C++ concepts
 
@@ -32,7 +32,7 @@ An **openFrameworks** (aka OF) desktop application that creates organic, animate
 - [ofxTweenLite](https://github.com/moebiussurfing/ofxTweenLite)
 - **ofxGui** (OF Core)
 
-## 📋 Project Management
+## Project Management
 
 ### Changelog
 
@@ -42,7 +42,7 @@ An **openFrameworks** (aka OF) desktop application that creates organic, animate
 
 [FILE-STRUCTURE.md](FILE-STRUCTURE.md)  
 
-## 💻 Tested Systems
+## Tested Systems
 
 - **Windows 11** (openFrameworks 0.12.1, Visual Studio / VS Code)
 - **macOS Tahoe** (openFrameworks 0.12.1, Xcode / VS Code)
