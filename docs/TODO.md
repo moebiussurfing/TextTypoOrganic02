@@ -19,7 +19,7 @@
 ----
 
 ## NOTES TO REMEMBER:
-- lee en profundidadAI-AGENTS-GUIDE.md (AGENTS.md y RULES.md principalmente, memorizalos. son los dos archivos para Agentes mas importantes)
+- lee en profundidad `docs/_AGENTS_START_HERES-GUIDE.md` (AGENTS.md y RULES.md principalmente, memorizalos. son los dos archivos para Agentes mas importantes)
 - hazme propuestas antes de implementar nada
 - ignora los TODO incrustados en el codigo!
 - revisa y modifica solo /src, principalmente src/organicText.h/cpp, y si es necesario ofApp.h/.cpp.
@@ -49,4 +49,4 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 ----
 
 # IGNORE: PERSONAL MISC NOTES: (TO BE COPIED TO THE AGENT)
-- AHORA REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` (SI AUN NO LO HAS HECHO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST` - que haremos luego - y el resto del archivo debajo.)
+- AHORA REVISA EN PROFUNDIDAD `docs/_AGENTS_START_HERE.md` (SI AUN NO LO HAS HECHO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST` - que haremos luego - y el resto del archivo debajo.)

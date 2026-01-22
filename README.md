@@ -19,7 +19,7 @@ An **openFrameworks** (aka OF) desktop application that creates organic, animate
 
 ## For AI Assistants & Coding Agents
 
-**Are you an AI Assistant Agent ?** → Read and deep think into **[AI-AGENTS-GUIDE.md](AI-AGENTS-GUIDE.md)**  
+**Are you an AI Assistant Agent ?** → Read and deep think into **[docs/AGENTS_START_HERE.md](docs/AGENTS_START_HERE.md)**  
 (Feel free to explore also the [docs/](docs/) folder.)
 
 ## For Developers

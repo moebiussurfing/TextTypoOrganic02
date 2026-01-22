@@ -1,4 +1,4 @@
-# KNOWN-BUGS.md
+# docs/BUGS.md
 
 ## Issues Under Investigation
 
