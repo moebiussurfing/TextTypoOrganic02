@@ -1,4 +1,4 @@
-# AI-AGENTS-GUIDE.md
+# docs/_AGENTS_START_HERE.md
 
 > [!NOTE]
 > Quick reference for AI coding Assistants and Agents:
@@ -20,9 +20,9 @@
 ### **READ & FAMILIARIZE**:
 
 - [**FILE-STRUCTURE**](FILE-STRUCTURE.md) → Project file map.
-- [**docs/PROJECT-CONTEXT.md**](docs/PROJECT-CONTEXT.md) → Full project overview. Read on first session or when lost.
+- [**docs/CONTEXT.md**](docs/CONTEXT.md) → Full project overview. Read on first session or when lost.
 - [**docs/CHANGELOG.md**](docs/CHANGELOG.md) → Project history, major milestones and current project status.
-- **[docs/Status/KNOWN-BUGS.md](docs/Status/KNOWN-BUGS.md)** → Bugs and known issues that we will need to resolve at some point.
+- **[docs/Status/docs/BUGS.md](docs/Status/docs/BUGS.md)** → Bugs and known issues that we will need to resolve at some point.
 
 ### **READ DEPTHLY & MEMORIZE**:
 

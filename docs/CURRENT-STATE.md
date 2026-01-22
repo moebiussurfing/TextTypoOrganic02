@@ -1,5 +1,0 @@
-# CURRENT-STATE.md
-
-## PROJECT STATUS: DONE PHASES
-
-- See [docs\CHANGELOG.md](docs\CHANGELOG.md)

@@ -3,14 +3,6 @@
 ```
 TextTypoOrganic02/
 ├── docs/
-│   ├── AI-Assistant/
-│   │   ├── Status/
-│   │   │   ├── KNOWN-BUGS.md
-│   │   │   └── TODO.md
-│   │   ├── AGENTS.md
-│   │   ├── CURRENT-STATE.md
-│   │   ├── PROJECT-CONTEXT.md
-│   │   └── RULES.md
 │   ├── Developer/
 │   │   ├── Future/
 │   │   │   ├── FUTURE-FEATURES.md
@@ -20,7 +12,13 @@ TextTypoOrganic02/
 │   │       └── SHADER-CONVERSION-STRATEGY.md
 │   ├── User/
 │   │   └── QUICK-START.md
-│   └── CHANGELOG.md
+│   ├── AGENTS.md
+│   ├── BUGS.md
+│   ├── CHANGELOG.md
+│   ├── CONTEXT.md
+│   ├── RULES.md
+│   ├── TODO.md
+│   └── _AGENTS_START_HERE.md
 ├── src/
 │   ├── main.cpp
 │   ├── ofApp.cpp
@@ -28,14 +26,19 @@ TextTypoOrganic02/
 │   ├── organicText.cpp
 │   ├── organicText.h
 │   ├── organicTextConstants.h
+│   ├── organicTextData.cpp
+│   ├── organicTextData.h
+│   ├── organicTextModifier.cpp
+│   ├── organicTextModifier.h
 │   ├── organicTextPreset.cpp
 │   ├── organicTextPreset.h
 │   ├── organicTextResetsRandoms.cpp
 │   └── organicTextResetsRandoms.h
-├── AI-AGENTS-GUIDE.md
 ├── Capture-v0.1.PNG
+├── Capture-v0.3.PNG
 ├── FILE-STRUCTURE.md
 ├── README.md
+├── TextTypoOrganic02.code-workspace alias
 ├── addons.make
 └── generate-FILE-STRUCTURE.py
 ```
