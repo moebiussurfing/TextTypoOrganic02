@@ -109,6 +109,7 @@ constexpr float DEBUG_SPEED = .2f;
 
 // Outline Constants
 constexpr float OUTLINE_WIDTH_BASE = 0.5f;
+constexpr float OUTLINE_THICKNESS_MAX = 10.0f;
 
 // Mouse Interaction Constants
 constexpr float MOUSE_RADIUS_INTERACT_MAX = 100.0f;

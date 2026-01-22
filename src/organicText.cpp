@@ -179,6 +179,7 @@ void OrganicText::setupScene() {
 		bDrawShapes.set("Draw Shapes", true);
 		bEnableAnimation.set("Animate", true);
 		bDrawOutline.set("Draw Outline", false);
+		outlineThickness.set("Thickness", 0.15f, 0.0f, 1.0f);
 		zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
 		bAutoZoomGlobal.set("Auto Zoom", true);
 		sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
@@ -425,6 +426,7 @@ void OrganicText::setupScene() {
 		parameters.add(bAutoZoomGlobal);
 		parameters.add(zoomGlobal);
 		parameters.add(bDrawOutline);
+		parameters.add(outlineThickness);
 		parameters.add(colorOutline);
 		parameters.add(bDebug);
 		parameters.add(bHelp);
@@ -694,10 +696,14 @@ void OrganicText::setupScene() {
 		//--
 		
 		#ifdef USE_PARTICLE_MODIFIER
+		// Apply delta time for frame-independent particle movement
+		float dt = ofGetLastFrameTime();
+		float normalizedDt = dt / (1.0f / targetFPS);
+		
 		for (int i = 0; i < particleTweaker.size(); i++) {
-			particleTweaker[i].bounds.x += particleTweaker[i].velocity.x;
-			particleTweaker[i].bounds.y += particleTweaker[i].velocity.y;
-			particleTweaker[i].angle += particleTweaker[i].angularVelocity;
+			particleTweaker[i].bounds.x += particleTweaker[i].velocity.x * normalizedDt;
+			particleTweaker[i].bounds.y += particleTweaker[i].velocity.y * normalizedDt;
+			particleTweaker[i].angle += particleTweaker[i].angularVelocity * normalizedDt;
 			
 			if (particleTweaker[i].bounds.x < -particleTweaker[i].bounds.width) {
 				particleTweaker[i].bounds.x = 1.0f;
@@ -1382,7 +1388,8 @@ void OrganicText::setupScene() {
 				ofPushStyle();
 				ofNoFill();
 				ofSetColor(colorOutline.get());
-				ofSetLineWidth(OUTLINE_WIDTH_BASE * zoomFactor);
+				float thickness = ofMap(outlineThickness.get(), 0.f, 1.f, OUTLINE_WIDTH_BASE, OUTLINE_THICKNESS_MAX);
+				ofSetLineWidth(thickness * zoomFactor);
 				font.drawStringAsShapes(sText, 0, 0);
 				ofPopStyle();
 			}

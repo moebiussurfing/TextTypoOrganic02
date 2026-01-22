@@ -10,7 +10,7 @@
 
 ----
 
-## REMEMBER:
+## NOTES TO REMEMBER:
 - lee en profundidadAI-AGENTS-GUIDE.md (AGENTS.md y RULES.md principalmente, memorizalos. son los dos archivos para Agentes mas importantes)
 - hazme propuestas antes de implementar nada
 - ignora los TODO incrustados en el codigo!
@@ -21,9 +21,11 @@
 
 ----
 
-# DONE: CHANGELOG:
+# ALREADY DONE: CHANGELOG:
 - En animation modes `pulse` y `wave` de organicText funcionan animando los puntos segun una funcion relativa a un punto horizontalmente centrado en el texto dibujado. me gustaria qeye pudiera modificarse el punto x desde la izquiera a la derecha, donde 0.5 sea el centro como hace ahora. tambien podemos usarlo para el modo `orbit` haciendo rotar desde otro x y no siempre desde el centro. anade otro ofparam 0-1 llamado animOriginX o similar.
 - he actualizado y mejorado ofxTweenLiteHelper. puedes ver el ejemplo de uso en ofxTweenLite/example4/src. revisa e implementa estas nuevas mejoras en organicText.h/.cpp y si necesitas toca cosas en ofapp
+
+----
 
 # IGNORE: NOTES:
 - no toques ofxTweenLiteHelper a no ser que sea imprescindible y yo te lo indique.
@@ -43,4 +45,4 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 - lo importante de estos dos modos es que usan los 3 colores globales (color1, color2, color3) y los mezclan segun la distancia al centro del texto y la posicion del punto en el texto.
 
 # IGNORE: NOTES:
-- REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`.
+- REVISA EN PROFUNDIDAD `AI-AGENTS-GUIDE.md` Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST`, que haremos luego.

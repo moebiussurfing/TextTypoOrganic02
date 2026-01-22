@@ -25,6 +25,8 @@ void organicTextPreset::applyDrawFlags(OrganicText * ot) {
 	ot->bDrawFill.set(true);
 	ot->bDrawShapes.set(true);
 	ot->bDrawTrails.set(true);
+	ot->bDrawOutline.set(false);
+	ot->outlineThickness.set(0.15f);
 }
 
 //--------------------------------------------------------------

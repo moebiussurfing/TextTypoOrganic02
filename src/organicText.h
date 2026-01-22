@@ -80,6 +80,7 @@ public:
 	ofParameter<bool> bHelp;
 	ofParameter<bool> bDebug;
 	ofParameter<bool> bDrawOutline;
+	ofParameter<float> outlineThickness;
 	ofParameter<bool> bDrawFill;
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
