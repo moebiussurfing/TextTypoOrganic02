@@ -38,7 +38,6 @@ TextTypoOrganic02/
 ├── Capture-v0.3.PNG
 ├── FILE-STRUCTURE.md
 ├── README.md
-├── TextTypoOrganic02.code-workspace alias
 ├── addons.make
 └── generate-FILE-STRUCTURE.py
 ```

@@ -9,7 +9,7 @@
 ## 📚 AI-ASSISTANT FILES:
 
 - All the related `.md` notes files for the `AI AGENT` are placed on this folder:
-[docs/AI-Assistant](docs/)
+[docs/](docs/)
 
 ---
 
@@ -19,15 +19,15 @@
 
 ### **READ & FAMILIARIZE**:
 
-- [**FILE-STRUCTURE**](FILE-STRUCTURE.md) → Project file map.
-- [**docs/CONTEXT.md**](docs/CONTEXT.md) → Full project overview. Read on first session or when lost.
-- [**docs/CHANGELOG.md**](docs/CHANGELOG.md) → Project history, major milestones and current project status.
-- **[docs/Status/docs/BUGS.md](docs/Status/docs/BUGS.md)** → Bugs and known issues that we will need to resolve at some point.
+   - [**FILE-STRUCTURE**](FILE-STRUCTURE.md) → Project file map.
+   - [**docs/CONTEXT.md**](docs/CONTEXT.md) → Full project overview. Read on first session or when lost.
+   - [**docs/CHANGELOG.md**](docs/CHANGELOG.md) → Project history, major milestones and current project status.
+   - **[docs/BUGS.md](docs/BUGS.md)** → Bugs and known issues that we will need to resolve at some point.
 
 ### **READ DEPTHLY & MEMORIZE**:
 
-- [**docs/AGENTS.md**](docs/AGENTS.md) → Full onboarding, workflows & best practices for assistants.
-- [**docs/RULES.md**](docs/RULES.md) → Automated execution rules and constraints for AI assistants.
+   - [**docs/AGENTS.md**](docs/AGENTS.md) → Full onboarding, workflows & best practices for assistants.
+   - [**docs/RULES.md**](docs/RULES.md) → Automated execution rules and constraints for AI assistants.
 
 ## **START CODING: PLAN & EXECUTE**:
 

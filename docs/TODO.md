@@ -1,7 +1,7 @@
 #### file: TODO.md
 
 # DO NOW LIST:
-[ ] 
+[ ]
 
 # DO NEXT LIST: (don't do now. could have semi finished job tasks)
 [ ] 
