@@ -49,4 +49,4 @@ constexpr float COLOR_ALPHA_EDGE = 80.0f;
 ----
 
 # IGNORE: PERSONAL MISC NOTES: (TO BE COPIED TO THE AGENT)
-- AHORA REVISA EN PROFUNDIDAD `docs/_AGENTS_START_HERE.md` (SI AUN NO LO HAS HECHO) Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/AI-Assistant/Status/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST` - que haremos luego - y el resto del archivo debajo.)
+- SI AUN NO LO HAS HECHO, AHORA REVISA EN PROFUNDIDAD MI PROYECTO. EMPIEZA LEYENDO `README.md` y EMPIEZA EN `docs/_AGENTS_START_HERE.md` Y PROCEDE A REALIZAR `DO NOW LIST` DEL file `docs/TODO.md`. (Ignora por ahora la seccion `# DO NEXT LIST` - que haremos luego - y el resto del archivo debajo.)
