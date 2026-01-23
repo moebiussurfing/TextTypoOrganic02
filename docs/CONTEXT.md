@@ -2,50 +2,36 @@
 
 ## ESSENTIAL INFO
 
-- **Main Purpose**: Real-time text visualization with organic animations and effects
+- **Main Purpose**: Real-time organic text visualization with animated shapes, trails, and connections
 - **Project Type**: openFrameworks C++ creative coding application
-- **Current Status**: PRODUCTION READY - All core features implemented
+- **Current Status**: Active development; core system stable with ongoing feature work
 
 ## PROJECT STRUCTURE
 - See `FILE-STRUCTURE.md` for detailed file organization and addons.
-- The used openFrameworks root folder for my system is located into: `D:\OF\of_v0.12.1_release`. We're going to call this folder named as `openframeworks\` too, to keep things simple, but it'll depend on the platform and version you use.
-- Current project is located into: `openframeworks\apps\myApps\TextTypoOrganic02`
-- For an OF (openFrameworks) project placed into: `openframeworks\apps\myApps\myProject\`.
-- Addons (ofxAddons) are located into: `openframeworks\addons\`.
+- Project location: `openframeworks/apps/myApps/TextTypoOrganic02` (platform path may vary).
+- Addons live in `openframeworks/addons` and are listed in `addons.make`.
 
 ## CORE CLASSES & RESPONSIBILITIES
 
 ### OrganicText (PRIMARY CLASS)
-- **Text sampling**: `sampleStringPoints()` - converts [MY-TEXT] text to point cloud
-- **Animation**: `calculateAnimation()` - points animation using one of 5 modes (Noise, Wave, Spiral, Pulse, Orbit)
-- **Rendering**: `draw()` - shapes, connections, trails, debug info
-- **Colors**: `updateColors()` - global palette with mixing algorithms
-- **GUI**: `ofxPanel` from `ofxGui` with organized parameter groups
-- **Presets**: using `ofxSurfingPresetsLite` when enabled for instant visual configurations
+- **Text sampling**: `sampleStringPoints()` → outline to point cloud
+- **Animation**: `getAnimatedOffset()` with 5 modes (Noise, Wave, Spiral, Pulse, Orbit)
+- **Rendering**: `draw()` with layered shapes, connections, trails, outline, debug
+- **Data**: `OrganicTextData` centralizes base points, animated cache, trails, metrics
+- **Modifiers**: `OrganicTextModifier` handles mouse/particle influence
+- **GUI/Presets**: `ofxGui` groups + `ofxSurfingPresetsLite` integration
 
 ### ofApp
-- Desktop app: Handles application lifecycle and auto-save on exit
-- Calls setup(), update(), draw() etc from `OrganicText` object
+- App lifecycle and window handling
+- Presets browsing, scene switching, and UI mode toggles
 
 ## ofxAddons / addons
-- The function of the presets manager for designing themes and switching scenes will be handled by the `ofxSurfingPresetsLite` addon when it is enabled.
+- `ofxSurfingPresetsLite` (presets + GUI integration)
+- `ofxSurfingHelpersLite`, `ofxTweenLite`, `ofxGui`
 
-## KEY PARAMETERS
-
-### VISUAL SCENE
-```cpp
-// Density - how many points
-pointDensity, contourSampling, pointsSpacing...
-
-// Shapes  
-shapeType, shapeRadius, shapeRotation...
-
-// Animation
-animationMode, animationSpeed, noiseSize...
-
-// Colors
-colorMode, globalColor1/2/3 (ofColor), colorMixFactor...
-
-// Effects
-connectionDistance, trailLength, sceneZoom...
-```
+## KEY PARAMETERS (EXAMPLES)
+- **Text & Density**: `sText`, `densitySpacing`, `fontSize`
+- **Shapes**: `shapeType`, `shapeSize`, `shapeRotation`, `bDrawFill`
+- **Animation**: `animationMode`, `animSpeed`, `animPower`, `animOriginX`
+- **Colors**: `colorMode`, `color1/2/3`, `colorMixFactor`, `colorInner`
+- **Effects**: `bDrawConnections`, `connectDistance`, `bDrawTrails`, `trailLength`
