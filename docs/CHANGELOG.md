@@ -2,6 +2,11 @@
 
 ## Major Milestones
 
+### v0.4
+- [ ]
+- [ ]
+- [ ]
+
 ### v0.3
 - [x] **Mouse interaction**
 - [x] **Smooth tweened** in/out drawing and browsing presets
@@ -16,14 +21,14 @@
 - [x] **Debug Visualization** for technical insights
 
 ### v0.2 **Major Features Added:**
-- Enhanced preset system (Using ofxSurfingPresetsLite)
-- GUI parameter refinement
-- Animation modes refinement
-- Color system refinement
-- Zoom functionality
-- Debug mode
+- [x] Enhanced preset system (Using ofxSurfingPresetsLite)
+- [x] GUI parameter refinement
+- [x] Animation modes refinement
+- [x] Color system refinement
+- [x] Zoom functionality
+- [x] Debug mode
 
 ### v0.1 - Initial Implementation **Foundation:**
-- Basic text-to-points sampling
-- Shape rendering system
-- Initial GUI setup
+- [x] Basic text-to-points sampling
+- [x] Shape rendering system
+- [x] Initial GUI setup
