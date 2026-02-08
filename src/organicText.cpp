@@ -1188,20 +1188,22 @@ void OrganicText::setupScene() {
 		ofDrawLine(textCenter - vec2(0, crossSize), textCenter + vec2(0, crossSize));
 		ofDrawCircle(textCenter, crossSize * 0.7);
 		
-		ofSetColor(colorDebugBlink);
-		
 		//// Text bounding box
 		//ofNoFill();
 		//ofDrawRectangle(0, -textHeight, textWidth, textHeight);
 		
 		// All sample points
-		if(bDrawOutline){
+		// if(bDrawOutline)
+		{
+			ofSetColor(colorDebugBlink);
+			
 			ofFill();
 			const auto& pointsString = data->getBasePoints();
 			for (const auto & point : pointsString) {
 				ofDrawCircle(point, 1.f);
 			}
 		}		
+
 		ofPopStyle();
 	}
 	
