@@ -23,12 +23,14 @@ void OrganicTextData::initTrails(int trailLength) {
   
   pointTrails.clear();
   pointTrails.resize(pointsString.size());
+  pointsAnimatedCache.assign(pointsString.size(), vec2(0, 0));
   
   for (std::size_t i = 0; i < pointsString.size(); i++) {
     pointTrails[i].resize(trailLength);
     for (int j = 0; j < trailLength; j++) {
       pointTrails[i][j] = pointsString[i];
     }
+    pointsAnimatedCache[i] = pointsString[i];
   }
 }
 

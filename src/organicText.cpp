@@ -357,6 +357,7 @@ void OrganicText::setupScene() {
 		paramsMouseTweaks.add(radiusMouse);
 		paramsMouseTweaks.add(bMouseHighlightPoints);
 		paramsMouseTweaks.add(colorMouseHighlight);
+		paramsMouseTweaks.add(bMouseTweaks);
 		paramsMouseTweaks.add(mouseInfluenceStrength);
 		paramsMouseTweaks.add(bMouseDisplacePoints);
 		paramsMouseTweaks.add(mouseDisplacePower);
@@ -382,7 +383,6 @@ void OrganicText::setupScene() {
 		paramsPreset.add(paramsAnim);
 		paramsPreset.add(paramsConnections);
 		paramsPreset.add(paramsTrails);
-		paramsPreset.add(bMouseTweaks);
 		paramsPreset.add(paramsMouseTweaks);
 		paramsPreset.add(vRandomPreset);
 		paramsPreset.add(vResetPreset);
@@ -1195,12 +1195,13 @@ void OrganicText::setupScene() {
 		//ofDrawRectangle(0, -textHeight, textWidth, textHeight);
 		
 		// All sample points
-		ofFill();
-		const auto& pointsString = data->getBasePoints();
-		for (const auto & point : pointsString) {
-			ofDrawCircle(point, 1.f);
-		}
-		
+		if(bDrawOutline){
+			ofFill();
+			const auto& pointsString = data->getBasePoints();
+			for (const auto & point : pointsString) {
+				ofDrawCircle(point, 1.f);
+			}
+		}		
 		ofPopStyle();
 	}
 	
