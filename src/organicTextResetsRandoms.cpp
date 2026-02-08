@@ -17,6 +17,7 @@ void organicTextResetsRandoms::resetPreset(OrganicText * ot) {
 	resetGlobalColorParams(ot);
 	resetAnimationParams(ot);
 	resetConnectionParams(ot);
+	resetMouseTweaks(ot);
 }
 
 //--------------------------------------------------------------
@@ -30,7 +31,7 @@ void organicTextResetsRandoms::resetAll(OrganicText * ot) {
 	// Session
 	ot->zoomGlobal.set(0.f);
 	ot->bAutoZoomGlobal = true;
-	ot->colorOutline.set(ofColor(60, 60, 60));
+	ot->colorOutline.set(ofColor::black);
 
 	ot->t = 0.0f;
 }
@@ -53,13 +54,13 @@ void organicTextResetsRandoms::resetFonts(OrganicText * ot) {
 	
 	//ot->fontPath.set("NotoSansMono-Regular.ttf");
 	ot->fontSize.set(150);
-	ot->letterSpacing.set(0.05f);
+	ot->letterSpacing.set(0.0f);
 }
 
 void organicTextResetsRandoms::resetDensityParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetDensityParams()";
 	
-	ot->densitySpacing.set(0.3f);
+	ot->densitySpacing.set(0.2f);
 }
 
 void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
@@ -67,8 +68,9 @@ void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
 	
 	ot->bDrawShapes.set(true);
 	ot->bDrawFill.set(true);
-	ot->shapeSize.set(0.25f);
-	ot->shapeSizeMin.set(0.f);
+	ot->bShapeBack.set(false);
+	ot->shapeSize.set(0.5f);
+	ot->shapeSizeMin.set(0.3f);
 	ot->shapeType.set(0);
 	ot->shapeRatio.set(.5f);
 	ot->shapeRotation.set(0.0f);
@@ -77,10 +79,10 @@ void organicTextResetsRandoms::resetShapeParams(OrganicText * ot) {
 void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetColorModes()";
 	
-	// ot->colorMode.set(0);
-	ot->colorSpeed.set(0.5f);
-	ot->colorMixFactor.set(0.4f);
-	ot->bColorByDistance.set(ofRandom()<0.5f?true:false);
+	ot->colorMode.set(3);
+	ot->colorSpeed.set(1.0f);
+	ot->colorMixFactor.set(0.5f);
+	ot->bColorByDistance.set(false);
 	ot->colorInner.set(0.4f);
 	ot->colorDistMiddle.set(0.7f);
 	ot->colorAlphaRange.set(0.7f);
@@ -89,38 +91,38 @@ void organicTextResetsRandoms::resetColorModes(OrganicText * ot) {
 void organicTextResetsRandoms::resetGlobalColorParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetGlobalColorParams()";
 	
-	ot->color1.set(ofColor(ofColor::red, 240));
-	ot->color2.set(ofColor(ofColor::green, 240));
-	ot->color3.set(ofColor(ofColor::blue, 240));
-	ot->colorConnection.set(ofColor(ofColor::orange, 200));
-	ot->colorTrails.set(ofColor(ofColor::white, 200));
+	ot->color1.set(ofColor::cyan);
+	ot->color2.set(ofColor::magenta);
+	ot->color3.set(ofColor::yellow);
+	ot->colorConnection.set(ofColor::white);
+	ot->colorTrails.set(ofColor::black);
 }
 
 void organicTextResetsRandoms::resetAnimationParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetAnimationParams()";
 	
-	// ot->animationMode.set(0);
-	// ot->radiusMouse.set(1.f);
+	ot->bEnableAnimation.set(true);
+	ot->animationMode.set(0);
 	ot->animSpeed.set(0.2f);
-	ot->animPower.set(0.5f);
-	ot->animWaveFreq.set(0.2f);
-	ot->animIntensity.set(0.5f);
-	ot->animSpiral.set(0.7f);
-	ot->animPulseIntensity.set(1.f);
+	ot->animPower.set(0.1f);
+	ot->animWaveFreq.set(0.3f);
+	ot->animIntensity.set(0.2f);
+	ot->animSpiral.set(0.2f);
+	ot->animPulseIntensity.set(0.2f);
 	ot->animOriginX.set(0.5f);
 }
 
 void organicTextResetsRandoms::resetConnectionParams(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetConnectionParams()";
 	
-	ot->bDrawConnections.set(true);
+	ot->bDrawConnections.set(false);
 	ot->connectDistance.set(30.0f);
-	ot->connectLineWidth.set(1.5f);
+	ot->connectLineWidth.set(1.0f);
 	ot->connectAlpha.set(0.5f);
-	ot->connectQuality.set(0.5f);
+	ot->connectQuality.set(1.0f);
 	ot->bConnectNearOnly.set(true);
-	ot->bDrawTrails.set(true);
-	ot->trailLineWidth.set(1.5f);
+	ot->bDrawTrails.set(false);
+	ot->trailLineWidth.set(1.0f);
 	ot->trailLength.set(0.5);
 	ot->trailFade.set(0.5f);
 }
@@ -129,15 +131,15 @@ void organicTextResetsRandoms::resetMouseTweaks(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetMouseTweaks()";
 	
 	ot->bMouseTweaks.set(true);
-	ot->bMouseControlOrigin.set(true);
-	ot->radiusMouse.set(0.7f);
-	ot->bMouseHighlightPoints.set(true);
-	ot->colorMouseHighlight.set(ofColor(255, 255, 255, 200));
-	ot->mouseInfluenceStrength.set(0.75f);
-	ot->bMouseDisplacePoints.set(true);
-	ot->mouseDisplacePower.set(0.75f); // 0.5 = neutral (no displacement)
-	ot->bMouseScaleShapes.set(true);
-	ot->mouseScalePower.set(0.75f);
+	ot->bMouseControlOrigin.set(false);
+	ot->radiusMouse.set(0.1f);
+	ot->bMouseHighlightPoints.set(false);
+	ot->colorMouseHighlight.set(ofColor(0, 150, 255));
+	ot->mouseInfluenceStrength.set(0.5f);
+	ot->bMouseDisplacePoints.set(false);
+	ot->mouseDisplacePower.set(0.5f); // 0.5 = neutral (no displacement)
+	ot->bMouseScaleShapes.set(false);
+	ot->mouseScalePower.set(0.5f);
 }
 
 //--------------------------------------------------------------

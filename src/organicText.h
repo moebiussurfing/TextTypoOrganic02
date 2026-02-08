@@ -10,16 +10,8 @@
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
 #include "organicTextData.h" // Data storage
-#include "organicTextModifier.h" // Text modifiers
+// Text modifiers removed; mouse tweaks are handled directly.
 //#include "ofxSurfingHelpersLite.h" // Draw widgets
-
-// (WIP) demo particle modifier
-#define USE_PARTICLE_MODIFIER
-#define PARTICLE_MODIFIER_NUM_PARTICLES 1
-#define PARTICLE_MODIFIER_MAX_SIZE 0.05f
-#pragma once
-
-//----------------------------------------------------------------------------
 
 #include "ofxGui.h"
 
@@ -74,7 +66,6 @@ public:
 	ofParameterGroup paramsConnections;
 	ofParameterGroup paramsTrails;
 	ofParameterGroup paramsMouseTweaks;
-	ofParameterGroup paramsParticleTweaks;
 
 	ofParameterGroup paramsSessionSettings; // For session status, not preset
 	ofParameterGroup paramsInternal; // Some internal settings
@@ -175,12 +166,6 @@ public:
 	ofParameter<float> mouseDisplacePower;
 	ofParameter<bool> bMouseScaleShapes;
 	ofParameter<float> mouseScalePower;
-	
-	// Particle modifiers parameters
-	ofParameter<bool> bParticleModifier;
-	ofParameter<int> numParticleModifiers;
-	ofParameter<float> particleSpeed;
-	ofParameter<float> particleSize;
 
 	//--
 
@@ -213,7 +198,7 @@ private:
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 	ofEventListener e_bAutoZoomGlobal;
 	ofEventListener e_bMouseTweaks;
-	ofEventListener e_bParticleModifier, e_numParticleModifiers;
+	ofEventListener e_mouseInfluenceStrength;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
@@ -231,9 +216,6 @@ private:
 	//Calculate mouse influence factor for a given position (0-1)
 	float getMouseInfluence(vec2 position) const;
 	
-	//Calculate combined influence from all modifiers for a given position (0-1)
-	//Returns: influence strength (0-1) and closest modifier position
-	float getModifiersInfluence(vec2 position, vec2& outModifierPos) const;
 	mutable glm::vec2 mousePos;
 
 	// Font management
@@ -264,14 +246,6 @@ private:
 	mutable vec2 mouseLocalPos;
 	mutable bool bMouseInBounds = false;
 	
-	// Modifiers system
-	std::vector<std::unique_ptr<OrganicTextModifier>> modifiers;
-	
-	void updateModifiers();
-	void drawModifiers() const;
-	void createParticleModifiers(int count);
-	void clearParticleModifiers();
-
 private:
 	void refreshPointsString();
 
