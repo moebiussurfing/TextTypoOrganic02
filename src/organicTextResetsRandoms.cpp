@@ -18,6 +18,7 @@ void organicTextResetsRandoms::resetPreset(OrganicText * ot) {
 	resetAnimationParams(ot);
 	resetConnectionParams(ot);
 	resetMouseTweaks(ot);
+	resetLineTweaks(ot);
 }
 
 //--------------------------------------------------------------
@@ -140,6 +141,15 @@ void organicTextResetsRandoms::resetMouseTweaks(OrganicText * ot) {
 	ot->mouseDisplacePower.set(0.5f); // 0.5 = neutral (no displacement)
 	ot->bMouseScaleShapes.set(false);
 	ot->mouseScalePower.set(0.5f);
+}
+
+void organicTextResetsRandoms::resetLineTweaks(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetLineTweaks()";
+
+	ot->bLineTweaks.set(true);
+	ot->vLineFrom.set(glm::vec2(-1.0f, 0.0f));
+	ot->vLineTo.set(glm::vec2(1.0f, 0.0f));
+	ot->lineTweaksDuration.set(5.0f);
 }
 
 //--------------------------------------------------------------

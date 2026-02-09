@@ -18,6 +18,7 @@ public:
 	static void resetFonts(OrganicText * ot);
 	static void resetPreset(OrganicText * ot);
 	static void resetMouseTweaks(OrganicText * ot);
+	static void resetLineTweaks(OrganicText * ot);
 	static void resetAll(OrganicText * ot);
 	
 	// Randomize functions

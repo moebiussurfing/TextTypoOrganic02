@@ -80,6 +80,7 @@ void OrganicText::setupScene() {
 	// Initialize
 	t = 0.0;
 	mouseLocalPos = vec2(0, 0);
+	lineLocalPos = vec2(0, 0);
 	bMouseInBounds = false;
 	
 	// Initialize mode names
@@ -262,10 +263,12 @@ void OrganicText::setupScene() {
 		
 		// Line tweaks
 		bLineTweaks.set("Line Tweaks Enabler", true);
+		radiusLine.set("Radius Line", 0.1f, 0.0f, 1.0f);
 		vTrigLineTweaks.set("Trig Line Tweaks");
 		vLineFrom.set("From", glm::vec2(-1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
 		vLineTo.set("To", glm::vec2(1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
-		lineTweaksDuration.set("Duration", 10.0f, 0.1f, 30.0f);
+		lineTweaksDuration.set("Duration", 5.0f, 0.1f, 10.0f);
+		vResetLineTweaks.set("Reset");
 		
 		//--
 		
@@ -373,13 +376,15 @@ void OrganicText::setupScene() {
 		paramsMouseTweaks.add(mouseScalePower);
 		paramsMouseTweaks.add(vResetMouseTweaks);
 		paramsMouseTweaks.add(vRandomMouseTweaks);
-
+		
 		paramsLineTweaks.setName("Line Tweaks");
 		paramsLineTweaks.add(bLineTweaks);
+		paramsLineTweaks.add(radiusLine);
 		paramsLineTweaks.add(vTrigLineTweaks);
 		paramsLineTweaks.add(vLineFrom);
 		paramsLineTweaks.add(vLineTo);
 		paramsLineTweaks.add(lineTweaksDuration);
+		paramsLineTweaks.add(vResetLineTweaks);
 		
 		//--
 		
@@ -492,12 +497,12 @@ void OrganicText::setupScene() {
 		e_vRandomConnection = vRandomConnection.newListener([this](void) { organicTextResetsRandoms::randomizeConnectionParams(this); });
 		e_vResetMouseTweaks = vResetMouseTweaks.newListener([this](void) { organicTextResetsRandoms::resetMouseTweaks(this); });
 		e_vRandomMouseTweaks = vRandomMouseTweaks.newListener([this](void) { organicTextResetsRandoms::randomizeMouseTweaks(this); });
+		e_vResetLineTweaks = vResetLineTweaks.newListener([this](void) { organicTextResetsRandoms::resetLineTweaks(this); });
 	
 		//--
 		
 		e_bMouseTweaks = bMouseTweaks.newListener([this](bool & b) {
 			ofLogNotice("OrganicText") << "bMouseTweaks: " << b;
-			if(b&&bLineTweaks)bLineTweaks=false;//workflow
 		});
 		
 		e_mouseInfluenceStrength = mouseInfluenceStrength.newListener([this](float & v) {
@@ -506,7 +511,6 @@ void OrganicText::setupScene() {
 
 		e_bLineTweaks = bLineTweaks.newListener([this](bool & b) {
 			ofLogNotice("OrganicText") << "bLineTweaks: " << b;
-			if(b&&bMouseTweaks)bMouseTweaks=false;//workflow
 		});
 
 		e_vTrigLineTweaks = vTrigLineTweaks.newListener([this](void) {
@@ -676,15 +680,15 @@ void OrganicText::setupScene() {
 		// Convert window coordinates to local text coordinates
 		//TODO: add anim point
 		if (bLineTweaks.get()) {
-			mouseLocalPos = tweenPosition.getValue();
-			mousePos = textToScreen(mouseLocalPos);
-		} else if (bMouseTweaks.get()) {
+			lineLocalPos = tweenPosition.getValue();
+		}
+		if (bMouseTweaks.get()) {
 			mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
 		}
 
 		//--
 
-		if (!bLineTweaks.get()) {
+		if (bMouseTweaks.get()) {
 			// Apply inverse transformations (same as in draw())
 			float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
 		
@@ -700,8 +704,15 @@ void OrganicText::setupScene() {
 			mouseLocalPos = scaled - vec2(textOffsetX, textOffsetY);
 		}
 		
-		// Check if mouse is within text bounds
-		bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= data->getTextWidth() && mouseLocalPos.y >= -data->getTextHeight() && mouseLocalPos.y <= 0);
+		// Check if mouse/line are within text bounds
+		bool mouseInBounds = false;
+		if (bMouseTweaks.get()) {
+			mouseInBounds |= (mouseLocalPos.x >= 0 && mouseLocalPos.x <= data->getTextWidth() && mouseLocalPos.y >= -data->getTextHeight() && mouseLocalPos.y <= 0);
+		}
+		if (bLineTweaks.get()) {
+			mouseInBounds |= (lineLocalPos.x >= 0 && lineLocalPos.x <= data->getTextWidth() && lineLocalPos.y >= -data->getTextHeight() && lineLocalPos.y <= 0);
+		}
+		bMouseInBounds = mouseInBounds;
 		
 		if (bDebug) {
 			// Smooth alpha blinking using sine wave
@@ -806,8 +817,14 @@ void OrganicText::setupScene() {
 		// Now works across entire canvas, deforming the constellation
 		// exclude ANIM_WAVE because no good results seen with it
 		if ((bMouseTweaks.get() || bLineTweaks.get()) && bMouseControlOrigin.get() && (AnimMode)animationMode.get() != ANIM_WAVE) {
-			customOriginX = mouseLocalPos.x;
-			customOriginY = mouseLocalPos.y;
+			vec2 controlOrigin = mouseLocalPos;
+			if (bMouseTweaks.get() && bLineTweaks.get()) {
+				controlOrigin = (mouseLocalPos + lineLocalPos) * 0.5f;
+			} else if (bLineTweaks.get()) {
+				controlOrigin = lineLocalPos;
+			}
+			customOriginX = controlOrigin.x;
+			customOriginY = controlOrigin.y;
 		}
 		
 		vec2 customOrigin = vec2(customOriginX, customOriginY);
@@ -816,10 +833,10 @@ void OrganicText::setupScene() {
 			case ANIM_NOISE: {
 				float maxDisp = ofMap(animPower.get(), 0, 1, 0, ANIM_NOISE_MAX * fontScale, true);
 				
-				// If mouse control is active, reduce noise displacement near mouse position
+				// If mouse control is active, reduce noise displacement near mouse/line position
 				if ((bMouseTweaks.get() || bLineTweaks.get()) && bMouseControlOrigin.get()) {
-					float mouseInfluence = getMouseInfluence(pointsString[index]);
-					maxDisp *= (1.0f - mouseInfluence * 2.f); // Reduce up to % near mouse
+					float combinedInfluence = getCombinedInfluence(pointsString[index]);
+					maxDisp *= (1.0f - combinedInfluence * 2.f); // Reduce up to % near mouse
 				}
 				
 				offset = vec2(ofSignedNoise(phase, 0.0f), ofSignedNoise(phase, 233.0f)) * maxDisp;
@@ -887,25 +904,40 @@ void OrganicText::setupScene() {
 	
 	//--------------------------------------------------------------
 	float OrganicText::getMouseInfluence(vec2 position) const {
-		float radiusPixels = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
-		float distToMouse = glm::distance(position, mouseLocalPos);
-		
-		if (distToMouse >= radiusPixels) {
+		return getInfluenceFrom(position, mouseLocalPos, radiusMouse.get());
+	}
+
+	float OrganicText::getInfluenceFrom(vec2 position, const vec2& sourcePos, float radiusParam) const {
+		float radiusPixels = ofMap(radiusParam, 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+		float distToSource = glm::distance(position, sourcePos);
+	
+		if (distToSource >= radiusPixels) {
 			return 0.0f; // Outside radius
 		}
-		
+	
 		// Calculate normalized influence (1.0 at center, 0.0 at edge)
-		float influence = ofMap(distToMouse, 0, radiusPixels, 1.0f, 0.0f, true);
-		
+		float influence = ofMap(distToSource, 0, radiusPixels, 1.0f, 0.0f, true);
+	
 		// Apply mouseInfluenceStrength BEFORE power curve to maintain control range
 		influence *= mouseInfluenceStrength.get();
-		
+	
 		// Apply power curve for gradient shape
 		// Power of 0.7 creates a softer, wider gradient
 		float power = 0.7f;
 		influence = std::pow(influence, power);
-		
+	
 		return influence;
+	}
+
+	float OrganicText::getCombinedInfluence(vec2 position) const {
+		float total = 0.0f;
+		if (bMouseTweaks.get()) {
+			total += getInfluenceFrom(position, mouseLocalPos, radiusMouse.get());
+		}
+		if (bLineTweaks.get()) {
+			total += getInfluenceFrom(position, lineLocalPos, radiusLine.get());
+		}
+		return ofClamp(total, 0.0f, 1.0f);
 	}
 
 	//--------------------------------------------------------------
@@ -1013,7 +1045,7 @@ void OrganicText::setupScene() {
 		
 		// Mouse highlight: override color for points within mouse radius
 		if ((bMouseTweaks.get() || bLineTweaks.get()) && bMouseHighlightPoints.get()) {
-			float influence = getMouseInfluence(position);
+			float influence = getCombinedInfluence(position);
 			if (influence > 0.0f) {
 				color = color.lerp(colorMouseHighlight.get(), influence);
 			}
@@ -1294,15 +1326,17 @@ void OrganicText::setupScene() {
 			vec2 offset = getAnimatedOffset(static_cast<int>(i), phase);
 			vec2 finalPos = pointsString[i] + offset;
 			
-			// Calculate influence from mouse tweaks only
-			float mouseInfluence = 0.0f;
+			// Calculate influence from mouse/line tweaks
+			float totalInfluence = 0.0f;
 			vec2 influenceSourcePos = mouseLocalPos;
-			
-			if (bMouseTweaks.get() || bLineTweaks.get()) {
-				mouseInfluence = getMouseInfluence(finalPos);
+			if (bMouseTweaks.get() && bLineTweaks.get()) {
+				influenceSourcePos = (mouseLocalPos + lineLocalPos) * 0.5f;
+			} else if (bLineTweaks.get()) {
+				influenceSourcePos = lineLocalPos;
 			}
-			
-			float totalInfluence = mouseInfluence;
+			if (bMouseTweaks.get() || bLineTweaks.get()) {
+				totalInfluence = getCombinedInfluence(finalPos);
+			}
 			
 			// Apply displacement effect (bidirectional)
 			// < 0.5 = attract, 0.5 = neutral, > 0.5 = repel
@@ -1436,12 +1470,26 @@ void OrganicText::setupScene() {
 		
 		// Mouse interact debug visualization
 		if (bDebug) {
-			ofPushStyle();
-			ofFill();
-			ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
-			float r = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
-			ofDrawCircle(mousePos, r);
-			ofPopStyle();
+			// Draw mouse radius circle (cyan)
+			if (bMouseTweaks.get()) {
+				ofPushStyle();
+				ofFill();
+				ofSetColor(ofColor::cyan, DEBUG_ALPHA_MAX * 0.5f);
+				float rMouse = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+				ofDrawCircle(mousePos, rMouse);
+				ofPopStyle();
+			}
+			
+			// Draw line radius circle (magenta)
+			if (bLineTweaks.get()) {
+				ofPushStyle();
+				ofFill();
+				ofSetColor(ofColor::magenta, DEBUG_ALPHA_MAX * 0.5f);
+				float rLine = ofMap(radiusLine.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+				vec2 lineScreenPos = textToScreen(lineLocalPos);
+				ofDrawCircle(lineScreenPos, rLine);
+				ofPopStyle();
+			}
 			
 			//--
 			
@@ -1756,10 +1804,6 @@ void OrganicText::setupScene() {
 		
 		else if (key == OF_KEY_BACKSPACE) {
 			organicTextResetsRandoms::resetAll(this);
-		}
-	
-		else if (key == 'L') {
-			vTrigLineTweaks.trigger();
 		}
 	}
 	

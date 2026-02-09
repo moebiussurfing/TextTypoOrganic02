@@ -22,6 +22,7 @@ void ofApp::setup() {
 	// Frame rate
 	
 	float fps = 60.f;
+	// float fps = 120.f;
 	ofSetFrameRate(fps);
 	
 	//--
@@ -224,6 +225,11 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		}
 	}
 	
+	if (k == 'l'|| k == 'L') {
+		ot.vTrigLineTweaks.trigger();
+		return;
+	}
+	
 	else {
 		ot.keyPressed(eventArgs);
 		
@@ -327,6 +333,9 @@ void ofApp::nextScene(browseDirection_ bd) {
 	ofLogNotice("ofApp") << "nextScene() browseDirection:" << bd;
 	
 	browseDirection = bd;
+	if (ot.bLineTweaks.get()) {
+		ot.vTrigLineTweaks.trigger();
+	}
 	if (bTweeningMode)
 	ot.writeIn();
 	else {

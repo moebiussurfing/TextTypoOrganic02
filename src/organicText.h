@@ -174,10 +174,12 @@ public:
 
 	// Line tweaks parameters
 	ofParameter<bool> bLineTweaks;
+	ofParameter<float> radiusLine;
 	ofParameter<void> vTrigLineTweaks;
 	ofParameter<float> lineTweaksDuration;;
 	ofParameter<glm::vec2> vLineFrom;
 	ofParameter<glm::vec2> vLineTo;
+	ofParameter<void> vResetLineTweaks;
 
 	//--
 
@@ -212,6 +214,7 @@ private:
 	ofEventListener e_bMouseTweaks;
 	ofEventListener e_bLineTweaks, e_vTrigLineTweaks;
 	ofEventListener e_mouseInfluenceStrength;
+	ofEventListener e_vResetLineTweaks;
 
 	// Functions
 	vector<vec2> sampleStringPoints(const std::string & s, float ds);
@@ -228,6 +231,8 @@ private:
 
 	//Calculate mouse influence factor for a given position (0-1)
 	float getMouseInfluence(vec2 position) const;
+	float getInfluenceFrom(vec2 position, const vec2& sourcePos, float radiusParam) const;
+	float getCombinedInfluence(vec2 position) const;
 	vec2 lineTweakToTextSpace(const vec2& normalized) const;
 	vec2 textToScreen(const vec2& textPos) const;
 	
@@ -259,6 +264,7 @@ public:
 
 private:
 	mutable vec2 mouseLocalPos;
+	mutable vec2 lineLocalPos;
 	mutable bool bMouseInBounds = false;
 	
 private:
