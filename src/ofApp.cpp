@@ -217,6 +217,8 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	// Dist Mode / advanced mode
 	if (k == OF_KEY_RETURN) {
 		bDistMode.set(!bDistMode.get());
+		//workflow
+		if(bDistMode &&!ot.bGui) ot.bGui=true;
 		return;
 	}
 	
@@ -248,6 +250,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		
 		// Debug mode
 		if (k == 'd' || k == 'D') {
+			//workflow
 			if (!ot.bKeys) ot.bDebug = !ot.bDebug;
 			return;
 		}
