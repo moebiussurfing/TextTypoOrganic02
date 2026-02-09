@@ -83,6 +83,9 @@ void ofApp::setup() {
 	paramsScene.add(bMouseBrowsing);
 	
 	pm.gui.add(paramsScene);
+
+	slideshow.setup(&ot, [this]() { nextScene(); });
+	pm.gui.add(slideshow.getParameters());
 	
 	ot.refreshGuiPanel(pm.guiParams);
 	
@@ -123,6 +126,8 @@ void ofApp::update() {
 	}
 	string wt = ofToString(OFWORKS_DEMO_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
+
+	slideshow.update(ofGetLastFrameTime());
 }
 
 //--------------------------------------------------------------
@@ -155,12 +160,6 @@ void ofApp::drawHelpDist() {
 	s += "\n\n";
 	s += "H              Help";
 	s += "\n\n";
-	s += "KIT            " + ofToString(pm.getKitName());
-	s += "\n";
-	s += "PRESET         " + ofToString(pm.getPresetIndex()) + " / " + ofToString(pm.getPresetIndexLast());
-	s += "\n";
-	s += "               " + pm.getPresetFileName();
-	s += "\n";
 	s += "SPACE          Next";
 	s += "\n";
 	if (bMouseBrowsing) {
@@ -181,6 +180,12 @@ void ofApp::drawHelpDist() {
 	s += " C             Center";
 	s += "\n";
 	s += " L             Trig Line Tweaks";
+	s += "\n";
+	s += "KIT            " + ofToString(pm.getKitName());
+	s += "\n";
+	s += "PRESET         " + ofToString(pm.getPresetIndex()) + " / " + ofToString(pm.getPresetIndexLast());
+	s += "\n";
+	s += "               " + pm.getPresetFileName();
 	s += "\n";
 	ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_BOTTOM_CENTER);
 }
@@ -331,6 +336,8 @@ void ofApp::setupTweensCallbacks() {
 //--------------------------------------------------------------
 void ofApp::nextScene(browseDirection_ bd) {
 	ofLogNotice("ofApp") << "nextScene() browseDirection:" << bd;
+
+	slideshow.onSceneAdvanced();
 	
 	browseDirection = bd;
 	if (ot.bLineTweaks.get()) {

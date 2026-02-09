@@ -45,6 +45,7 @@
 
 #include "ofxSurfingPresetsLiteOfxGui.h"
 #include "organicText.h"
+#include "presetSlideshow.h"
 
 class ofApp : public ofBaseApp {
 
@@ -61,6 +62,7 @@ public:
 
 	// Presets Manager
 	SurfingPresetsLiteOfxGui pm;
+	PresetSlideshow slideshow;
 
 	// Reset app window custom shape
 	void centerWindow();

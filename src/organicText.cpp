@@ -733,6 +733,10 @@ void OrganicText::setupScene() {
 		//--
 		
 	}
+
+bool OrganicText::isLineTweaksRunning() const {
+	return bLineTweaks.get() && tweenPosition.isRunning();
+}
 	
 	//--
 	

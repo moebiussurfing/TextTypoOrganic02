@@ -368,6 +368,8 @@ public:
 		return b;
 	}
 
+	bool isLineTweaksRunning() const;
+
 	/// @brief Set custom callback for when writeOut tween completes
 	void setOnCompleteWriteOut(std::function<void()> callback) {
 		tweenOutPoint.onUserCompleteCallback(callback);
