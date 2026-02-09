@@ -179,6 +179,8 @@ void ofApp::drawHelpDist() {
 	s += "\n";
 	s += " C             Center";
 	s += "\n";
+	s += " L             Trig Line Tweaks";
+	s += "\n";
 	ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_BOTTOM_CENTER);
 }
 

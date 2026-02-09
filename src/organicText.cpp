@@ -168,7 +168,6 @@ void OrganicText::setupScene() {
 		zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
 		bAutoZoomGlobal.set("Auto Zoom", true);
 		sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
-		bMouseTweaks.set("Mouse Tweaks Enabled", true);
 		
 		// Font parameters
 		fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
@@ -251,6 +250,7 @@ void OrganicText::setupScene() {
 		trailFade.set("Fade", 0.5f, 0, 1.f);
 		
 		// Mouse Tweaks
+		bMouseTweaks.set("Mouse Tweaks Enabler", true);
 		bMouseControlOrigin.set("x Origin", false);
 		bMouseHighlightPoints.set("Highlight", false);
 		colorMouseHighlight.set("Color", ofColor(0, 150, 255));
@@ -259,6 +259,13 @@ void OrganicText::setupScene() {
 		mouseDisplacePower.set("D Power", 0.5, 0.0, 1.0);
 		bMouseScaleShapes.set("Scale", false);
 		mouseScalePower.set("S Power", 0.5, 0.0, 1.0);
+		
+		// Line tweaks
+		bLineTweaks.set("Line Tweaks Enabler", true);
+		vTrigLineTweaks.set("Trig Line Tweaks");
+		vLineFrom.set("From", glm::vec2(-1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
+		vLineTo.set("To", glm::vec2(1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
+		lineTweaksDuration.set("Duration", 10.0f, 0.1f, 30.0f);
 		
 		//--
 		
@@ -354,11 +361,11 @@ void OrganicText::setupScene() {
 		paramsTrails.add(vRandomConnection);
 		
 		paramsMouseTweaks.setName("Mouse Tweaks");
+		paramsMouseTweaks.add(bMouseTweaks);
 		paramsMouseTweaks.add(bMouseControlOrigin);
 		paramsMouseTweaks.add(radiusMouse);
 		paramsMouseTweaks.add(bMouseHighlightPoints);
 		paramsMouseTweaks.add(colorMouseHighlight);
-		paramsMouseTweaks.add(bMouseTweaks);
 		paramsMouseTweaks.add(mouseInfluenceStrength);
 		paramsMouseTweaks.add(bMouseDisplacePoints);
 		paramsMouseTweaks.add(mouseDisplacePower);
@@ -366,6 +373,13 @@ void OrganicText::setupScene() {
 		paramsMouseTweaks.add(mouseScalePower);
 		paramsMouseTweaks.add(vResetMouseTweaks);
 		paramsMouseTweaks.add(vRandomMouseTweaks);
+
+		paramsLineTweaks.setName("Line Tweaks");
+		paramsLineTweaks.add(bLineTweaks);
+		paramsLineTweaks.add(vTrigLineTweaks);
+		paramsLineTweaks.add(vLineFrom);
+		paramsLineTweaks.add(vLineTo);
+		paramsLineTweaks.add(lineTweaksDuration);
 		
 		//--
 		
@@ -385,6 +399,7 @@ void OrganicText::setupScene() {
 		paramsPreset.add(paramsConnections);
 		paramsPreset.add(paramsTrails);
 		paramsPreset.add(paramsMouseTweaks);
+		paramsPreset.add(paramsLineTweaks);
 		paramsPreset.add(vRandomPreset);
 		paramsPreset.add(vResetPreset);
 		
@@ -419,7 +434,6 @@ void OrganicText::setupScene() {
 		parameters.add(paramsSessionSettings);
 		parameters.add(paramsInternal);
 		parameters.add(paramsTweens);
-		parameters.add(bMouseTweaks);
 		
 		#ifndef SURFING_USE_EXTERNAL_PRESET_MANAGER
 		// exclude these settings from settings
@@ -483,10 +497,35 @@ void OrganicText::setupScene() {
 		
 		e_bMouseTweaks = bMouseTweaks.newListener([this](bool & b) {
 			ofLogNotice("OrganicText") << "bMouseTweaks: " << b;
+			if(b&&bLineTweaks)bLineTweaks=false;//workflow
 		});
 		
 		e_mouseInfluenceStrength = mouseInfluenceStrength.newListener([this](float & v) {
 			ofLogNotice("OrganicText") << "mouseInfluenceStrength: " << v;
+		});
+
+		e_bLineTweaks = bLineTweaks.newListener([this](bool & b) {
+			ofLogNotice("OrganicText") << "bLineTweaks: " << b;
+			if(b&&bMouseTweaks)bMouseTweaks=false;//workflow
+		});
+
+		e_vTrigLineTweaks = vTrigLineTweaks.newListener([this](void) {
+			ofLogNotice("OrganicText") << "vTrigLineTweaks triggered";
+
+			// Configure start / end positions in text space (normalized -1..1)
+			posStart = lineTweakToTextSpace(vLineFrom.get());
+			posEnd = lineTweakToTextSpace(vLineTo.get());
+
+			// Position tween: from left to right
+			tweenPosition.setFrom(posStart)
+			.setTo(posEnd)
+			// .setDuration(10.0f)
+			.setDuration(lineTweaksDuration)
+			// .setEase(OF_EASE_BOUNCE_INOUT)
+			// .setEase(OF_EASE_EXPO_INOUT)
+			.setEase(OF_EASE_QUAD_INOUT)
+			.setChainFromCurrentValue(false);
+			tweenPosition.start();
 		});
 	}
 
@@ -627,34 +666,39 @@ void OrganicText::setupScene() {
 		}
 		
 		//--
-		
+	
+		float centerX = ofGetWidth() * 0.5f;
+		float centerY = ofGetHeight() * 0.5f;
+
 		tweenPosition.update();
 		
 		// Mouse coordinate transformation
 		// Convert window coordinates to local text coordinates
 		//TODO: add anim point
-		// if(bMouseTweaks) 
-		// mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
-		// else 
-		mousePos= tweenPosition.getValue();
+		if (bLineTweaks.get()) {
+			mouseLocalPos = tweenPosition.getValue();
+			mousePos = textToScreen(mouseLocalPos);
+		} else if (bMouseTweaks.get()) {
+			mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
+		}
 
 		//--
 
-		// Apply inverse transformations (same as in draw())
-		float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
-		float centerX = ofGetWidth() * 0.5f;
-		float centerY = ofGetHeight() * 0.5f;
+		if (!bLineTweaks.get()) {
+			// Apply inverse transformations (same as in draw())
+			float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
 		
-		// Step 1: Translate from window to center
-		vec2 translated = mousePos - vec2(centerX, centerY);
+			// Step 1: Translate from window to center
+			vec2 translated = mousePos - vec2(centerX, centerY);
 		
-		// Step 2: Inverse scale (divide by zoom)
-		vec2 scaled = translated / zoomFactor;
+			// Step 2: Inverse scale (divide by zoom)
+			vec2 scaled = translated / zoomFactor;
 		
-		// Step 3: Translate to text origin (inverse of text centering)
-		float textOffsetX = -data->getTextWidth() * 0.5f;
-		float textOffsetY = data->getTextHeight() * 0.5f;
-		mouseLocalPos = scaled - vec2(textOffsetX, textOffsetY);
+			// Step 3: Translate to text origin (inverse of text centering)
+			float textOffsetX = -data->getTextWidth() * 0.5f;
+			float textOffsetY = data->getTextHeight() * 0.5f;
+			mouseLocalPos = scaled - vec2(textOffsetX, textOffsetY);
+		}
 		
 		// Check if mouse is within text bounds
 		bMouseInBounds = (mouseLocalPos.x >= 0 && mouseLocalPos.x <= data->getTextWidth() && mouseLocalPos.y >= -data->getTextHeight() && mouseLocalPos.y <= 0);
@@ -761,7 +805,7 @@ void OrganicText::setupScene() {
 		// Override with mouse position if mouse control is active
 		// Now works across entire canvas, deforming the constellation
 		// exclude ANIM_WAVE because no good results seen with it
-		if (bMouseTweaks.get() && bMouseControlOrigin.get() && (AnimMode)animationMode.get() != ANIM_WAVE) {
+		if ((bMouseTweaks.get() || bLineTweaks.get()) && bMouseControlOrigin.get() && (AnimMode)animationMode.get() != ANIM_WAVE) {
 			customOriginX = mouseLocalPos.x;
 			customOriginY = mouseLocalPos.y;
 		}
@@ -773,7 +817,7 @@ void OrganicText::setupScene() {
 				float maxDisp = ofMap(animPower.get(), 0, 1, 0, ANIM_NOISE_MAX * fontScale, true);
 				
 				// If mouse control is active, reduce noise displacement near mouse position
-				if (bMouseTweaks.get() && bMouseControlOrigin.get()) {
+				if ((bMouseTweaks.get() || bLineTweaks.get()) && bMouseControlOrigin.get()) {
 					float mouseInfluence = getMouseInfluence(pointsString[index]);
 					maxDisp *= (1.0f - mouseInfluence * 2.f); // Reduce up to % near mouse
 				}
@@ -862,6 +906,22 @@ void OrganicText::setupScene() {
 		influence = std::pow(influence, power);
 		
 		return influence;
+	}
+
+	//--------------------------------------------------------------
+	vec2 OrganicText::lineTweakToTextSpace(const vec2& normalized) const {
+		float x = ofMap(normalized.x, -1.0f, 1.0f, 0.0f, data->getTextWidth(), true);
+		float y = ofMap(normalized.y, -1.0f, 1.0f, -data->getTextHeight(), 0.0f, true);
+		return vec2(x, y);
+	}
+
+	//--------------------------------------------------------------
+	vec2 OrganicText::textToScreen(const vec2& textPos) const {
+		float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
+		float centerX = ofGetWidth() * 0.5f;
+		float centerY = ofGetHeight() * 0.5f;
+		vec2 offset = vec2(-data->getTextWidth() * 0.5f, data->getTextHeight() * 0.5f);
+		return vec2(centerX, centerY) + (textPos + offset) * zoomFactor;
 	}
 	
 	//--------------------------------------------------------------
@@ -952,7 +1012,7 @@ void OrganicText::setupScene() {
 		}
 		
 		// Mouse highlight: override color for points within mouse radius
-		if (bMouseTweaks.get() && bMouseHighlightPoints.get()) {
+		if ((bMouseTweaks.get() || bLineTweaks.get()) && bMouseHighlightPoints.get()) {
 			float influence = getMouseInfluence(position);
 			if (influence > 0.0f) {
 				color = color.lerp(colorMouseHighlight.get(), influence);
@@ -1238,7 +1298,7 @@ void OrganicText::setupScene() {
 			float mouseInfluence = 0.0f;
 			vec2 influenceSourcePos = mouseLocalPos;
 			
-			if (bMouseTweaks.get()) {
+			if (bMouseTweaks.get() || bLineTweaks.get()) {
 				mouseInfluence = getMouseInfluence(finalPos);
 			}
 			
@@ -1309,10 +1369,11 @@ void OrganicText::setupScene() {
 		
 		float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
 		
+		float centerX = ofGetWidth() * 0.5f;
+		float centerY = ofGetHeight() * 0.5f;
+		
 		ofPushMatrix();
 		{
-			float centerX = ofGetWidth() * 0.5f;
-			float centerY = ofGetHeight() * 0.5f;
 			ofTranslate(centerX, centerY);
 			ofScale(zoomFactor, zoomFactor);
 			
@@ -1385,17 +1446,25 @@ void OrganicText::setupScene() {
 			//--
 			
 			// Mouse debug visualization only
-		}
+			
+			// Start to end line preview for line tweaks
+			if (bLineTweaks.get()) {
+				ofPushStyle();
+				ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
 
-			// Start to end line
-			ofPushStyle();
-			ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
-			ofDrawCircle(posStart, 4);
-			ofDrawCircle(posEnd, 4);
-			ofDrawLine(posStart, posEnd);
-			glm::vec2 p=tweenPosition.getValue();
-			ofDrawCircle(p, 10);
-			ofPopStyle();
+				vec2 startText = lineTweakToTextSpace(vLineFrom.get());
+				vec2 endText = lineTweakToTextSpace(vLineTo.get());
+				vec2 startScreen = textToScreen(startText);
+				vec2 endScreen = textToScreen(endText);
+				vec2 currentScreen = textToScreen(tweenPosition.getValue());
+
+				ofDrawCircle(startScreen, 4);
+				ofDrawCircle(endScreen, 4);
+				ofDrawLine(startScreen, endScreen);
+				ofDrawCircle(currentScreen, 10);
+				ofPopStyle();
+			}
+		}
 		
 		// Debug bench measuring drawing performance
 		timeDrawBenchmark = ofGetElapsedTimeMicros() - td;
@@ -1605,6 +1674,7 @@ void OrganicText::setupScene() {
 		ui.getGroup(paramsAnim.getName()).minimizeAll();
 		ui.getGroup(paramsConnections.getName()).minimizeAll();
 		ui.getGroup(paramsMouseTweaks.getName()).minimizeAll();
+		ui.getGroup(paramsLineTweaks.getName()).minimizeAll();
 		ui.minimizeAll();
 	}
 	
@@ -1619,6 +1689,7 @@ void OrganicText::setupScene() {
 		g.getGroup(paramsAnim.getName()).minimizeAll();
 		g.getGroup(paramsConnections.getName()).minimizeAll();
 		g.getGroup(paramsMouseTweaks.getName()).minimizeAll();
+		g.getGroup(paramsLineTweaks.getName()).minimizeAll();
 		g.minimizeAll();
 	}
 	
@@ -1686,25 +1757,10 @@ void OrganicText::setupScene() {
 		else if (key == OF_KEY_BACKSPACE) {
 			organicTextResetsRandoms::resetAll(this);
 		}
-
 	
-		else if (key == 'p') {
-
-		// Configure start / end positions based on current window size
-		int offsetY = 40;
-		posStart = glm::vec2(100, ofGetHeight() / 2.0f+offsetY);
-		posEnd = glm::vec2(ofGetWidth() - 100, ofGetHeight() / 2.0f - offsetY);
-
-		// Position tween: from left to right
-		tweenPosition.setFrom(posStart)
-		.setTo(posEnd)
-		.setDuration(10.0f)
-		// .setEase(OF_EASE_BOUNCE_INOUT)
-		// .setEase(OF_EASE_EXPO_INOUT)
-		.setEase(OF_EASE_QUAD_INOUT)
-		.setChainFromCurrentValue(false);
-		tweenPosition.start();
-	}
+		else if (key == 'L') {
+			vTrigLineTweaks.trigger();
+		}
 	}
 	
 	//--

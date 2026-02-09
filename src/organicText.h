@@ -70,6 +70,7 @@ public:
 	ofParameterGroup paramsConnections;
 	ofParameterGroup paramsTrails;
 	ofParameterGroup paramsMouseTweaks;
+	ofParameterGroup paramsLineTweaks;
 
 	ofParameterGroup paramsSessionSettings; // For session status, not preset
 	ofParameterGroup paramsInternal; // Some internal settings
@@ -171,6 +172,13 @@ public:
 	ofParameter<bool> bMouseScaleShapes;
 	ofParameter<float> mouseScalePower;
 
+	// Line tweaks parameters
+	ofParameter<bool> bLineTweaks;
+	ofParameter<void> vTrigLineTweaks;
+	ofParameter<float> lineTweaksDuration;;
+	ofParameter<glm::vec2> vLineFrom;
+	ofParameter<glm::vec2> vLineTo;
+
 	//--
 
 	// Global controls
@@ -202,6 +210,7 @@ private:
 	ofEventListener e_vResetMouseTweaks, e_vRandomMouseTweaks;
 	ofEventListener e_bAutoZoomGlobal;
 	ofEventListener e_bMouseTweaks;
+	ofEventListener e_bLineTweaks, e_vTrigLineTweaks;
 	ofEventListener e_mouseInfluenceStrength;
 
 	// Functions
@@ -219,6 +228,8 @@ private:
 
 	//Calculate mouse influence factor for a given position (0-1)
 	float getMouseInfluence(vec2 position) const;
+	vec2 lineTweakToTextSpace(const vec2& normalized) const;
+	vec2 textToScreen(const vec2& textPos) const;
 	
 	mutable glm::vec2 mousePos;
 
