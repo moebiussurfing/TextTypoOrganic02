@@ -24,6 +24,10 @@ public:
 	OrganicText();
 	~OrganicText();
 
+	ofxTweenLiteHelper<glm::vec2> tweenPosition;
+	glm::vec2 posStart;
+	glm::vec2 posEnd;
+
 	//--
 
 public:

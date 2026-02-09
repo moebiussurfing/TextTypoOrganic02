@@ -68,6 +68,7 @@ void OrganicText::startup() {
 	loadSettings();
 	
 	refreshWindowResized();
+
 }
 
 //--------------------------------------------------------------
@@ -627,10 +628,18 @@ void OrganicText::setupScene() {
 		
 		//--
 		
+		tweenPosition.update();
+		
 		// Mouse coordinate transformation
 		// Convert window coordinates to local text coordinates
-		mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
-		
+		//TODO: add anim point
+		// if(bMouseTweaks) 
+		// mousePos = glm::vec2(ofGetMouseX(), ofGetMouseY());
+		// else 
+		mousePos= tweenPosition.getValue();
+
+		//--
+
 		// Apply inverse transformations (same as in draw())
 		float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
 		float centerX = ofGetWidth() * 0.5f;
@@ -1377,6 +1386,16 @@ void OrganicText::setupScene() {
 			
 			// Mouse debug visualization only
 		}
+
+			// Start to end line
+			ofPushStyle();
+			ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
+			ofDrawCircle(posStart, 4);
+			ofDrawCircle(posEnd, 4);
+			ofDrawLine(posStart, posEnd);
+			glm::vec2 p=tweenPosition.getValue();
+			ofDrawCircle(p, 10);
+			ofPopStyle();
 		
 		// Debug bench measuring drawing performance
 		timeDrawBenchmark = ofGetElapsedTimeMicros() - td;
@@ -1667,6 +1686,25 @@ void OrganicText::setupScene() {
 		else if (key == OF_KEY_BACKSPACE) {
 			organicTextResetsRandoms::resetAll(this);
 		}
+
+	
+		else if (key == 'p') {
+
+		// Configure start / end positions based on current window size
+		int offsetY = 40;
+		posStart = glm::vec2(100, ofGetHeight() / 2.0f+offsetY);
+		posEnd = glm::vec2(ofGetWidth() - 100, ofGetHeight() / 2.0f - offsetY);
+
+		// Position tween: from left to right
+		tweenPosition.setFrom(posStart)
+		.setTo(posEnd)
+		.setDuration(10.0f)
+		// .setEase(OF_EASE_BOUNCE_INOUT)
+		// .setEase(OF_EASE_EXPO_INOUT)
+		.setEase(OF_EASE_QUAD_INOUT)
+		.setChainFromCurrentValue(false);
+		tweenPosition.start();
+	}
 	}
 	
 	//--
