@@ -27,7 +27,10 @@ private:
   ofParameter<bool> bEnabled_ { "Slideshow", false };
   ofParameter<float> waitSeconds_ { "Interval (s)", 5.0f, 1.0f, 10.0f };
   ofParameterGroup paramsFeedback_;
-  ofParameter<float> feedback_ { "Feedback", 0.1f, 0.0f, 1.0f };
+  ofParameter<float> feedback_ { "Feedback", 0.0f, 0.0f, 1.0f };
+  ofParameter<bool> bTimerRunning_ { "Timer Running", false };
+  ofParameter<bool> bBusyTweens_ { "Busy Tweens", false };
+  ofParameter<bool> bBusyLineTweaks_ { "Busy LineTweaks", false };
   ofParameter<bool> bWaitTweens_ { "Wait Tweens", true };
   ofParameter<bool> bWaitLineTweaks_ { "Wait LineTweaks", true };
   ofParameter<bool> bPauseTimerWhenBusy_ { "Pause When Busy", true };

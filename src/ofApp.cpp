@@ -180,7 +180,7 @@ void ofApp::drawHelpDist() {
 	s += " C             Center";
 	s += "\n";
 	s += " L             Trig Line Tweaks";
-	s += "\n";
+	s += "\n\n";
 	s += "KIT            " + ofToString(pm.getKitName());
 	s += "\n";
 	s += "PRESET         " + ofToString(pm.getPresetIndex()) + " / " + ofToString(pm.getPresetIndexLast());

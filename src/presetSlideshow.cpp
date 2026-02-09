@@ -13,7 +13,14 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
   params_.add(bEnabled_);
   params_.add(waitSeconds_);
   paramsFeedback_.setName("Feedback");
+  feedback_.setSerializable(false);
+  bTimerRunning_.setSerializable(false);
+  bBusyTweens_.setSerializable(false);
+  bBusyLineTweaks_.setSerializable(false);
   paramsFeedback_.add(feedback_);
+  paramsFeedback_.add(bTimerRunning_);
+  paramsFeedback_.add(bBusyTweens_);
+  paramsFeedback_.add(bBusyLineTweaks_);
   params_.add(paramsFeedback_);
   params_.add(bWaitTweens_);
   params_.add(bWaitLineTweaks_);
@@ -26,17 +33,36 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
 }
 
 void PresetSlideshow::update(float dt) {
-  if (!bEnabled_.get()) return;
-  if (!nextScene_) return;
+  if (!bEnabled_.get() || !nextScene_) {
+    feedback_.set(0.0f);
+    bTimerRunning_.set(false);
+    return;
+  }
 
-  const bool ready = isReady();
+  const bool busyTweens = bWaitTweens_.get() && ot_ != nullptr && ot_->isTweening();
+  const bool busyLineTweaks = bWaitLineTweaks_.get() && ot_ != nullptr && ot_->isLineTweaksRunning();
+  bBusyTweens_.set(busyTweens);
+  bBusyLineTweaks_.set(busyLineTweaks);
+
+  const bool ready = !busyTweens && !busyLineTweaks;
+
+  const bool timerRunning = ready || !bPauseTimerWhenBusy_.get();
+  bTimerRunning_.set(timerRunning && bEnabled_.get());
 
   if (!ready && bPauseTimerWhenBusy_) {
+    feedback_.set(0.0f);
     return;
   }
 
   const float step = (dt > 0.0f) ? dt : ofGetLastFrameTime();
   elapsed_ += step;
+
+  if (waitSeconds_.get() > 0.0f && timerRunning) {
+    const float progress = ofClamp(elapsed_ / waitSeconds_.get(), 0.0f, 1.0f);
+    feedback_.set(progress);
+  } else {
+    feedback_.set(0.0f);
+  }
 
   if (elapsed_ >= waitSeconds_.get() && ready) {
     triggerNow();
@@ -78,4 +104,10 @@ bool PresetSlideshow::isReady() const {
 
 void PresetSlideshow::resetTimer() {
   elapsed_ = 0.0f;
+
+  // Reset feedback to start of cycle
+  feedback_.set(0.0f);
+  bTimerRunning_.set(false);
+  bBusyTweens_.set(false);
+  bBusyLineTweaks_.set(false);
 }
