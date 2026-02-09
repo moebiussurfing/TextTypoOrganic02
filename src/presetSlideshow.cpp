@@ -13,11 +13,13 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
   params_.add(bEnabled_);
   params_.add(waitSeconds_);
   paramsFeedback_.setName("Feedback");
-  feedback_.setSerializable(false);
+  progressFeedback_.setSerializable(false);
+  bUserIdle_.setSerializable(false);
   bTimerRunning_.setSerializable(false);
   bBusyTweens_.setSerializable(false);
   bBusyLineTweaks_.setSerializable(false);
-  paramsFeedback_.add(feedback_);
+  paramsFeedback_.add(progressFeedback_);
+  paramsFeedback_.add(bUserIdle_);
   paramsFeedback_.add(bTimerRunning_);
   paramsFeedback_.add(bBusyTweens_);
   paramsFeedback_.add(bBusyLineTweaks_);
@@ -25,6 +27,7 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
   params_.add(bWaitTweens_);
   params_.add(bWaitLineTweaks_);
   params_.add(bPauseTimerWhenBusy_);
+  params_.add(bWaitUserIdle_);
   params_.add(vTriggerNow_);
 
   eTriggerNow_ = vTriggerNow_.newListener([this](const void *) { triggerNow(); });
@@ -32,9 +35,14 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
   resetTimer();
 }
 
+void PresetSlideshow::setMouseIdleChecker(std::function<bool()> fn) {
+  isMouseIdle_ = std::move(fn);
+}
+
 void PresetSlideshow::update(float dt) {
   if (!bEnabled_.get() || !nextScene_) {
-    feedback_.set(0.0f);
+    progressFeedback_.set(0.0f);
+    bUserIdle_.set(true);
     bTimerRunning_.set(false);
     bBusyTweens_.set(false);
     bBusyLineTweaks_.set(false);
@@ -50,6 +58,15 @@ void PresetSlideshow::update(float dt) {
   const bool timerRunning = ready || !bPauseTimerWhenBusy_.get();
   bTimerRunning_.set(timerRunning);
 
+  const bool userIdle = isMouseIdle_ ? isMouseIdle_() : true;
+  bUserIdle_.set(userIdle);
+
+  // Only block while waiting between slides (timer advancing) and system is ready.
+  if (ready && timerRunning && bWaitUserIdle_.get() && !userIdle) {
+    bTimerRunning_.set(false);
+    return;
+  }
+
   if (timerRunning) {
     const float step = (dt > 0.0f) ? dt : ofGetLastFrameTime();
     elapsed_ += step;
@@ -57,10 +74,13 @@ void PresetSlideshow::update(float dt) {
 
   if (waitSeconds_.get() > 0.0f) {
     const float progress = ofClamp(elapsed_ / waitSeconds_.get(), 0.0f, 1.0f);
-    feedback_.set(progress);
+    progressFeedback_.set(progress);
   } else {
-    feedback_.set(0.0f);
+    progressFeedback_.set(0.0f);
   }
+
+  //TODO:
+  // if(ot_->isMouseIdle())
 
   if (elapsed_ >= waitSeconds_.get() && ready) {
     triggerNow();
@@ -69,6 +89,10 @@ void PresetSlideshow::update(float dt) {
 
 void PresetSlideshow::onSceneAdvanced() {
   resetTimer();
+}
+
+void PresetSlideshow::toggle() {
+  bEnabled_.set(!bEnabled_.get());
 }
 
 void PresetSlideshow::triggerNow() {
@@ -102,7 +126,8 @@ bool PresetSlideshow::isReady() const {
 
 void PresetSlideshow::resetTimer() {
   elapsed_ = 0.0f;
-  feedback_.set(0.0f);
+  progressFeedback_.set(0.0f);
+  bUserIdle_.set(true);
   bTimerRunning_.set(false);
   bBusyTweens_.set(false);
   bBusyLineTweaks_.set(false);

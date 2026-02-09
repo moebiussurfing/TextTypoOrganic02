@@ -85,6 +85,7 @@ void ofApp::setup() {
 	pm.gui.add(paramsScene);
 
 	slideshow.setup(&ot, [this]() { nextScene(); });
+	slideshow.setMouseIdleChecker([this]() { return isMouseIdle(); });
 	pm.gui.add(slideshow.getParameters());
 	
 	ot.refreshGuiPanel(pm.guiParams);
@@ -180,6 +181,9 @@ void ofApp::drawHelpDist() {
 	s += " C             Center";
 	s += "\n";
 	s += " L             Trig Line Tweaks";
+	s += "\n";
+	string sp=ofToString(slideshow.bEnabled_.get() ? "Slideshow Pause" : "Slideshow Play");
+	s += " P             "+ sp;
 	s += "\n\n";
 	s += "KIT            " + ofToString(pm.getKitName());
 	s += "\n";
@@ -229,9 +233,11 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 			return;
 		}
 	}
-	
 	if (k == 'l'|| k == 'L') {
 		ot.vTrigLineTweaks.trigger();
+	}
+	if (k == 'p'|| k == 'P') {
+		slideshow.toggle();
 		return;
 	}
 	
@@ -270,6 +276,15 @@ void ofApp::mousePressed(int x, int y, int button) {
 		nextScene(browseDirection);
 		return;
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y) {
+	lastMouseMove = ofGetElapsedTimeMillis(); 
+}
+//--------------------------------------------------------------
+bool ofApp::isMouseIdle() const {
+	return (ofGetElapsedTimeMillis() - lastMouseMove) > mouseWait;
 }
 
 //--

@@ -57,6 +57,11 @@ public:
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void mousePressed(int x, int y, int button);
 
+	int lastMouseMove = 0; 
+	int mouseWait = 1000; // ms
+	void mouseMoved(int x, int y);
+	bool isMouseIdle() const;
+	
 	// Organic Text
 	OrganicText ot;
 
