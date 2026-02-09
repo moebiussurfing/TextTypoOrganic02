@@ -263,7 +263,7 @@ void OrganicText::setupScene() {
 		
 		// Line tweaks
 		bLineTweaks.set("Line Tweaks Enabler", true);
-		radiusLine.set("Radius Line", 0.1f, 0.0f, 1.0f);
+		radiusLineMouse.set("Radius Line Mouse", 0.1f, 0.0f, 1.0f);
 		vTrigLineTweaks.set("Trig Line Tweaks");
 		vLineFrom.set("From", glm::vec2(-1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
 		vLineTo.set("To", glm::vec2(1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
@@ -379,7 +379,7 @@ void OrganicText::setupScene() {
 		
 		paramsLineTweaks.setName("Line Tweaks");
 		paramsLineTweaks.add(bLineTweaks);
-		paramsLineTweaks.add(radiusLine);
+		paramsLineTweaks.add(radiusLineMouse);
 		paramsLineTweaks.add(vTrigLineTweaks);
 		paramsLineTweaks.add(vLineFrom);
 		paramsLineTweaks.add(vLineTo);
@@ -935,7 +935,7 @@ void OrganicText::setupScene() {
 			total += getInfluenceFrom(position, mouseLocalPos, radiusMouse.get());
 		}
 		if (bLineTweaks.get()) {
-			total += getInfluenceFrom(position, lineLocalPos, radiusLine.get());
+			total += getInfluenceFrom(position, lineLocalPos, radiusLineMouse.get());
 		}
 		return ofClamp(total, 0.0f, 1.0f);
 	}
@@ -1327,15 +1327,22 @@ void OrganicText::setupScene() {
 			vec2 finalPos = pointsString[i] + offset;
 			
 			// Calculate influence from mouse/line tweaks
-			float totalInfluence = 0.0f;
+			float mouseInfluence = 0.0f;
+			float lineInfluence = 0.0f;
+			if (bMouseTweaks.get()) {
+				mouseInfluence = getInfluenceFrom(finalPos, mouseLocalPos, radiusMouse.get());
+			}
+			if (bLineTweaks.get()) {
+				lineInfluence = getInfluenceFrom(finalPos, lineLocalPos, radiusLineMouse.get());
+			}
+			float totalInfluence = ofClamp(mouseInfluence + lineInfluence, 0.0f, 1.0f);
+			
 			vec2 influenceSourcePos = mouseLocalPos;
 			if (bMouseTweaks.get() && bLineTweaks.get()) {
-				influenceSourcePos = (mouseLocalPos + lineLocalPos) * 0.5f;
+				// Use the dominant source to avoid drifting the modifier origin
+				influenceSourcePos = (mouseInfluence >= lineInfluence) ? mouseLocalPos : lineLocalPos;
 			} else if (bLineTweaks.get()) {
 				influenceSourcePos = lineLocalPos;
-			}
-			if (bMouseTweaks.get() || bLineTweaks.get()) {
-				totalInfluence = getCombinedInfluence(finalPos);
 			}
 			
 			// Apply displacement effect (bidirectional)
@@ -1485,7 +1492,7 @@ void OrganicText::setupScene() {
 				ofPushStyle();
 				ofFill();
 				ofSetColor(ofColor::magenta, DEBUG_ALPHA_MAX * 0.5f);
-				float rLine = ofMap(radiusLine.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
+				float rLine = ofMap(radiusLineMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
 				vec2 lineScreenPos = textToScreen(lineLocalPos);
 				ofDrawCircle(lineScreenPos, rLine);
 				ofPopStyle();

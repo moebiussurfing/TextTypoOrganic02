@@ -174,7 +174,7 @@ public:
 
 	// Line tweaks parameters
 	ofParameter<bool> bLineTweaks;
-	ofParameter<float> radiusLine;
+	ofParameter<float> radiusLineMouse;
 	ofParameter<void> vTrigLineTweaks;
 	ofParameter<float> lineTweaksDuration;;
 	ofParameter<glm::vec2> vLineFrom;

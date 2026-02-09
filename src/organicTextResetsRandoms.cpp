@@ -147,6 +147,7 @@ void organicTextResetsRandoms::resetLineTweaks(OrganicText * ot) {
 	ofLogNotice("organicTextResetsRandoms") << "resetLineTweaks()";
 
 	ot->bLineTweaks.set(true);
+	ot->radiusLineMouse.set(0.1f);
 	ot->vLineFrom.set(glm::vec2(-1.0f, 0.0f));
 	ot->vLineTo.set(glm::vec2(1.0f, 0.0f));
 	ot->lineTweaksDuration.set(5.0f);
