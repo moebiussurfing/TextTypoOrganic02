@@ -46,10 +46,22 @@
 #include "ofxSurfingPresetsLiteOfxGui.h"
 #include "organicText.h"
 #include "presetSlideshow.h"
+// #include "ofxBloom.h"
 
 class ofApp : public ofBaseApp {
 
 public:
+	// void setupBloom();
+	// void beginBloom();
+	// void endBloom();
+	// ofxPanel gui;
+	// ofxFloatSlider scale;
+	// ofxFloatSlider thresh;
+	// ofxFloatSlider brightness;
+	// float time;
+	// ofxBloom bloom;
+	// ofFbo fbo;
+
 	void setup();
 	void update();
 	void draw();

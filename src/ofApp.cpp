@@ -1,4 +1,38 @@
 #include "ofApp.h"
+// //--------------------------------------------------------------
+// void ofApp::setupBloom() {
+// 	//Src fbo's texcoord has to be normalized(0 - 1)
+// 	ofDisableArbTex();
+// 	fbo.allocate(ofGetWidth(), ofGetHeight());
+// 	ofEnableArbTex();
+
+// 	bloom.setup(ofGetWidth(), ofGetHeight(), fbo);
+
+// 	gui.setup();
+// 	gui.add(scale.setup("Scale", 2.3f, 0.1f, 16.f));
+// 	gui.add(brightness.setup("Brightness", 5.0f, 0.f, 30.f));
+// 	gui.add(thresh.setup("Threshold", 0.f, 0.1f, 2.f));
+// }
+
+// //--------------------------------------------------------------
+// void ofApp::beginBloom() {
+// 	time = ofGetElapsedTimef();
+
+// 	fbo.begin();
+// 	ofClear(20);
+
+// }
+
+// //--------------------------------------------------------------
+// void ofApp::endBloom() {
+	
+// 	fbo.end();
+
+// 	bloom.setBrightness(brightness);
+// 	bloom.setScale(scale);
+// 	bloom.setThreshold(thresh);
+// 	bloom.process();
+// }
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -103,6 +137,8 @@ void ofApp::setup() {
 	paramsOfApp.add(bMouseBrowsing);
 	paramsOfApp.add(bFullScreen);
 	ofxSurfing::loadGroup(paramsOfApp);
+
+	// setupBloom();
 }
 
 //--------------------------------------------------------------
@@ -140,9 +176,12 @@ void ofApp::draw() {
 		ofBackground(20);
 	}
 	
-	// Organic Text
+	// beginBloom();
+	// // Organic Text
 	ot.draw();
-	
+	// endBloom();
+	// bloom.draw();
+
 	if (!bDistMode.get()) {
 		// Presets Manager
 		pm.drawGui();
@@ -151,6 +190,8 @@ void ofApp::draw() {
 		// Draw Help Dist
 		if (bHelpDist) drawHelpDist();
 	}
+
+	// gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -218,7 +259,7 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	if (k == OF_KEY_RETURN) {
 		bDistMode.set(!bDistMode.get());
 		//workflow
-		if(bDistMode &&!ot.bGui) ot.bGui=true;
+		// if(bDistMode &&!ot.bGui) ot.bGui=true;
 		return;
 	}
 	
