@@ -36,6 +36,8 @@ void PresetSlideshow::update(float dt) {
   if (!bEnabled_.get() || !nextScene_) {
     feedback_.set(0.0f);
     bTimerRunning_.set(false);
+    bBusyTweens_.set(false);
+    bBusyLineTweaks_.set(false);
     return;
   }
 
@@ -45,19 +47,15 @@ void PresetSlideshow::update(float dt) {
   bBusyLineTweaks_.set(busyLineTweaks);
 
   const bool ready = !busyTweens && !busyLineTweaks;
-
   const bool timerRunning = ready || !bPauseTimerWhenBusy_.get();
-  bTimerRunning_.set(timerRunning && bEnabled_.get());
+  bTimerRunning_.set(timerRunning);
 
-  if (!ready && bPauseTimerWhenBusy_) {
-    feedback_.set(0.0f);
-    return;
+  if (timerRunning) {
+    const float step = (dt > 0.0f) ? dt : ofGetLastFrameTime();
+    elapsed_ += step;
   }
 
-  const float step = (dt > 0.0f) ? dt : ofGetLastFrameTime();
-  elapsed_ += step;
-
-  if (waitSeconds_.get() > 0.0f && timerRunning) {
+  if (waitSeconds_.get() > 0.0f) {
     const float progress = ofClamp(elapsed_ / waitSeconds_.get(), 0.0f, 1.0f);
     feedback_.set(progress);
   } else {
@@ -104,8 +102,6 @@ bool PresetSlideshow::isReady() const {
 
 void PresetSlideshow::resetTimer() {
   elapsed_ = 0.0f;
-
-  // Reset feedback to start of cycle
   feedback_.set(0.0f);
   bTimerRunning_.set(false);
   bBusyTweens_.set(false);
