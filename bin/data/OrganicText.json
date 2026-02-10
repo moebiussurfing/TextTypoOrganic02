@@ -16,11 +16,11 @@
         "Session_Settings": {
             "Autosave": "1"
         },
-        "Text": "ORGANIC TYPE",
+        "Text": "OPENFRAMEWORKS",
         "Thickness": "0.15",
         "Tweens_Drawing": {
             "In": "0",
-            "Out": "1",
+            "Out": "0.0217015",
             "Tween_In": {
                 "Advanced": {
                     "Chain": "0"
@@ -40,6 +40,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "0"
+        "Zoom": "0.96"
     }
 }
