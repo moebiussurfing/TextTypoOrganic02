@@ -90,9 +90,11 @@ void ofApp::setup() {
 	e_bFullScreen = bFullScreen.newListener([this](bool & v) {
 		ofLogNotice("ofApp") << "bFullScreen: " << v;
 		if (bFullScreen.get()) {
-			fullScreenWindow();
+			//fullScreenWindow();
+			ofSetFullscreen(true);
 		} else {
 			resetWindow();
+			ofSetFullscreen(false);
 		}
 	});
 	
