@@ -220,7 +220,7 @@ void ofApp::drawHelpDist() {
 	s += " F             " + ofToString(bFullScreen ? "Reset" : "Full Screen");
 	s += "\n";
 	s += " C             Center";
-	s += "\n";
+	s += "\n\n";
 	s += " L             Trig Line Tweaks";
 	s += "\n";
 	string sp=ofToString(slideshow.bEnabled_.get() ? "Slideshow Pause" : "Slideshow Play");

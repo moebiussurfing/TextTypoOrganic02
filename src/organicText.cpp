@@ -1485,7 +1485,7 @@ bool OrganicText::isLineTweaksRunning() const {
 			if (bMouseTweaks.get()) {
 				ofPushStyle();
 				ofFill();
-				ofSetColor(ofColor::cyan, DEBUG_ALPHA_MAX * 0.5f);
+				ofSetColor(colorDebugBlink);
 				float rMouse = ofMap(radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
 				ofDrawCircle(mousePos, rMouse);
 				ofPopStyle();
@@ -1495,7 +1495,7 @@ bool OrganicText::isLineTweaksRunning() const {
 			if (bLineTweaks.get()) {
 				ofPushStyle();
 				ofFill();
-				ofSetColor(ofColor::magenta, DEBUG_ALPHA_MAX * 0.5f);
+				ofSetColor(colorDebugBlink);
 				float rLine = ofMap(radiusLineMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
 				vec2 lineScreenPos = textToScreen(lineLocalPos);
 				ofDrawCircle(lineScreenPos, rLine);
@@ -1509,7 +1509,7 @@ bool OrganicText::isLineTweaksRunning() const {
 			// Start to end line preview for line tweaks
 			if (bLineTweaks.get()) {
 				ofPushStyle();
-				ofSetColor(ofColor(colorDebug, DEBUG_ALPHA_MAX * 0.5f));
+				ofSetColor(colorDebugBlink);
 
 				vec2 startText = lineTweakToTextSpace(vLineFrom.get());
 				vec2 endText = lineTweakToTextSpace(vLineTo.get());
