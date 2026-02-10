@@ -32,6 +32,11 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
 
   eTriggerNow_ = vTriggerNow_.newListener([this](const void *) { triggerNow(); });
 
+  // Start with text hidden so the first slide appears via writeIn tween.
+  if (ot_ != nullptr) {
+    ot_->writeOut();
+  }
+
   resetTimer();
 }
 
