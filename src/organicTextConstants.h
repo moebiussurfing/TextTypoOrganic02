@@ -103,8 +103,8 @@ constexpr float SHAPE_SIZE_NOISE_SCALE = 0.5f;
 constexpr float SHAPE_SIZE_INDEX_SCALE = 0.01f;
 
 // Debug Constants
-constexpr int DEBUG_ALPHA_MAX = 120;
-constexpr int DEBUG_ALPHA_MIN_OFFSET = 20;
+constexpr int DEBUG_ALPHA_MAX = 48;
+constexpr int DEBUG_ALPHA_MIN_OFFSET = 16;
 constexpr float DEBUG_SPEED = .2f;
 
 // Outline Constants
