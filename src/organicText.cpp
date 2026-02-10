@@ -531,6 +531,11 @@ void OrganicText::setupScene() {
 			.setChainFromCurrentValue(false);
 			tweenPosition.start();
 		});
+
+		e_bAutoZoomGlobal = bAutoZoomGlobal.newListener([this](bool & b) {
+			ofLogNotice("OrganicText") << "bAutoZoomGlobal: " << b;
+			refreshWindowResized();
+		});
 	}
 
 	//--------------------------------------------------------------
