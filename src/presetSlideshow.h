@@ -1,6 +1,8 @@
 #pragma once
 
 #include <functional>
+#include <string>
+#include <vector>
 
 #include "ofMain.h"
 
@@ -16,11 +18,14 @@ public:
   void toggle();
   ofParameterGroup & getParameters();
   ofParameterGroup & getFeedbackParameters();
+  bool isPresetLocked() const;
+  void applyTextFromFileNow();
   ofParameter<bool> bEnabled_ { "Slideshow", false };
 
 private:
   bool isReady() const;
   void resetTimer();
+  void applyTextFromFile();
 
   OrganicText * ot_ = nullptr;
   std::function<void()> nextScene_;
@@ -30,6 +35,9 @@ private:
 
   ofParameterGroup params_;
   ofParameter<float> waitSeconds_ { "Interval (s)", 5.0f, 1.0f, 10.0f };
+  ofParameter<bool> bReadFromFile_ { "Read From File", false };
+  ofParameter<std::string> textFilePath_ { "Text File", "slideshow.txt" };
+  ofParameter<bool> bLockPreset_ { "Lock Preset", false };
   ofParameterGroup paramsFeedback_;
   ofParameter<float> progressFeedback_ { "Progress", 0.0f, 0.0f, 1.0f };
   ofParameter<bool> bUserIdle_ { "User Idle", true };
@@ -43,4 +51,5 @@ private:
   ofParameter<void> vTriggerNow_ { "Trigger Now" };
 
   ofEventListener eTriggerNow_;
+  std::size_t currentLineIndex_ = 0;
 };

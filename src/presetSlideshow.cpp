@@ -1,8 +1,23 @@
+#include <algorithm>
+#include <cctype>
 #include <utility>
 
 #include "presetSlideshow.h"
 
 #include "organicText.h"
+
+namespace {
+std::string trimLine(const std::string & value) {
+  std::string out = value;
+  out.erase(out.begin(), std::find_if(out.begin(), out.end(), [](unsigned char ch) {
+    return !std::isspace(ch);
+  }));
+  out.erase(std::find_if(out.rbegin(), out.rend(), [](unsigned char ch) {
+    return !std::isspace(ch);
+  }).base(), out.end());
+  return out;
+}
+} // namespace
 
 void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nextSceneCallback) {
   ofLogNotice("PresetSlideshow") << "setup()";
@@ -12,6 +27,9 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
   params_.setName("Slideshow");
   params_.add(bEnabled_);
   params_.add(waitSeconds_);
+  params_.add(bReadFromFile_);
+  params_.add(textFilePath_);
+  params_.add(bLockPreset_);
   paramsFeedback_.setName("Feedback");
   progressFeedback_.setSerializable(false);
   bUserIdle_.setSerializable(false);
@@ -117,6 +135,16 @@ ofParameterGroup & PresetSlideshow::getFeedbackParameters() {
   return paramsFeedback_;
 }
 
+bool PresetSlideshow::isPresetLocked() const {
+  return bLockPreset_.get();
+}
+
+void PresetSlideshow::applyTextFromFileNow() {
+  if (bReadFromFile_.get()) {
+    applyTextFromFile();
+  }
+}
+
 bool PresetSlideshow::isReady() const {
   bool tweensReady = true;
   bool lineTweaksReady = true;
@@ -140,4 +168,37 @@ void PresetSlideshow::resetTimer() {
   bTimerRunning_.set(false);
   bBusyTweens_.set(false);
   bBusyLineTweaks_.set(false);
+}
+
+void PresetSlideshow::applyTextFromFile() {
+  if (ot_ == nullptr) return;
+
+  const std::string filePath = ofToDataPath(textFilePath_.get(), true);
+  ofFile file(filePath);
+  if (!file.exists()) {
+    ofLogWarning("PresetSlideshow") << "Text file not found: " << filePath;
+    return;
+  }
+
+  ofBuffer buffer = ofBufferFromFile(filePath);
+  std::vector<std::string> lines;
+  lines.reserve(64);
+  for (const auto & line : buffer.getLines()) {
+    std::string trimmed = trimLine(line);
+    if (!trimmed.empty()) {
+      lines.push_back(trimmed);
+    }
+  }
+
+  if (lines.empty()) {
+    ofLogWarning("PresetSlideshow") << "Text file is empty: " << filePath;
+    return;
+  }
+
+  if (currentLineIndex_ >= lines.size()) {
+    currentLineIndex_ = 0;
+  }
+
+  ot_->sText.set(lines[currentLineIndex_]);
+  currentLineIndex_ = (currentLineIndex_ + 1) % lines.size();
 }

@@ -391,10 +391,13 @@ void ofApp::setupTweensCallbacks() {
 	// In = 1, Out = 1
 	ot.setOnCompleteWriteIn([this]() {
 		ofLogNotice("ofApp") << "writeIn completed. (Empty space: no draw)";
-		if (browseDirection == BROWSE_NEXT)
-		pm.doLoadNext(); // Load next preset
-		else
-		pm.doLoadPrevious(); // Load previous preset
+		slideshow.applyTextFromFileNow();
+		if (!slideshow.isPresetLocked()) {
+			if (browseDirection == BROWSE_NEXT)
+			pm.doLoadNext(); // Load next preset
+			else
+			pm.doLoadPrevious(); // Load previous preset
+		}
 		ot.writeOut(); // Animate draw tween
 	});
 	
@@ -422,10 +425,13 @@ void ofApp::nextScene(browseDirection_ bd) {
 		pendingLineTweaks = wantLineTweaks;
 		ot.writeIn();
 	} else {
-		if (browseDirection == BROWSE_NEXT) {
-			pm.doLoadNext();
-		} else {
-			pm.doLoadPrevious();
+		slideshow.applyTextFromFileNow();
+		if (!slideshow.isPresetLocked()) {
+			if (browseDirection == BROWSE_NEXT) {
+				pm.doLoadNext();
+			} else {
+				pm.doLoadPrevious();
+			}
 		}
 		if (wantLineTweaks) {
 			ot.vTrigLineTweaks.trigger();
