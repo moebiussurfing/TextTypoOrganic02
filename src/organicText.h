@@ -255,6 +255,7 @@ private:
 
 private:
 	ofTrueTypeFont font;
+	float baseSpaceSize = 0.0f;
 	
 	// Centralized data storage
 	std::unique_ptr<OrganicTextData> data;

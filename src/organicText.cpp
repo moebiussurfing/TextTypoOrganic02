@@ -616,12 +616,14 @@ void OrganicText::setupScene() {
 		
 		if (success) {
 			ofLogNotice("OrganicText") << "Font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";
+		baseSpaceSize = font.getSpaceSize();
 		} else {
 			ofLogError("OrganicText") << "Failed to load font: " << fontPath.get();
 			
 			success = font.load(fontPath.get(), fontSize.get(), false, false, true);
 			if (success) {
 				ofLogNotice("OrganicText") << "Forced font loaded: " << fontPath.get() << " @ " << fontSize.get() << "px";
+			baseSpaceSize = font.getSpaceSize();
 			} else {
 				ofLogError("OrganicText") << "Failed to load font: " << fontPath.get();
 				ofLogFatalError("OrganicText") << "Failed last try to load OF_TTF font.";
@@ -634,8 +636,6 @@ void OrganicText::setupScene() {
 	void OrganicText::refreshFont() {
 		ofLogNotice("OrganicText") << "refreshFont(): " << fontPath.get();
 		
-		font.setSpaceSize(font.getSpaceSize() * letterSpacing);
-		
 		const float spMin = 0.2f;
 		const float spMax = 4.f;
 		float sp = 1.f;
@@ -643,6 +643,10 @@ void OrganicText::setupScene() {
 		sp = ofMap(letterSpacing, 0, -1, 1, spMin, true);
 		else if (letterSpacing > 0)
 		sp = ofMap(letterSpacing, 0, 1, 1, spMax, true);
+		if (baseSpaceSize <= 0.0f) {
+			baseSpaceSize = font.getSpaceSize();
+		}
+		font.setSpaceSize(baseSpaceSize * sp);
 		font.setLetterSpacing(sp);
 		
 		refreshPointsString();
@@ -1837,5 +1841,4 @@ bool OrganicText::isLineTweaksRunning() const {
 	}
 	
 	//--
-	
 	
