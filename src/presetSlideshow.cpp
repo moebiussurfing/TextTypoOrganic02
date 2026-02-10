@@ -113,6 +113,10 @@ ofParameterGroup & PresetSlideshow::getParameters() {
   return params_;
 }
 
+ofParameterGroup & PresetSlideshow::getFeedbackParameters() {
+  return paramsFeedback_;
+}
+
 bool PresetSlideshow::isReady() const {
   bool tweensReady = true;
   bool lineTweaksReady = true;

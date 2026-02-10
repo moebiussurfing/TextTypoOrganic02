@@ -15,6 +15,7 @@ public:
   void triggerNow();
   void toggle();
   ofParameterGroup & getParameters();
+  ofParameterGroup & getFeedbackParameters();
   ofParameter<bool> bEnabled_ { "Slideshow", false };
 
 private:
