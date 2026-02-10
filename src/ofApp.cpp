@@ -109,32 +109,36 @@ void ofApp::setup() {
 	
 	pm.setup(ot.paramsPreset);
 	pm.gui.add(ot.bGui);
+	ot.refreshGuiPanel(pm.guiParams);
+
+	//--
 	
+	// Gui Scene Slideshow
 	paramsScene.setName("Scene");
 	paramsScene.add(bBgGradient);
 	paramsScene.add(bFullScreen);
 	paramsScene.add(bTweeningMode);
 	paramsScene.add(bMouseBrowsing);
-	
-	pm.gui.add(paramsScene);
 
+	guiScene.setup("Scene Slideshow");
+	guiScene.add(paramsScene);
+
+	// Refresh
 	slideshow.setup(&ot, [this]() { nextScene(); });
 	slideshow.setMouseIdleChecker([this]() { return isMouseIdle(); });
-	pm.gui.add(slideshow.getParameters());
+	guiScene.add(slideshow.getParameters());
 
 	// Collapse scene group
-	pm.gui.getGroup(paramsScene.getName()).minimize();
-	pm.gui.getGroup(paramsScene.getName()).minimizeAll();
+	guiScene.getGroup(paramsScene.getName()).minimize();
+	guiScene.getGroup(paramsScene.getName()).minimizeAll();
 
 	// Collapse slideshow groups using their declared names
-	auto & slideshowGroup = pm.gui.getGroup(slideshow.getParameters().getName());
+	auto & slideshowGroup = guiScene.getGroup(slideshow.getParameters().getName());
 	slideshowGroup.minimize();
 	slideshowGroup.minimizeAll();
 	auto & feedbackGroup = slideshowGroup.getGroup(slideshow.getFeedbackParameters().getName());
 	feedbackGroup.minimize();
 	feedbackGroup.minimizeAll();
-	
-	ot.refreshGuiPanel(pm.guiParams);
 	
 	//--
 	
@@ -144,10 +148,12 @@ void ofApp::setup() {
 	
 	// App session settings
 	paramsOfApp.setName("ofApp");
-	paramsOfApp.add(bDistMode);
-	paramsOfApp.add(bFullScreen);
-	paramsOfApp.add(bMouseBrowsing);
-	paramsOfApp.add(bFullScreen);
+	//paramsOfApp.add(bDistMode);
+	//paramsOfApp.add(bFullScreen);
+	//paramsOfApp.add(bMouseBrowsing);
+	//paramsOfApp.add(bFullScreen);
+	paramsOfApp.add(paramsScene);
+	paramsOfApp.add(slideshow.getParameters());
 	ofxSurfing::loadGroup(paramsOfApp);
 
 	// setupBloom();
@@ -204,6 +210,12 @@ void ofApp::draw() {
 	}
 
 	// gui.draw();
+	if (ot.bGui && !bDistMode) {
+		int p = SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS;
+		int y = ofGetHeight() - p - guiScene.getHeight();
+		guiScene.setPosition(p, y);
+		guiScene.draw();
+	}
 }
 
 //--------------------------------------------------------------

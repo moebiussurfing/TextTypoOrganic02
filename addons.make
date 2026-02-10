@@ -1,4 +1,3 @@
-ofxBloom
 ofxGui
 ofxSurfingHelpersLite
 ofxSurfingPresetsLite

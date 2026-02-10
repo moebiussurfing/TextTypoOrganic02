@@ -131,4 +131,6 @@ public:
 	ofEventListener e_bFullScreen;
 
 	ofParameterGroup paramsOfApp;
+
+	ofxPanel guiScene;
 };
