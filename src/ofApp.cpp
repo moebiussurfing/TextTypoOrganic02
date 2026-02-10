@@ -122,6 +122,10 @@ void ofApp::setup() {
 	slideshow.setMouseIdleChecker([this]() { return isMouseIdle(); });
 	pm.gui.add(slideshow.getParameters());
 
+	// Collapse scene group
+	pm.gui.getGroup(paramsScene.getName()).minimize();
+	pm.gui.getGroup(paramsScene.getName()).minimizeAll();
+
 	// Collapse slideshow groups using their declared names
 	auto & slideshowGroup = pm.gui.getGroup(slideshow.getParameters().getName());
 	slideshowGroup.minimize();
