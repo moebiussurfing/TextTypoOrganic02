@@ -44,7 +44,7 @@
         "Draw_Shapes": "1",
         "Draw_Trails": "1",
         "Line_Tweaks": {
-            "Duration": "5",
+            "Duration": "1",
             "From": "-1, -0.692792",
             "Line_Tweaks_Enabler": "1",
             "Radius_Line_Mouse": "1",

@@ -1,0 +1,45 @@
+{
+    "OrganicText": {
+        "Auto_Zoom": "0",
+        "Color_Outline": "0, 0, 0, 255",
+        "Debug": "0",
+        "Draw_Outline": "0",
+        "Font": {
+            "Size": "150",
+            "Spacing": "0"
+        },
+        "Help": "0",
+        "Internal": {
+            "OrganicText": "1"
+        },
+        "Keys": "0",
+        "Session_Settings": {
+            "Autosave": "1"
+        },
+        "Text": "ORGANIC TYPE",
+        "Thickness": "0.15",
+        "Tweens_Drawing": {
+            "In": "0",
+            "Out": "1",
+            "Tween_In": {
+                "Advanced": {
+                    "Chain": "0"
+                },
+                "Duration": "1",
+                "EaseType": "9",
+                "From": "0",
+                "To": "1"
+            },
+            "Tween_Out": {
+                "Advanced": {
+                    "Chain": "0"
+                },
+                "Duration": "1",
+                "EaseType": "9",
+                "From": "0",
+                "To": "1"
+            }
+        },
+        "Zoom": "0"
+    }
+}
