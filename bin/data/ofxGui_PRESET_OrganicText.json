@@ -1,0 +1,16 @@
+{
+    "PRESET_OrganicText": {
+        "Align": "0",
+        "AutoLayout": "0",
+        "Layout": "0",
+        "Minimizeds": {
+            "OrganicText_minimized": "0",
+            "PRESET_OrganicText_minimized": "0"
+        },
+        "Position": "8, 8",
+        "UI": {
+            "UI_PARAMETERS": "1",
+            "UI_PRESETS_OrganicText": "1"
+        }
+    }
+}

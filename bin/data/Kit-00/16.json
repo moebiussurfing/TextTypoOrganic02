@@ -1,0 +1,81 @@
+{
+    "OrganicText": {
+        "Animate": "1",
+        "Animation": {
+            "Animate": "1",
+            "Intensity": "0",
+            "Mode": "0",
+            "Origin_X": "0.535928",
+            "Power": "0.0663265",
+            "Pulse": "0.193619",
+            "Speed": "0.122449",
+            "Spiral": "0.389115",
+            "Wave_Freq": "0.350747"
+        },
+        "Color_Modes": {
+            "Alpha_Range": "0.673406",
+            "By_Dist": "1",
+            "Dist_Middle": "0.433143",
+            "Inner": "0.264938",
+            "Mix": "0.840573",
+            "Mode": "0",
+            "Speed": "0.695207"
+        },
+        "Colors": {
+            "Color_1": "255, 0, 160, 255",
+            "Color_2": "255, 201, 0, 255",
+            "Color_3": "255, 248, 0, 255",
+            "Color_Connections": "255, 185, 0, 255",
+            "Color_Trails": "255, 0, 84, 255"
+        },
+        "Connections": {
+            "Alpha": "0.995375",
+            "Distance": "12.4438",
+            "Draw_Connections": "0",
+            "Line_Width": "0.850821",
+            "Near_Only": "0",
+            "Quality": "0.195244"
+        },
+        "Density": {
+            "Spacing": "0.166327"
+        },
+        "Draw_Connections": "0",
+        "Draw_Fill": "1",
+        "Draw_Shapes": "1",
+        "Draw_Trails": "1",
+        "Line_Tweaks": {
+            "Duration": "5",
+            "From": "-1, -0.692792",
+            "Line_Tweaks_Enabler": "1",
+            "Radius_Line_Mouse": "1",
+            "To": "1, 1"
+        },
+        "Mouse_Tweaks": {
+            "Color": "255, 98, 132, 255",
+            "D_Power": "0.27551",
+            "Displace": "1",
+            "Highlight": "1",
+            "Influence": "1",
+            "Mouse_Tweaks_Enabler": "1",
+            "S_Power": "0.122449",
+            "Scale": "1",
+            "radiusMouse": "1",
+            "x_Origin": "1"
+        },
+        "Shape": {
+            "Back": "0",
+            "Draw_Fill": "1",
+            "Min_Size": "1",
+            "Ratio": "0",
+            "Rotation": "0.127551",
+            "Size": "0.117347",
+            "Type": "4"
+        },
+        "Trails": {
+            "Draw_Trails": "1",
+            "Fade": "0.77551",
+            "Length": "0.168367",
+            "Line_Width": "2"
+        }
+    }
+}

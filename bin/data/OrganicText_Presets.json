@@ -1,0 +1,38 @@
+{
+    "PRESET_OrganicText": {
+        "Advanced": {
+            "Cycled": "1",
+            "Internal": {
+                "UI_PRESETS_OrganicText": "1"
+            },
+            "Num_presets": "10"
+        },
+        "AutoSave": "1",
+        "Browse": {
+            "Index": "3"
+        },
+        "Help": "1",
+        "Keys": "1",
+        "Kit": {
+            "Kit_Path": {
+                "Folder": "E:\\OF\\of_v0.12.1_vs_64_release\\apps\\myApps\\TextTypoOrganic02\\bin\\data\\Kit-00"
+            }
+        },
+        "Manager": null,
+        "OrganicText": "1",
+        "Scene": {
+            "Background_Gradient": "0",
+            "Full_Screen": "0",
+            "Mode_Tweening": "1",
+            "Mouse_Browsing": "1"
+        },
+        "UI": {
+            "GuiManager": {
+                "Align": "0",
+                "AutoLayout": "0",
+                "Layout": "0"
+            },
+            "UI_PARAMETERS": "1"
+        }
+    }
+}
