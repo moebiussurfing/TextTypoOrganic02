@@ -387,8 +387,12 @@ void ofApp::setupTweensCallbacks() {
 	});
 	
 	// writeOut tween completed
-	ot.setOnCompleteWriteOut([]() {
+	ot.setOnCompleteWriteOut([this]() {
 		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
+		if (pendingLineTweaks && ot.bLineTweaks.get()) {
+			ot.vTrigLineTweaks.trigger();
+		}
+		pendingLineTweaks = false;
 	});
 }
 
@@ -399,16 +403,20 @@ void ofApp::nextScene(browseDirection_ bd) {
 	slideshow.onSceneAdvanced();
 	
 	browseDirection = bd;
-	if (ot.bLineTweaks.get()) {
-		ot.vTrigLineTweaks.trigger();
-	}
-	if (bTweeningMode)
-	ot.writeIn();
-	else {
+	pendingLineTweaks = false;
+	const bool wantLineTweaks = ot.bLineTweaks.get();
+
+	if (bTweeningMode) {
+		pendingLineTweaks = wantLineTweaks;
+		ot.writeIn();
+	} else {
 		if (browseDirection == BROWSE_NEXT) {
 			pm.doLoadNext();
 		} else {
 			pm.doLoadPrevious();
+		}
+		if (wantLineTweaks) {
+			ot.vTrigLineTweaks.trigger();
 		}
 	}
 }

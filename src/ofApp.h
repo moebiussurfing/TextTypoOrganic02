@@ -110,6 +110,9 @@ public:
 	void setupTweensCallbacks();
 	void nextScene(browseDirection_ bd = BROWSE_NEXT);
 
+	// Delay line tweaks until tween-out finishes to avoid distorting the reveal
+	bool pendingLineTweaks = false;
+
 	//--
 
 	// Helpers
