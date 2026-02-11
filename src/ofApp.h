@@ -1,37 +1,10 @@
 /*
-	BUGS
-	- window handlig requires some fixes/workarounds
-		to work well in multi-monitors (and WIN32)  setup 
-
 	TODO
-	- fix update anims when not drawing shapes!
-	- improve draw glitches.
-		calculate pointsAnimatedCache on update() instead of draw(),
-		that is sensible to draw order, tween drawing etc
 	- fix ratio and mouse tweaks for cross shape
-	- ofxSurfingPresetsLite
-		fix empty/first startup ?
-		fix path_kit single place store and persistence ?
-		copy presets (button) to next or other
-			- add autoload toggle ? simple solution!
-			- slider target index. button To and From
-				but copy to mem + move without load + save
-				set kit path dialog
-			
-	IDEAS
-	- USE_PARTICLE_MODIFIER
-		- use another algo to more organic movements.
-			noise glm2 ?
-			mouse click to force pos ?
-		- allow multiple points + mousePos influence
-			create many. check which are near to text bbox.
-			focus in one, ignore others untils goes out
-		- replace for A to B tweening line ?
-			- click point A and point B then auto starts tweening between them
-			- random point A and point B the auto start tweening between them
-
+	- replace for A to B tweening line ?
+		- click point A and point B then auto starts tweening between them
+		- random point A and point B the auto start tweening between them
 	- finish implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
-	- player next presets timed (check surfingPlayer addon)
 	- zoom lines ratio ? related to fullscreen/screen size ?
 	- separate write tweening methods to new class files
 	- separate drawing engine to new class files
