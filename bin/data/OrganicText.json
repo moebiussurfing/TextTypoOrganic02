@@ -1,6 +1,6 @@
 {
     "OrganicText": {
-        "Auto_Zoom": "1",
+        "Auto_Zoom": "0",
         "Color_Outline": "0, 0, 0, 255",
         "Debug": "0",
         "Draw_Outline": "0",
@@ -9,7 +9,7 @@
             "Size": "210.714",
             "Spacing": "-0.193878"
         },
-        "Help": "1",
+        "Help": "0",
         "Internal": {
             "OrganicText": "1"
         },
@@ -26,7 +26,7 @@
                 "Advanced": {
                     "Chain": "0"
                 },
-                "Duration": "1",
+                "Duration": "2",
                 "EaseType": "9",
                 "From": "0",
                 "To": "1"
@@ -41,6 +41,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "0.529412"
+        "Zoom": "0.495"
     }
 }
