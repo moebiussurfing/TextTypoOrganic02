@@ -20,7 +20,7 @@ public:
   ofParameterGroup & getFeedbackParameters();
   bool isPresetLocked() const;
   void applyTextFromFileNow();
-  ofParameter<bool> bEnabled_ { "Slideshow", false };
+  ofParameter<bool> bEnabled_ { "Slideshow Play", false };
 
 private:
   bool isReady() const;

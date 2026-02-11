@@ -4,13 +4,15 @@
 	- replace for A to B tweening line ?
 		- click point A and point B then auto starts tweening between them
 		- random point A and point B the auto start tweening between them
-	- finish implement deployment define OFWORKS_DEMO_APP_DEPLOY ?
+	- finish implement deployment define OFWORKS_DEMO_APP_DISTRIBUTION ?
 	- zoom lines ratio ? related to fullscreen/screen size ?
 	- separate write tweening methods to new class files
 	- separate drawing engine to new class files
 	- make parent class ofApp -> OrganicTextScene:
 		bigger level class to integrate on bigger projects
  */
+
+#define USE_OFX_POSTPROCESSING_MANAGER
 
 #include "ofMain.h"
 
@@ -20,21 +22,21 @@
 #include "organicText.h"
 #include "presetSlideshow.h"
 
-#define USE_OFX_POSTPROCESSING_MANAGER
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 #include "ofxPostProcessingManager.h"
 #endif
 
 class ofApp : public ofBaseApp {
 
-public:
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
-	ofxPostProcessingManager manager; // ofxpostprocessing manager
+public:
+	ofxPostProcessingManager manager;
 	void setupFx();
 	void updateFx();
 	ofParameter<bool> bGui_Fx;
 #endif
 
+public:
 	void setup();
 	void update();
 	void draw();
@@ -98,16 +100,14 @@ public:
 	//--
 
 	// Distribution Mode
-	ofParameter<bool> bDistMode; // False: Advanced Mode. True: Distribution (User) Mode
-	ofParameter<bool> bHelpDist;
-	ofEventListener e_bDistMode;
-	void drawHelpDist();
+	ofParameter<bool> bDistributionMode; // False: Advanced Mode. True: Distribution (User) Mode
+	ofParameter<bool> bHelpDistribution;
+	ofEventListener e_bDistributionMode;
+	void drawHelpDistribution();
 	ofParameter<bool> bFullScreen;
 	ofEventListener e_bFullScreen;
 
 	ofParameterGroup paramsOfApp;
 
 	ofxPanel guiScene;
-
-	void setupGui(ofxPanel &g, string f, int fSize);
 };

@@ -163,7 +163,7 @@ void OrganicText::setupParams() {
 	bDrawFill.set("Draw Fill", true);
 	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
-	bDrawOutline.set("Draw Outline", false);
+	//bDrawOutline.set("Draw Outline", false);
 	outlineThickness.set("Thickness", 0.15f, 0.0f, 1.0f);
 	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
 	bAutoZoomGlobal.set("Auto Zoom", true);
@@ -189,7 +189,7 @@ void OrganicText::setupParams() {
 	shapeType.set("Type", 0, 0, 5);
 	shapeTypeName.set("Name", "Circle");
 	shapeTypeName.setSerializable(false);
-	bDrawOutline.set("Draw Outline", false);
+	//bDrawOutline.set("Draw Outline", false);
 	bShapeBack.set("Back", false);
 	shapeSize.set("Size", 0.5, 0, 1);
 	shapeSizeMin.set("Min Size", 0.3, 0, 1);
@@ -429,7 +429,7 @@ void OrganicText::setupParams() {
 	parameters.add(paramsFont);
 	parameters.add(bAutoZoomGlobal);
 	parameters.add(zoomGlobal);
-	parameters.add(bDrawOutline);
+	//parameters.add(bDrawOutline);
 	parameters.add(outlineThickness);
 	parameters.add(colorOutline);
 	parameters.add(bDebug);
@@ -1328,7 +1328,7 @@ void OrganicText::drawDebug() const {
 		//float centerX = ofGetWidth() * 0.5f;
 		//float centerY = ofGetHeight() * 0.5f;
 
-		// Draw mouse radius circle (cyan)
+		// Draw mouse radius circle
 		if (bMouseTweaks.get()) {
 			ofPushStyle();
 			ofFill();
@@ -1338,7 +1338,7 @@ void OrganicText::drawDebug() const {
 			ofPopStyle();
 		}
 
-		// Draw line radius circle (magenta)
+		// Draw line radius circle
 		if (bLineTweaks.get()) {
 			ofPushStyle();
 			ofFill();
@@ -1379,14 +1379,6 @@ void OrganicText::drawDebug() const {
 			ofNoFill();
 			ofSetColor(colorDebugBlink);
 			ofSetLineWidth(1.f);
-			font.drawStringAsShapes(sText, 0, 0);
-			ofPopStyle();
-		} else if (bDrawOutline) {
-			ofPushStyle();
-			ofNoFill();
-			ofSetColor(colorOutline.get());
-			float thickness = ofMap(outlineThickness.get(), 0.f, 1.f, OUTLINE_WIDTH_BASE, OUTLINE_THICKNESS_MAX);
-			ofSetLineWidth(thickness * zoomFactor);
 			font.drawStringAsShapes(sText, 0, 0);
 			ofPopStyle();
 		}
@@ -1481,6 +1473,7 @@ void OrganicText::drawShapes() {
 
 		drawShape(finalPos, pointSize, (ShapeType)shapeType.get(), rotation);
 
+		//TODO: should be out of fx
 		if (bDebug) {
 			ofSetColor(colorDebug);
 			ofDrawCircle(finalPos, 2.f);

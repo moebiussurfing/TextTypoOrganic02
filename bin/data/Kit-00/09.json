@@ -45,10 +45,10 @@
         "Draw_Trails": "1",
         "Line_Tweaks": {
             "Duration": "1",
-            "From": "-1, -0.692792",
+            "From": "-1, -0.5",
             "Line_Tweaks_Enabler": "1",
             "Radius_Line_Mouse": "1",
-            "To": "1, 1"
+            "To": "1, -0.479167"
         },
         "Mouse_Tweaks": {
             "Color": "162, 255, 220, 255",

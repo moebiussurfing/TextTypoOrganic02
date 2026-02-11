@@ -6,8 +6,8 @@
             "Intensity": "0.230369",
             "Mode": "3",
             "Origin_X": "0.552423",
-            "Power": "0.122449",
-            "Pulse": "0.0459184",
+            "Power": "0.243481",
+            "Pulse": "0.487264",
             "Speed": "0.855598",
             "Spiral": "0.162518",
             "Wave_Freq": "0.772843"
@@ -45,10 +45,10 @@
         "Draw_Trails": "1",
         "Line_Tweaks": {
             "Duration": "5",
-            "From": "-1, -0.692792",
+            "From": "-1, 0",
             "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "1",
-            "To": "1, 1"
+            "Radius_Line_Mouse": "0.1",
+            "To": "1, 0"
         },
         "Mouse_Tweaks": {
             "Color": "2, 255, 31, 255",

@@ -29,15 +29,15 @@
             "Color_Trails": "255, 255, 255, 255"
         },
         "Connections": {
-            "Alpha": "0.25",
-            "Distance": "100",
+            "Alpha": "0.795918",
+            "Distance": "42.8061",
             "Draw_Connections": "1",
-            "Line_Width": "0.1",
+            "Line_Width": "3",
             "Near_Only": "0",
-            "Quality": "0.430612"
+            "Quality": "1"
         },
         "Density": {
-            "Spacing": "0.195408"
+            "Spacing": "0.491071"
         },
         "Draw_Connections": "1",
         "Draw_Fill": "1",
@@ -45,10 +45,10 @@
         "Draw_Trails": "1",
         "Line_Tweaks": {
             "Duration": "5",
-            "From": "-1, -0.692792",
+            "From": "-1, 0",
             "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "1",
-            "To": "1, 1"
+            "Radius_Line_Mouse": "0.1",
+            "To": "1, 0"
         },
         "Mouse_Tweaks": {
             "Color": "255, 148, 148, 255",
@@ -65,10 +65,10 @@
         "Shape": {
             "Back": "0",
             "Draw_Fill": "1",
-            "Min_Size": "0.341837",
+            "Min_Size": "1",
             "Ratio": "0",
             "Rotation": "0.152225",
-            "Size": "0.0717464",
+            "Size": "0.198144",
             "Type": "4"
         },
         "Trails": {

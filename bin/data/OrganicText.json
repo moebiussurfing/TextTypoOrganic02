@@ -3,11 +3,10 @@
         "Auto_Zoom": "0",
         "Color_Outline": "0, 0, 0, 255",
         "Debug": "0",
-        "Draw_Outline": "0",
         "Font": {
-            "Font_Path": "fonts\\GeistMono-Medium.ttf",
-            "Size": "210.714",
-            "Spacing": "-0.193878"
+            "Font_Path": "fonts\\JetBrainsMono-Bold.ttf",
+            "Size": "150",
+            "Spacing": "0"
         },
         "Help": "0",
         "Internal": {
@@ -17,7 +16,7 @@
         "Session_Settings": {
             "Autosave": "1"
         },
-        "Text": "HELLO",
+        "Text": "GEMINI 300M+",
         "Thickness": "0.15",
         "Tweens_Drawing": {
             "In": "0",
@@ -41,6 +40,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "0.495"
+        "Zoom": "1"
     }
 }

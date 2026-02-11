@@ -13,7 +13,7 @@
 // OFAPP CONSTANTS
 //----------------------------------------------------------------------------
 
-#define OFWORKS_DEMO_APP_DEPLOY // Uncomment for the deployment release version
+#define OFWORKS_DEMO_APP_DISTRIBUTION // Uncomment for the deployment release version
 
 //---
 
@@ -50,6 +50,9 @@ constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SANS;
 //----------------------------------------------------------------------------
 // DRAWING & ANIMATION CONSTANTS
 //----------------------------------------------------------------------------
+
+constexpr float ORGANIC_TEXT_FPS = 60.f;
+//constexpr float ORGANIC_TEXT_FPS = 120.f;
 
 constexpr float ZOOM_GLOBAL_MAX = 1.1f; // QHD 2K calibrated
 

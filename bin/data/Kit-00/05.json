@@ -45,20 +45,20 @@
         "Draw_Trails": "1",
         "Line_Tweaks": {
             "Duration": "5",
-            "From": "-1, -0.692792",
+            "From": "-1, 0",
             "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "1",
-            "To": "1, 1"
+            "Radius_Line_Mouse": "0.1",
+            "To": "1, 0"
         },
         "Mouse_Tweaks": {
             "Color": "255, 0, 104, 255",
             "D_Power": "0.352041",
-            "Displace": "0",
+            "Displace": "1",
             "Highlight": "1",
             "Influence": "0.663265",
             "Mouse_Tweaks_Enabler": "1",
             "S_Power": "0.596939",
-            "Scale": "0",
+            "Scale": "1",
             "radiusMouse": "0.755102",
             "x_Origin": "1"
         },

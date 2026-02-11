@@ -24,24 +24,27 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
   ot_ = organicText;
   nextScene_ = std::move(nextSceneCallback);
 
+  progressFeedback_.setSerializable(false);
+  bUserIdle_.setSerializable(false);
+  bTimerRunning_.setSerializable(false);
+  bBusyTweens_.setSerializable(false);
+  bBusyLineTweaks_.setSerializable(false);
+
   params_.setName("Slideshow");
   params_.add(bEnabled_);
   params_.add(waitSeconds_);
   params_.add(bReadFromFile_);
   params_.add(textFilePath_);
   params_.add(bLockPreset_);
+
   paramsFeedback_.setName("Feedback");
-  progressFeedback_.setSerializable(false);
-  bUserIdle_.setSerializable(false);
-  bTimerRunning_.setSerializable(false);
-  bBusyTweens_.setSerializable(false);
-  bBusyLineTweaks_.setSerializable(false);
   paramsFeedback_.add(progressFeedback_);
   paramsFeedback_.add(bUserIdle_);
   paramsFeedback_.add(bTimerRunning_);
   paramsFeedback_.add(bBusyTweens_);
   paramsFeedback_.add(bBusyLineTweaks_);
   params_.add(paramsFeedback_);
+
   params_.add(bWaitTweens_);
   params_.add(bWaitLineTweaks_);
   params_.add(bPauseTimerWhenBusy_);

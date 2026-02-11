@@ -8,10 +8,10 @@
         },
         "10_FILM_GRAIN": {
             "10_FILM_GRAIN": "0",
-            "Count": "1990.6",
+            "Count": "1837.55",
             "GrayScale": "0",
-            "N_Intensity": "0.5",
-            "S_Intensity": "0.5"
+            "N_Intensity": "0.158163",
+            "S_Intensity": "0"
         },
         "11_DOT_SCREEN": {
             "11_DOT_SCREEN": "0",
@@ -22,22 +22,22 @@
         },
         "12_GLITCH_DIGITAL": {
             "12_GLITCH_DIGITAL": "1",
-            "Amount": "0.006",
-            "Angle": "5.38098",
+            "Amount": "0.00307092",
+            "Angle": "2.86071",
             "Bypass": "0",
-            "Column": "0.157494",
-            "Distortion_X": "0.500045",
-            "Distortion_Y": "0.121833",
-            "Seed": "0.02",
-            "Seed_X": "0.02",
-            "Seed_Y": "0.02"
+            "Column": "0.0973267",
+            "Distortion_X": "-0.108616",
+            "Distortion_Y": "-0.0173162",
+            "Seed": "0.811224",
+            "Seed_X": "0.244898",
+            "Seed_Y": "0.857143"
         },
         "13_GLITCH_BAD_TV": {
             "13_GLITCH_BAD_TV": "0",
-            "Distortion_1": "3",
-            "Distortion_2": "5",
-            "Roll_Speed": "0.1",
-            "Speed": "3"
+            "Distortion_1": "0.612245",
+            "Distortion_2": "0.918367",
+            "Roll_Speed": "0.112245",
+            "Speed": "1.42857"
         },
         "14_FILTER_ACES_Film": {
             "14_FILTER_ACES_Film": "0",
@@ -56,15 +56,15 @@
             "Strength": "0.5"
         },
         "17_Super_Shader": {
-            "17_Super_Shader": "0",
-            "Brightness": "0",
-            "Contrast": "0",
-            "Glow_Amount": "0.5",
-            "Glow_Size": "4",
-            "RGB_Shift_Amount": "0.01",
-            "Saturation": "0",
-            "Vignette_Darkness": "1",
-            "Vignette_Offset": "1"
+            "17_Super_Shader": "1",
+            "Brightness": "-0.234694",
+            "Contrast": "0.112245",
+            "Glow_Amount": "0.173469",
+            "Glow_Size": "1.42857",
+            "RGB_Shift_Amount": "0.0357143",
+            "Saturation": "0.229592",
+            "Vignette_Darkness": "0.0765306",
+            "Vignette_Offset": "0.0918367"
         },
         "18_GLITCH_AUTOMATED": {
             "18_GLITCH_AUTOMATED": "0",
@@ -77,13 +77,13 @@
             "Speed": "1"
         },
         "1_BLOOM": {
-            "1_BLOOM": "0",
-            "Blur_X": "0.000953125",
-            "Blur_Y": "0.000953125"
+            "1_BLOOM": "1",
+            "Blur_X": "0.00209184",
+            "Blur_Y": "0.00204082"
         },
         "20_DITHER": {
             "20_DITHER": "0",
-            "Scale": "1"
+            "Scale": "0"
         },
         "21_Strobber": {
             "21_Strobber": "0",
@@ -118,7 +118,7 @@
         },
         "5_GOD_RAYS": {
             "5_GOD_RAYS": "0",
-            "GodRays-Light": "0.673469",
+            "GodRays-Light": "0.3",
             "Light_Position": "0, 0, 0"
         },
         "6_LIMBDARKENING": {

@@ -12,7 +12,7 @@
             "Lock_Preset": "1",
             "Pause_When_Busy": "1",
             "Read_From_File": "1",
-            "Slideshow": "1",
+            "Slideshow_Play": "1",
             "Text_File": "slideshow.txt",
             "Wait_LineTweaks": "1",
             "Wait_Tweens": "1",

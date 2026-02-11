@@ -6,9 +6,9 @@
             "Intensity": "0.741688",
             "Mode": "2",
             "Origin_X": "0.535928",
-            "Power": "0.158163",
+            "Power": "0.931876",
             "Pulse": "0.193619",
-            "Speed": "0.545918",
+            "Speed": "0.320643",
             "Spiral": "0.389115",
             "Wave_Freq": "0.350747"
         },
@@ -45,14 +45,14 @@
         "Draw_Trails": "1",
         "Line_Tweaks": {
             "Duration": "5",
-            "From": "-1, -0.692792",
+            "From": "-1, 0",
             "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "1",
-            "To": "1, 1"
+            "Radius_Line_Mouse": "0.1",
+            "To": "1, 0"
         },
         "Mouse_Tweaks": {
             "Color": "255, 255, 255, 255",
-            "D_Power": "0.0918367",
+            "D_Power": "0.27551",
             "Displace": "1",
             "Highlight": "1",
             "Influence": "1",

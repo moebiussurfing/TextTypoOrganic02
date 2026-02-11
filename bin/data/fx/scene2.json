@@ -8,7 +8,7 @@
         },
         "10_FILM_GRAIN": {
             "10_FILM_GRAIN": "0",
-            "Count": "1990.6",
+            "Count": "613.184",
             "GrayScale": "0",
             "N_Intensity": "0.5",
             "S_Intensity": "0.5"
@@ -23,17 +23,17 @@
         "12_GLITCH_DIGITAL": {
             "12_GLITCH_DIGITAL": "0",
             "Amount": "0.006",
-            "Angle": "0.02",
+            "Angle": "3.40698",
             "Bypass": "0",
-            "Column": "0.03",
-            "Distortion_X": "0.02",
-            "Distortion_Y": "0.02",
+            "Column": "0.192863",
+            "Distortion_X": "-0.139141",
+            "Distortion_Y": "-0.20718",
             "Seed": "0.02",
             "Seed_X": "0.02",
             "Seed_Y": "0.02"
         },
         "13_GLITCH_BAD_TV": {
-            "13_GLITCH_BAD_TV": "1",
+            "13_GLITCH_BAD_TV": "0",
             "Distortion_1": "3",
             "Distortion_2": "5",
             "Roll_Speed": "0.1",
@@ -41,45 +41,45 @@
         },
         "14_FILTER_ACES_Film": {
             "14_FILTER_ACES_Film": "0",
-            "Exposure": "1"
+            "Exposure": "0.469388"
         },
         "15_NOISE_GRAINS": {
             "15_NOISE_GRAINS": "0",
-            "Amount": "0.128",
+            "Amount": "0.0561224",
             "Speed": "0.08"
         },
         "16_Tilt_Shift": {
             "16_Tilt_Shift": "0",
-            "Focus": "0.35",
+            "Focus": "0.469388",
             "Offset": "0.05",
-            "Range": "0.5",
-            "Strength": "0.5"
+            "Range": "0.52551",
+            "Strength": "0.484694"
         },
         "17_Super_Shader": {
-            "17_Super_Shader": "0",
-            "Brightness": "0",
-            "Contrast": "0",
-            "Glow_Amount": "0.5",
-            "Glow_Size": "4",
+            "17_Super_Shader": "1",
+            "Brightness": "-0.44898",
+            "Contrast": "-0.163265",
+            "Glow_Amount": "0.464286",
+            "Glow_Size": "8.77551",
             "RGB_Shift_Amount": "0.01",
             "Saturation": "0",
-            "Vignette_Darkness": "1",
-            "Vignette_Offset": "1"
+            "Vignette_Darkness": "0",
+            "Vignette_Offset": "0.44898"
         },
         "18_GLITCH_AUTOMATED": {
             "18_GLITCH_AUTOMATED": "0",
-            "Amount": "0.2",
-            "Speed": "0.6"
+            "Amount": "0.0153061",
+            "Speed": "0.443878"
         },
         "19_SPACE_COLORS_SHADER": {
             "19_SPACE_COLORS_SHADER": "0",
-            "Opacity": "0.1",
-            "Speed": "1"
+            "Opacity": "0.0242347",
+            "Speed": "0.510204"
         },
         "1_BLOOM": {
-            "1_BLOOM": "0",
-            "Blur_X": "0.000953125",
-            "Blur_Y": "0.000953125"
+            "1_BLOOM": "1",
+            "Blur_X": "0.000510204",
+            "Blur_Y": "0.000102041"
         },
         "20_DITHER": {
             "20_DITHER": "0",
@@ -87,13 +87,13 @@
         },
         "21_Strobber": {
             "21_Strobber": "0",
-            "Phase": "0.15",
-            "Volume": "1"
+            "Phase": "0.403061",
+            "Volume": "0"
         },
         "22_RIMBLIGHTING": {
             "22_RIMBLIGHTING": "0",
-            "Intensity": "64",
-            "Light_Color": "2.9, 1.3, 1.3"
+            "Intensity": "355.265",
+            "Light_Color": "2.32812, 2, 2.25"
         },
         "23_DOF": {
             "23_DOF": "0",
@@ -108,7 +108,7 @@
         "3_NOISEWRAP": {
             "3_NOISEWRAP": "0",
             "Amplitude": "0.1",
-            "Frequency": "4",
+            "Frequency": "1.42857",
             "Speed": "0.1"
         },
         "4_PIXELATE": {
@@ -118,7 +118,7 @@
         },
         "5_GOD_RAYS": {
             "5_GOD_RAYS": "1",
-            "GodRays-Light": "0.673469",
+            "GodRays-Light": "0.0459184",
             "Light_Position": "0, 0, 0"
         },
         "6_LIMBDARKENING": {
@@ -141,14 +141,14 @@
         "8_zoomblur": {
             "8_zoomblur": "0",
             "Density": "0.25",
-            "Exposure": "0.48",
+            "Exposure": "1",
             "Weight": "0.25",
-            "Zoom_Center_XY": "0.5, 0.5"
+            "Zoom_Center_XY": "0.640625, 0.411458"
         },
         "9_RGBShift": {
             "9_RGBShift": "0",
-            "Amount": "0.005",
-            "Angle": "0"
+            "Amount": "0.00255102",
+            "Angle": "1.41051"
         },
         "ENABLE_DEBUG_DRAW": "0",
         "FX_SWITCH_PERIOD": "0.1",

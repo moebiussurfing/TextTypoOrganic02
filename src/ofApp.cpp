@@ -3,9 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-// Deployment app version
-#ifdef OFWORKS_DEMO_APP_DEPLOY
+// Deployment app distribution version
+#ifdef OFWORKS_DEMO_APP_DISTRIBUTION
 	ofSetLogLevel(OF_LOG_SILENT);
+	ofSetLogLevel("OrganicText", OF_LOG_SILENT);
 	ofSetLogLevel("SurfingPresetsLite", OF_LOG_SILENT);
 #endif
 
@@ -21,9 +22,8 @@ void ofApp::setup() {
 
 	// Frame rate
 
-	float fps = 60.f;
-	// float fps = 120.f;
-	ofSetFrameRate(fps);
+	float fpsTarget = ORGANIC_TEXT_FPS;
+	ofSetFrameRate(fpsTarget);
 
 	//--
 	
@@ -35,16 +35,16 @@ void ofApp::setup() {
 
 	//--
 
-	// Dist Mode
+	// Distribution Mode
 
-	bHelpDist.set("Help Dist", true);
+	bHelpDistribution.set("Help Distribution", true);
 
 	// False: Advanced Mode. True: Distribution (User) Mode
-	bDistMode.set("Dist mode", true);
-	e_bDistMode = bDistMode.newListener([this](bool & v) {
-		ofLogNotice("ofApp") << "bDistMode: " << v;
+	bDistributionMode.set("Distribution mode", true);
+	e_bDistributionMode = bDistributionMode.newListener([this](bool & v) {
+		ofLogNotice("ofApp") << "bDistributionMode: " << v;
 		// Workflow ui to improve user experience
-		if (bDistMode.get()) {
+		if (bDistributionMode.get()) {
 			ot.bKeys = false;
 		} else {
 			ot.bGui.set(true);
@@ -68,8 +68,7 @@ void ofApp::setup() {
 
 	// Organic Text Session
 
-	ot.setup(fps);
-	// ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);//top right
+	ot.setup(fpsTarget);
 
 	//--
 
@@ -82,6 +81,7 @@ void ofApp::setup() {
 	//--
 
 	// Gui Scene Slideshow
+
 	paramsScene.setName("Scene");
 
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
@@ -122,10 +122,6 @@ void ofApp::setup() {
 
 	// App session settings
 	paramsOfApp.setName("ofApp");
-	//paramsOfApp.add(bDistMode);
-	//paramsOfApp.add(bFullScreen);
-	//paramsOfApp.add(bMouseBrowsing);
-	//paramsOfApp.add(bFullScreen);
 	paramsOfApp.add(paramsScene);
 	paramsOfApp.add(slideshow.getParameters());
 
@@ -141,7 +137,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setupFx() {
 
-	//setup manager
+	// Setup manager
 	manager.setup(ofGetWidth(), ofGetHeight(), "fonts\\VCR_OSD_MONO_1.001.ttf", 8);
 
 	bGui_Fx.set("UI FX", true);
@@ -172,13 +168,15 @@ void ofApp::update() {
 	static std::string s2 = "";
 	std::string s3 = "";
 	// Debug info
+	s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 	if (ot.bDebug) {
-		s1 = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 		if (pm.isChangedIndex()) {
 			s2 = "PRESET " + ofToString(pm.getPresetIndex());
 		}
 		s3 = ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight());
 		s = "     " + s1 + "     " + s3 + "     " + s2;
+	} else {
+		s = "     " + s1;
 	}
 	string wt = ofToString(OFWORKS_DEMO_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
@@ -212,41 +210,37 @@ void ofApp::draw() {
 		ofBackground(20);
 	}
 
-	// beginBloom();
-	// // Organic Text
 	ot.draw();
-	// endBloom();
-	// bloom.draw();
 
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 	manager.end();
 #endif
 
-	//--
+	//----
 
 	drawGui();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawGui() {
-	if (!bDistMode.get()) {
+	if (!bDistributionMode.get()) {
 		// Presets Manager
 		pm.drawGui();
 		if (pm.bGui) ot.drawGui();
 	} else {
-		// Draw Help Dist
-		if (bHelpDist) drawHelpDist();
+		// Draw Help Distribution
+		if (bHelpDistribution) drawHelpDistribution();
 	}
 
-	if (ot.bGui && !bDistMode) {
+	if (ot.bGui && pm.bGui && !bDistributionMode) {
 		int p = SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS;
 		int y = ofGetHeight() - p - guiScene.getHeight();
 		guiScene.setPosition(p, y);
 		guiScene.draw();
 
-		// fx
+		// Fx
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
-		if (bGui_Fx) {
+		if (bGui_Fx && pm.bGui) {
 			manager.drawGui(ofGetWidth() - manager.getGUIWidth(), 0);
 		} else {
 			// There is a kind of buggy issue on MAC.
@@ -257,19 +251,21 @@ void ofApp::drawGui() {
 #endif
 	}
 
-	// session
+	// Session
 	ot.gui.setPosition(SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS + ot.gui.getWidth() + SURFING__OFXGUI__PAD_BETWEEN_PANELS, ofGetHeight() - ot.gui.getHeight() - SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS); //bottom left 2nd column
 }
 
 //--------------------------------------------------------------
-void ofApp::drawHelpDist() {
+void ofApp::drawHelpDistribution() {
 	// Help Dist info
 	std::string s = "";
 	s += "ORGANIC TEXT";
 	s += "\n\n";
 	s += "H              Help";
 	s += "\n\n";
-	s += "SPACE          Next";
+	s += "ENTER          Advanced Mode";
+	s += "\n\n";
+	s += "SPACE          Next Slide";
 	s += "\n";
 	if (bMouseBrowsing) {
 		s += "MOUSE CLICK    Prev / Next";
@@ -280,18 +276,16 @@ void ofApp::drawHelpDist() {
 			s += " Left/Right*   Half Screen";
 		s += "\n\n";
 	}
-	s += "ENTER          Advanced";
-	s += "\n\n";
-	s += "WINDOW";
-	s += "\n";
-	s += " F             " + ofToString(bFullScreen ? "Reset" : "Full Screen");
-	s += "\n";
-	s += " C             Center";
-	s += "\n\n";
 	s += " L             Trig Line Tweaks";
 	s += "\n";
 	string sp = ofToString(slideshow.bEnabled_.get() ? "Slideshow Pause" : "Slideshow Play");
 	s += " P             " + sp;
+	s += "\n\n";
+		s += "WINDOW";
+	s += "\n";
+	s += " F             " + ofToString(bFullScreen ? "Reset" : "Full Screen");
+	s += "\n";
+	s += " C             Center";
 	s += "\n\n";
 	s += "KIT            " + ofToString(pm.getKitName());
 	s += "\n";
@@ -324,9 +318,9 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 	// Dist Mode / advanced mode
 	if (k == OF_KEY_RETURN) {
-		bDistMode.set(!bDistMode.get());
+		bDistributionMode.set(!bDistributionMode.get());
 		//workflow
-		// if(bDistMode &&!ot.bGui) ot.bGui=true;
+		// if(bDistributionMode &&!ot.bGui) ot.bGui=true;
 		return;
 	}
 
@@ -336,10 +330,10 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		return;
 	}
 
-	if (bDistMode.get()) {
+	if (bDistributionMode.get()) {
 		// Help Dist
 		if (k == 'h' || k == 'H') {
-			bHelpDist.set(!bHelpDist.get());
+			bHelpDistribution.set(!bHelpDistribution.get());
 			return;
 		}
 	}

@@ -44,11 +44,11 @@
         "Draw_Shapes": "1",
         "Draw_Trails": "1",
         "Line_Tweaks": {
-            "Duration": "1.74137",
-            "From": "-1, -0.692792",
+            "Duration": "5",
+            "From": "-1, 0",
             "Line_Tweaks_Enabler": "1",
             "Radius_Line_Mouse": "1",
-            "To": "1, 1"
+            "To": "1, 0"
         },
         "Mouse_Tweaks": {
             "Color": "255, 255, 255, 255",
