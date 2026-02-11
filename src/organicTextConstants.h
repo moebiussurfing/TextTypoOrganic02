@@ -27,8 +27,8 @@ constexpr int OFWORKS_DEMO_APP_WIDTH = 1200;
 constexpr int OFWORKS_DEMO_APP_HEIGHT = 550;
 #else
 // Custom size
-constexpr int OFWORKS_DEMO_APP_WIDTH = 1600;
-constexpr int OFWORKS_DEMO_APP_HEIGHT = 1600 * 0.458f;
+constexpr int OFWORKS_DEMO_APP_WIDTH = 1920;
+constexpr int OFWORKS_DEMO_APP_HEIGHT = 1080;
 #endif
 
 // Default text

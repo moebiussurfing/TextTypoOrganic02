@@ -26,7 +26,7 @@ void ofApp::setup() {
 	ofSetFrameRate(fps);
 
 	//--
-
+	
 	// Parameters
 
 	bBgGradient.set("Background Gradient", false);
@@ -94,7 +94,6 @@ void ofApp::setup() {
 	paramsScene.add(bMouseBrowsing);
 
 	guiScene.setup("Scene Slideshow");
-	// setupGui(guiScene, "GeistMono-Medium.ttf", 10);
 
 	guiScene.add(paramsScene);
 
@@ -355,13 +354,13 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 	else if (k == OF_KEY_F1)
-		manager.loadSettings("fx\\scene1.json");
+		manager.loadSettings("scene1.json");
 
 	else if (k == OF_KEY_F2)
-		manager.loadSettings("fx\\scene2.json");
+		manager.loadSettings("scene2.json");
 
 	else if (k == OF_KEY_F3)
-		manager.loadSettings("fx\\scene3.json");
+		manager.loadSettings("scene3.json");
 #endif
 
 	else {
@@ -517,20 +516,3 @@ void ofApp::exit() {
 
 	ofxSurfing::saveGroup(paramsOfApp);
 }
-
-////---------------------------------------
-//void ofApp::setupGui(ofxPanel & g, string f, int fSize) {
-//	ofFile file(f);
-//	// Set the fill color
-//	ofxGuiSetFillColor(ofColor(0, 200, 0, 130));
-//	g.setDefaultTextPadding(fSize - 1);
-//	g.setDefaultWidth(220);
-//	g.setDefaultHeight(fSize + 4);
-//	if (f != "" && file.exists()) {
-//		if (file.exists()) {
-//			g.loadFont(f, fSize, false);
-//		} else {
-//			ofLogError(__FUNCTION__) << "file " << f << " not found!";
-//		}
-//	}
-//}

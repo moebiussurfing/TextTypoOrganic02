@@ -7,9 +7,10 @@
             },
             "Num_presets": "10"
         },
+        "AutoLoad": "1",
         "AutoSave": "1",
         "Browse": {
-            "Index": "12"
+            "Index": "9"
         },
         "Help": "1",
         "Keys": "0",

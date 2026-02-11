@@ -11,7 +11,6 @@
 #include "organicTextConstants.h" // Constants
 #include "organicTextData.h" // Data storage
 // Text modifiers removed; mouse tweaks are handled directly.
-//#include "ofxSurfingHelpersLite.h" // Draw widgets
 
 #include "ofxGui.h"
 
@@ -49,6 +48,11 @@ public:
 	void draw();
 	void drawGui();
 
+private:
+	void drawHelp() const;
+	void drawDebug() const;
+
+public:
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void exit();
 
@@ -295,10 +299,6 @@ public:
 
 private:
 	std::string sHelp;
-
-	void drawHelp() const;
-
-	void drawDebug() const;
 
 public:
 	ofColor colorDebug;
