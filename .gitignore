@@ -593,3 +593,6 @@ enc_temp_folder/cdfbf9e1d8871eb11f537a6cd8cd1525/organicText.h
 enc_temp_folder/fc894cdf7dc25943ab2588047dfaa5e/ofApp.cpp
 bin/TextTypoOrganic02_debug.app alias
 TextTypoOrganic02/data/.gitkeep
+bin/data/ofApp.json
+bin/data/OrganicText.json
+bin/data/OrganicText_Presets.json
