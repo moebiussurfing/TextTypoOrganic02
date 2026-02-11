@@ -1,22 +1,22 @@
 {
     "OrganicText": {
-        "Auto_Zoom": "0",
+        "Auto_Zoom": "1",
         "Color_Outline": "0, 0, 0, 255",
         "Debug": "0",
         "Draw_Outline": "0",
         "Font": {
-            "Size": "210.714",
-            "Spacing": "-0.193878"
+            "Size": "150",
+            "Spacing": "0"
         },
-        "Help": "1",
+        "Help": "0",
         "Internal": {
             "OrganicText": "1"
         },
         "Keys": "0",
         "Session_Settings": {
-            "Autosave": "1"
+            "Autosave": "0"
         },
-        "Text": "SLIDE TWO",
+        "Text": "SpyWarez",
         "Thickness": "0.15",
         "Tweens_Drawing": {
             "In": "0",
@@ -40,6 +40,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "0.25"
+        "Zoom": "1"
     }
 }

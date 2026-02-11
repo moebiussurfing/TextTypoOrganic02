@@ -133,4 +133,6 @@ public:
 	ofParameterGroup paramsOfApp;
 
 	ofxPanel guiScene;
+
+	void setupGui(ofxPanel &g, string f, int fSize);
 };

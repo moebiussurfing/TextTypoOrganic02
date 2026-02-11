@@ -10,17 +10,31 @@
         "AutoLoad": "1",
         "AutoSave": "1",
         "Browse": {
-            "Index": "9"
+            "Index": "11"
         },
         "Help": "1",
-        "Keys": "0",
+        "Keys": "1",
         "Kit": {
             "Kit_Path": {
-                "Folder": "E:\\OF\\of_v0.12.1_vs_64_release\\apps\\myApps\\TextTypoOrganic02\\bin\\data\\Kit-00"
+                "Folder": "/Volumes/xData/OF/of_v20260206_osx_release/apps/myApps/TextTypoOrganic02/bin/data/Kit-00"
             }
         },
         "Manager": null,
         "OrganicText": "1",
+        "Scene": {
+            "Background_Gradient": "0",
+            "Full_Screen": "1",
+            "Mode_Tweening": "1",
+            "Mouse_Browsing": "0"
+        },
+        "Slideshow": {
+            "Feedback": null,
+            "Interval__s_": "3",
+            "Pause_When_Busy": "1",
+            "Slideshow": "1",
+            "Wait_LineTweaks": "1",
+            "Wait_Tweens": "1"
+        },
         "UI": {
             "GuiManager": {
                 "Align": "0",

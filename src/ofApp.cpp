@@ -142,6 +142,8 @@ void ofApp::setup() {
 	feedbackGroup.minimize();
 	feedbackGroup.minimizeAll();
 	
+	setupGui(guiScene, "VCR_OSD_MONO_1.001.ttf", 9);
+
 	//--
 	
 	setupTweensCallbacks();
@@ -462,4 +464,21 @@ void ofApp::exit() {
 	ot.exit();
 	
 	ofxSurfing::saveGroup(paramsOfApp);
+}
+
+//---------------------------------------
+void ofApp::setupGui(ofxPanel &g, string f, int fSize){
+    ofFile file(f);
+    // Set the fill color
+    ofxGuiSetFillColor(ofColor(0,200,0,130));
+    g.setDefaultTextPadding(fSize-4);
+    g.setDefaultWidth(220);
+    g.setDefaultHeight(fSize+4);
+    if(f != "" && file.exists()) {
+        if(file.exists()) {
+            g.loadFont(f, fSize, false);
+        }else{
+            ofLogError(__FUNCTION__) << "file " << f << " not found!";
+        }
+    }
 }
