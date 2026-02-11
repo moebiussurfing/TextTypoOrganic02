@@ -123,6 +123,8 @@ void ofApp::setup() {
 	paramsScene.add(bMouseBrowsing);
 
 	guiScene.setup("Scene Slideshow");
+	setupGui(guiScene, "GeistMono-Medium.ttf", 10);
+	
 	guiScene.add(paramsScene);
 
 	// Refresh
@@ -141,8 +143,6 @@ void ofApp::setup() {
 	auto & feedbackGroup = slideshowGroup.getGroup(slideshow.getFeedbackParameters().getName());
 	feedbackGroup.minimize();
 	feedbackGroup.minimizeAll();
-	
-	setupGui(guiScene, "VCR_OSD_MONO_1.001.ttf", 9);
 
 	//--
 	
@@ -471,7 +471,7 @@ void ofApp::setupGui(ofxPanel &g, string f, int fSize){
     ofFile file(f);
     // Set the fill color
     ofxGuiSetFillColor(ofColor(0,200,0,130));
-    g.setDefaultTextPadding(fSize-4);
+    g.setDefaultTextPadding(fSize-1);
     g.setDefaultWidth(220);
     g.setDefaultHeight(fSize+4);
     if(f != "" && file.exists()) {
