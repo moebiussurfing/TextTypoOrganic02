@@ -30,6 +30,8 @@ void ofApp::setup() {
 	// Parameters
 
 	bBgGradient.set("Background Gradient", false);
+	bgColor1.set("Bg Color 1", ofColor(10));
+	bgColor2.set("Bg Color 2", ofColor(40));
 	bMouseBrowsing.set("Mouse Browsing", true);
 	bTweeningMode.set("Mode Tweening", true);
 
@@ -89,6 +91,8 @@ void ofApp::setup() {
 #endif
 
 	paramsScene.add(bBgGradient);
+	paramsScene.add(bgColor1);
+	paramsScene.add(bgColor2);
 	paramsScene.add(bFullScreen);
 	paramsScene.add(bTweeningMode);
 	paramsScene.add(bMouseBrowsing);
@@ -205,9 +209,9 @@ void ofApp::draw() {
 
 	// Background
 	if (bBgGradient) {
-		ofxDrawBgGradient();
+		ofxDrawBgGradient(bgColor1, bgColor2);
 	} else {
-		ofBackground(20);
+		ofBackground(bgColor1);
 	}
 
 	ot.draw();

@@ -36,7 +36,7 @@ constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 
 // Default font
 #if 1
-constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = "fonts\\JetBrainsMono-Bold.ttf";
+constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = "GeistMono-Medium.ttf";
 // constexpr const std::string ORGANIC_TEXT_FONT_DEFAULT = "NotoSansMono-Regular.ttf";
 #else
 // Bundled OF fonts
@@ -118,6 +118,9 @@ constexpr float OUTLINE_THICKNESS_MAX = 10.0f;
 constexpr float MOUSE_RADIUS_INTERACT_MAX = 100.0f;
 constexpr float MOUSE_RADIUS_INTERACT_MIN = 10.0f;
 constexpr float MAX_SCALE_POWER = 3.0f;
+
+// Line Tweaks Constants
+constexpr float LINE_TWEAKS_EDGE_PAD = 0.12f; // Extra pad outside text width (fraction)
 
 //----------------------------------------------------------------------------
 // ENUMERATIONS

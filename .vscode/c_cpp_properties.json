@@ -144,6 +144,12 @@
 			"${workspaceRoot}/../../../addons/ofxGui/src",
 			"${workspaceRoot}/../../../addons/ofxSurfingHelpersLite/src",
 			"${workspaceRoot}/../../../addons/ofxSurfingPresetsLite/src",
+			"${workspaceRoot}/../../../addons/ofxTweenLite/src",
+			"${workspaceRoot}/src",
+			"${workspaceRoot}/../../../addons/ofxGui/src",
+			"${workspaceRoot}/../../../addons/ofxPostProcessing/src",
+			"${workspaceRoot}/../../../addons/ofxSurfingHelpersLite/src",
+			"${workspaceRoot}/../../../addons/ofxSurfingPresetsLite/src",
 			"${workspaceRoot}/../../../addons/ofxTweenLite/src"
 		]
 	},

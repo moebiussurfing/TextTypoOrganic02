@@ -71,6 +71,8 @@ public:
 
 	// Scene parameters
 	ofParameterGroup paramsScene;
+	ofParameter<ofColor> bgColor1;
+	ofParameter<ofColor> bgColor2;
 	ofParameter<bool> bBgGradient;
 
 	// Interaction

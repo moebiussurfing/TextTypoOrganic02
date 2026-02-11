@@ -272,7 +272,7 @@ void OrganicText::setupParams() {
 	//--
 
 	// Settings group
-	bAutosave.set("Autosave", false);
+	bAutosave.set("Autosave", true);
 	vSaveSettigs.set("Save");
 	vLoadSettigs.set("Load");
 
@@ -952,7 +952,8 @@ float OrganicText::getCombinedInfluence(vec2 position) const {
 
 //--------------------------------------------------------------
 vec2 OrganicText::lineTweakToTextSpace(const vec2 & normalized) const {
-	float x = ofMap(normalized.x, -1.0f, 1.0f, 0.0f, data->getTextWidth(), true);
+	float padX = data->getTextWidth() * LINE_TWEAKS_EDGE_PAD;
+	float x = ofMap(normalized.x, -1.0f, 1.0f, -padX, data->getTextWidth() + padX, true);
 	float y = ofMap(normalized.y, -1.0f, 1.0f, -data->getTextHeight(), 0.0f, true);
 	return vec2(x, y);
 }
