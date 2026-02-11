@@ -2,13 +2,14 @@
     "OrganicText": {
         "Auto_Zoom": "0",
         "Color_Outline": "0, 0, 0, 255",
-        "Debug": "0",
+        "Debug": "1",
         "Draw_Outline": "0",
         "Font": {
+            "Font_Path": "fonts\\GeistMono-Medium.ttf",
             "Size": "210.714",
             "Spacing": "-0.193878"
         },
-        "Help": "1",
+        "Help": "0",
         "Internal": {
             "OrganicText": "1"
         },
@@ -16,7 +17,7 @@
         "Session_Settings": {
             "Autosave": "1"
         },
-        "Text": "SLIDE TWO",
+        "Text": "OPENAI 100M+",
         "Thickness": "0.15",
         "Tweens_Drawing": {
             "In": "0",

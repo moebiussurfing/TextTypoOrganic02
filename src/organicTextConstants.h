@@ -36,7 +36,7 @@ constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 
 // Default font
 #if 1
-constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = "JetBrainsMono-Bold.ttf";
+constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = "fonts\\JetBrainsMono-Bold.ttf";
 // constexpr const std::string ORGANIC_TEXT_FONT_DEFAULT = "NotoSansMono-Regular.ttf";
 #else
 // Bundled OF fonts

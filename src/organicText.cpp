@@ -172,7 +172,7 @@ void OrganicText::setupScene() {
 		
 		// Font parameters
 		fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
-		fontPath.setSerializable(false);
+		//fontPath.setSerializable(false);
 		fontSize.set("Size", 150, 50, 500);
 		letterSpacing.set("Spacing", 0, -1, 1);
 		vResetFont.set("Reset");
@@ -1647,7 +1647,11 @@ bool OrganicText::isLineTweaksRunning() const {
 		
 		if (bGui) {
 			// linked to gui anchor
-			boxX = gui.getPosition().x - boxWidth - 5;
+			//// left of the panel
+			//boxX = gui.getPosition().x - boxWidth - 5;
+			//boxY = gui.getPosition().y - 1;
+			// right of the panel
+			boxX = gui.getPosition().x + gui.getWidth() + 5;
 			boxY = gui.getPosition().y - 1;
 		} else {
 			// screen border
