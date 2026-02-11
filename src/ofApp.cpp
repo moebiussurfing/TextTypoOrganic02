@@ -100,10 +100,10 @@ void ofApp::setup() {
 	
 	//--
 	
-	// Organic Text
+	// Organic Text Session
 	
 	ot.setup(fps);
-	ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);
+	// ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);//top right
 	
 	//--
 	
@@ -123,7 +123,7 @@ void ofApp::setup() {
 	paramsScene.add(bMouseBrowsing);
 
 	guiScene.setup("Scene Slideshow");
-	setupGui(guiScene, "GeistMono-Medium.ttf", 10);
+	// setupGui(guiScene, "GeistMono-Medium.ttf", 10);
 	
 	guiScene.add(paramsScene);
 
@@ -220,6 +220,9 @@ void ofApp::draw() {
 		guiScene.setPosition(p, y);
 		guiScene.draw();
 	}
+
+	// session
+	ot.gui.setPosition(SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS + ot.gui.getWidth()+SURFING__OFXGUI__PAD_BETWEEN_PANELS, ofGetHeight() - ot.gui.getHeight() - SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS);//bottom left 2nd column
 }
 
 //--------------------------------------------------------------
