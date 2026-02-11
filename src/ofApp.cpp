@@ -1,78 +1,44 @@
 #include "ofApp.h"
-// //--------------------------------------------------------------
-// void ofApp::setupBloom() {
-// 	//Src fbo's texcoord has to be normalized(0 - 1)
-// 	ofDisableArbTex();
-// 	fbo.allocate(ofGetWidth(), ofGetHeight());
-// 	ofEnableArbTex();
-
-// 	bloom.setup(ofGetWidth(), ofGetHeight(), fbo);
-
-// 	gui.setup();
-// 	gui.add(scale.setup("Scale", 2.3f, 0.1f, 16.f));
-// 	gui.add(brightness.setup("Brightness", 5.0f, 0.f, 30.f));
-// 	gui.add(thresh.setup("Threshold", 0.f, 0.1f, 2.f));
-// }
-
-// //--------------------------------------------------------------
-// void ofApp::beginBloom() {
-// 	time = ofGetElapsedTimef();
-
-// 	fbo.begin();
-// 	ofClear(20);
-
-// }
-
-// //--------------------------------------------------------------
-// void ofApp::endBloom() {
-	
-// 	fbo.end();
-
-// 	bloom.setBrightness(brightness);
-// 	bloom.setScale(scale);
-// 	bloom.setThreshold(thresh);
-// 	bloom.process();
-// }
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	
-	// Deployment app version
-	#ifdef OFWORKS_DEMO_APP_DEPLOY
+
+// Deployment app version
+#ifdef OFWORKS_DEMO_APP_DEPLOY
 	ofSetLogLevel(OF_LOG_SILENT);
 	ofSetLogLevel("SurfingPresetsLite", OF_LOG_SILENT);
-	#endif
-	
+#endif
+
 	ofLogNotice("ofApp") << "setup()";
-	
+
 	//--
-	
+
 	// Window
-	
+
 	centerWindow();
-	
+
 	//--
-	
+
 	// Frame rate
-	
+
 	float fps = 60.f;
 	// float fps = 120.f;
 	ofSetFrameRate(fps);
-	
+
 	//--
-	
+
 	// Parameters
-	
+
 	bBgGradient.set("Background Gradient", false);
 	bMouseBrowsing.set("Mouse Browsing", true);
 	bTweeningMode.set("Mode Tweening", true);
-	
+
 	//--
-	
+
 	// Dist Mode
-	
+
 	bHelpDist.set("Help Dist", true);
-	
+
 	// False: Advanced Mode. True: Distribution (User) Mode
 	bDistMode.set("Dist mode", true);
 	e_bDistMode = bDistMode.newListener([this](bool & v) {
@@ -84,7 +50,7 @@ void ofApp::setup() {
 			ot.bGui.set(true);
 		}
 	});
-	
+
 	// Window Full Screen / default size
 	bFullScreen.set("Full Screen", false);
 	e_bFullScreen = bFullScreen.newListener([this](bool & v) {
@@ -97,26 +63,31 @@ void ofApp::setup() {
 			ofSetFullscreen(false);
 		}
 	});
-	
+
 	//--
-	
+
 	// Organic Text Session
-	
+
 	ot.setup(fps);
 	// ot.gui.setPosition(ofGetWidth() - ot.gui.getWidth() - 5, 5);//top right
-	
+
 	//--
-	
+
 	// Presets Manager
-	
+
 	pm.setup(ot.paramsPreset);
 	pm.gui.add(ot.bGui);
 	ot.refreshGuiPanel(pm.guiParams);
 
 	//--
-	
+
 	// Gui Scene Slideshow
 	paramsScene.setName("Scene");
+
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	paramsOfApp.add(bGui_Fx);
+#endif
+
 	paramsScene.add(bBgGradient);
 	paramsScene.add(bFullScreen);
 	paramsScene.add(bTweeningMode);
@@ -124,7 +95,7 @@ void ofApp::setup() {
 
 	guiScene.setup("Scene Slideshow");
 	// setupGui(guiScene, "GeistMono-Medium.ttf", 10);
-	
+
 	guiScene.add(paramsScene);
 
 	// Refresh
@@ -145,11 +116,11 @@ void ofApp::setup() {
 	feedbackGroup.minimizeAll();
 
 	//--
-	
+
 	setupTweensCallbacks();
-	
+
 	//--
-	
+
 	// App session settings
 	paramsOfApp.setName("ofApp");
 	//paramsOfApp.add(bDistMode);
@@ -158,9 +129,36 @@ void ofApp::setup() {
 	//paramsOfApp.add(bFullScreen);
 	paramsOfApp.add(paramsScene);
 	paramsOfApp.add(slideshow.getParameters());
-	ofxSurfing::loadGroup(paramsOfApp);
 
-	// setupBloom();
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	setupFx();
+	paramsOfApp.add(bGui_Fx);
+#endif
+
+	ofxSurfing::loadGroup(paramsOfApp);
+}
+
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+//--------------------------------------------------------------
+void ofApp::setupFx() {
+
+	//setup manager
+	manager.setup(ofGetWidth(), ofGetHeight(), "fonts\\VCR_OSD_MONO_1.001.ttf", 8);
+
+	bGui_Fx.set("UI FX", true);
+
+	// Load Settings
+	manager.loadSettings();
+}
+#endif
+
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h) {
+	ofLogNotice("ofApp") << "windowResized " << w << "," << h;
+
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	manager.windowResized(w, h);
+#endif
 }
 
 //--------------------------------------------------------------
@@ -168,7 +166,7 @@ void ofApp::update() {
 	// Performance
 	fps = ofGetFrameRate();
 	frameTime = 1000.0f / ofClamp(fps, 0.1f, 10000.0f);
-	
+
 	// Window title
 	std::string s = "";
 	std::string s1 = "";
@@ -186,24 +184,52 @@ void ofApp::update() {
 	string wt = ofToString(OFWORKS_DEMO_APP_TITLE) + s;
 	ofSetWindowTitle(wt);
 
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	updateFx();
+#endif
+
 	slideshow.update(ofGetLastFrameTime());
 }
 
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+//--------------------------------------------------------------
+void ofApp::updateFx() {
+	// update manager
+	manager.updateValues();
+}
+#endif
+
 //--------------------------------------------------------------
 void ofApp::draw() {
+
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	manager.begin();
+#endif
+
 	// Background
 	if (bBgGradient) {
 		ofxDrawBgGradient();
 	} else {
 		ofBackground(20);
 	}
-	
+
 	// beginBloom();
 	// // Organic Text
 	ot.draw();
 	// endBloom();
 	// bloom.draw();
 
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	manager.end();
+#endif
+
+	//--
+
+	drawGui();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawGui() {
 	if (!bDistMode.get()) {
 		// Presets Manager
 		pm.drawGui();
@@ -213,16 +239,27 @@ void ofApp::draw() {
 		if (bHelpDist) drawHelpDist();
 	}
 
-	// gui.draw();
 	if (ot.bGui && !bDistMode) {
 		int p = SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS;
 		int y = ofGetHeight() - p - guiScene.getHeight();
 		guiScene.setPosition(p, y);
 		guiScene.draw();
+
+		// fx
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+		if (bGui_Fx) {
+			manager.drawGui(ofGetWidth() - manager.getGUIWidth(), 0);
+		} else {
+			// There is a kind of buggy issue on MAC.
+			// Drawing the GUI out of the window.
+			// Otherwise FPS draws continously
+			manager.hideGui();
+		}
+#endif
 	}
 
 	// session
-	ot.gui.setPosition(SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS + ot.gui.getWidth()+SURFING__OFXGUI__PAD_BETWEEN_PANELS, ofGetHeight() - ot.gui.getHeight() - SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS);//bottom left 2nd column
+	ot.gui.setPosition(SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS + ot.gui.getWidth() + SURFING__OFXGUI__PAD_BETWEEN_PANELS, ofGetHeight() - ot.gui.getHeight() - SURFING__OFXGUI__PAD_TO_WINDOW_BORDERS); //bottom left 2nd column
 }
 
 //--------------------------------------------------------------
@@ -239,9 +276,9 @@ void ofApp::drawHelpDist() {
 		s += "MOUSE CLICK    Prev / Next";
 		s += "\n";
 		if (ofGetMouseX() < ofGetWidth() / 2)
-		s += "*Left/Right    Half Screen";
+			s += "*Left/Right    Half Screen";
 		else
-		s += " Left/Right*   Half Screen";
+			s += " Left/Right*   Half Screen";
 		s += "\n\n";
 	}
 	s += "ENTER          Advanced";
@@ -254,8 +291,8 @@ void ofApp::drawHelpDist() {
 	s += "\n\n";
 	s += " L             Trig Line Tweaks";
 	s += "\n";
-	string sp=ofToString(slideshow.bEnabled_.get() ? "Slideshow Pause" : "Slideshow Play");
-	s += " P             "+ sp;
+	string sp = ofToString(slideshow.bEnabled_.get() ? "Slideshow Pause" : "Slideshow Play");
+	s += " P             " + sp;
 	s += "\n\n";
 	s += "KIT            " + ofToString(pm.getKitName());
 	s += "\n";
@@ -270,9 +307,9 @@ void ofApp::drawHelpDist() {
 void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	const auto k = eventArgs.key;
 	ofLogNotice("ofApp") << "keyPressed(): " << char(k);
-	
+
 	//--
-	
+
 	// Full screen window
 	if (k == 'f' || k == 'F') {
 		bFullScreen.set(!bFullScreen.get());
@@ -283,9 +320,9 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		centerWindow();
 		return;
 	}
-	
+
 	//--
-	
+
 	// Dist Mode / advanced mode
 	if (k == OF_KEY_RETURN) {
 		bDistMode.set(!bDistMode.get());
@@ -293,13 +330,13 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 		// if(bDistMode &&!ot.bGui) ot.bGui=true;
 		return;
 	}
-	
+
 	// Next preset
 	if (k == OF_KEY_SPACE) {
 		nextScene();
 		return;
 	}
-	
+
 	if (bDistMode.get()) {
 		// Help Dist
 		if (k == 'h' || k == 'H') {
@@ -307,19 +344,31 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 			return;
 		}
 	}
-	if (k == 'l'|| k == 'L') {
+	if (k == 'l' || k == 'L') {
 		ot.vTrigLineTweaks.trigger();
+		return;
 	}
-	if (k == 'p'|| k == 'P') {
+	if (k == 'p' || k == 'P') {
 		slideshow.toggle();
 		return;
 	}
-	
+
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	else if (k == OF_KEY_F1)
+		manager.loadSettings("fx\\scene1.json");
+
+	else if (k == OF_KEY_F2)
+		manager.loadSettings("fx\\scene2.json");
+
+	else if (k == OF_KEY_F3)
+		manager.loadSettings("fx\\scene3.json");
+#endif
+
 	else {
 		ot.keyPressed(eventArgs);
-		
+
 		//--
-		
+
 		// Debug mode
 		if (k == 'd' || k == 'D') {
 			//workflow
@@ -332,21 +381,21 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
 	ofLogNotice("ofApp") << "mousePressed(): " << x << "," << y << " " << button;
-	
+
 	// Get browse direction from mouse click x position
 	// (left/reight half = previous/next)
 	if (bMouseBrowsing) {
 		if (ot.isTweening()) return; // Skip mouse clicks until running tweening ends.
 		if (x < ofGetWidth() / 2) {
 			if (button == 0)
-			browseDirection = BROWSE_PREVIOUS;
+				browseDirection = BROWSE_PREVIOUS;
 			else
-			browseDirection = BROWSE_NEXT;
+				browseDirection = BROWSE_NEXT;
 		} else {
 			if (button == 2)
-			browseDirection = BROWSE_PREVIOUS;
+				browseDirection = BROWSE_PREVIOUS;
 			else
-			browseDirection = BROWSE_NEXT;
+				browseDirection = BROWSE_NEXT;
 		}
 		nextScene(browseDirection);
 		return;
@@ -355,7 +404,7 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y) {
-	lastMouseMove = ofGetElapsedTimeMillis(); 
+	lastMouseMove = ofGetElapsedTimeMillis();
 }
 //--------------------------------------------------------------
 bool ofApp::isMouseIdle() const {
@@ -369,7 +418,7 @@ bool ofApp::isMouseIdle() const {
 //--------------------------------------------------------------
 void ofApp::centerWindow() {
 	ofLogNotice("ofApp") << "centerWindow()";
-	
+
 	int w = ofGetWindowWidth();
 	int h = ofGetWindowHeight();
 	ofSetWindowPosition(ofGetScreenWidth() * 0.5f - w * 0.5f, ofGetScreenHeight() * 0.5f - h * 0.5f);
@@ -378,7 +427,7 @@ void ofApp::centerWindow() {
 //--------------------------------------------------------------
 void ofApp::fullScreenWindow() { // Set window full screen
 	ofLogNotice("ofApp") << "resetWindowFullScreen()";
-	
+
 	ofSetWindowShape(ofGetScreenWidth(), ofGetScreenHeight());
 	ofSetWindowPosition(0, 0);
 }
@@ -386,10 +435,10 @@ void ofApp::fullScreenWindow() { // Set window full screen
 //--------------------------------------------------------------
 void ofApp::resetWindow() { // Set window reset
 	ofLogNotice("ofApp") << "resetWindow()";
-	
+
 	int w = OFWORKS_DEMO_APP_WIDTH;
 	int h = OFWORKS_DEMO_APP_HEIGHT;
-	
+
 	ofSetWindowShape(w, h);
 	ofSetWindowPosition(ofGetScreenWidth() / 2 - w / 2, ofGetScreenHeight() / 2 - h / 2);
 }
@@ -401,10 +450,10 @@ void ofApp::resetWindow() { // Set window reset
 //--------------------------------------------------------------
 void ofApp::setupTweensCallbacks() {
 	ofLogNotice("ofApp") << "setupTweensCallbacks()";
-	
+
 	// Setup tween callbacks to be called when completed
 	// Custom workflow for combine with/as preset transitions
-	
+
 	// writeIn tween completed
 	// Empty space: not drawing nothing on complete
 	// In = 1, Out = 1
@@ -413,13 +462,13 @@ void ofApp::setupTweensCallbacks() {
 		slideshow.applyTextFromFileNow();
 		if (!slideshow.isPresetLocked()) {
 			if (browseDirection == BROWSE_NEXT)
-			pm.doLoadNext(); // Load next preset
+				pm.doLoadNext(); // Load next preset
 			else
-			pm.doLoadPrevious(); // Load previous preset
+				pm.doLoadPrevious(); // Load previous preset
 		}
 		ot.writeOut(); // Animate draw tween
 	});
-	
+
 	// writeOut tween completed
 	ot.setOnCompleteWriteOut([this]() {
 		ofLogNotice("ofApp") << "writeOut completed. (Full range draw)";
@@ -435,7 +484,7 @@ void ofApp::nextScene(browseDirection_ bd) {
 	ofLogNotice("ofApp") << "nextScene() browseDirection:" << bd;
 
 	slideshow.onSceneAdvanced();
-	
+
 	browseDirection = bd;
 	pendingLineTweaks = false;
 	const bool wantLineTweaks = ot.bLineTweaks.get();
@@ -463,25 +512,25 @@ void ofApp::nextScene(browseDirection_ bd) {
 //--------------------------------------------------------------
 void ofApp::exit() {
 	ofLogNotice("ofApp") << "exit()";
-	
+
 	ot.exit();
-	
+
 	ofxSurfing::saveGroup(paramsOfApp);
 }
 
-//---------------------------------------
-void ofApp::setupGui(ofxPanel &g, string f, int fSize){
-    ofFile file(f);
-    // Set the fill color
-    ofxGuiSetFillColor(ofColor(0,200,0,130));
-    g.setDefaultTextPadding(fSize-1);
-    g.setDefaultWidth(220);
-    g.setDefaultHeight(fSize+4);
-    if(f != "" && file.exists()) {
-        if(file.exists()) {
-            g.loadFont(f, fSize, false);
-        }else{
-            ofLogError(__FUNCTION__) << "file " << f << " not found!";
-        }
-    }
-}
+////---------------------------------------
+//void ofApp::setupGui(ofxPanel & g, string f, int fSize) {
+//	ofFile file(f);
+//	// Set the fill color
+//	ofxGuiSetFillColor(ofColor(0, 200, 0, 130));
+//	g.setDefaultTextPadding(fSize - 1);
+//	g.setDefaultWidth(220);
+//	g.setDefaultHeight(fSize + 4);
+//	if (f != "" && file.exists()) {
+//		if (file.exists()) {
+//			g.loadFont(f, fSize, false);
+//		} else {
+//			ofLogError(__FUNCTION__) << "file " << f << " not found!";
+//		}
+//	}
+//}

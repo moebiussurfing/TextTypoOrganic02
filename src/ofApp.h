@@ -19,26 +19,28 @@
 #include "ofxSurfingPresetsLiteOfxGui.h"
 #include "organicText.h"
 #include "presetSlideshow.h"
-// #include "ofxBloom.h"
+
+#define USE_OFX_POSTPROCESSING_MANAGER
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+#include "ofxPostProcessingManager.h"
+#endif
 
 class ofApp : public ofBaseApp {
 
 public:
-	// void setupBloom();
-	// void beginBloom();
-	// void endBloom();
-	// ofxPanel gui;
-	// ofxFloatSlider scale;
-	// ofxFloatSlider thresh;
-	// ofxFloatSlider brightness;
-	// float time;
-	// ofxBloom bloom;
-	// ofFbo fbo;
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+	ofxPostProcessingManager manager; // ofxpostprocessing manager
+	void setupFx();
+	void updateFx();
+	ofParameter<bool> bGui_Fx;
+#endif
 
 	void setup();
 	void update();
 	void draw();
+	void drawGui();
 	void exit();
+	void windowResized(int w, int h);
 	void keyPressed(ofKeyEventArgs & eventArgs);
 	void mousePressed(int x, int y, int button);
 
