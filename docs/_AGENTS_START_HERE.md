@@ -22,7 +22,6 @@
    - [**FILE-STRUCTURE**](FILE-STRUCTURE.md) → Project file map.
    - [**docs/CONTEXT.md**](docs/CONTEXT.md) → Full project overview. Read on first session or when lost.
    - [**docs/CHANGELOG.md**](docs/CHANGELOG.md) → Project history, major milestones and current project status.
-   - **[docs/BUGS.md](docs/BUGS.md)** → Bugs and known issues that we will need to resolve at some point.
 
 ### **READ DEPTHLY & MEMORIZE**:
 
