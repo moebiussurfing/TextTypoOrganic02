@@ -23,8 +23,8 @@
         },
         "Colors": {
             "Color_1": "48, 0, 188, 255",
-            "Color_2": "76, 0, 221, 231",
-            "Color_3": "63, 0, 152, 255",
+            "Color_2": "0, 221, 160, 255",
+            "Color_3": "152, 27, 48, 255",
             "Color_Connections": "0, 0, 0, 255",
             "Color_Trails": "8, 227, 97, 255"
         },
@@ -44,10 +44,10 @@
         "Draw_Shapes": "1",
         "Draw_Trails": "0",
         "Line_Tweaks": {
-            "Duration": "5",
-            "From": "-1, 0",
+            "Duration": "2.32245",
+            "From": "-1, 1",
             "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "0.1",
+            "Radius_Line_Mouse": "1",
             "To": "1, 0"
         },
         "Mouse_Tweaks": {

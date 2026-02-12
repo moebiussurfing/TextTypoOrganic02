@@ -2,20 +2,20 @@
     "ofApp": {
         "Scene": {
             "Background_Gradient": "0",
-            "Bg_Color_1": "0, 0, 0, 255",
+            "Bg_Color_1": "10, 10, 10, 255",
             "Bg_Color_2": "40, 40, 40, 255",
-            "Full_Screen": "1",
+            "Full_Screen": "0",
             "Mode_Tweening": "1",
             "Mouse_Browsing": "1"
         },
         "Slideshow": {
             "Feedback": null,
-            "Interval__s_": "1",
+            "Interval__s_": "2",
             "Lock_Preset": "1",
             "Pause_When_Busy": "1",
             "Read_From_File": "1",
-            "Slideshow_Play": "1",
-            "Text_File": "slideshow.txt",
+            "Slideshow_Play": "0",
+            "Text_File": "text/slideshow.txt",
             "Wait_LineTweaks": "1",
             "Wait_Tweens": "1",
             "Wait_User_Idle": "1"

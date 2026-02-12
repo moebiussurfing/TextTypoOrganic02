@@ -4,19 +4,19 @@
         "Color_Outline": "0, 0, 0, 255",
         "Debug": "0",
         "Font": {
-            "Font_Path": "GeistMono-Medium.ttf",
+            "Font_Path": "../../../data/fonts/GeistMono-Medium.ttf",
             "Size": "150",
             "Spacing": "0"
         },
-        "Help": "1",
+        "Help": "0",
         "Internal": {
             "OrganicText": "1"
         },
-        "Keys": "0",
+        "Keys": "1",
         "Session_Settings": {
             "Autosave": "1"
         },
-        "Text": "LOST FRAMES",
+        "Text": "ofWorks",
         "Tweens_Drawing": {
             "In": "0",
             "Out": "1",
@@ -39,6 +39,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "0.819777"
+        "Zoom": "0.847118"
     }
 }

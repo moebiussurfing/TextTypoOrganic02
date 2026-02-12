@@ -42,7 +42,7 @@
         "Draw_Connections": "1",
         "Draw_Fill": "1",
         "Draw_Shapes": "1",
-        "Draw_Trails": "1",
+        "Draw_Trails": "0",
         "Line_Tweaks": {
             "Duration": "3.68622",
             "From": "-1, -0.5",
@@ -66,13 +66,13 @@
             "Back": "0",
             "Draw_Fill": "1",
             "Min_Size": "0.583486",
-            "Ratio": "0.944241",
+            "Ratio": "0.0867347",
             "Rotation": "0.361304",
-            "Size": "0.934561",
+            "Size": "0.132653",
             "Type": "5"
         },
         "Trails": {
-            "Draw_Trails": "1",
+            "Draw_Trails": "0",
             "Fade": "0.454082",
             "Length": "0.622449",
             "Line_Width": "1.52846"

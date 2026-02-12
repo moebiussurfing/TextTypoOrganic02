@@ -47,7 +47,7 @@
             "Duration": "5",
             "From": "-1, 0",
             "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "0.1",
+            "Radius_Line_Mouse": "1",
             "To": "1, 0"
         },
         "Mouse_Tweaks": {
