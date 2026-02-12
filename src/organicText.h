@@ -10,6 +10,7 @@
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
 #include "organicTextData.h" // Data storage
+#include "OrganicTextRenderer.h" // Rendering and calculations
 // Text modifiers removed; mouse tweaks are handled directly.
 
 #include "ofxGui.h"
@@ -19,6 +20,7 @@ using namespace glm;
 //----
 
 class OrganicText {
+	friend class OrganicTextRenderer;
 public:
 	OrganicText();
 	~OrganicText();
@@ -50,7 +52,6 @@ public:
 
 private:
 	void drawHelp() const;
-	void drawDebug() const;
 
 public:
 	void keyPressed(ofKeyEventArgs & eventArgs);
@@ -82,8 +83,6 @@ public:
 	// Basic parameters
 	ofParameter<bool> bHelp;
 	ofParameter<bool> bDebug;
-	//ofParameter<bool> bDrawOutline;
-	// ofParameter<float> outlineThickness;
 	ofParameter<bool> bDrawFill;
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
@@ -221,24 +220,6 @@ private:
 	ofEventListener e_vResetLineTweaks;
 
 	// Functions
-	vector<vec2> sampleStringPoints(const std::string & s, float ds);
-	void drawShape(vec2 position, float size, ShapeType shape, float rotation = 0) const;
-	void drawShapes();
-
-	void drawConnections() const;
-
-	void updateTrails();
-	void drawTrails();
-
-	ofColor getPointColor(int index, vec2 position, float phase) const;
-	vec2 getAnimatedOffset(int index, float phase) const;
-
-	//Calculate mouse influence factor for a given position (0-1)
-	float getMouseInfluence(vec2 position) const;
-	float getInfluenceFrom(vec2 position, const vec2& sourcePos, float radiusParam) const;
-	float getCombinedInfluence(vec2 position) const;
-	vec2 lineTweakToTextSpace(const vec2& normalized) const;
-	vec2 textToScreen(const vec2& textPos) const;
 	float getZoomScale() const;
 	
 	mutable glm::vec2 mousePos;
@@ -274,7 +255,8 @@ private:
 	mutable bool bMouseInBounds = false;
 	
 private:
-	void refreshPointsString();
+	// Rendering and heavy calculations
+	OrganicTextRenderer renderer_;
 
 	//--
 
