@@ -1,6 +1,6 @@
 {
     "OrganicText": {
-        "Auto_Zoom": "0",
+        "Auto_Zoom": "1",
         "Color_Outline": "0, 0, 0, 255",
         "Debug": "0",
         "Font": {
@@ -16,8 +16,7 @@
         "Session_Settings": {
             "Autosave": "1"
         },
-        "Text": "@ Spotify",
-        "Thickness": "0.15",
+        "Text": "LOST FRAMES",
         "Tweens_Drawing": {
             "In": "0",
             "Out": "1",
@@ -40,6 +39,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "0.57"
+        "Zoom": "0.819777"
     }
 }

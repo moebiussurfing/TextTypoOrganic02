@@ -18,18 +18,13 @@
 //---
 
 // Window title
-const std::string OFWORKS_DEMO_APP_TITLE = "organicText v0.1";
+const std::string OFWORKS_DEMO_APP_TITLE = "organicText v0.2";
 
 // Window size
-#if 0
-// Demo for ofWorks installing window
-constexpr int OFWORKS_DEMO_APP_WIDTH = 1200;
-constexpr int OFWORKS_DEMO_APP_HEIGHT = 550;
-#else
+
 // Custom size
 constexpr int OFWORKS_DEMO_APP_WIDTH = 1920;
 constexpr int OFWORKS_DEMO_APP_HEIGHT = 1080;
-#endif
 
 // Default text
 constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
@@ -55,8 +50,8 @@ constexpr float ORGANIC_TEXT_FPS = 60.f;
 //constexpr float ORGANIC_TEXT_FPS = 120.f;
 
 constexpr float ZOOM_GLOBAL_SCALE_MIN = 0.2f;
-constexpr float ZOOM_GLOBAL_SCALE_MAX = 2.1f; // QHD 2K calibrated
-constexpr float ZOOM_GLOBAL_AUTO_PADDING = 80.0f; // Pixels
+constexpr float ZOOM_GLOBAL_SCALE_MAX = 2.1f; // QHD 2K calibrated aprox
+constexpr float ZOOM_GLOBAL_AUTO_PADDING = 200.0f; // Pixels
 
 // Density Constants
 constexpr float DENSITY_SPACING_MIN = 1.5f;

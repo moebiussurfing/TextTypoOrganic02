@@ -122,8 +122,17 @@ void OrganicTextRenderer::drawDebug() const {
 
   auto* o = owner_;
 
+  float zoomFactor = getZoomScale();
+  float centerX = ofGetWidth() * 0.5f;
+  float centerY = ofGetHeight() * 0.5f;
+  glm::vec2 textOffset(-o->data->getTextWidth() * 0.5f, o->data->getTextHeight() * 0.5f);
+
   ofPushMatrix();
   {
+    ofTranslate(centerX, centerY);
+    ofScale(zoomFactor, zoomFactor);
+    ofTranslate(textOffset);
+
     ofPushStyle();
 
     ofSetColor(o->colorDebugBlink);
@@ -154,7 +163,7 @@ void OrganicTextRenderer::drawDebug() const {
       ofFill();
       ofSetColor(o->colorDebugBlink);
       float rMouse = ofMap(o->radiusMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
-      ofDrawCircle(o->mousePos, rMouse);
+      ofDrawCircle(o->mouseLocalPos, rMouse);
       ofPopStyle();
     }
 
@@ -163,8 +172,7 @@ void OrganicTextRenderer::drawDebug() const {
       ofFill();
       ofSetColor(o->colorDebugBlink);
       float rLine = ofMap(o->radiusLineMouse.get(), 0.f, 1.f, MOUSE_RADIUS_INTERACT_MIN, MOUSE_RADIUS_INTERACT_MAX, true);
-      glm::vec2 lineScreenPos = textToScreen(o->lineLocalPos);
-      ofDrawCircle(lineScreenPos, rLine);
+      ofDrawCircle(o->lineLocalPos, rLine);
       ofPopStyle();
     }
 
@@ -174,14 +182,12 @@ void OrganicTextRenderer::drawDebug() const {
 
       glm::vec2 startText = lineTweakToTextSpace(o->vLineFrom.get());
       glm::vec2 endText = lineTweakToTextSpace(o->vLineTo.get());
-      glm::vec2 startScreen = textToScreen(startText);
-      glm::vec2 endScreen = textToScreen(endText);
-      glm::vec2 currentScreen = textToScreen(o->tweenPosition.getValue());
+      glm::vec2 currentText = o->tweenPosition.getValue();
 
-      ofDrawCircle(startScreen, 4);
-      ofDrawCircle(endScreen, 4);
-      ofDrawLine(startScreen, endScreen);
-      ofDrawCircle(currentScreen, 10);
+      ofDrawCircle(startText, 4);
+      ofDrawCircle(endText, 4);
+      ofDrawLine(startText, endText);
+      ofDrawCircle(currentText, 10);
       ofPopStyle();
     }
 
