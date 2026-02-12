@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "organicText.h"
 
 #include "organicTextResetsRandoms.h"
@@ -164,8 +166,9 @@ void OrganicText::setupParams() {
 	bDrawShapes.set("Draw Shapes", true);
 	bEnableAnimation.set("Animate", true);
 	//bDrawOutline.set("Draw Outline", false);
-	outlineThickness.set("Thickness", 0.15f, 0.0f, 1.0f);
-	zoomGlobal.set("Zoom", 0.015f, 0.0f, 1.0f);
+	// outlineThickness.set("Thickness", 0.15f, 0.0f, 1.0f);
+	const float zoomDefault = (1.0f - ZOOM_GLOBAL_SCALE_MIN) / (ZOOM_GLOBAL_SCALE_MAX - ZOOM_GLOBAL_SCALE_MIN);
+	zoomGlobal.set("Zoom", ofClamp(zoomDefault, 0.0f, 1.0f), 0.0f, 1.0f);
 	bAutoZoomGlobal.set("Auto Zoom", false);
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 
@@ -430,7 +433,7 @@ void OrganicText::setupParams() {
 	parameters.add(bAutoZoomGlobal);
 	parameters.add(zoomGlobal);
 	//parameters.add(bDrawOutline);
-	parameters.add(outlineThickness);
+	// parameters.add(outlineThickness);
 	parameters.add(colorOutline);
 	parameters.add(bDebug);
 	parameters.add(bHelp);
@@ -592,8 +595,19 @@ void OrganicText::refreshWindowResized() {
 
 	// Auto Zoom
 	if (bAutoZoomGlobal) {
-		auto ww = 2560; // callibarted for QHD / 2K screen but will work ok for others
-		zoomGlobal = ofMap(ofGetWidth(), 1200, ww, 0.f, 1.0f, false);
+		const float textWidth = data->getTextWidth();
+		const float textHeight = data->getTextHeight();
+		const float pad = ZOOM_GLOBAL_AUTO_PADDING;
+		const float availW = ofClamp(ofGetWidth() - pad * 2.0f, 1.0f, 100000.0f);
+		const float availH = ofClamp(ofGetHeight() - pad * 2.0f, 1.0f, 100000.0f);
+		if (textWidth > 0.0f && textHeight > 0.0f) {
+			const float scaleX = availW / textWidth;
+			const float scaleY = availH / textHeight;
+			const float targetScale = ofClamp(std::min(scaleX, scaleY), ZOOM_GLOBAL_SCALE_MIN, ZOOM_GLOBAL_SCALE_MAX);
+			const float range = ZOOM_GLOBAL_SCALE_MAX - ZOOM_GLOBAL_SCALE_MIN;
+			const float normalized = (range > 0.0f) ? ((targetScale - ZOOM_GLOBAL_SCALE_MIN) / range) : 0.0f;
+			zoomGlobal = ofClamp(normalized, 0.0f, 1.0f);
+		}
 	}
 }
 
@@ -697,7 +711,7 @@ void OrganicText::update() {
 
 	if (bMouseTweaks.get()) {
 		// Apply inverse transformations (same as in draw())
-		float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
+		float zoomFactor = getZoomScale();
 
 		// Step 1: Translate from window to center
 		vec2 translated = mousePos - vec2(centerX, centerY);
@@ -805,6 +819,10 @@ void OrganicText::refreshPointsString() {
 		float width = font.stringWidth(sText);
 		float height = font.stringHeight(sText);
 		data->setTextMetrics(width, height, center);
+	}
+
+	if (bAutoZoomGlobal) {
+		refreshWindowResized();
 	}
 }
 
@@ -960,11 +978,17 @@ vec2 OrganicText::lineTweakToTextSpace(const vec2 & normalized) const {
 
 //--------------------------------------------------------------
 vec2 OrganicText::textToScreen(const vec2 & textPos) const {
-	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
+	float zoomFactor = getZoomScale();
 	float centerX = ofGetWidth() * 0.5f;
 	float centerY = ofGetHeight() * 0.5f;
 	vec2 offset = vec2(-data->getTextWidth() * 0.5f, data->getTextHeight() * 0.5f);
 	return vec2(centerX, centerY) + (textPos + offset) * zoomFactor;
+}
+
+//--------------------------------------------------------------
+float OrganicText::getZoomScale() const {
+	const float normalized = ofClamp(zoomGlobal.get(), 0.0f, 1.0f);
+	return ofLerp(ZOOM_GLOBAL_SCALE_MIN, ZOOM_GLOBAL_SCALE_MAX, normalized);
 }
 
 //--------------------------------------------------------------
@@ -1286,9 +1310,6 @@ void OrganicText::drawTrails() {
 
 //--------------------------------------------------------------
 void OrganicText::drawDebug() const {
-	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
-	float centerX = ofGetWidth() * 0.5f;
-	float centerY = ofGetHeight() * 0.5f;
 	ofPushMatrix();
 	{
 		ofPushStyle();
@@ -1488,7 +1509,7 @@ void OrganicText::drawShapes() {
 void OrganicText::draw() {
 	auto td = ofGetElapsedTimeMicros(); //benchmark measure performance
 
-	float zoomFactor = 1.0f + (zoomGlobal.get() * ZOOM_GLOBAL_MAX);
+	float zoomFactor = getZoomScale();
 
 	float centerX = ofGetWidth() * 0.5f;
 	float centerY = ofGetHeight() * 0.5f;

@@ -83,7 +83,7 @@ public:
 	ofParameter<bool> bHelp;
 	ofParameter<bool> bDebug;
 	//ofParameter<bool> bDrawOutline;
-	ofParameter<float> outlineThickness;
+	// ofParameter<float> outlineThickness;
 	ofParameter<bool> bDrawFill;
 	ofParameter<bool> bDrawShapes;
 	ofParameter<bool> bEnableAnimation;
@@ -239,6 +239,7 @@ private:
 	float getCombinedInfluence(vec2 position) const;
 	vec2 lineTweakToTextSpace(const vec2& normalized) const;
 	vec2 textToScreen(const vec2& textPos) const;
+	float getZoomScale() const;
 	
 	mutable glm::vec2 mousePos;
 

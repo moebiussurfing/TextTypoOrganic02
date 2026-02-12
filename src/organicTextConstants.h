@@ -54,7 +54,9 @@ constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SANS;
 constexpr float ORGANIC_TEXT_FPS = 60.f;
 //constexpr float ORGANIC_TEXT_FPS = 120.f;
 
-constexpr float ZOOM_GLOBAL_MAX = 1.1f; // QHD 2K calibrated
+constexpr float ZOOM_GLOBAL_SCALE_MIN = 0.2f;
+constexpr float ZOOM_GLOBAL_SCALE_MAX = 2.1f; // QHD 2K calibrated
+constexpr float ZOOM_GLOBAL_AUTO_PADDING = 80.0f; // Pixels
 
 // Density Constants
 constexpr float DENSITY_SPACING_MIN = 1.5f;
