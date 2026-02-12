@@ -596,3 +596,6 @@ TextTypoOrganic02/data/.gitkeep
 bin/data/ofApp.json
 bin/data/OrganicText.json
 bin/data/OrganicText_Presets.json
+bin/data/ofApp.json
+bin/data/ofxGui_PRESET_OrganicText.json
+bin/data/OrganicText.json
