@@ -30,6 +30,7 @@ An **openFrameworks** (aka OF) desktop application that creates organic, animate
 - [ofxSurfingPresetsLite](https://github.com/moebiussurfing/ofxSurfingPresetsLite)
 - [ofxSurfingHelpersLite](https://github.com/moebiussurfing/ofxSurfingHelpersLite)
 - [ofxTweenLite](https://github.com/moebiussurfing/ofxTweenLite)
+- [ofxPostProcessing](https://github.com/alptugan/ofxPostProcessing)
 - **ofxGui** (OF Core)
 
 ## Project Management
