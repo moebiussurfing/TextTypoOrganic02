@@ -339,8 +339,8 @@ private:
 	// outPoint: limites the end (to the right) of the text that is being drawn.
 	// inPoint: limites the starting (from left) of the text that is being drawn.
 	// To draw the full text complete (from left to right):
-	// outPoint = 1
 	// inPoint = 0
+	// outPoint = 1
 
 public:
 	void writeIn() {
@@ -362,6 +362,12 @@ public:
 		// Full range visible left to right
 		inPoint.set(0.0f);
 		outPoint.set(1.0f);
+	}
+	void writeClear() {
+		ofLogNotice("OrganicText") << "writeClear()";
+		// Full range empty left to right
+		inPoint.set(0.0f);
+		outPoint.set(0.0f);
 	}
 
 	bool isTweening() {

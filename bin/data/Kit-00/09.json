@@ -4,11 +4,11 @@
         "Animation": {
             "Animate": "1",
             "Intensity": "0.0687769",
-            "Mode": "1",
+            "Mode": "0",
             "Origin_X": "0.660094",
             "Power": "0.193168",
             "Pulse": "0.869654",
-            "Speed": "0.515306",
+            "Speed": "0.0612245",
             "Spiral": "0.451051",
             "Wave_Freq": "0.0408163"
         },
@@ -44,11 +44,11 @@
         "Draw_Shapes": "1",
         "Draw_Trails": "1",
         "Line_Tweaks": {
-            "Duration": "1",
+            "Duration": "3.68622",
             "From": "-1, -0.5",
             "Line_Tweaks_Enabler": "1",
             "Radius_Line_Mouse": "1",
-            "To": "1, -0.479167"
+            "To": "1, 1"
         },
         "Mouse_Tweaks": {
             "Color": "162, 255, 220, 255",

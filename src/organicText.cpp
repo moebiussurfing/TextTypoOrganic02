@@ -156,7 +156,7 @@ void OrganicText::setupParams() {
 
 	// Basic parameters
 	bGui.set("OrganicText", true);
-	bKeys.set("Keys", false);
+	bKeys.set("Keys", true);
 	bDebug.set("Debug", false);
 	bHelp.set("Help", false);
 
@@ -165,8 +165,8 @@ void OrganicText::setupParams() {
 	bEnableAnimation.set("Animate", true);
 	//bDrawOutline.set("Draw Outline", false);
 	outlineThickness.set("Thickness", 0.15f, 0.0f, 1.0f);
-	zoomGlobal.set("Zoom", 0.0f, 0.0f, 1.0f);
-	bAutoZoomGlobal.set("Auto Zoom", true);
+	zoomGlobal.set("Zoom", 0.015f, 0.0f, 1.0f);
+	bAutoZoomGlobal.set("Auto Zoom", false);
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 
 	// Font parameters

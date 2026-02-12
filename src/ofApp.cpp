@@ -275,21 +275,25 @@ void ofApp::drawHelpDistribution() {
 		s += "MOUSE CLICK    Prev / Next";
 		s += "\n";
 		if (ofGetMouseX() < ofGetWidth() / 2)
-			s += "*Left/Right    Half Screen";
+			s += "*Left/Right    (Half Screen)";
 		else
-			s += " Left/Right*   Half Screen";
+			s += " Left/Right*   (Half Screen)";
 		s += "\n\n";
 	}
-	s += " L             Trig Line Tweaks";
+	s += "< >            Browse Presets";
 	s += "\n";
 	string sp = ofToString(slideshow.bEnabled_.get() ? "Slideshow Pause" : "Slideshow Play");
-	s += " P             " + sp;
+	s += "P              " + sp;
+	s += "\n";
+	s += "L              Trig Line Tweaks";
+	s += "\n";
+	s += "O/I            Clear/Write Text";
 	s += "\n\n";
-		s += "WINDOW";
+	s += "WINDOW";
 	s += "\n";
 	s += " F             " + ofToString(bFullScreen ? "Reset" : "Full Screen");
-	s += "\n";
-	s += " C             Center";
+	// s += "\n";
+	// s += " C             Center";
 	s += "\n\n";
 	s += "KIT            " + ofToString(pm.getKitName());
 	s += "\n";
@@ -347,6 +351,16 @@ void ofApp::keyPressed(ofKeyEventArgs & eventArgs) {
 	}
 	if (k == 'p' || k == 'P') {
 		slideshow.toggle();
+		return;
+	}
+
+	else if (k == 'I'|| k == 'i') {
+		ot.writeOut();
+		return;
+	}
+
+	else if (k == 'O'|| k == 'o') {
+		ot.writeClear();
 		return;
 	}
 

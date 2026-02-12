@@ -4,11 +4,11 @@
         "Color_Outline": "0, 0, 0, 255",
         "Debug": "0",
         "Font": {
-            "Font_Path": "fonts\\JetBrainsMono-Bold.ttf",
+            "Font_Path": "GeistMono-Medium.ttf",
             "Size": "150",
             "Spacing": "0"
         },
-        "Help": "0",
+        "Help": "1",
         "Internal": {
             "OrganicText": "1"
         },
@@ -16,7 +16,7 @@
         "Session_Settings": {
             "Autosave": "1"
         },
-        "Text": "GEMINI 300M+",
+        "Text": "@ Spotify",
         "Thickness": "0.15",
         "Tweens_Drawing": {
             "In": "0",
@@ -25,7 +25,7 @@
                 "Advanced": {
                     "Chain": "0"
                 },
-                "Duration": "2",
+                "Duration": "1",
                 "EaseType": "9",
                 "From": "0",
                 "To": "1"
@@ -40,6 +40,6 @@
                 "To": "1"
             }
         },
-        "Zoom": "1"
+        "Zoom": "0.57"
     }
 }

@@ -18,7 +18,7 @@
 //---
 
 // Window title
-const std::string OFWORKS_DEMO_APP_TITLE = "organicText v0.1 DEMO @ ofWorks";
+const std::string OFWORKS_DEMO_APP_TITLE = "organicText v0.1";
 
 // Window size
 #if 0
@@ -120,7 +120,7 @@ constexpr float MOUSE_RADIUS_INTERACT_MIN = 10.0f;
 constexpr float MAX_SCALE_POWER = 3.0f;
 
 // Line Tweaks Constants
-constexpr float LINE_TWEAKS_EDGE_PAD = 0.12f; // Extra pad outside text width (fraction)
+constexpr float LINE_TWEAKS_EDGE_PAD = 0.18f; // Extra pad outside text width (fraction)
 
 //----------------------------------------------------------------------------
 // ENUMERATIONS
