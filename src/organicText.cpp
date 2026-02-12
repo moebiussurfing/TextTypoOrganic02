@@ -172,7 +172,7 @@ void OrganicText::setupParams() {
 	sText.set("Text", ORGANIC_TEXT_DEFAULT_STRING);
 
 	// Font parameters
-	fontPath.set("Font Path", ofToString(ORGANIC_TEXT_FONT_DEFAULT));
+	fontPath.set("Font Path", ofToDataPath(ofToString(ORGANIC_TEXT_FONT_DEFAULT)));
 	//fontPath.setSerializable(false);
 	fontSize.set("Size", 150, 50, 500);
 	letterSpacing.set("Spacing", 0, -1, 1);

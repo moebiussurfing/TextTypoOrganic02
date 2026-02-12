@@ -680,7 +680,7 @@ void ofxPostProcessingManager::setupGui(std::string f, int fSize){
     fileName = "fxSettings.json";
 
 	// bypass ui styling
-    #if 1
+    #if 0
     ofFile file(f);
     // Set the fill color
     ofxGuiSetFillColor(ofColor(0,200,0,130));

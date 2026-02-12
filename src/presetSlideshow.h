@@ -36,7 +36,7 @@ private:
   ofParameterGroup params_;
   ofParameter<float> waitSeconds_ { "Interval (s)", 2.0f, 1.0f, 10.0f };
   ofParameter<bool> bReadFromFile_ { "Read From File", true };
-  ofParameter<std::string> textFilePath_ { "Text File", "slideshow.txt" };
+  ofParameter<std::string> textFilePath_ { "Text File", "text/slideshow.txt" };
   ofParameter<bool> bLockPreset_ { "Lock Preset", true };
   ofParameterGroup paramsFeedback_;
   ofParameter<float> progressFeedback_ { "Progress", 0.0f, 0.0f, 1.0f };
