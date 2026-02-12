@@ -154,6 +154,13 @@ void OrganicTextRenderer::drawDebug() const {
       for (const auto& point : pointsString) {
         ofDrawCircle(point, 1.f);
       }
+
+      const auto& pointsAnimatedCache = o->data->getAnimatedCache();
+      if (pointsAnimatedCache.size() == pointsString.size() && !pointsAnimatedCache.empty()) {
+        for (const auto& point : pointsAnimatedCache) {
+          ofDrawCircle(point, 2.f);
+        }
+      }
     }
 
     ofPopStyle();
@@ -839,11 +846,6 @@ void OrganicTextRenderer::drawShapes() {
     float rotation = ofMap(o->shapeRotation.get(), 0, 1, 0, 360, true);
 
     drawShape(finalPos, pointSize, (ShapeType)o->shapeType.get(), rotation);
-
-    if (o->bDebug) {
-      ofSetColor(o->colorDebug);
-      ofDrawCircle(finalPos, 2.f);
-    }
 
     ofPopStyle();
   }

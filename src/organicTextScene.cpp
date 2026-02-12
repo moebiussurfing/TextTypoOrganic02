@@ -216,6 +216,8 @@ void OrganicTextScene::draw() {
 
 //--------------------------------------------------------------
 void OrganicTextScene::drawGui() {
+  ot.drawDebugOverlay();
+
   if (!bDistributionMode.get()) {
     // Presets Manager
     pm.drawGui();

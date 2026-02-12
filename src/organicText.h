@@ -48,6 +48,8 @@ private:
 
 public:
 	void draw();
+	/// @brief Draw debug overlays outside postprocessing.
+	void drawDebugOverlay();
 	void drawGui();
 
 private:

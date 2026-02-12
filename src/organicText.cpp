@@ -683,20 +683,13 @@ void OrganicText::draw() {
 }
 
 //--------------------------------------------------------------
-void OrganicText::drawGui() {
+void OrganicText::drawDebugOverlay() {
+	if (!bDebug) return;
 
-	//--
+	// Layer: Debug (drawn before panels and outside postprocessing)
+	renderer_.drawDebug();
 
-	if (bDebug) {
-		// Layer 5: Debug (always on top)
-		renderer_.drawDebug();
-	}
-
-	//----
-
-	if (!bGui) return;
-
-	if (bDebug && bDebugLowFPS) {
+	if (bDebugLowFPS) {
 		ofPushStyle();
 		ofNoFill();
 		ofSetLineWidth(2);
@@ -706,11 +699,19 @@ void OrganicText::drawGui() {
 
 		// Low FPS warning
 		std::string s = "LOW FPS";
-		//ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_TOP_CENTER);
 		auto bf = ofBitmapFont();
-		//bf.getBoundingBox(s,0,0);
-		ofDrawBitmapStringHighlight(s, ofGetWidth() / 2 - bf.getBoundingBox(s, 0, 0).getWidth() / 2, bf.getBoundingBox(s, 0, 0).getHeight(), ofColor::yellow, ofColor::black);
+		ofDrawBitmapStringHighlight(
+			s,
+			ofGetWidth() / 2 - bf.getBoundingBox(s, 0, 0).getWidth() / 2,
+			bf.getBoundingBox(s, 0, 0).getHeight(),
+			ofColor::yellow,
+			ofColor::black);
 	}
+}
+
+//--------------------------------------------------------------
+void OrganicText::drawGui() {
+	if (!bGui) return;
 
 	gui.draw();
 
