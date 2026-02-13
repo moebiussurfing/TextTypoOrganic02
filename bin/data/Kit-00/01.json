@@ -12,6 +12,11 @@
             "Spiral": "0.162518",
             "Wave_Freq": "0.772843"
         },
+        "Background": {
+            "Background_Gradient": "0",
+            "Bg_Color_1": "40, 40, 40, 255",
+            "Bg_Color_2": "150, 255, 234, 255"
+        },
         "Color_Modes": {
             "Alpha_Range": "0.7",
             "By_Dist": "0",
