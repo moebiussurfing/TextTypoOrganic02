@@ -1,5 +1,1 @@
 ofxGui
-ofxPostProcessing
-ofxSurfingHelpersLite
-ofxSurfingPresetsLite
-ofxTweenLite

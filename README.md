@@ -29,11 +29,13 @@ An **openFrameworks** (aka OF) desktop application that creates organic, animate
 **[docs/Developer](docs/Developer)** → Folder with developer notes, ideas, future roadmap, evaluating ideas, strategies and priorities, and C++ concepts
 
 ### Dependencies
+- **ofxGui** (OF Core)
+
+## Bundled in `/libs`. (No need to clone)
 - [ofxSurfingPresetsLite](https://github.com/moebiussurfing/ofxSurfingPresetsLite)
 - [ofxSurfingHelpersLite](https://github.com/moebiussurfing/ofxSurfingHelpersLite)
 - [ofxTweenLite](https://github.com/moebiussurfing/ofxTweenLite)
 - [ofxPostProcessing](https://github.com/alptugan/ofxPostProcessing)
-- **ofxGui** (OF Core)
 
 ## Project Management
 
