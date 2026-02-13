@@ -608,3 +608,7 @@ bin/data/OrganicText.json
 bin/slideshow copy.txt
 bin/slideshow copy.txt
 bin/slideshow copy.txt
+.vscode/c_cpp_properties.json
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/tasks.json
