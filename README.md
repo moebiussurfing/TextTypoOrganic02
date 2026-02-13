@@ -7,6 +7,8 @@
 
 ![](Capture-v0.3.PNG)
 
+![PLAYLIST_CAPTURES](https://www.youtube.com/playlist?list=PLFoSbcsHXMI6c3x38pasUodA9gP-YkcTh)
+
 An **openFrameworks** (aka OF) desktop application that creates organic, animated visualizations from text using customizable shapes, colors, animations, presets and mouse interactions.
 
 *Enhanced version based on original code from [PFAD/examples/week_5/organicTypographyWorked](https://github.com/colormotor/PFAD/tree/main/examples/week_5/organicTypographyWorked)*:
