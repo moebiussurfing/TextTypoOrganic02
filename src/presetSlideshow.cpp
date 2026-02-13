@@ -34,12 +34,15 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
 	params_.setName("Slideshow");
 	params_.add(bEnabled_);
 	params_.add(waitSeconds_);
+	params_.add(startDelaySeconds_);
+	params_.add(bLoop_);
 	params_.add(bLockPreset_);
 	params_.add(bReadFromFile_);
 	params_.add(textFilePath_);
 
 	paramsFeedback_.setName("Feedback");
 	paramsFeedback_.add(progressFeedback_);
+	paramsFeedback_.add(slideIndex_);
 	paramsFeedback_.add(bUserIdle_);
 	paramsFeedback_.add(bTimerRunning_);
 	paramsFeedback_.add(bBusyTweens_);
@@ -53,6 +56,21 @@ void PresetSlideshow::setup(OrganicText * organicText, std::function<void()> nex
 	params_.add(vTriggerNow_);
 
 	eTriggerNow_ = vTriggerNow_.newListener([this](const void *) { triggerNow(); });
+	eEnabled_ = bEnabled_.newListener([this](bool & enabled) {
+		if (enabled) {
+			currentLineIndex_ = 0;
+			stopAfterClear_ = false;
+			if (ot_ != nullptr) {
+				ot_->writeClear();
+			}
+			resetTimer();
+			elapsed_ = -startDelaySeconds_.get();
+			pendingStartFromClear_ = true;
+		} else {
+			pendingStartFromClear_ = false;
+			stopAfterClear_ = false;
+		}
+	});
 
 	// Start with text hidden so the first slide appears via writeIn tween.
 	if (ot_ != nullptr) {
@@ -125,6 +143,24 @@ void PresetSlideshow::toggle() {
 void PresetSlideshow::triggerNow() {
 	if (!nextScene_) return;
 	if (!isReady()) return;
+	if (pendingLoopClear_) {
+		pendingLoopClear_ = false;
+		skipWriteInCompletion_ = true;
+		if (ot_ != nullptr) {
+			ot_->writeIn();
+		}
+		resetTimer();
+		lastTriggerTime_ = ofGetElapsedTimef();
+		if (stopAfterClear_) {
+			stopAfterClear_ = false;
+			bEnabled_.set(false);
+			return;
+		}
+		currentLineIndex_ = 0;
+		pendingStartFromClear_ = true;
+		elapsed_ = -startDelaySeconds_.get();
+		return;
+	}
 
 	nextScene_();
 	resetTimer();
@@ -147,6 +183,22 @@ void PresetSlideshow::applyTextFromFileNow() {
 	if (bReadFromFile_.get()) {
 		applyTextFromFile();
 	}
+}
+
+bool PresetSlideshow::consumeStartFromClear() {
+	if (!pendingStartFromClear_) {
+		return false;
+	}
+	pendingStartFromClear_ = false;
+	return true;
+}
+
+bool PresetSlideshow::consumeSkipWriteInCompletion() {
+	if (!skipWriteInCompletion_) {
+		return false;
+	}
+	skipWriteInCompletion_ = false;
+	return true;
 }
 
 bool PresetSlideshow::isReady() const {
@@ -199,10 +251,18 @@ void PresetSlideshow::applyTextFromFile() {
 		return;
 	}
 
+	slideIndex_.setMax(static_cast<int>(lines.size() - 1));
+
 	if (currentLineIndex_ >= lines.size()) {
 		currentLineIndex_ = 0;
 	}
 
 	ot_->sText.set(lines[currentLineIndex_]);
+	slideIndex_.set(static_cast<int>(currentLineIndex_));
+	const bool wasLastLine = (currentLineIndex_ == (lines.size() - 1));
 	currentLineIndex_ = (currentLineIndex_ + 1) % lines.size();
+	if (wasLastLine) {
+		pendingLoopClear_ = true;
+		stopAfterClear_ = !bLoop_.get();
+	}
 }

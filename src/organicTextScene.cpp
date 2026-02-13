@@ -22,7 +22,7 @@ void OrganicTextScene::setup(float fpsTarget) {
 
 	// Parameters
 
-	bMouseBrowsing.set("Mouse Browsing", true);
+	bMouseBrowsing.set("Mouse Browsing", false);
 	bTweeningMode.set("Mode Tweening", true);
 
 	//--
@@ -81,6 +81,7 @@ void OrganicTextScene::setup(float fpsTarget) {
 	guiScene.setup("Manager");
 	guiScene.add(slideshow.bEnabled_);
 	guiScene.add(slideshow.progressFeedback_);
+	guiScene.add(slideshow.slideIndex_);
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 	setupFx();
 	paramsScene.add(bGui_Fx);
@@ -460,6 +461,9 @@ void OrganicTextScene::setupTweensCallbacks() {
 	// In = 1, Out = 1
 	ot.setOnCompleteWriteIn([this]() {
 		ofLogNotice("OrganicTextScene") << "writeIn completed. (Empty space: no draw)";
+		if (slideshow.consumeSkipWriteInCompletion()) {
+			return;
+		}
 		slideshow.applyTextFromFileNow();
 		if (!slideshow.isPresetLocked()) {
 			if (browseDirection == BROWSE_NEXT)
@@ -489,6 +493,20 @@ void OrganicTextScene::nextScene(BrowseDirection bd) {
 	browseDirection = bd;
 	pendingLineTweaks = false;
 	const bool wantLineTweaks = ot.bLineTweaks.get();
+
+	if (bTweeningMode && slideshow.consumeStartFromClear()) {
+		pendingLineTweaks = wantLineTweaks;
+		slideshow.applyTextFromFileNow();
+		if (!slideshow.isPresetLocked()) {
+			if (browseDirection == BROWSE_NEXT) {
+				pm.doLoadNext();
+			} else {
+				pm.doLoadPrevious();
+			}
+		}
+		ot.writeOut();
+		return;
+	}
 
 	if (bTweeningMode) {
 		pendingLineTweaks = wantLineTweaks;

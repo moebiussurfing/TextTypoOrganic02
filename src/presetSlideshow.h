@@ -20,6 +20,8 @@ public:
 	ofParameterGroup & getFeedbackParameters();
 	bool isPresetLocked() const;
 	void applyTextFromFileNow();
+	bool consumeStartFromClear();
+	bool consumeSkipWriteInCompletion();
 	ofParameter<bool> bEnabled_ { "Slideshow Play", false };
 
 private:
@@ -32,15 +34,22 @@ private:
 	std::function<bool()> isMouseIdle_;
 	float elapsed_ = 0.0f;
 	float lastTriggerTime_ = 0.0f;
+	bool pendingStartFromClear_ = false;
+	bool pendingLoopClear_ = false;
+	bool skipWriteInCompletion_ = false;
+	bool stopAfterClear_ = false;
 
 public:
 	ofParameterGroup params_;
 	ofParameter<float> waitSeconds_ { "Duration (s)", 2.0f, 1.0f, 10.0f };
+	ofParameter<float> startDelaySeconds_ { "Start Delay (s)", 1.0f, 0.0f, 10.0f };
+	ofParameter<bool> bLoop_ { "Loop", false };
 	ofParameter<bool> bReadFromFile_ { "Read From File", true };
 	ofParameter<std::string> textFilePath_ { "Text File", "text/slideshow.txt" };
 	ofParameter<bool> bLockPreset_ { "Lock Preset", true };
 	ofParameterGroup paramsFeedback_;
 	ofParameter<float> progressFeedback_ { "Progress", 0.0f, 0.0f, 1.0f };
+	ofParameter<int> slideIndex_ { "Slide Index", 0, 0, 0 };
 	ofParameter<bool> bUserIdle_ { "User Idle", true };
 	ofParameter<bool> bTimerRunning_ { "Timer Running", false };
 	ofParameter<bool> bBusyTweens_ { "Busy Tweens", false };
@@ -48,9 +57,10 @@ public:
 	ofParameter<bool> bWaitTweens_ { "Wait Tweens", true };
 	ofParameter<bool> bWaitLineTweaks_ { "Wait LineTweaks", true };
 	ofParameter<bool> bPauseTimerWhenBusy_ { "Pause When Busy", true };
-	ofParameter<bool> bWaitUserIdle_ { "Wait User Idle", true };
+	ofParameter<bool> bWaitUserIdle_ { "Wait User Idle", false };
 	ofParameter<void> vTriggerNow_ { "Trigger Now" };
 
 	ofEventListener eTriggerNow_;
+	ofEventListener eEnabled_;
 	std::size_t currentLineIndex_ = 0;
 };
