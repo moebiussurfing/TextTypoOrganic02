@@ -34,9 +34,9 @@ constexpr const char * ORGANIC_TEXT_DEFAULT_STRING = "ofWorks";
 constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = "fonts/GeistMono-Medium.ttf";
 // constexpr const std::string ORGANIC_TEXT_FONT_DEFAULT = "NotoSansMono-Regular.ttf";
 #else
-// Bundled OF fonts
-// ttf file not required
-#include "ofMain.h"
+	// Bundled OF fonts
+	// ttf file not required
+	#include "ofMain.h"
 constexpr const char * ORGANIC_TEXT_FONT_DEFAULT = OF_TTF_SANS;
 //constexpr const char * = OF_TTF_SERIF;
 //constexpr const char * = OF_TTF_MONO;

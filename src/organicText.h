@@ -7,10 +7,10 @@
 
 #include "ofMain.h"
 
+#include "OrganicTextRenderer.h" // Rendering and calculations
 #include "ofxTweenLiteHelper.h" // Tweener
 #include "organicTextConstants.h" // Constants
 #include "organicTextData.h" // Data storage
-#include "OrganicTextRenderer.h" // Rendering and calculations
 // Text modifiers removed; mouse tweaks are handled directly.
 
 #include "ofxGui.h"
@@ -21,6 +21,7 @@ using namespace glm;
 
 class OrganicText {
 	friend class OrganicTextRenderer;
+
 public:
 	OrganicText();
 	~OrganicText();
@@ -181,10 +182,17 @@ public:
 	ofParameter<bool> bLineTweaks;
 	ofParameter<float> radiusLineMouse;
 	ofParameter<void> vTrigLineTweaks;
-	ofParameter<float> lineTweaksDuration;;
+	ofParameter<float> lineTweaksDuration;
 	ofParameter<glm::vec2> vLineFrom;
 	ofParameter<glm::vec2> vLineTo;
 	ofParameter<void> vResetLineTweaks;
+
+	// Backgroundf
+	ofParameterGroup paramsBg;
+	ofParameter<ofColor> bgColor1;
+	ofParameter<ofColor> bgColor2;
+	ofParameter<bool> bBgGradient;
+	ofParameter<void> vResetBg;
 
 	//--
 
@@ -220,10 +228,11 @@ private:
 	ofEventListener e_bLineTweaks, e_vTrigLineTweaks;
 	ofEventListener e_mouseInfluenceStrength;
 	ofEventListener e_vResetLineTweaks;
+	ofEventListener e_vResetBg;
 
 	// Functions
 	float getZoomScale() const;
-	
+
 	mutable glm::vec2 mousePos;
 
 	// Font management
@@ -244,7 +253,7 @@ private:
 private:
 	ofTrueTypeFont font;
 	float baseSpaceSize = 0.0f;
-	
+
 	// Centralized data storage
 	std::unique_ptr<OrganicTextData> data;
 
@@ -255,7 +264,7 @@ private:
 	mutable vec2 mouseLocalPos;
 	mutable vec2 lineLocalPos;
 	mutable bool bMouseInBounds = false;
-	
+
 private:
 	// Rendering and heavy calculations
 	OrganicTextRenderer renderer_;
@@ -372,4 +381,11 @@ public:
 	}
 
 	//--
+
+	// Helpers
+	inline void ofxDrawBgGradient(const ofColor & c1 = ofColor { 10 },
+		const ofColor & c2 = ofColor { 40 },
+		ofGradientMode g = OF_GRADIENT_CIRCULAR) {
+		ofBackgroundGradient(c1, c2, g);
+	}
 };

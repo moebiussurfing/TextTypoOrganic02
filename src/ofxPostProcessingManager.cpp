@@ -697,15 +697,15 @@ void ofxPostProcessingManager::setupGui(std::string f, int fSize){
     #endif
 
     gui.setup("POST PROCESSING FX", fileName);
-    gui.add(gDebugDraw.setup("ENABLE DEBUG DRAW", false));
-    gui.add(btnRandomize);
-    gui.add(sliderTime);
-    gui.add(gdisableAll);
     gui.add(gBypassAll);
+    gui.add(gdisableAll);
     gui.add(gResetAll);
     gui.add(btnLoad);
     //gui.add(btnFileName );
     gui.add(btnSave);
+    gui.add(btnRandomize);
+    gui.add(sliderTime);
+    gui.add(gDebugDraw.setup("DEBUG DRAW", false));
 
     for (int i = 0; i < post.size(); i++) {
         gBtnEffSwtich.push_back(ofxToggle());

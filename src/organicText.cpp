@@ -270,6 +270,12 @@ void OrganicText::setupParams() {
 	lineTweaksDuration.set("Duration", 5.0f, 0.1f, 10.0f);
 	vResetLineTweaks.set("Reset");
 
+	// Background
+	vResetBg.set("Reset");
+	bBgGradient.set("Background Gradient", false);
+	bgColor1.set("Bg Color 1", ofColor(10));
+	bgColor2.set("Bg Color 2", ofColor(40));
+
 	//--
 
 	// Settings group
@@ -386,6 +392,13 @@ void OrganicText::setupParams() {
 	paramsLineTweaks.add(lineTweaksDuration);
 	paramsLineTweaks.add(vResetLineTweaks);
 
+	//Background
+	paramsBg.setName("Background");
+	paramsBg.add(bgColor1);
+	paramsBg.add(bgColor2);
+	paramsBg.add(bBgGradient);
+	paramsBg.add(vResetBg);
+
 	//--
 
 	// Presets parameters
@@ -405,6 +418,7 @@ void OrganicText::setupParams() {
 	paramsPreset.add(paramsTrails);
 	paramsPreset.add(paramsMouseTweaks);
 	paramsPreset.add(paramsLineTweaks);
+	paramsPreset.add(paramsBg);
 	paramsPreset.add(vRandomPreset);
 	paramsPreset.add(vResetPreset);
 
@@ -496,6 +510,7 @@ void OrganicText::setupCallbacks() {
 	e_vResetMouseTweaks = vResetMouseTweaks.newListener([this](void) { organicTextResetsRandoms::resetMouseTweaks(this); });
 	e_vRandomMouseTweaks = vRandomMouseTweaks.newListener([this](void) { organicTextResetsRandoms::randomizeMouseTweaks(this); });
 	e_vResetLineTweaks = vResetLineTweaks.newListener([this](void) { organicTextResetsRandoms::resetLineTweaks(this); });
+	e_vResetBg = vResetBg.newListener([this](void) { organicTextResetsRandoms::resetBg(this); });
 
 	//--
 
@@ -679,6 +694,14 @@ bool OrganicText::isLineTweaksRunning() const {
 //--
 
 void OrganicText::draw() {
+
+	// Background
+	if (bBgGradient) {
+		ofxDrawBgGradient(bgColor1, bgColor2);
+	} else {
+		ofBackground(bgColor1);
+	}
+
 	renderer_.draw();
 }
 

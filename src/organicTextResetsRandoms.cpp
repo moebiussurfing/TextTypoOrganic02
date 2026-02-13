@@ -153,6 +153,14 @@ void organicTextResetsRandoms::resetLineTweaks(OrganicText * ot) {
 	ot->lineTweaksDuration.set(5.0f);
 }
 
+void organicTextResetsRandoms::resetBg(OrganicText * ot) {
+	ofLogNotice("organicTextResetsRandoms") << "resetBg()";
+
+	ot->bBgGradient.set(false);
+	ot->bgColor1.set(ofColor(10));
+	ot->bgColor1.set(ofColor(40));
+}
+
 //--------------------------------------------------------------
 // RANDOMIZE FUNCTIONS
 //--------------------------------------------------------------

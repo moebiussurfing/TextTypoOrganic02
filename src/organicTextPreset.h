@@ -14,11 +14,11 @@ class OrganicText;
  * https://github.com/dimitre/openFrameworks/tree/ofworks/examples/demos/organicText
  */
 class organicTextPreset {
-	
+
 public:
 	/// @brief Apply all preset values from 05.json
 	static void applyPreset(OrganicText * ot);
-	
+
 private:
 	// Individual parameter groups
 	static void applyAnimationParams(OrganicText * ot);
