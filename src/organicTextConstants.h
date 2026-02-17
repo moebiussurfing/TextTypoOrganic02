@@ -69,6 +69,7 @@ constexpr float ANIM_WAVE_FREQ_MAX = 0.04f;
 constexpr float ANIM_SPIRAL_TIGHT_MIN = 0.002f;
 constexpr float ANIM_SPIRAL_TIGHT_MAX = 0.025f;
 constexpr float ANIM_SPEED_MAX = 8.f;
+constexpr float ANIM_DEPTH_AMOUNT_FACTOR = 0.1f; // 10x subtler Z depth
 
 // Time System
 constexpr float BASE_TIME_STEP = 0.008f;

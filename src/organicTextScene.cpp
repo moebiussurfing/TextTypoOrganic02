@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "organicTextScene.h"
 
 //--------------------------------------------------------------
@@ -60,6 +62,7 @@ void OrganicTextScene::setup(float fpsTarget) {
 
 	// Organic Text Session
 	ot.setup(fpsTarget);
+	setup3DScene();
 
 	//--
 
@@ -87,6 +90,10 @@ void OrganicTextScene::setup(float fpsTarget) {
 	paramsScene.add(bGui_Fx);
 #endif
 	guiScene.add(paramsScene);
+
+	// 3D controls
+	gui3D_.setup("3D Scene");
+	gui3D_.add(params3D_);
 
 	// Refresh
 	slideshow.setup(&ot, [this]() { nextScene(); });
@@ -119,6 +126,7 @@ void OrganicTextScene::setup(float fpsTarget) {
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 	paramsOfApp.add(bGui_Fx);
 #endif
+	paramsOfApp.add(params3D_);
 
 	ofxSurfing::loadGroup(paramsOfApp);
 }
@@ -141,6 +149,7 @@ void OrganicTextScene::setupFx() {
 //--------------------------------------------------------------
 void OrganicTextScene::windowResized(int w, int h) {
 	ofLogNotice("OrganicTextScene") << "windowResized " << w << "," << h;
+	refresh3DCamera();
 
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 	manager.windowResized(w, h);
@@ -176,6 +185,7 @@ void OrganicTextScene::update() {
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
 	updateFx();
 #endif
+	update3DScene();
 
 	slideshow.update(ofGetLastFrameTime());
 }
@@ -190,23 +200,218 @@ void OrganicTextScene::updateFx() {
 
 //--------------------------------------------------------------
 void OrganicTextScene::draw() {
-
+	const bool b3D = ot.bRender3D.get() || ot.bShapesAsObjects3D.get();
+	const bool useCamera = b3D && !bDisableCamera_.get();
+	if (b3D) {
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
-	manager.begin();
+		if (useCamera) {
+			manager.begin(cam_);
+		} else {
+			manager.begin();
+		}
+#else
+		if (useCamera) {
+			cam_.begin();
+		}
 #endif
 
-	ot.draw();
+		ofEnableDepthTest();
+		ofEnableLighting();
+		keyLight_.enable();
+		fillLight_.enable();
+
+		ot.draw();
+
+		fillLight_.disable();
+		keyLight_.disable();
+		ofDisableLighting();
+		ofDisableDepthTest();
 
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
-	manager.end();
+		manager.end();
+#else
+		if (useCamera) {
+			cam_.end();
+		}
 #endif
+	} else {
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+		manager.begin();
+#endif
+		ot.draw();
+#ifdef USE_OFX_POSTPROCESSING_MANAGER
+		manager.end();
+#endif
+	}
 
 	//--
 
 	if ((bHelpDistribution && bDistributionMode) || ot.bGui && !bDistributionMode) {
-	std:
-		string s = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
+		std::string s = ofToString(fps, 0) + " Fps / " + ofToString(frameTime, 0) + " ms";
 		ofxSurfing::ofDrawBitmapStringBox(s, ofxSurfing::SURFING_LAYOUT_TOP_CENTER);
+	}
+}
+
+//--------------------------------------------------------------
+void OrganicTextScene::setup3DScene() {
+	params3D_.setName("3D");
+
+	paramsCamera_.setName("Camera");
+	camDistance_.set("Distance", 1.2f, 0.3f, 4.0f);
+	camOffsetX_.set("Cam X", 0.0f, -1600.0f, 1600.0f);
+	camOffsetY_.set("Cam Y", 0.0f, -1600.0f, 1600.0f);
+	camOffsetZ_.set("Cam Z", 0.0f, -3200.0f, 3200.0f);
+	camTargetOffsetX_.set("Target X", 0.0f, -1200.0f, 1200.0f);
+	camTargetOffsetY_.set("Target Y", 0.0f, -1200.0f, 1200.0f);
+	camTargetOffsetZ_.set("Target Z", 0.0f, -1200.0f, 1200.0f);
+	bDisableCamera_.set("Disable Camera", false);
+	bCamMouseInput_.set("Enable Mouse", false);
+	vResetCamera_.set("Reset Camera");
+	paramsCamera_.add(camDistance_);
+	paramsCamera_.add(camOffsetX_);
+	paramsCamera_.add(camOffsetY_);
+	paramsCamera_.add(camOffsetZ_);
+	paramsCamera_.add(camTargetOffsetX_);
+	paramsCamera_.add(camTargetOffsetY_);
+	paramsCamera_.add(camTargetOffsetZ_);
+	paramsCamera_.add(bDisableCamera_);
+	paramsCamera_.add(bCamMouseInput_);
+	paramsCamera_.add(vResetCamera_);
+
+	paramsLights_.setName("Lights");
+	ambientLight_.set("Ambient", 0.18f, 0.0f, 1.0f);
+	keyLightIntensity_.set("Key Intensity", 0.92f, 0.0f, 1.0f);
+	keyLightOffsetX_.set("Key X", -560.0f, -2400.0f, 2400.0f);
+	keyLightOffsetY_.set("Key Y", -320.0f, -2400.0f, 2400.0f);
+	keyLightOffsetZ_.set("Key Z", 900.0f, -2400.0f, 2400.0f);
+	vResetKeyLight_.set("Reset Key");
+	fillLightIntensity_.set("Fill Intensity", 0.35f, 0.0f, 1.0f);
+	fillLightOffsetX_.set("Fill X", 620.0f, -2400.0f, 2400.0f);
+	fillLightOffsetY_.set("Fill Y", 240.0f, -2400.0f, 2400.0f);
+	fillLightOffsetZ_.set("Fill Z", 620.0f, -2400.0f, 2400.0f);
+	vResetFillLight_.set("Reset Fill");
+	vResetLights_.set("Reset All Lights");
+	paramsLights_.add(ambientLight_);
+	paramsLights_.add(keyLightIntensity_);
+	paramsLights_.add(keyLightOffsetX_);
+	paramsLights_.add(keyLightOffsetY_);
+	paramsLights_.add(keyLightOffsetZ_);
+	paramsLights_.add(vResetKeyLight_);
+	paramsLights_.add(fillLightIntensity_);
+	paramsLights_.add(fillLightOffsetX_);
+	paramsLights_.add(fillLightOffsetY_);
+	paramsLights_.add(fillLightOffsetZ_);
+	paramsLights_.add(vResetFillLight_);
+	paramsLights_.add(vResetLights_);
+
+	params3D_.add(paramsCamera_);
+	params3D_.add(paramsLights_);
+
+	eResetCamera_ = vResetCamera_.newListener([this](void) {
+		camDistance_.set(1.2f);
+		camOffsetX_.set(0.0f);
+		camOffsetY_.set(0.0f);
+		camOffsetZ_.set(0.0f);
+		camTargetOffsetX_.set(0.0f);
+		camTargetOffsetY_.set(0.0f);
+		camTargetOffsetZ_.set(0.0f);
+		bDisableCamera_.set(false);
+		bCamMouseInput_.set(false);
+		refresh3DCamera();
+	});
+
+	eCamMouseInput_ = bCamMouseInput_.newListener([this](bool & b) {
+		ofLogNotice("OrganicTextScene") << "bCamMouseInput: " << b;
+		if (bDisableCamera_.get()) {
+			cam_.disableMouseInput();
+			return;
+		}
+		if (b) {
+			cam_.enableMouseInput();
+		} else {
+			cam_.disableMouseInput();
+		}
+	});
+
+	eDisableCamera_ = bDisableCamera_.newListener([this](bool & b) {
+		ofLogNotice("OrganicTextScene") << "bDisableCamera: " << b;
+		if (b) {
+			cam_.disableMouseInput();
+		} else if (bCamMouseInput_.get()) {
+			cam_.enableMouseInput();
+			refresh3DCamera();
+		} else {
+			refresh3DCamera();
+		}
+	});
+
+	eResetKeyLight_ = vResetKeyLight_.newListener([this](void) {
+		keyLightIntensity_.set(0.92f);
+		keyLightOffsetX_.set(-560.0f);
+		keyLightOffsetY_.set(-320.0f);
+		keyLightOffsetZ_.set(900.0f);
+	});
+
+	eResetFillLight_ = vResetFillLight_.newListener([this](void) {
+		fillLightIntensity_.set(0.35f);
+		fillLightOffsetX_.set(620.0f);
+		fillLightOffsetY_.set(240.0f);
+		fillLightOffsetZ_.set(620.0f);
+	});
+
+	eResetLights_ = vResetLights_.newListener([this](void) {
+		ambientLight_.set(0.18f);
+		keyLightIntensity_.set(0.92f);
+		keyLightOffsetX_.set(-560.0f);
+		keyLightOffsetY_.set(-320.0f);
+		keyLightOffsetZ_.set(900.0f);
+		fillLightIntensity_.set(0.35f);
+		fillLightOffsetX_.set(620.0f);
+		fillLightOffsetY_.set(240.0f);
+		fillLightOffsetZ_.set(620.0f);
+	});
+
+	keyLight_.setDiffuseColor(ofColor::white);
+	keyLight_.setSpecularColor(ofColor::white);
+	fillLight_.setDiffuseColor(ofColor::white);
+	fillLight_.setSpecularColor(ofColor(180));
+	refresh3DCamera();
+}
+
+//--------------------------------------------------------------
+void OrganicTextScene::refresh3DCamera() {
+	const glm::vec3 center(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f, 0.0f);
+	const glm::vec3 target = center + glm::vec3(camTargetOffsetX_.get(), camTargetOffsetY_.get(), camTargetOffsetZ_.get());
+	const float distance = std::max(ofGetWidth(), ofGetHeight()) * camDistance_.get();
+	const glm::vec3 camPos = target + glm::vec3(camOffsetX_.get(), camOffsetY_.get(), distance + camOffsetZ_.get());
+	cam_.setNearClip(1.0f);
+	cam_.setFarClip(12000.0f);
+	cam_.setTarget(target);
+	cam_.setPosition(camPos);
+	cam_.lookAt(target);
+	if (bDisableCamera_.get()) {
+		cam_.disableMouseInput();
+	} else if (bCamMouseInput_.get()) {
+		cam_.enableMouseInput();
+	} else {
+		cam_.disableMouseInput();
+	}
+}
+
+//--------------------------------------------------------------
+void OrganicTextScene::update3DScene() {
+	const glm::vec3 center(ofGetWidth() * 0.5f, ofGetHeight() * 0.5f, 0.0f);
+	const glm::vec3 target = center + glm::vec3(camTargetOffsetX_.get(), camTargetOffsetY_.get(), camTargetOffsetZ_.get());
+	const unsigned char keyI = static_cast<unsigned char>(ofMap(keyLightIntensity_.get(), 0.0f, 1.0f, 0.0f, 255.0f, true));
+	const unsigned char fillI = static_cast<unsigned char>(ofMap(fillLightIntensity_.get(), 0.0f, 1.0f, 0.0f, 255.0f, true));
+	const unsigned char ambI = static_cast<unsigned char>(ofMap(ambientLight_.get(), 0.0f, 1.0f, 0.0f, 255.0f, true));
+	ofSetGlobalAmbientColor(ofColor(ambI));
+	keyLight_.setDiffuseColor(ofColor(keyI));
+	fillLight_.setDiffuseColor(ofColor(fillI));
+	keyLight_.setPosition(target + glm::vec3(keyLightOffsetX_.get(), keyLightOffsetY_.get(), keyLightOffsetZ_.get()));
+	fillLight_.setPosition(target + glm::vec3(fillLightOffsetX_.get(), fillLightOffsetY_.get(), fillLightOffsetZ_.get()));
+	if (!bDisableCamera_.get() && !bCamMouseInput_.get()) {
+		refresh3DCamera();
 	}
 }
 
@@ -228,6 +433,11 @@ void OrganicTextScene::drawGui() {
 		int y = ofGetHeight() - p - guiScene.getHeight();
 		guiScene.setPosition(p, y);
 		guiScene.draw();
+//		//bottom left
+//		gui3D_.setPosition(p, std::max(0, y - static_cast<int>(gui3D_.getHeight()) - SURFING__OFXGUI__PAD_BETWEEN_PANELS));
+		//bottom right
+		gui3D_.setPosition(ofGetWidth()- p-gui3D_.getWidth(), std::max(0, ofGetHeight() - static_cast<int>(gui3D_.getHeight()) - SURFING__OFXGUI__PAD_BETWEEN_PANELS));
+		gui3D_.draw();
 
 // Fx
 #ifdef USE_OFX_POSTPROCESSING_MANAGER
@@ -347,6 +557,12 @@ void OrganicTextScene::keyPressed(ofKeyEventArgs & eventArgs) {
 		return;
 	}
 
+	else if (k == 'U' || k == 'u') {
+		skipSceneAdvanceOnWriteIn_ = true;
+		ot.writeIn();
+		return;
+	}
+
 	else if (k == 'O' || k == 'o') {
 		ot.writeClear();
 		return;
@@ -461,6 +677,10 @@ void OrganicTextScene::setupTweensCallbacks() {
 	// In = 1, Out = 1
 	ot.setOnCompleteWriteIn([this]() {
 		ofLogNotice("OrganicTextScene") << "writeIn completed. (Empty space: no draw)";
+		if (skipSceneAdvanceOnWriteIn_) {
+			skipSceneAdvanceOnWriteIn_ = false;
+			return;
+		}
 		if (slideshow.consumeSkipWriteInCompletion()) {
 			return;
 		}
@@ -491,6 +711,7 @@ void OrganicTextScene::nextScene(BrowseDirection bd) {
 	slideshow.onSceneAdvanced();
 
 	browseDirection = bd;
+	skipSceneAdvanceOnWriteIn_ = false;
 	pendingLineTweaks = false;
 	const bool wantLineTweaks = ot.bLineTweaks.get();
 

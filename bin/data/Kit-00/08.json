@@ -3,84 +3,71 @@
         "Animate": "1",
         "Animation": {
             "Animate": "1",
-            "Intensity": "0.0687769",
-            "Mode": "0",
-            "Origin_X": "0.660094",
-            "Power": "0.193168",
-            "Pulse": "0.869654",
-            "Speed": "0.0612245",
-            "Spiral": "0.451051",
-            "Wave_Freq": "0.0408163"
-        },
-        "Background": {
-            "Background_Gradient": "0",
-            "Bg_Color_1": "37, 37, 37, 255",
-            "Bg_Color_2": "150, 255, 234, 255"
+            "Intensity": "0.423469",
+            "Mode": "1",
+            "Origin_X": "0.5",
+            "Power": "0",
+            "Pulse": "0.325695",
+            "Speed": "0.0255102",
+            "Spiral": "0.843444",
+            "Wave_Freq": "0.183673"
         },
         "Color_Modes": {
-            "Alpha_Range": "0.493748",
-            "By_Dist": "1",
-            "Dist_Middle": "0.414869",
-            "Inner": "0.776871",
-            "Mix": "0.141158",
+            "Alpha_Range": "0.7",
+            "By_Dist": "0",
+            "Dist_Middle": "0.7",
+            "Inner": "0.4",
+            "Mix": "1",
             "Mode": "1",
-            "Speed": "0.853683"
+            "Speed": "5"
         },
         "Colors": {
-            "Color_1": "0, 255, 183, 255",
-            "Color_2": "0, 255, 206, 255",
-            "Color_3": "0, 255, 158, 255",
-            "Color_Connections": "2, 255, 172, 255",
-            "Color_Trails": "0, 255, 102, 255"
+            "Color_1": "188, 182, 7, 255",
+            "Color_2": "255, 0, 95, 255",
+            "Color_3": "255, 0, 95, 255",
+            "Color_Connections": "0, 231, 168, 255",
+            "Color_Trails": "255, 255, 255, 255"
         },
         "Connections": {
-            "Alpha": "0.968546",
-            "Distance": "30.8467",
+            "Alpha": "0.795918",
+            "Distance": "42.8061",
             "Draw_Connections": "1",
-            "Line_Width": "2.52064",
-            "Near_Only": "1",
-            "Quality": "0.967321"
+            "Line_Width": "3",
+            "Near_Only": "0",
+            "Quality": "1"
         },
         "Density": {
-            "Spacing": "0.253571"
+            "Spacing": "0.491071"
         },
         "Draw_Connections": "1",
         "Draw_Fill": "1",
         "Draw_Shapes": "1",
-        "Draw_Trails": "0",
-        "Line_Tweaks": {
-            "Duration": "3.68622",
-            "From": "-1, -0.5",
-            "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "1",
-            "To": "1, 1"
-        },
+        "Draw_Trails": "1",
         "Mouse_Tweaks": {
-            "Color": "162, 255, 220, 255",
-            "D_Power": "0.709184",
+            "Color": "255, 148, 148, 255",
+            "D_Power": "0.72449",
             "Displace": "1",
             "Highlight": "1",
-            "Influence": "0.909584",
-            "Mouse_Tweaks_Enabler": "1",
-            "S_Power": "0.362245",
+            "Influence": "1",
+            "S_Power": "0",
             "Scale": "1",
-            "radiusMouse": "0.0816327",
+            "radiusMouse": "1",
             "x_Origin": "1"
         },
         "Shape": {
             "Back": "0",
             "Draw_Fill": "1",
-            "Min_Size": "0.583486",
-            "Ratio": "0.0867347",
-            "Rotation": "0.361304",
-            "Size": "0.132653",
-            "Type": "5"
+            "Min_Size": "1",
+            "Ratio": "0",
+            "Rotation": "0.152225",
+            "Size": "0.198144",
+            "Type": "4"
         },
         "Trails": {
-            "Draw_Trails": "0",
-            "Fade": "0.454082",
-            "Length": "0.622449",
-            "Line_Width": "1.52846"
+            "Draw_Trails": "1",
+            "Fade": "0.464286",
+            "Length": "0.464286",
+            "Line_Width": "0.1"
         }
     }
 }

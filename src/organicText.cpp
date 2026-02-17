@@ -165,6 +165,7 @@ void OrganicText::setupParams() {
 
 	bDrawFill.set("Draw Fill", true);
 	bDrawShapes.set("Draw Shapes", true);
+	bRender3D.set("3D Mode", true);
 	bEnableAnimation.set("Animate", true);
 	const float zoomDefault = (1.0f - ZOOM_GLOBAL_SCALE_MIN) / (ZOOM_GLOBAL_SCALE_MAX - ZOOM_GLOBAL_SCALE_MIN);
 	zoomGlobal.set("Zoom", ofClamp(zoomDefault, 0.0f, 1.0f), 0.0f, 1.0f);
@@ -192,6 +193,8 @@ void OrganicText::setupParams() {
 	shapeTypeName.set("Name", "Circle");
 	shapeTypeName.setSerializable(false);
 	bShapeBack.set("Back", false);
+	bShapesAsObjects3D.set("3D Objects", true);
+	bDrawWire.set("Draw Wire", false);
 	shapeSize.set("Size", 0.5, 0, 1);
 	shapeSizeMin.set("Min Size", 0.3, 0, 1);
 	shapeRatio.set("Ratio", .5, 0, 1.0f);
@@ -233,6 +236,8 @@ void OrganicText::setupParams() {
 	animSpiral.set("Spiral", 0.2, 0.0, 1.0);
 	animPulseIntensity.set("Pulse", 0.2, 0.0, 1.0);
 	animOriginX.set("Origin X", 0.5, 0.0, 1.0);
+	animDepthAmount.set("Depth Z (0-1)", 0.35f, 0.0f, 1.0f);
+	animDepthFreq.set("Depth Freq", 0.5f, 0.0f, 1.0f);
 
 	// Connection group
 	vResetConnection.set("Reset");
@@ -303,9 +308,17 @@ void OrganicText::setupParams() {
 
 	paramsShape.setName("Shape");
 	paramsShape.add(bDrawFill);
+	paramsShape.add(bDrawWire);
 	paramsShape.add(bShapeBack);
 	paramsShape.add(shapeType);
 	paramsShape.add(shapeTypeName);
+
+	params3dZ.setName("3d Z");
+	params3dZ.add(bShapesAsObjects3D);
+	params3dZ.add(animDepthAmount);
+	params3dZ.add(animDepthFreq);
+	paramsShape.add(params3dZ);
+
 	paramsShape.add(shapeSize);
 	paramsShape.add(shapeSizeMin);
 	paramsShape.add(shapeRatio);
@@ -440,6 +453,7 @@ void OrganicText::setupParams() {
 
 	// Gui parameters
 	parameters.setName("OrganicText");
+	parameters.add(bRender3D);
 	parameters.add(sText);
 	parameters.add(paramsFont);
 	parameters.add(bAutoZoomGlobal);

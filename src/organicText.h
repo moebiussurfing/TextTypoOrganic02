@@ -71,6 +71,7 @@ public:
 	ofParameterGroup paramsFont;
 	ofParameterGroup paramsPreset;
 	ofParameterGroup paramsShape;
+	ofParameterGroup params3dZ;
 	ofParameterGroup paramsDensity;
 	ofParameterGroup paramsColorModes;
 	ofParameterGroup paramsColors;
@@ -88,6 +89,7 @@ public:
 	ofParameter<bool> bDebug;
 	ofParameter<bool> bDrawFill;
 	ofParameter<bool> bDrawShapes;
+	ofParameter<bool> bRender3D;
 	ofParameter<bool> bEnableAnimation;
 	ofParameter<float> zoomGlobal;
 	ofParameter<bool> bAutoZoomGlobal;
@@ -110,6 +112,8 @@ public:
 	ofParameter<int> shapeType;
 	ofParameter<std::string> shapeTypeName;
 	ofParameter<bool> bShapeBack;
+	ofParameter<bool> bShapesAsObjects3D;
+	ofParameter<bool> bDrawWire;
 	ofParameter<float> shapeSize;
 	ofParameter<float> shapeSizeMin;
 	ofParameter<float> shapeRatio;
@@ -149,6 +153,8 @@ public:
 	ofParameter<float> animSpiral;
 	ofParameter<float> animPulseIntensity;
 	ofParameter<float> animOriginX;
+	ofParameter<float> animDepthAmount;
+	ofParameter<float> animDepthFreq;
 
 	// Connection parameters
 	ofParameter<void> vResetConnection;

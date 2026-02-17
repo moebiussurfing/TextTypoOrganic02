@@ -4,6 +4,7 @@
 
 #include <ofMain.h>
 
+#include "ofxGui.h"
 #include "ofxSurfingPresetsLiteOfxGui.h"
 #include "organicText.h"
 #include "presetSlideshow.h"
@@ -33,8 +34,49 @@ public:
 #endif
 
 private:
+	void setup3DScene();
+	void update3DScene();
+	void refresh3DCamera();
+
 	// Organic Text
 	OrganicText ot;
+
+	// 3D scene
+	ofEasyCam cam_;
+	ofLight keyLight_;
+	ofLight fillLight_;
+	ofxPanel gui3D_;
+	ofParameterGroup params3D_;
+	ofParameterGroup paramsCamera_;
+	ofParameterGroup paramsLights_;
+	ofParameter<float> camDistance_;
+	ofParameter<float> camOffsetX_;
+	ofParameter<float> camOffsetY_;
+	ofParameter<float> camOffsetZ_;
+	ofParameter<float> camTargetOffsetX_;
+	ofParameter<float> camTargetOffsetY_;
+	ofParameter<float> camTargetOffsetZ_;
+	ofParameter<bool> bDisableCamera_;
+	ofParameter<bool> bCamMouseInput_;
+	ofParameter<void> vResetCamera_;
+	ofParameter<float> ambientLight_;
+	ofParameter<float> keyLightIntensity_;
+	ofParameter<float> keyLightOffsetX_;
+	ofParameter<float> keyLightOffsetY_;
+	ofParameter<float> keyLightOffsetZ_;
+	ofParameter<void> vResetKeyLight_;
+	ofParameter<float> fillLightIntensity_;
+	ofParameter<float> fillLightOffsetX_;
+	ofParameter<float> fillLightOffsetY_;
+	ofParameter<float> fillLightOffsetZ_;
+	ofParameter<void> vResetFillLight_;
+	ofParameter<void> vResetLights_;
+	ofEventListener eCamMouseInput_;
+	ofEventListener eDisableCamera_;
+	ofEventListener eResetCamera_;
+	ofEventListener eResetKeyLight_;
+	ofEventListener eResetFillLight_;
+	ofEventListener eResetLights_;
 
 	// Presets Manager
 	SurfingPresetsLiteOfxGui pm;
@@ -69,6 +111,7 @@ private:
 
 	// Delay line tweaks until tween-out finishes to avoid distorting the reveal
 	bool pendingLineTweaks = false;
+	bool skipSceneAdvanceOnWriteIn_ = false;
 
 	// Distribution Mode
 	ofParameter<bool> bDistributionMode;

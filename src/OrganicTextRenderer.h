@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include <ofMain.h>
 
 #include "organicTextConstants.h"
@@ -26,7 +27,8 @@ public:
 
 private:
 	std::vector<glm::vec2> sampleStringPoints(const std::string & s, float ds) const;
-	void drawShape(glm::vec2 position, float size, ShapeType shape, float rotation = 0) const;
+	void drawShape(const glm::vec3 & position, float size, ShapeType shape, float rotation = 0) const;
+	float getAnimatedDepth(int index, float phase, glm::vec2 position) const;
 	void drawShapes();
 	void drawConnections() const;
 	void updateTrails();

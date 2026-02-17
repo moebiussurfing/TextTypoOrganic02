@@ -1,4 +1,5 @@
 #include <cmath>
+#include <functional>
 
 #include "OrganicTextRenderer.h"
 
@@ -378,6 +379,48 @@ glm::vec2 OrganicTextRenderer::getAnimatedOffset(int index, float phase) const {
 }
 
 //--------------------------------------------------------------
+float OrganicTextRenderer::getAnimatedDepth(int index, float phase, glm::vec2 position) const {
+	if (!owner_) return 0.0f;
+
+	auto * o = owner_;
+	if (!o->bShapesAsObjects3D.get()) return 0.0f;
+
+	const float depthMax = ofMap(o->animDepthAmount.get(), 0.0f, 1.0f, 0.0f, 280.0f, true) * ANIM_DEPTH_AMOUNT_FACTOR;
+	if (depthMax <= 0.001f) return 0.0f;
+
+	const float freq = ofMap(o->animDepthFreq.get(), 0.0f, 1.0f, 0.15f, 3.5f, true);
+	const float noiseTerm = ofSignedNoise(position.x * 0.01f * freq, position.y * 0.01f * freq, phase * 0.4f * freq);
+
+	float modeTerm = 0.0f;
+	switch ((AnimMode)o->animationMode.get()) {
+	case ANIM_WAVE:
+		modeTerm = sin((position.x * 0.02f * freq) + phase * glm::two_pi<float>());
+		break;
+	case ANIM_SPIRAL:
+		modeTerm = cos(phase * glm::two_pi<float>() + (position.x + position.y) * 0.01f * freq);
+		break;
+	case ANIM_PULSE:
+		modeTerm = sin(phase * glm::two_pi<float>() * 0.5f);
+		break;
+	case ANIM_ORBIT:
+		modeTerm = sin(phase * glm::two_pi<float>() * 0.75f + static_cast<float>(index) * 0.01f);
+		break;
+	case ANIM_NOISE:
+	default:
+		modeTerm = 0.0f;
+		break;
+	}
+
+	float influence = 0.0f;
+	if (o->bMouseTweaks.get() || o->bLineTweaks.get()) {
+		influence = getCombinedInfluence(position);
+	}
+
+	const float depth = (noiseTerm * 0.72f + modeTerm * 0.28f) * depthMax + influence * (depthMax * 0.35f);
+	return depth;
+}
+
+//--------------------------------------------------------------
 float OrganicTextRenderer::getMouseInfluence(glm::vec2 position) const {
 	if (!owner_) return 0.0f;
 
@@ -554,67 +597,177 @@ ofColor OrganicTextRenderer::getPointColor(int index, glm::vec2 position, float 
 }
 
 //--------------------------------------------------------------
-void OrganicTextRenderer::drawShape(glm::vec2 position, float size, ShapeType shape, float rotation) const {
+void OrganicTextRenderer::drawShape(const glm::vec3 & position, float size, ShapeType shape, float rotation) const {
 	if (!owner_) return;
 
 	auto * o = owner_;
 
 	ofPushMatrix();
 	ofTranslate(position);
-	ofRotateDeg(rotation);
-	float h = size * ofMap(o->shapeRatio.get(), 0.f, 1.f, 1.f, 10.f, true);
+	ofRotateDeg(rotation, 0.0f, 0.0f, 1.0f);
+
+	const bool is3D = o->bShapesAsObjects3D.get();
+	if (!is3D) {
+		float h2d = size * ofMap(o->shapeRatio.get(), 0.f, 1.f, 1.f, 10.f, true);
+		switch (shape) {
+		case SHAPE_CIRCLE:
+			ofDrawCircle(0, 0, size);
+			break;
+		case SHAPE_RECTANGLE:
+			ofDrawRectangle(-size * 0.5f, -size * 0.5f, size, h2d);
+			break;
+		case SHAPE_TRIANGLE:
+			ofDrawTriangle(0, -h2d * 0.5f, -size * 0.5f, h2d * 0.5f, size * 0.5f, h2d * 0.5f);
+			break;
+		case SHAPE_STAR: {
+			ofPolyline star;
+			int points = 5;
+			for (int i = 0; i < points * 2; i++) {
+				float angle = (static_cast<float>(i) * glm::two_pi<float>()) / (static_cast<float>(points) * 2.0f);
+				float radius = (i % 2 == 0) ? size : size * 0.4f;
+				star.addVertex(cos(angle) * radius, sin(angle) * radius);
+			}
+			star.close();
+			ofPath starPath;
+			starPath.setFilled(o->bDrawFill.get());
+			starPath.setFillColor(ofGetStyle().color);
+			starPath.setStrokeColor(ofGetStyle().color);
+			starPath.setStrokeWidth(1.0f);
+			starPath.moveTo(star[0]);
+			for (std::size_t i = 1; i < star.size(); ++i) {
+				starPath.lineTo(star[i]);
+			}
+			starPath.close();
+			starPath.draw();
+			break;
+		}
+		case SHAPE_CROSS: {
+			float thickness = size * 0.2f;
+			ofDrawRectangle(-thickness * 0.5f, -size * 0.5f, thickness, size);
+			ofDrawRectangle(-size * 0.5f, -thickness * 0.5f, size, thickness);
+			break;
+		}
+		case SHAPE_POINT:
+			ofDrawCircle(0, 0, size * 0.05f);
+			break;
+		}
+		ofPopMatrix();
+		return;
+	}
+
+	const bool drawFaces = o->bDrawFill.get();
+	const bool drawWire = o->bDrawWire.get();
+	if (!drawFaces && !drawWire) {
+		ofPopMatrix();
+		return;
+	}
+
+	const ofColor fillColor = ofGetStyle().color;
+	ofColor wireColor = o->colorConnection.get();
+	const float wireWidth = ofClamp(o->connectLineWidth.get(), 0.1f, CONNECTIONS_MAX_LINE_WIDTH);
+
+	const float boxRatio = ofMap(o->shapeRatio.get(), 0.f, 1.f, 0.4f, 2.6f, true);
+	const float depthRatio = ofMap(o->shapeRatio.get(), 0.f, 1.f, 0.35f, 2.2f, true);
+
+	auto drawPyramidMesh = [](float height, float halfBase, float halfDepth) {
+		const glm::vec3 apex(0.0f, -height * 0.6f, 0.0f);
+		const glm::vec3 b0(-halfBase, height * 0.4f, -halfDepth);
+		const glm::vec3 b1(halfBase, height * 0.4f, -halfDepth);
+		const glm::vec3 b2(halfBase, height * 0.4f, halfDepth);
+		const glm::vec3 b3(-halfBase, height * 0.4f, halfDepth);
+		ofMesh pyramid;
+		pyramid.setMode(OF_PRIMITIVE_TRIANGLES);
+		pyramid.addVertex(apex); pyramid.addVertex(b0); pyramid.addVertex(b1);
+		pyramid.addVertex(apex); pyramid.addVertex(b1); pyramid.addVertex(b2);
+		pyramid.addVertex(apex); pyramid.addVertex(b2); pyramid.addVertex(b3);
+		pyramid.addVertex(apex); pyramid.addVertex(b3); pyramid.addVertex(b0);
+		pyramid.addVertex(b0); pyramid.addVertex(b3); pyramid.addVertex(b2);
+		pyramid.addVertex(b0); pyramid.addVertex(b2); pyramid.addVertex(b1);
+		return pyramid;
+	};
+
+	auto drawWithStyles = [&](const std::function<void()> & solidDraw, const std::function<void()> & wireDraw) {
+		if (drawFaces) {
+			ofPushStyle();
+			ofFill();
+			ofSetColor(fillColor);
+			solidDraw();
+			ofPopStyle();
+		}
+		if (drawWire) {
+			ofPushStyle();
+			ofNoFill();
+			ofSetLineWidth(wireWidth);
+			ofSetColor(wireColor);
+			wireDraw();
+			ofPopStyle();
+		}
+	};
 
 	switch (shape) {
 	case SHAPE_CIRCLE:
-		ofDrawCircle(0, 0, size);
+		drawWithStyles(
+			[&]() { ofDrawSphere(0.0f, 0.0f, 0.0f, size); },
+			[&]() { ofDrawSphere(0.0f, 0.0f, 0.0f, size); });
 		break;
 
 	case SHAPE_RECTANGLE:
-		ofDrawRectangle(-size * 0.5f, -size * 0.5f, size, h);
+		drawWithStyles(
+			[&]() { ofDrawBox(0.0f, 0.0f, 0.0f, size, size * boxRatio, size * depthRatio); },
+			[&]() { ofDrawBox(0.0f, 0.0f, 0.0f, size, size * boxRatio, size * depthRatio); });
 		break;
 
 	case SHAPE_TRIANGLE: {
-		ofDrawTriangle(0, -h * 0.5f, -size * 0.5f, h * 0.5f, size * 0.5f, h * 0.5f);
+		const float h = size * ofMap(o->shapeRatio.get(), 0.f, 1.f, 0.8f, 2.2f, true);
+		const ofMesh pyramid = drawPyramidMesh(h, size * 0.5f, size * 0.5f * depthRatio);
+		drawWithStyles(
+			[&]() { pyramid.draw(); },
+			[&]() { pyramid.drawWireframe(); });
 		break;
 	}
 
 	case SHAPE_STAR: {
-		ofPolyline star;
-		int points = 5;
-		for (int i = 0; i < points * 2; i++) {
-			float angle = (static_cast<float>(i) * glm::two_pi<float>()) / (static_cast<float>(points) * 2.0f);
-			float radius = (i % 2 == 0) ? size : size * 0.4f;
-			star.addVertex(cos(angle) * radius, sin(angle) * radius);
-		}
-		star.close();
-
-		ofPath starPath;
-		starPath.setFilled(o->bDrawFill.get());
-		starPath.setFillColor(ofGetStyle().color);
-		starPath.setStrokeColor(ofGetStyle().color);
-		starPath.setStrokeWidth(1.0f);
-
-		starPath.moveTo(star[0]);
-		for (std::size_t i = 1; i < star.size(); ++i) {
-			starPath.lineTo(star[i]);
-		}
-		starPath.close();
-
-		starPath.draw();
+		// Two closed pyramids superposed; second one rotated 180 degrees.
+		const float h = size * ofMap(o->shapeRatio.get(), 0.f, 1.f, 0.8f, 2.2f, true);
+		const ofMesh pyramid = drawPyramidMesh(h, size * 0.55f, size * 0.55f * depthRatio);
+		drawWithStyles(
+			[&]() {
+				pyramid.draw();
+				ofPushMatrix();
+				ofRotateDeg(180.0f, 1.0f, 0.0f, 0.0f);
+				pyramid.draw();
+				ofPopMatrix();
+			},
+			[&]() {
+				pyramid.drawWireframe();
+				ofPushMatrix();
+				ofRotateDeg(180.0f, 1.0f, 0.0f, 0.0f);
+				pyramid.drawWireframe();
+				ofPopMatrix();
+			});
 		break;
 	}
 
-	case SHAPE_CROSS: {
-		float thickness = size * 0.2f;
-		ofDrawRectangle(-thickness * 0.5f, -size * 0.5f, thickness, size);
-		ofDrawRectangle(-size * 0.5f, -thickness * 0.5f, size, thickness);
+	case SHAPE_CROSS:
+		drawWithStyles(
+			[&]() {
+				const float thickness = size * 0.2f;
+				ofDrawBox(0.0f, 0.0f, 0.0f, thickness * depthRatio, size, thickness * depthRatio);
+				ofDrawBox(0.0f, 0.0f, 0.0f, size, thickness * depthRatio, thickness * depthRatio);
+			},
+			[&]() {
+				const float thickness = size * 0.2f;
+				ofDrawBox(0.0f, 0.0f, 0.0f, thickness * depthRatio, size, thickness * depthRatio);
+				ofDrawBox(0.0f, 0.0f, 0.0f, size, thickness * depthRatio, thickness * depthRatio);
+			});
 		break;
-	}
 
-	case SHAPE_POINT: {
-		ofDrawCircle(0, 0, size * 0.05f);
+	case SHAPE_POINT:
+	default:
+		drawWithStyles(
+			[&]() { ofDrawSphere(0.0f, 0.0f, 0.0f, size * 0.12f); },
+			[&]() { ofDrawSphere(0.0f, 0.0f, 0.0f, size * 0.12f); });
 		break;
-	}
 	}
 
 	ofPopMatrix();
@@ -704,8 +857,12 @@ void OrganicTextRenderer::drawConnections() const {
 				ofColor connectionColor = o->colorConnection.get();
 				connectionColor.a = alpha;
 
-				glm::vec3 p1(pos1.x, pos1.y, 0.0f);
-				glm::vec3 p2(pos2.x, pos2.y, 0.0f);
+				const float phaseZ1 = o->t + 0.123f * static_cast<float>(i);
+				const float phaseZ2 = o->t + 0.123f * static_cast<float>(j);
+				const float z1 = getAnimatedDepth(static_cast<int>(i), phaseZ1, pos1);
+				const float z2 = getAnimatedDepth(static_cast<int>(j), phaseZ2, pos2);
+				glm::vec3 p1(pos1.x, pos1.y, z1);
+				glm::vec3 p2(pos2.x, pos2.y, z2);
 
 				connectionMesh.addVertex(p1);
 				connectionMesh.addColor(connectionColor);
@@ -755,8 +912,12 @@ void OrganicTextRenderer::drawTrails() {
 			ofColor segmentColor = o->colorTrails.get();
 			segmentColor.a = alpha;
 
-			glm::vec3 p1(pointTrails[i][j - 1].x, pointTrails[i][j - 1].y, 0.0f);
-			glm::vec3 p2(pointTrails[i][j].x, pointTrails[i][j].y, 0.0f);
+			const float phaseTrailA = o->t + 0.123f * static_cast<float>(i) - static_cast<float>(j - 1) * 0.03f;
+			const float phaseTrailB = o->t + 0.123f * static_cast<float>(i) - static_cast<float>(j) * 0.03f;
+			const float zA = getAnimatedDepth(static_cast<int>(i), phaseTrailA, pointTrails[i][j - 1]);
+			const float zB = getAnimatedDepth(static_cast<int>(i), phaseTrailB, pointTrails[i][j]);
+			glm::vec3 p1(pointTrails[i][j - 1].x, pointTrails[i][j - 1].y, zA);
+			glm::vec3 p2(pointTrails[i][j].x, pointTrails[i][j].y, zB);
 
 			trailMesh.addVertex(p1);
 			trailMesh.addColor(segmentColor);
@@ -822,13 +983,19 @@ void OrganicTextRenderer::drawShapes() {
 		o->data->setCachedAnimatedPoint(i, finalPos);
 
 		ofColor color = getPointColor(static_cast<int>(i), finalPos, phase);
+		const bool drawObjects3D = o->bShapesAsObjects3D.get();
+		if (drawObjects3D) {
+			color.a = 255;
+		}
 
 		ofSetColor(color);
 
-		if (o->bDrawFill.get()) {
-			ofFill();
-		} else {
-			ofNoFill();
+		if (!drawObjects3D) {
+			if (o->bDrawFill.get()) {
+				ofFill();
+			} else {
+				ofNoFill();
+			}
 		}
 
 		float maxSize = ofMap(o->shapeSize.get(), 0, 1, SHAPE_MIN_RADIUS, SHAPE_MAX_RADIUS, true);
@@ -844,8 +1011,10 @@ void OrganicTextRenderer::drawShapes() {
 		}
 
 		float rotation = ofMap(o->shapeRotation.get(), 0, 1, 0, 360, true);
+		const float zDepth = getAnimatedDepth(static_cast<int>(i), phase, finalPos);
+		const glm::vec3 finalPos3(finalPos.x, finalPos.y, zDepth);
 
-		drawShape(finalPos, pointSize, (ShapeType)o->shapeType.get(), rotation);
+		drawShape(finalPos3, pointSize, (ShapeType)o->shapeType.get(), rotation);
 
 		ofPopStyle();
 	}

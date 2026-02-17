@@ -12,11 +12,6 @@
             "Spiral": "0.372767",
             "Wave_Freq": "0.399244"
         },
-        "Background": {
-            "Background_Gradient": "0",
-            "Bg_Color_1": "40, 40, 40, 255",
-            "Bg_Color_2": "150, 255, 234, 255"
-        },
         "Color_Modes": {
             "Alpha_Range": "0.627551",
             "By_Dist": "1",
@@ -48,20 +43,12 @@
         "Draw_Fill": "1",
         "Draw_Shapes": "1",
         "Draw_Trails": "0",
-        "Line_Tweaks": {
-            "Duration": "5",
-            "From": "-1, 0",
-            "Line_Tweaks_Enabler": "1",
-            "Radius_Line_Mouse": "0.1",
-            "To": "1, 0"
-        },
         "Mouse_Tweaks": {
             "Color": "0, 0, 0, 197",
             "D_Power": "0.331633",
             "Displace": "1",
             "Highlight": "1",
             "Influence": "0.438776",
-            "Mouse_Tweaks_Enabler": "1",
             "S_Power": "0.229592",
             "Scale": "1",
             "radiusMouse": "0.693878",
