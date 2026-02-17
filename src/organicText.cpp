@@ -256,7 +256,7 @@ void OrganicText::setupParams() {
 	trailFade.set("Fade", 0.5f, 0, 1.f);
 
 	// Mouse Tweaks
-	bMouseTweaks.set("Mouse Tweaks Enabler", true);
+	bMouseTweaks.set("Mouse Tweaks Enabler", false);
 	bMouseControlOrigin.set("x Origin", false);
 	bMouseHighlightPoints.set("Highlight", false);
 	colorMouseHighlight.set("Color", ofColor(0, 150, 255));
@@ -268,7 +268,7 @@ void OrganicText::setupParams() {
 
 	// Line tweaks
 	bLineTweaks.set("Line Tweaks Enabler", true);
-	radiusLineMouse.set("Radius Line Mouse", 0.1f, 0.0f, 1.0f);
+	radiusLineMouse.set("Radius Line Mouse", 1.0f, 0.0f, 1.0f);
 	vTrigLineTweaks.set("Trig Line Tweaks");
 	vLineFrom.set("From", glm::vec2(-1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));
 	vLineTo.set("To", glm::vec2(1.0, 0.0), glm::vec2(-1.0, -1.0), glm::vec2(1.0, 1.0));

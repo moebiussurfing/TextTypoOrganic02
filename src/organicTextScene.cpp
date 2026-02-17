@@ -31,7 +31,7 @@ void OrganicTextScene::setup(float fpsTarget) {
 
 	// Distribution Mode
 
-	bHelpDistribution.set("Help Distribution", true);
+	bHelpDistribution.set("Help Distribution", false);
 
 	// False: Advanced Mode. True: Distribution (User) Mode
 	bDistributionMode.set("Distribution mode", true);
@@ -94,6 +94,7 @@ void OrganicTextScene::setup(float fpsTarget) {
 	// 3D controls
 	gui3D_.setup("3D Scene");
 	gui3D_.add(params3D_);
+	gui3D_.getGroup(params3D_.getName()).getGroup(paramsLights_.getName()).minimize();
 
 	// Refresh
 	slideshow.setup(&ot, [this]() { nextScene(); });
@@ -137,7 +138,8 @@ void OrganicTextScene::setupFx() {
 
 	// Setup manager
 	manager.setup(ofGetWidth(), ofGetHeight(), ofToDataPath("fonts/VCR_OSD_MONO_1.001.ttf"), 8);
-
+	manager.gui.minimizeAll();
+	manager.gui.minimize();
 	bGui_Fx.set("UI FX", true);
 
 	// Load Settings
@@ -265,7 +267,7 @@ void OrganicTextScene::setup3DScene() {
 	camTargetOffsetY_.set("Target Y", 0.0f, -1200.0f, 1200.0f);
 	camTargetOffsetZ_.set("Target Z", 0.0f, -1200.0f, 1200.0f);
 	bDisableCamera_.set("Disable Camera", false);
-	bCamMouseInput_.set("Enable Mouse", false);
+	bCamMouseInput_.set("Enable Mouse", true);
 	vResetCamera_.set("Reset Camera");
 	paramsCamera_.add(camDistance_);
 	paramsCamera_.add(camOffsetX_);
@@ -316,7 +318,7 @@ void OrganicTextScene::setup3DScene() {
 		camTargetOffsetY_.set(0.0f);
 		camTargetOffsetZ_.set(0.0f);
 		bDisableCamera_.set(false);
-		bCamMouseInput_.set(false);
+		//bCamMouseInput_.set(false);
 		refresh3DCamera();
 	});
 
@@ -332,6 +334,7 @@ void OrganicTextScene::setup3DScene() {
 			cam_.disableMouseInput();
 		}
 	});
+	bCamMouseInput_.set(bCamMouseInput_.get());//trig
 
 	eDisableCamera_ = bDisableCamera_.newListener([this](bool & b) {
 		ofLogNotice("OrganicTextScene") << "bDisableCamera: " << b;
@@ -376,6 +379,8 @@ void OrganicTextScene::setup3DScene() {
 	fillLight_.setDiffuseColor(ofColor::white);
 	fillLight_.setSpecularColor(ofColor(180));
 	refresh3DCamera();
+
+	ofSetSphereResolution(10);
 }
 
 //--------------------------------------------------------------
@@ -485,7 +490,7 @@ void OrganicTextScene::drawHelpDistribution() {
 	s += "\n";
 	s += "L              Trig Line Tweaks";
 	s += "\n";
-	s += "O/I            Clear/Write Text";
+	s += "I/U/O          Clear/Write Text";
 	s += "\n\n";
 	s += "WINDOW";
 	s += "\n";

@@ -98,8 +98,11 @@ private:
 
     //gui------------------------------------------
 
+public:
     ofxPanel gui;
-    ofxToggle gDebugDraw;
+
+private:
+	ofxToggle gDebugDraw;
 
 
     // LOAD SeTTINGS
