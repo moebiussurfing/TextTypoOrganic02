@@ -1,10 +1,10 @@
 {
     "OrganicText": {
-        "Animate": "1",
+        "Animate": "0",
         "Animation": {
-            "Animate": "1",
+            "Animate": "0",
             "Intensity": "0.556122",
-            "Mode": "3",
+            "Mode": "0",
             "Origin_X": "0.535928",
             "Power": "1",
             "Pulse": "1",
